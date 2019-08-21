@@ -1,0 +1,19 @@
+@import '../../lib/color';
+@import '../../lib/typography';
+@import '../../lib/transform';
+
+.image-placeholder {
+  @include color-secondary(background-color);
+  @include rounded;
+  height: 0;
+  padding-top: 100%;
+  position: relative;
+
+  &__label {
+    @include body;
+    @include center-hv;
+    @include color-primary;
+    text-transform: uppercase;
+    user-select: none;
+  }
+}

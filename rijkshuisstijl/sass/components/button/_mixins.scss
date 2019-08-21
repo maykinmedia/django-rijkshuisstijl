@@ -1,0 +1,10 @@
+@import 'constants';
+
+@mixin button--small {
+  height: $button-height-small;
+  line-height: $button-height-small;
+
+  .icon:before {
+    @include scale(0.75);
+  }
+}

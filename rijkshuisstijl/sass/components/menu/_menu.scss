@@ -1,0 +1,99 @@
+@import '../../settings/lib/ro-shade';
+@import '../../lib/animation';
+@import '../../lib/color';
+@import '../../lib/grid';
+@import '../../lib/typography';
+@import '../../lib/responsive';
+
+.menu {
+  @include animate(visibility, $delay: 0.3s);
+  @include clearfix;
+  @include responsive(flex-direction, column, row);
+  align-self: stretch;
+  display: flex;
+  align-items: stretch;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  & & {
+    @include tablet {
+      @include absolute(100%, 0);
+      @include gutter(padding-left);
+      @include rows(1);
+      visibility: hidden;
+
+      &:before {
+        @include shade-color($scheme, 1, background-color);
+        @include rows(1);
+        content: '';
+        position: absolute;
+        left: -100vw;
+        width: 200vw;
+        z-index: 1;
+      }
+    }
+  }
+
+  &__list-item:hover &,
+  &__list-item--active & {
+    @include animate(visibility, $delay: 0s);
+    visibility: visible;
+  }
+
+  & & &__list-item {
+    position: relative;
+    z-index: 1;
+  }
+
+  & & &__link {
+    @include mobile-only {
+      @include gutter(padding-left, 2);
+    }
+
+    @include tablet {
+      @include body;
+      @include color-primary(color, true);
+      position: relative;
+      white-space: nowrap;
+    }
+  }
+
+  &__list-item {
+    display: flex;
+    align-items: stretch;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    float: left;
+  }
+
+  &__list-item--active > &__link {
+    @include color-secondary(background-color);
+  }
+
+  &__link,
+  &__label {
+    @include body;
+    @include responsive(font-size, 20px, 22px, 22px, 26px);
+    @include responsive(line-height, 28px, 32px, 32px, 32);
+  }
+
+  &__link {
+    @include anchor(true);
+    @include gutter(padding-left);
+    @include gutter(padding-right);
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__list-item:not(&__list-item--active) &__link {
+    @include color-background(color);
+  }
+
+  &__label {
+    @include color-background(color);
+    font-weight: bold;
+  }
+}

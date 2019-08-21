@@ -1,0 +1,11 @@
+{% spaceless %}{% load i18n sitetree %}
+<nav class="navbar">
+    <div class="navbar__body">
+        {% include '../login/login.html' %}
+        {% sitetree_menu from 'primary' include 'trunk,topmenu' %}
+        <div class="navbar__actions">
+            {% include '../search/search.html' %}
+        </div>
+    </div>
+</nav>
+{% endspaceless %}

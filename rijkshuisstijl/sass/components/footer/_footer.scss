@@ -1,0 +1,51 @@
+@import '../../lib/color';
+@import '../../lib/responsive';
+@import '../../lib/grid';
+@import '../../lib/typography';
+@import 'constants';
+
+
+.footer {
+  @include color-primary(background-color);
+  @include container(true, false);
+  @include container--big(false);
+  @include responsive(padding-top, $footer-padding-mobile, $footer-padding-tablet, $footer-padding-desktop);
+  @include responsive(padding-bottom, $footer-padding-mobile, $footer-padding-tablet, $footer-padding-desktop);
+  min-height: $footer-min-height;
+
+  &__body {
+    @include container;
+    padding: 0;
+  }
+
+  &__section {
+    @include container;
+    @include responsive(width, 50%, 25%, 16.66667%);
+    float: left;
+  }
+
+  &__section:first-child {
+    @include responsive(margin-left, 0, 50%, 58.33333%);
+  }
+
+  &__title {
+    @include h2(true);
+    @include responsive(font-size, 20px, 24px, 24px, 27px);
+    @include responsive(line-height, 25px, 30px, 30px, 33px);
+    @include color-background(color);
+    font-weight: 400;
+    margin-top: 0;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__link {
+    @include body;
+    @include color-background(color);
+    text-decoration: none;
+  }
+}

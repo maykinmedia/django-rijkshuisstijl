@@ -1,0 +1,9 @@
+@import '../../lib/responsive';
+
+.logo {
+  .image__image {
+    @include tablet(true) {
+      height: 90%;
+    }
+  }
+}

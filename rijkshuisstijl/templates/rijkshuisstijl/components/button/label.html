@@ -1,0 +1,4 @@
+{% spaceless %}
+{% if not 'no-text' in class and label %}<span class="button__label">{{ label }}</span>{% endif %}
+{% if icon %}{% include '../icon/icon.html' with icon=icon label=label only %}{% endif %}
+{% endspaceless %}
