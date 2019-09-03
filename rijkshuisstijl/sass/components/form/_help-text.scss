@@ -1,0 +1,13 @@
+@import '../../lib/typography';
+
+.help-text {
+  @include body;
+  @include body--small;
+  padding-top: $help-text-padding-v;
+  padding-bottom: $help-text-padding-v;
+
+  &__body {
+    font-size: 80%;
+    padding: 0 $input-padding-h;
+  }
+}

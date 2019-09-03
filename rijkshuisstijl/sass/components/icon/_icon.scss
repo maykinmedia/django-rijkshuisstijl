@@ -1,46 +1,14 @@
-@import '../../settings/lib/ro-icons';
-@import '../../settings/lib/ro-icons-map';
-@import '../../lib/color';
 @import '../../lib/transform';
+@import 'constants';
+@import 'mixins';
 
 .icon {
   display: block;
   font-size: 0;
 
-  &--rounded {
-    @include color-secondary(background-color);
-    @include rounded;
-    height: 0;
-    padding-top: 100%;
-    position: relative;
-
-    &:before {
-      @include color-primary;
-      @include center-hv;
-      margin: 0!important;
-      padding: 0!important;
-    }
-  }
-
-  // Legacy
-  @each $key, $value in $ro-icons {
+  @each $key, $value in $icons {
     &--#{$key} {
       @include ro-icon-before($key)
-    }
-  }
-
-  // New icons
-  @each $key, $value in $rh-icons {
-    &--#{$key} {
-      @include rh-icon-before($value)
-    }
-  }
-
-  &--metric {
-    &:before {
-      width: 16px;
-      height: 16px;
-      margin-right: 10px;
     }
   }
 }

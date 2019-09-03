@@ -1,0 +1,8 @@
+@import '../../settings/color';
+@import '../../lib/grid';
+
+
+$login-bar-color-background: map_get($shades, gray-1);
+$login-bar-color-link-secondary: map_get($shades, gray-6);
+$login-bar-min-height: 32px;
+$login-bar-spacing: $grid-margin-2;

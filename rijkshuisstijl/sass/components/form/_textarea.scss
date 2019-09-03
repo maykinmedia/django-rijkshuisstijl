@@ -1,0 +1,9 @@
+@import '../../lib/grid';
+@import 'constants';
+@import 'mixins';
+
+.textarea {
+  @include input;
+  @include rows(3, min-height);
+  padding: $input-padding-h;
+}

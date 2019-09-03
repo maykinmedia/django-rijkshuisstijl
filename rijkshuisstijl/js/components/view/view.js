@@ -1,5 +1,5 @@
 import BEM from 'bem.js';
-import {MODIFIER_MENU_OPEN, NAVBAR, VIEW} from './constants';
+import {MODIFIER_MENU_OPEN, NAVIGATION_BAR, VIEW} from './constants';
 
 
 /**
@@ -41,7 +41,7 @@ class ViewNavigation {
             return;
         }
 
-        if (!path || path.indexOf(NAVBAR) === -1 || e.target.getAttribute('href')) {
+        if (!path || path.indexOf(NAVIGATION_BAR) === -1 || e.target.getAttribute('href')) {
             this.close();
         }
     }

@@ -1,0 +1,8 @@
+.label {
+  @include body;
+  font-weight: bold;
+
+  &:first-letter {
+    text-transform: capitalize;
+  }
+}

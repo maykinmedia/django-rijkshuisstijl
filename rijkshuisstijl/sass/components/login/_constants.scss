@@ -1,8 +1,0 @@
-@import '../../settings/color';
-@import '../../lib/grid';
-
-
-$login-color-background: map_get($shades, gray-1);
-$login-color-link-secondary: map_get($shades, gray-6);
-$login-min-height: 32px;
-$login-spacing: $grid-margin-2;

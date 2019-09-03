@@ -1,0 +1,55 @@
+@import '../../lib/typography';
+@import '../../lib/responsive';
+@import 'constants';
+
+.form-control {
+  @include responsive(flex-direction, column, row);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  box-sizing: border-box;
+
+
+  > .label {
+    @include responsive(width, 100%, $label-width);
+    @include responsive(margin-bottom, $form-control-margin-top, 0);
+    align-self: flex-start;
+    padding-top: calc((#{$grid-row-height} - #{$typography-line-height-text * 1em}) / 2);
+    box-sizing: border-box;
+  }
+
+  > .label ~ * {
+    width: 100%;
+
+    @include tablet {
+      @include body;
+      margin-left: $form-control-spacing !important;
+      width: calc(100% - #{$label-width} - #{$form-control-spacing});
+    }
+  }
+
+  .input, .select {
+    &:not([type=checkbox]):not([type=radio]) {
+      @include rows(1);
+    }
+  }
+
+  &__choices {
+    @include responsive(flex-direction, column, row);
+    display: flex;
+  }
+
+  &__choices > * {
+    @include mobile-only {
+      margin-bottom: $input-padding-h;
+
+      &:first-child {
+        margin-top: $input-padding-h;
+      }
+    }
+  }
+
+  &__choices > *:not(:last-child) {
+    margin-right: $input-padding-h;
+  }
+}

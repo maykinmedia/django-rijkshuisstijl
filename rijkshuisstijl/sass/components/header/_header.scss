@@ -28,9 +28,10 @@
 
   .button {
     @include show-on-mobile;
-    @include container-padding(normal, right);
+    @include container-padding(normal, (padding-left, padding-right));
     @include center-v;
     position: absolute;
+    right: 0;
   }
 
   .logo {

@@ -132,21 +132,37 @@ $grid-margin-10: 100px !default;
   }
 }
 
+@mixin breakout-margin($size: normal, $offset-property: margin-left, $size-property: width, $size-base: 100%) {
+  @if $size == big {
+    @include breakout($grid-container-margin-big);
+  } @else if $size == small {
+    @include breakout($grid-container-margin-small);
+  } @else if $size == normal {
+    @include breakout($grid-container-margin);
+  }
+}
+
+@mixin breakout-padding($size: normal, $offset-property: margin-left, $size-property: width, $size-base: 100%) {
+  @if $size == big {
+    @include breakout($grid-container-padding-big);
+  } @else if $size == small {
+    @include breakout($grid-container-padding-small);
+  } @else if $size == normal {
+    @include breakout($grid-container-padding);
+  }
+}
+
+@mixin breakout($amount, $offset-property: margin-left, $size-property: width, $size-base: 100%) {
+  #{$offset-property}: -$amount;
+  #{$size-property}: calc(#{$size-base} + #{2 * $amount});
+}
+
 @mixin clearfix {
   &:after {
     clear: both;
     content: '';
     display: table;
   }
-}
-
-@mixin breakout($margin: $grid-container-margin, $padding: $grid-container-padding) {
-  position: relative;
-  left: calc((#{$margin} + #{$padding}) * -1);
-  box-sizing: border-box;
-  padding-left: $padding + $margin;
-  padding-right: $padding + $margin;
-  width: calc(100% + (#{$margin} + #{$padding}) * 2);
 }
 
 @mixin columns-responsive($span-mobile, $span-tablet, $span-laptop: $span-tablet, $span-desktop: $span-laptop, $correction-mobile: 0px, $correction-tablet: $correction-mobile, $correction-laptop: $correction-tablet, $correction-desktop: $correction-laptop, $property: width) {

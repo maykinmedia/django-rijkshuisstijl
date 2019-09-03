@@ -10,7 +10,7 @@ export const MODIFIER_MENU_OPEN = 'menu-open';
 export const VIEW = BEM.getBEMNode(BLOCK_VIEW);
 
 /** @const {string} */
-export const BLOCK_NAVBAR = 'navbar';
+export const BLOCK_NAVIGATION_BAR = 'navigation_bar';
 
 /** @const {HTMLElement} */
-export const NAVBAR = BEM.getBEMNode(BLOCK_NAVBAR);
+export const NAVIGATION_BAR = BEM.getBEMNode(BLOCK_NAVIGATION_BAR);

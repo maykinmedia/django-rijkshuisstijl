@@ -1,0 +1,59 @@
+@import '../../settings/lib/ro-shade';
+@import '../../lib/grid';
+@import '../../lib/color';
+@import '../../lib/responsive';
+@import 'constants';
+
+.form {
+  &__header,
+  &__body {
+    @include container;
+    @include container--small;
+  }
+
+  &__header {
+    padding: 0;
+  }
+
+  &__title {
+    @include h1;
+    @include shade-color('dark-blue');
+    font-weight: normal;
+    margin: $form-title-margin;
+  }
+
+  &__text {
+    @include body;
+  }
+
+  &__body {
+    @include shade(1, background-color);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-control {
+    margin-top: $form-control-margin-top
+  }
+
+  &__actions {
+    @include body;
+    margin-top: $form-control-margin-top;
+    margin-bottom: $form-control-margin-top;
+
+    @include tablet {
+      margin-left: $form-control-spacing;
+      padding-left: $label-width;
+    }
+  }
+
+  &__actions .button {
+    @include mobile-only {
+      width: 100%;
+    }
+  }
+
+  &__actions .button {
+    margin-top: $form-control-margin-top;
+  }
+}

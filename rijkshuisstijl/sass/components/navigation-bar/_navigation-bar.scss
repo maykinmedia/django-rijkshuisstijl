@@ -1,0 +1,133 @@
+@import '../../lib/color';
+@import '../../lib/grid';
+@import '../../lib/typography';
+@import '../../lib/transform';
+@import '../../lib/util';
+@import 'constants';
+
+
+.navigation-bar {
+  @include mobile-only {
+    @include animate;
+    @include overlay;
+    @include shadow;
+    @include translate(105%);
+    left: auto;
+    right: 0;
+    width: 90%;
+    max-width: 320px;
+    position: fixed;
+    z-index: 1000;
+
+    &:after {
+      @include color-background();
+      @include overlay;
+      content: '';
+      height: 110%;
+      z-index: -1;
+    }
+
+    .view--menu-open & {
+      @include translate(0%);
+    }
+
+    .login-bar {
+      flex-shrink: 0;
+    }
+
+    &__actions {
+      display: flex;
+      flex-shrink: 0;
+    }
+
+    &__actions .menu {
+      width: $navigation-bar-height-search!important;
+      height: $navigation-bar-height-search!important;
+    }
+
+    &__actions .menu .menu {
+      display: none;
+      visibility: hidden;
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: column-reverse;
+      height: 100%;
+    }
+
+    .menu,
+    &__body > ul {  // Fixme: ul doesn't get class on empty menu.
+      width: 100%;
+      height: 100%;
+    }
+
+    &__body > .menu {
+      overflow-y: auto;
+    }
+
+
+    .menu__link,
+    .login-bar__link {
+      @include rows(1);
+      display: flex;
+      align-items: center;
+    }
+
+    .menu__link {
+      @include color-primary(color, true);
+    }
+
+    .login-bar {
+      text-align: left;
+      display: block !important;
+    }
+  }
+
+  @include tablet {
+    @include color-primary(background-color);
+    @include container(flex, false);
+    @include container--big(false);
+
+    .login-bar {
+      display: none !important;
+    }
+
+    &__body {
+      @include container(flex);
+      justify-content: space-between;
+      align-items: center;
+      min-height: $navigation-bar-min-height-tablet;
+      position: relative;
+    }
+
+    &__actions {
+      @include container-padding(normal, padding-left);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 32.5%;
+      height: 100%;
+    }
+
+    .search {
+      max-width: 380px;
+    }
+
+    .search--open {
+      width: 100%;
+    }
+
+    &__profile {
+      height: 100%;
+    }
+
+    &__profile .icon:before {
+      @include color-background;
+    }
+
+    &__actions .menu .menu {
+      right: 0;
+    }
+  }
+}

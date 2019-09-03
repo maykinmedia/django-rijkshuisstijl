@@ -1,0 +1,23 @@
+@import '../../settings/lib/ro-shade';
+@import '../../lib/color';
+@import '../../lib/grid';
+
+$checkbox-size: 20px;
+$radio-size: 22px;
+
+$errorlist-color-error: #d52b1e;
+$errorlist-color-icon: $color-background;
+$errorlist-height-error: 70px;
+$errorlist-size-icon: 34px;
+
+$form-title-margin: $grid-margin-3 0 $grid-margin-0;
+
+$form-control-margin-top: 14px;
+$form-control-spacing: 30px;
+
+$help-text-padding-v: $grid-margin-1;
+
+$input-color-placeholder: shade('4');
+$input-padding-h: 12px;
+
+$label-width: 9em;

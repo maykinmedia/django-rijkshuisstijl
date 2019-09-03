@@ -1,0 +1,25 @@
+@import 'mixins';
+
+
+.radio {
+  @include checkbox;
+
+  &__checkmark {
+    @include rounded;
+    background-image: none!important;
+    width: $radio-size;
+    height: $radio-size;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__checkmark:before {
+    @include center-hv($radio-size / 2, $radio-size / 2);
+    @include rounded;
+    content: '';
+  }
+
+  .input:checked + &__checkmark:before {
+    @include shade-color(dark-blue, $property: background-color);
+  }
+}

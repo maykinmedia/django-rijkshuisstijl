@@ -1,0 +1,31 @@
+@import '../../lib/typography';
+@import '../../lib/grid';
+
+$paginator-spacing: $grid-margin-0;
+
+.paginator {
+  @include container-padding;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+
+  &__label,
+  &__link {
+    margin: 0 $paginator-spacing;
+  }
+
+  &__label {
+    @include body;
+    display: flex;
+    align-items: baseline;
+  }
+
+  &__link {
+    @include anchor;
+  }
+
+  .input {
+    width: 5em;
+  }
+}

@@ -1,0 +1,151 @@
+@import '../../lib/color';
+@import '../../lib/grid';
+@import '../../lib/responsive';
+@import '../../lib/transform';
+@import '../../lib/typography';
+@import '../../lib/util';
+@import '../../settings/color';
+@import '../../settings/lib/ro-shade';
+@import '../header/constants';
+
+
+$datagrid-spacing: 0.4em;
+$datagrid-offset-caption-mobile: $header-height-mobile;
+
+
+.datagrid {
+  @include border(all);
+  @include shadow;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &--scroll {
+    max-height: 50vh;
+  }
+
+  &__header,
+  &__footer {
+    flex-shrink: 0;
+  }
+
+  &__infobar {
+    @include outline;
+    @include border(all);
+    @include color-info(background-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: $datagrid-spacing;
+  }
+
+  &__toolbar {
+    @include border;
+    @include shade(1, background-color);
+    @include rows(1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: $datagrid-spacing;
+  }
+
+  &__toolbar:empty {
+    display: none;
+  }
+
+  &--overflow &__body {
+    overflow: auto;
+  }
+
+  &--overflow-mobile &__body {
+    @include mobile-only {
+      overflow: auto;
+    }
+  }
+
+  &__title {
+    @include h4;
+    @include color-primary;
+  }
+
+  &__count {
+    display: flex;
+    align-items: center;
+  }
+
+  &__number,
+  &__text {
+    @include ellipsis;
+    @include h4;
+    @include color-primary;
+    font-weight: normal;
+    margin-left: $datagrid-spacing;
+  }
+
+  &__table {
+    @include outline;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  &__row {
+    @include color-background;
+    @include rows(1);
+  }
+
+  &__thead &__row {
+    @include border(all);
+  }
+
+  @each $color-name, $color in $colors {
+    &__row--#{$color-name} &__cell:first-child:before {
+      @include overlay;
+      content: '';
+      width: 4px;
+      background-color: $color;
+    }
+
+    &__row--#{$color-name} &__cell--modifier {
+      color: $color;
+    }
+  }
+
+  &__table-body &__row:hover {
+    @include color-info(background-color);
+  }
+
+  &__caption,
+  &__cell {
+    @include body;
+    @include body--small;
+    @include border;
+    box-sizing: border-box;
+    padding: $datagrid-spacing;
+    position: relative;
+    text-align: left;
+  }
+
+  &__caption {
+    @include outline;
+    @include responsive(top, $datagrid-offset-caption-mobile, 0);
+    @include shade(1, background-color);
+    position: sticky;
+    z-index: 10;
+  }
+
+  &--overflow &__caption {
+    position: static;
+  }
+
+  &--overflow-mobile &__caption {
+    @include mobile-only {
+      position: static;
+    }
+  }
+
+  &__link {
+    @include anchor;
+    color: inherit;
+  }
+}
