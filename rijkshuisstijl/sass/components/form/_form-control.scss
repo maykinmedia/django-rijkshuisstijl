@@ -1,5 +1,5 @@
-@import '../../lib/typography';
-@import '../../lib/responsive';
+@import 'microscope/typography';
+@import 'microscope/responsive';
 @import 'constants';
 
 .form-control {
@@ -8,7 +8,6 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   box-sizing: border-box;
-
 
   > .label {
     @include responsive(width, 100%, $label-width);

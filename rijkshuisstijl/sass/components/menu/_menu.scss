@@ -1,9 +1,9 @@
 @import '../../settings/lib/ro-shade';
-@import '../../lib/animation';
-@import '../../lib/color';
-@import '../../lib/grid';
-@import '../../lib/typography';
-@import '../../lib/responsive';
+@import 'microscope/animation';
+@import 'microscope/color';
+@import 'microscope/grid';
+@import 'microscope/typography';
+@import 'microscope/responsive';
 
 .menu {
   @include animate(visibility, $delay: 0.3s);

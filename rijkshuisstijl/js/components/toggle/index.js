@@ -2,9 +2,9 @@ import {SELECT_ALLS, TOGGLES} from './constants';
 
 // Start!
 if (SELECT_ALLS.length) {
-    import('./select-all');
+    import(/* webpackChunkName: 'select-all' */ './select-all');
 }
 
 if (TOGGLES.length) {
-    import('./toggle');
+    import(/* webpackChunkName: 'toggle' */ './toggle');
 }

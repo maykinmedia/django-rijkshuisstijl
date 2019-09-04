@@ -1,7 +1,7 @@
 @import '../../settings/lib/ro-shade';
-@import '../../lib/color';
-@import '../../lib/grid';
-@import '../../lib/typography';
+@import 'microscope/color';
+@import 'microscope/grid';
+@import 'microscope/typography';
 @import 'constants';
 
 
@@ -37,11 +37,7 @@
 
   .label {
     font-weight: normal;
-  }
-
-  .label:before {
-    content: ' ';
-    white-space: pre;
+    margin-left: $checkbox-spacing;
   }
 }
 
@@ -52,6 +48,7 @@
   border-radius: 0;
   display: inline-flex;
   align-items: center;
+  outline: none;
   padding: 0 $input-padding-h;
 
   &:disabled {
@@ -61,7 +58,6 @@
   &:not([type=checkbox]):not([type=radio]) {
     @include body;
     border: none;
-    outline: none;
   }
 
   &#{&}--primary {
@@ -74,18 +70,17 @@
   }
 
   &:focus {
-    @include shade-color(heaven-blue, 1, border-color, $force: true);
-    border: 2px solid;
+    @include shade-color(heaven-blue, 1, outline-color, $force: true);
+    outline: 2px solid;
   }
 
   &--error {
-    @include shade-color(red, $property: border-color, $force: true);
-    border: 2px solid;
+    @include shade-color(red, $property: outline-color, $force: true);
+    outline: 2px solid;
   }
 
-  &--readonly {
-    &:focus {
-      border: 1px solid $color-gray;
-    }
+  &[readonly]:focus,
+  &--readonly:focus {
+    outline-color: $color-gray!important;
   }
 }

@@ -2,5 +2,5 @@ import {PAGINATORS} from './constants';
 
 // Start!
 if (PAGINATORS.length) {
-    import('./paginator');
+    import(/* webpackChunkName: 'paginator' */ './paginator');
 }

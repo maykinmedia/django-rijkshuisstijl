@@ -1,5 +1,5 @@
 @import '../../settings/color';
-@import '../../lib/grid';
+@import 'microscope/grid';
 
 
 $login-bar-color-background: map_get($shades, gray-1);

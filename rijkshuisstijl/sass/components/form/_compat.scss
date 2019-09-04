@@ -1,0 +1,23 @@
+@import 'microscope/grid';
+@import 'microscope/responsive';
+@import 'microscope/transform';
+@import 'microscope/typography';
+@import 'constants';
+
+
+.form-control > .label ~ dateinput-picker {
+  @include translate(null, $grid-row-height);
+  position: relative;
+  margin-left: 0 !important;
+  width: auto;
+
+  @include tablet {
+    @include rows(1, margin-top, true);
+    @include translate($form-control-spacing, null);
+  }
+}
+
+dateinput-picker + .input {
+  color: $typography-color-text !important;
+  left: $form-control-spacing;
+}

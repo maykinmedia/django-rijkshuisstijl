@@ -1,9 +1,10 @@
 @import '../../settings/lib/ro-shade';
-@import '../../lib/color';
-@import '../../lib/grid';
+@import 'microscope/color';
+@import 'microscope/grid';
 
 $checkbox-size: 20px;
 $radio-size: 22px;
+$checkbox-spacing: $grid-margin-0;
 
 $errorlist-color-error: #d52b1e;
 $errorlist-color-icon: $color-background;

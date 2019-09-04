@@ -1,4 +1,6 @@
 import './button';
+import './compat';
+import './fake-link';
 import './filter';
 import './paginator';
 import './search';

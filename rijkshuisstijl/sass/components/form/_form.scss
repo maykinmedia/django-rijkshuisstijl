@@ -1,7 +1,7 @@
 @import '../../settings/lib/ro-shade';
-@import '../../lib/grid';
-@import '../../lib/color';
-@import '../../lib/responsive';
+@import 'microscope/grid';
+@import 'microscope/color';
+@import 'microscope/responsive';
 @import 'constants';
 
 .form {

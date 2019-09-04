@@ -1,6 +1,6 @@
-@import '../../lib/color';
-@import '../../lib/typography';
-@import '../../lib/transform';
+@import 'microscope/color';
+@import 'microscope/typography';
+@import 'microscope/transform';
 
 .image-placeholder {
   @include color-secondary(background-color);

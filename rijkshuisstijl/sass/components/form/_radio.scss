@@ -14,7 +14,7 @@
   }
 
   &__checkmark:before {
-    @include center-hv($radio-size / 2, $radio-size / 2);
+    @include center-hv($radio-size / 2 + 1, $radio-size / 2 + 1);
     @include rounded;
     content: '';
   }

@@ -1,5 +1,5 @@
-@import '../../lib/color';
-@import '../../lib/grid';
+@import 'microscope/color';
+@import 'microscope/grid';
 
 $search-color-button-active: $color-black;
 $search-height: $grid-row-height + $grid-margin-0;

@@ -2,5 +2,5 @@ import {FILTERS} from './constants';
 
 // Start!
 if (FILTERS.length) {
-    import('./filter');
+    import(/* webpackChunkName: 'filter' */ './filter');
 }

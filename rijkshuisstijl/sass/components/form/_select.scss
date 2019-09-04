@@ -1,4 +1,4 @@
-@import '../../lib/grid';
+@import 'microscope/grid';
 @import 'mixins';
 
 .select {
@@ -8,6 +8,10 @@
   background-repeat: no-repeat;
   background-size: contain;
   padding-right: $grid-row-height + $input-padding-h;
+
+  &::-ms-expand {
+    display: none;
+  }
 
   &--multiple {
     @include rows(3, min-height);

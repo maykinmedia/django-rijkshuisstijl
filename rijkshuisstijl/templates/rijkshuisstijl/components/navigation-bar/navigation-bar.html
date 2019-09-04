@@ -4,7 +4,7 @@
         {% login_bar details_url=details_url logout_url=logout_url login_url=login_url registration_url=registration_url %}
         {% sitetree_menu from 'navigation-bar' include 'trunk,topmenu' %}
         <div class="navigation-bar__actions">
-            {% search %}
+            {% search request=request %}
         </div>
     </div>
 </nav>
