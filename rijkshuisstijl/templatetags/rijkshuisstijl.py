@@ -85,6 +85,16 @@ def logo(**kwargs):
     return kwargs
 
 
+@register.inclusion_tag('rijkshuisstijl/components/meta/meta-css.html')
+def meta_css(**kwargs):
+    return kwargs
+
+
+@register.inclusion_tag('rijkshuisstijl/components/meta/meta-js.html')
+def meta_js(**kwargs):
+    return kwargs
+
+
 @register.inclusion_tag('rijkshuisstijl/components/meta/meta-icons.html')
 def meta_icons(**kwargs):
     return kwargs

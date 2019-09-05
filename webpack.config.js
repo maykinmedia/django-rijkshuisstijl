@@ -14,7 +14,7 @@ if (argv.production) {
 module.exports = {
     // Path to the js entry point (source).
     entry: {
-        main: __dirname + '/' + paths.jsEntry,
+        rijkshuisstijl: __dirname + '/' + paths.jsEntry,
         compat: __dirname + '/' + paths.compatEntry,
     },
 

@@ -1,3 +1,8 @@
+# Distribution / packaging
+*.egg-info
+__pycache__
+.eyeglass_cache
+
 # Coverage reports
 /reports/
 /htmlcov/
@@ -7,3 +12,4 @@ node_modules/
 
 ### IDE ###
 .idea
+.DS_STORE
