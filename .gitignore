@@ -2,10 +2,16 @@
 *.egg-info
 __pycache__
 .eyeglass_cache
+build/lib
+dist/
+docs/_build/
 
 # Coverage reports
 /reports/
 /htmlcov/
+
+# Environment
+/env/
 
 ### Dependencies ###
 node_modules/

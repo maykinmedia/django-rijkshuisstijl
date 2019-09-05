@@ -4,7 +4,7 @@ django-rijkshuisstijl
 
 Rijkshuisstijl boilerplate for Django.
 
-:Version: 0.1.0
+:Version: 0.1.1
 :Source: https://github.com/maykinmedia/django-rijkshuisstijl
 :Keywords: ``Django, rijkshuisstijl``
 :PythonVersion: 3.6
