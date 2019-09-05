@@ -87,4 +87,4 @@ Then add the basic structure, supply the current urls for various urls (dependin
         {% meta_js %}
     </body>
 
-See the documentation for further information about navigation, forms and lists.
+See the documentation for further information about logos, navigation, forms and datagrids.
