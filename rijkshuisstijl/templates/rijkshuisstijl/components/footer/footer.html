@@ -1,16 +1,7 @@
-{% spaceless %}{% load i18n %}
+{% spaceless %}{% load sitetree %}
 <footer class="footer">
     <div class="footer__body">
-        {% if links %}
-        <div class="footer__section">
-            <h2 class="footer__title">{{ _('Service') }}</h2>
-            <ul class="footer__list">
-                {% for link in links %}
-                    {% include './footer-list-item.html' with href=link.url label=link.title only %}
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+        {% sitetree_menu from 'footer' include 'trunk,topmenu' template 'rijkshuisstijl/components/footer/menu.html' %}
     </div>
 </footer>
 {% endspaceless %}

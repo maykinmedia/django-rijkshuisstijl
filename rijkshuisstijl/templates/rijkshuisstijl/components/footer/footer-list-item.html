@@ -1,6 +1,6 @@
-{% spaceless %}
-<li class="footer__list-item">
-    <a class="footer__link" href="{{ href }}">{{ label }}</a>
-</li>
+{% spaceless %}{% load sitetree %}
+    <li class="footer__list-item">
+        <a class="footer__link" href="{% sitetree_url for item %}">{{ item.title_resolved }}</a>
+    </li>
 {% endspaceless %}
 

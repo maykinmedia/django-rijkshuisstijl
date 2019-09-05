@@ -53,8 +53,9 @@ def button_link(**kwargs):
     return kwargs
 
 
-@register.inclusion_tag('rijkshuisstijl/components/footer/footer.html')
-def footer(**kwargs):
+@register.inclusion_tag('rijkshuisstijl/components/footer/footer.html', takes_context=True)
+def footer(context, **kwargs):
+    kwargs['request'] = context['request']
     return kwargs
 
 
