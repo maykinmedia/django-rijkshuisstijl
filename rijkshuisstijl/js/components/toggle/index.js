@@ -1,3 +1,4 @@
+//jshint ignore:start
 import {SELECT_ALLS, TOGGLES} from './constants';
 
 // Start!

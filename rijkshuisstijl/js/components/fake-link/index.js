@@ -1,3 +1,4 @@
+//jshint ignore:start
 import {FAKE_LINKS} from './constants';
 
 // Start!

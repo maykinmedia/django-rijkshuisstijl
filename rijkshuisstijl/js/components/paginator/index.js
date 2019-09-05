@@ -1,3 +1,4 @@
+//jshint ignore:start
 import {PAGINATORS} from './constants';
 
 // Start!

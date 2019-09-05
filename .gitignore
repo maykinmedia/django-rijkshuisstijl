@@ -1,3 +1,7 @@
+# Coverage reports
+/reports/
+/htmlcov/
+
 ### Dependencies ###
 node_modules/
 
