@@ -7,7 +7,7 @@ import {BLOCK_INPUT, PAGINATORS} from './constants';
  * Contains logic for making the paginator work with existing GET params.
  * @class
  */
-class Paginator {
+export class Paginator {
     /**
      * Constructor method.
      * @param {HTMLFormElement} node

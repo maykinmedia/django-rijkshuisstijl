@@ -9,7 +9,7 @@ import {FAKE_LINKS, MODIFIER_DOUBLE_CLICK} from './constants';
  * Toggle should have data-href set to target location.
  * @class
  */
-class FakeLink {
+export class FakeLink {
     /**
      * Constructor method.
      * @param {HTMLElement} node

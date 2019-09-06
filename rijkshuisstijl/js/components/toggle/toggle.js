@@ -12,7 +12,7 @@ import {TOGGLES} from './constants';
  * Toggle may have data-link-mode set to either "normal", "positive", "negative" or "prevent", see this.onClick().
  * @class
  */
-class Toggle {
+export class Toggle {
     /**
      * Constructor method.
      * @param {HTMLElement} node
@@ -93,7 +93,9 @@ class Toggle {
      */
     toggle(exp = undefined) {
         let targets = this.getTargets();
-        targets.forEach(target => BEM.toggleModifier(target, this.toggleModifier, exp));
+        targets.forEach(target => {
+            BEM.toggleModifier(target, this.toggleModifier, exp)
+        });
 
         this.getExclusive()
             .filter(exclusive => targets.indexOf(exclusive) === -1)

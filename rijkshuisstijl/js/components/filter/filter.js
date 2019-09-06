@@ -8,7 +8,7 @@ import {BLOCK_FILTER, ELEMENT_INPUT, FILTERS, MODIFIER_MATCH, MODIFIER_NO_MATCH}
  * Filter should have data-filter-target set to query selector for targets.
  * @class
  */
-class Filter {
+export class Filter {
     /**
      * Constructor method.
      * @param {HTMLElement} node

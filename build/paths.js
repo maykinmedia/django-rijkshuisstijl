@@ -43,6 +43,12 @@ module.exports = {
     // Path to the (transpiled) js directory
     jsDir: staticRoot + 'js/',
 
+    // Path to js spec (test) files
+    jsSpec: sourcesRoot + 'jstests/**/*.spec.js',
+
+    // Path to js spec (test) entry file
+    jsSpecEntry: sourcesRoot + 'jstests/index.js',
+
     // Path to js code coverage directory
     coverageDir: 'reports/jstests/',
 };

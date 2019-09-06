@@ -2,7 +2,7 @@
  * Adds "/static/js/compat.js" to DOM if browser fails checks.
  * @class
  */
-class Compat {
+export class Compat {
     /**
      * Constructor method.
      */

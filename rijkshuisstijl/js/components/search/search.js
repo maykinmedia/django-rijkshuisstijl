@@ -8,7 +8,7 @@ import {SEARCHES, BLOCK_SEARCH, ELEMENT_INPUT, MODIFIER_OPEN} from './constants'
  * NOTE: Open/close behaviour controlled by button (ToggleButton).
  * @class
  */
-class Search {
+export class Search {
     /**
      * Constructor method.
      * @param {HTMLFormElement} node
