@@ -4,14 +4,14 @@
  */
 export class Utils {
     /**
-     * Returns a modfiied version of class target.
+     * Returns a modified version of class target.
      * Modified version's constructor is not called by default.
      *
      * @example:
      *
-     * let faq = Utils.createTestableClass(Faq);
-     * this.faq = new faq();
-     * this.faq.constructor()
+     * let this.Foo = Utils.createTestableClass(Foo);
+     * this.foo = new this.Foo();
+     * this.foo.constructor()
      *
      * @param {Function} target
      * @returns {Function}

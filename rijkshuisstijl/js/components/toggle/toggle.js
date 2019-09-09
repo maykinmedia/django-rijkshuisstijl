@@ -94,7 +94,7 @@ export class Toggle {
     toggle(exp = undefined) {
         let targets = this.getTargets();
         targets.forEach(target => {
-            BEM.toggleModifier(target, this.toggleModifier, exp)
+            BEM.toggleModifier(target, this.toggleModifier, exp);
         });
 
         this.getExclusive()

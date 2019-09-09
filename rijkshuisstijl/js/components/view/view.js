@@ -5,7 +5,7 @@ import {MODIFIER_MENU_OPEN, NAVIGATION_BAR, VIEW} from './constants';
 /**
  * Constains logic for dealing with the (mobile) navigation.
  */
-class ViewNavigation {
+export class ViewNavigation {
     /**
      * Constructor method.
      * @param {HTMLHtmlElement} node
@@ -47,7 +47,7 @@ class ViewNavigation {
     }
 
     close() {
-        if (!BEM.hasModifier(VIEW, MODIFIER_MENU_OPEN)) {
+        if (!BEM.hasModifier(VIEW||this.node, MODIFIER_MENU_OPEN)) {
             return;
         }
 

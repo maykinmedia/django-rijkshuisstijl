@@ -7,7 +7,7 @@ import {SELECT_ALLS} from './constants';
  * Toggle should have data-select-all set to queryselector for target(s).
  * @class
  */
-class SelectAll {
+export class SelectAll {
     /**
      * Constructor method.
      * @param {HTMLInputElement} node

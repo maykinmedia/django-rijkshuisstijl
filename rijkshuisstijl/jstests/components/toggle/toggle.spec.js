@@ -201,9 +201,9 @@ describe('toggle/toggle.js - Toggle ', function () {
         sinon.replace(toggle, 'getTargets', () => [this.target]);
         sinon.replace(toggle, 'getExclusive', () => []);
         toggle.toggle();
-        assert.ok(BEM.hasModifier(this.target, 'foo'))
+        assert.ok(BEM.hasModifier(this.target, 'foo'));
         toggle.toggle();
-        assert.notOk(BEM.hasModifier(this.target, 'foo'))
+        assert.notOk(BEM.hasModifier(this.target, 'foo'));
     });
 
     it('should add this.toggleModifier to all targets returns by getTargets()', () => {
@@ -341,7 +341,7 @@ describe('toggle/toggle.js - Toggle ', function () {
 
     it('should log a warning if saving to localStorage fails when saveState() is called', () => {
         sinon.replace(localStorage, 'setItem', () => { throw new Error('error')});
-        sinon.spy(console, 'warn');
+        sinon.replace(console, 'warn', sinon.fake());
         this.node.id = 'node';
         let toggle = new this.Toggle();
         toggle.constructor(this.node);
