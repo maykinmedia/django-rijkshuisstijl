@@ -4,7 +4,13 @@ import jsdom from 'jsdom-global';
 import simulant from 'simulant';
 import sinon from 'sinon';
 import {Filter} from '../../../js/components/filter/filter';
-import {BLOCK_FILTER, ELEMENT_INPUT, MODIFIER_MATCH, MODIFIER_NO_MATCH} from '../../../js/components/filter/constants';
+import {
+    BLOCK_FILTER,
+    ELEMENT_INPUT,
+    MODIFIER_CLASS_ONLY,
+    MODIFIER_MATCH,
+    MODIFIER_NO_MATCH
+} from '../../../js/components/filter/constants';
 import {Utils} from '../../utils';
 
 describe('filter/filter.js - Filter ', function () {
@@ -28,8 +34,8 @@ describe('filter/filter.js - Filter ', function () {
     });
 
     after(() => {
-       document.body.removeChild(this.target);
-       document.body.removeChild(this.target2);
+        document.body.removeChild(this.target);
+        document.body.removeChild(this.target2);
     });
 
     afterEach(() => {
@@ -122,5 +128,40 @@ describe('filter/filter.js - Filter ', function () {
         assert.notOk(this.target.style.display);
         assert.ok(BEM.hasModifier(this.target2, MODIFIER_MATCH));
         assert.notOk(this.target2.style.display);
+    });
+
+    it('should not apply display changes MODIFIER_CLASS_ONLY is present', (done) => {
+        let node = document.createElement('div');
+        node.className = BEM.getBEMClassName(BLOCK_FILTER);
+        BEM.addModifier(node, MODIFIER_CLASS_ONLY);
+        node.dataset.filterTarget = '.target';
+        let input = document.createElement('input');
+        input.className = BEM.getBEMClassName(BLOCK_FILTER, ELEMENT_INPUT);
+        node.appendChild(this.input);
+        let target = document.createElement('div');
+        target.innerHTML = '<p>lorem ipsum...</p>';
+        target.className = 'target';
+        let target2 = document.createElement('div');
+        target2.innerHTML = '<p>dolor sit amet...</p>';
+        target2.className = 'target';
+        document.body.appendChild(target);
+        document.body.appendChild(target2);
+
+        let filter = new Filter(node);
+        filter.input.value = 'lorem';
+        filter.applyFilter();
+
+        Utils.delay(200)
+            .then(() => {
+                BEM.removeModifier(node, MODIFIER_CLASS_ONLY);
+                document.body.removeChild(target)
+                document.body.removeChild(target2)
+
+                assert.ok(BEM.hasModifier(target, MODIFIER_MATCH));
+                assert.notOk(target.style.display);
+                assert.ok(BEM.hasModifier(target2, MODIFIER_NO_MATCH));
+                assert.notOk(target2.style.display);
+                done()
+            });
     });
 });

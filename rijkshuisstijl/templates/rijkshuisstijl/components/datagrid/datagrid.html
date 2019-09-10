@@ -14,7 +14,8 @@
             {% endif %}
 
             <div class="datagrid__toolbar">
-                {% if id %}{% dom_filter filter_target='#'|add:id|add:' tbody tr' %}{% endif %}
+                {% if id %}
+                    {% dom_filter class='filter--class-only' filter_target='#'|add:id|add:' tbody tr' %}{% endif %}
             </div>
         </header>
 
@@ -23,30 +24,40 @@
                 <thead class="datagrid__table-header">
                 <tr class="datagrid__row">
                     {% for column in columns %}
-                        <th class="datagrid__caption">{{ column }}</th>
+                        {% if column.key in orderable_column_keys %}
+                            {% with ordering|get:column.key as ordering %}
+                                <th class="datagrid__caption datagrid__caption--orderable{% if ordering.direction%} datagrid__caption--ordered-{{ ordering.direction }}{% endif %}">
+                                    <a class="datagrid__link" href="{{ ordering.url }}">{{ column.label }}</a>
+                                </th>
+                            {% endwith %}
+                        {% else %}
+                            <th class="datagrid__caption">{{ column.label }}</th>
+                        {% endif %}
                     {% endfor %}
                 </tr>
                 </thead>
 
                 <tbody class="datagrid__table-body">
                 {% for object in object_list %}
-                    <tr class="datagrid__row{% if object.modifier_class %} datagrid__row--{{ object.modifier_class }}{% endif %}{% if object.get_absolute_url %} fake-link fake-link--double-click" data-href="{{ object.get_absolute_url }}"{% else %}"{% endif %}>
-                        {% for key in column_values %}
-                            <td class="datagrid__cell{% if key == modifier_key %} datagrid__cell--modifier{% endif %}">
-                                {% if forloop.counter0 == 0 and object.get_absolute_url %}
-                                    <a class="datagrid__link" href="{{ object.get_absolute_url }}">{{ object|get_attr:key }}</a>
-                                {% else %}
-                                    {{ object|get_attr:key }}
-                                {% endif %}
-                            </td>
-                        {% endfor %}
+                    <tr class="datagrid__row{% if object.modifier_class %} datagrid__row--{{ object.modifier_class }}{% endif %}{% if object.get_absolute_url %} fake-link fake-link--double-click"
+                        data-href="{{ object.get_absolute_url }}"{% else %}"{% endif %}>
+                    {% for column in columns %}
+                        <td class="datagrid__cell{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">
+                            {% if forloop.counter0 == 0 and object.get_absolute_url %}
+                                <a class="datagrid__link"
+                                   href="{{ object.get_absolute_url }}">{{ object|get_attr:column.key }}</a>
+                            {% else %}
+                                {{ object|get_attr:column.key }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
                     </tr>
                 {% endfor %}
                 {% if not object_list %}
                     <tr class="datagrid__row datagrid__row--placeholder">
                         <td class="datagrid__cell" colspan="{{ columns|length }}">{{ _('Geen resultaten') }}</td>
                     </tr>
-                    {% endif %}
+                {% endif %}
                 </tbody>
             </table>
         </div>

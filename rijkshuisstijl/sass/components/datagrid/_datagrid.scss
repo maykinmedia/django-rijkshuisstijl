@@ -7,6 +7,7 @@
 @import '../../settings/color';
 @import '../../settings/lib/ro-shade';
 @import '../header/constants';
+@import '../icon/mixins';
 
 
 $datagrid-spacing: 0.4em;
@@ -134,6 +135,39 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     z-index: 10;
   }
 
+  &__caption--orderable {
+    padding: 0;
+
+    &:after {
+      @include center-v;
+      transform: tr_translate(null, -50%) tr_scale(0.5);
+      right: $datagrid-spacing;
+    }
+  }
+
+  &__caption--ordered-asc,
+  &__caption--ordered-desc {
+    @include shade(2, background-color);
+  }
+
+  &__caption--ordered-asc {
+    @include ro-icon-after('delta-omhoog');
+  }
+
+  &__caption--ordered-desc {
+    @include ro-icon-after('delta-omlaag');
+  }
+
+  &__caption--orderable &__link {
+    @include rows(1, height);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $datagrid-spacing;
+    padding-right: $datagrid-spacing * 4;
+  }
+
   &--overflow &__caption {
     position: static;
   }
@@ -142,6 +176,10 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     @include mobile-only {
       position: static;
     }
+  }
+
+  &__row--nomatch:not(&__row--placeholder) &__cell {
+    opacity: 0.5;
   }
 
   &__row--placeholder &__cell {

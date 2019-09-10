@@ -1,5 +1,12 @@
 import BEM from 'bem.js';
-import {BLOCK_FILTER, ELEMENT_INPUT, FILTERS, MODIFIER_MATCH, MODIFIER_NO_MATCH} from './constants';
+import {
+    BLOCK_FILTER,
+    ELEMENT_INPUT,
+    FILTERS,
+    MODIFIER_CLASS_ONLY,
+    MODIFIER_MATCH,
+    MODIFIER_NO_MATCH
+} from './constants';
 
 
 /**
@@ -53,12 +60,18 @@ export class Filter {
             [...selection].forEach(node => {
                 BEM.addModifier(node, MODIFIER_MATCH);
                 BEM.removeModifier(node, MODIFIER_NO_MATCH);
-                node.style.removeProperty('display');
+
+                if(!BEM.hasModifier(this.node, MODIFIER_CLASS_ONLY)) {
+                    node.style.removeProperty('display');
+                }
 
                 if (!node.textContent.toUpperCase().match(query)) {
                     BEM.removeModifier(node, MODIFIER_MATCH);
                     BEM.addModifier(node, MODIFIER_NO_MATCH);
-                    node.style.display = 'none';
+
+                    if(!BEM.hasModifier(this.node, MODIFIER_CLASS_ONLY)) {
+                        node.style.display = 'none';
+                    }
                 }
             });
         });
@@ -70,7 +83,10 @@ export class Filter {
     discardFilter() {
         let selection = document.querySelectorAll(this.node.dataset.filterTarget);
         [...selection].forEach(node => {
-            node.style.removeProperty('display');
+            if(!BEM.hasModifier(this.node, MODIFIER_CLASS_ONLY)) {
+                node.style.removeProperty('display');
+            }
+            BEM.removeModifier(node, MODIFIER_NO_MATCH);
             BEM.addModifier(node, MODIFIER_MATCH);
         });
     }

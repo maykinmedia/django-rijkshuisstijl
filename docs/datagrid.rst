@@ -11,7 +11,7 @@ document for a full list of available colors.
 .. code-block:: html
 
     {% load rijkshuisstijl %}
-    {% datagrid columns='Title,Author,Price,In Stock' column_values='title,author,price,in_stock_pretty' queryset=object_list is_paginated=True paginator=paginator page_obj=page_obj modifier_key='in_stock_pretty' modifier_mapping='yes:green, no:red' %}
+    {% datagrid class='datagrid--overflow-mobile' orderable_columns='event_name, official:official__first_name, location_pretty:event_city, event_date, status_pretty:status' columns='event_name:Naam, official:Bewindspersoon, location_pretty:Locatie, event_date:Datum, status_pretty:Status' queryset=object_list is_paginated=True paginator=paginator page_obj=page_obj modifier_key='status' modifier_column='status_pretty' modifier_mapping='new:light-blue, recommendation:heaven-blue, decision:dark-blue, draft:mint-green, complete:green' %}
 
 Additionally, a class parameter can be passed providing additional classes for the datagrid's HTML output. Certain
 predefined classes can be used to alter it's behaviour:

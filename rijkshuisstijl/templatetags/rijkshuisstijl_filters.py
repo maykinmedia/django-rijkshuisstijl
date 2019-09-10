@@ -24,5 +24,10 @@ def input_time_format(value):
 
 
 @register.filter
+def get(object, key):
+    return object.get(key)
+
+
+@register.filter
 def get_attr(object, key):
     return getattr(object, key)

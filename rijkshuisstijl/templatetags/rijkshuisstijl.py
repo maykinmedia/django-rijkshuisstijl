@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django import template
+from django.http import QueryDict
 
 register = template.Library()
 
@@ -15,36 +16,118 @@ def dom_filter(**kwargs):
     return kwargs
 
 
-@register.inclusion_tag('rijkshuisstijl/components/datagrid/datagrid.html')
-def datagrid(**kwargs):
-    kwargs['id'] = kwargs.get('id', 'datagrid-' + str(uuid4()))
-    kwargs['object_list'] = kwargs.get('object_list', kwargs['queryset'])
+@register.inclusion_tag('rijkshuisstijl/components/datagrid/datagrid.html', takes_context=True)
+def datagrid(context, **kwargs):
+    def get_id():
+        return kwargs.get('id', 'datagrid-' + str(uuid4()))
 
-    for key in ('columns', 'column_values', 'modifier_mapping'):
+    def parse_kwargs():
+        _kwargs = kwargs
+        for key in ('columns', 'column_labels', 'modifier_mapping', 'orderable_columns'):
+            try:
+                _kwargs[key] = [str.strip() for str in kwargs[key].split(',')]
+            except (AttributeError, KeyError):
+                pass
+        return _kwargs
+
+    def get_columns():
+        _kwargs = parse_kwargs()
+        columns = _kwargs['columns']
+
+        _columns = []
+        for column in columns:
+            key_label = column.split(':')
+            key = key_label[0].strip()
+
+            try:
+                label = key_label[1].strip()
+            except IndexError:
+                label = key
+
+            _columns.append({'key': key, 'label': label})
+
+        return _columns
+
+    def get_object_list():
+        object_list = kwargs.get('queryset', kwargs.get('object_list', []))
+        add_modifier_class(object_list)
+        return object_list
+
+    def add_modifier_class(object_list):
+        _kwargs = parse_kwargs()
         try:
-            kwargs[key] = kwargs[key].split(',')
-        except (AttributeError, KeyError):
-            pass
+            key = _kwargs['modifier_key']
+            modifier_map = {}
 
-    if kwargs['modifier_key']:
-        modifier_map = {}
-
-        if kwargs['modifier_mapping']:
             for mapping in kwargs['modifier_mapping']:
                 mapping = mapping.split(':')
                 modifier_map[mapping[0].strip()] = mapping[1].strip()
 
-            key = kwargs['modifier_key']
+            for object in object_list:
+                object_value = getattr(object, key)
 
-        for object in kwargs['queryset']:
-            modifier_value = getattr(object, key)
+                try:
+                    modifier_value = modifier_map[object_value]
+                    object.modifier_class = modifier_value
+                except KeyError:
+                    pass
+        except KeyError:
+            pass
+
+    def get_modifier_column():
+        return kwargs.get('modifier_column', kwargs.get('modifier_key', False))
+
+    def get_orderable_column_keys():
+        _kwargs = parse_kwargs()
+        return [orderable_column.split(':')[0] for orderable_column in _kwargs.get('orderable_columns', [])]
+
+    def get_ordering():
+        _kwargs = parse_kwargs()
+        request = context['request']
+        orderable_columns = _kwargs.get('orderable_columns', [])
+
+        ordering = {}
+        for orderable_column in orderable_columns:
+            querydict = QueryDict(request.GET.urlencode(), mutable=True)
+            ordering_key = _kwargs.get('ordering_key', 'ordering')
+            current_ordering = querydict.get(ordering_key, False)
+
+            orderable_column_key_field = orderable_column.split(':')
+            orderable_column_key = orderable_column_key_field[0].strip()
+
             try:
-                modifier_value = modifier_map[modifier_value]
-            except KeyError:
-                pass
+                orderable_column_field = orderable_column_key_field[1].strip()
+            except IndexError:
+                orderable_column_field = orderable_column_key
 
-            object.modifier_class = modifier_value
+            directions = {
+                'asc': orderable_column_field,
+                'desc': '-' + orderable_column_field
+            }
+            direction_url = directions['asc']
+            direction = None
 
+            if current_ordering == directions['asc']:
+                direction = 'asc'
+                direction_url = directions['desc']
+            elif current_ordering == directions['desc']:
+                direction = 'desc'
+                direction_url = directions['asc']
+
+            querydict[ordering_key] = direction_url
+            ordering[orderable_column_key] = {
+                'direction': direction,
+                'url': '?' + querydict.urlencode()
+            }
+        return ordering
+
+    kwargs['id'] = get_id()
+    kwargs['columns'] = get_columns()
+    kwargs['object_list'] = get_object_list()
+    kwargs['modifier_column'] = get_modifier_column()
+    kwargs['orderable_column_keys'] = get_orderable_column_keys()
+    kwargs['ordering'] = get_ordering()
+    kwargs['request'] = context['request']
     return kwargs
 
 

@@ -7,6 +7,9 @@ export const BLOCK_FILTER = 'filter';
 export const ELEMENT_INPUT = 'input';
 
 /** @const {string} */
+export const MODIFIER_CLASS_ONLY = 'class-only';
+
+/** @const {string} */
 export const MODIFIER_FILTER = 'filter';
 
 /** @const {string} */
