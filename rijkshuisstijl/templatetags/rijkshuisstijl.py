@@ -208,3 +208,8 @@ def skiplink(**kwargs):
 @register.inclusion_tag('rijkshuisstijl/components/skiplink/skiplink-target.html')
 def skiplink_target(**kwargs):
     return kwargs
+
+
+@register.inclusion_tag('rijkshuisstijl/components/textbox/textbox.html')
+def textbox(**kwargs):
+    return kwargs

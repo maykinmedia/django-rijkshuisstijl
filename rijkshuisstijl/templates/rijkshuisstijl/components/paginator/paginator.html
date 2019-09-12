@@ -16,7 +16,7 @@
             <span class="paginator__label">
                 {% if page_obj.has_next %}
                     <a class="paginator__link paginator__link--next" href="?page={{ page_obj.next_page_number|unlocalize }}" data-page="{{ page_obj.next_page_number|unlocalize }}">{{ _('Volgende') }}</a>
-                    <a class="paginator__link paginator__link--last" href="?page=last">{{ _('Laatste') }}</a>
+                    <a class="paginator__link paginator__link--last" href="?page=last" data-page="last">{{ _('Laatste') }}</a>
                 {% endif %}
             </span>
         </form>

@@ -16,7 +16,7 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
 .datagrid {
   @include border(all);
-  @include shadow;
+  //@include shadow;
   position: relative;
   display: flex;
   flex-direction: column;

@@ -17,9 +17,20 @@
 
   &__title {
     @include h1;
-    @include shade-color('dark-blue');
     font-weight: normal;
     margin: $form-title-margin;
+  }
+
+  &__subtitle {
+    @include h2;
+    @include shade-color('dark-blue');
+    font-weight: normal;
+    margin: $form-subtitle-margin;
+  }
+
+  &__legend {
+    opacity: 0;
+    position: absolute;
   }
 
   &__text {
@@ -27,19 +38,37 @@
   }
 
   &__body {
+    padding: 0;
+  }
+
+  &__fieldset {
+    @include container-padding(small);
     @include shade(1, background-color);
+    border: none;
     display: flex;
     flex-direction: column;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &__legend {
+    margin: 0;
+    padding: 0;
   }
 
   .form-control {
     margin-top: $form-control-margin-top
   }
 
+  .form-control:last-child,
+  &__actions:last-child {
+    margin-bottom: $form-control-margin-top;
+  }
+
   &__actions {
     @include body;
     margin-top: $form-control-margin-top;
-    margin-bottom: $form-control-margin-top;
 
     @include tablet {
       margin-left: $form-control-spacing;

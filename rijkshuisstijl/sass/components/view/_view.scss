@@ -18,6 +18,12 @@ $view-min-height-content-tablet: calc(100vh - #{$login-bar-min-height + $header-
     @include responsive(min-height, $view-min-height-content-mobile, $view-min-height-content-tablet);
   }
 
+  &--vcenter &__content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
   &--big .article__body,
   &--big .login-bar__body,
   &--big .navigation-bar__body {

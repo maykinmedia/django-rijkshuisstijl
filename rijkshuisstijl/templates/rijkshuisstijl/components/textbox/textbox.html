@@ -1,0 +1,6 @@
+{% spaceless %}{% load i18n rijkshuisstijl %}
+<div class="textbox{% if status %} textbox--{{ status }}{% endif %}{% if class %} {{ class }}{% endif %}">
+    {% if title %}<h4 class="textbox__title">{{ title }}</h4>{% endif %}
+    {% if text %}<p class="textbox__text">{{ text }}</p>{% endif %}
+</div>
+{% endspaceless %}

@@ -1,0 +1,33 @@
+@import '../../settings/lib/ro-shade';
+@import 'microscope/grid';
+@import 'microscope/typography';
+
+.textbox {
+  @include shade(1, background-color);
+  @include rows(1, padding);
+  box-sizing: border-box;
+
+  &--danger {
+    @include color-danger(background-color);
+  }
+
+  &--info {
+    @include color-info(background-color);
+  }
+
+  &--success {
+    @include color-success(background-color);
+  }
+
+  &--warning {
+    @include color-warning(background-color);
+  }
+
+  &__title {
+    @include h4;
+  }
+
+  &__text {
+    @include body;
+  }
+}

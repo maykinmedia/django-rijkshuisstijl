@@ -5,29 +5,37 @@ from django.template.defaulttags import register
 
 @register.filter
 def input_date_format(value):
-    regex = re.compile('(\d\d)-(\d\d)-(\d\d\d\d)')
-    match = re.match(regex, value)
+    if value:
+        regex = re.compile('(\d\d)-(\d\d)-(\d\d\d\d)')
+        match = re.match(regex, value)
 
-    if match:
-        return '{}-{}-{}'.format(match[3], match[2], match[1])
-    return value
+        if match:
+            return '{}-{}-{}'.format(match[3], match[2], match[1])
+        return value
 
 
 @register.filter
 def input_time_format(value):
-    regex = re.compile('^(\d\d):(\d\d):(\d\d)$')
-    match = re.match(regex, value)
+    if value:
+        regex = re.compile('^(\d\d):(\d\d):(\d\d)$')
+        match = re.match(regex, value)
 
-    if match:
-        return '{}:{}'.format(match[1], match[2])
-    return value
+        if match:
+            return '{}:{}'.format(match[1], match[2])
+        return value
 
 
 @register.filter
 def get(object, key):
-    return object.get(key)
+    try:
+        return object.get(key)
+    except:
+        return ''
 
 
 @register.filter
 def get_attr(object, key):
-    return getattr(object, key)
+    try:
+        return getattr(object, key)
+    except:
+        return ''
