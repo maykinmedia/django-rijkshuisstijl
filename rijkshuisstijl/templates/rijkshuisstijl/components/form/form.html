@@ -1,6 +1,6 @@
 {% spaceless %}{% load i18n sniplates rijkshuisstijl_filters %}
     {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
-    <form class="form{% if class %} {{ class }}{% endif %}" method="{{ method|default:'post' }}"{% if id %} id="{{ id }}"{% endif %}>
+    <form class="form{% if class %} {{ class }}{% endif %}" method="{{ method|default:'post' }}" enctype="{{ enctype|default:'multipart/form-data' }}"{% if id %} id="{{ id }}"{% endif %}>
         <header class="form__header">
             {% if title %}<h1 class="form__title">{{ title }}</h1>{% endif %}
             <p class="form__text">* {{ _('verplichte velden') }}</p>

@@ -11,5 +11,6 @@
         <input class="input{% if errors %} input--error{% endif %}{% if "readonly" in widget_attrs %} input--readonly{% endif %}{% if class %} {{ class }}{% endif %}" type="{{ type|default:'checkbox' }}"{{ base_attrs }}{{ optional_attrs }}{{ valdation_atrs }}{{ meta_atrs }}{{ additional_attrs }}>
         <div class="{{ type|default:'checkbox' }}__checkmark"></div>
         {% if choice %}{% include './label.html' with for=id label=choice.display %}{% endif %}
+        {% if label %}{% include './label.html' with for=id label=label %}{% endif %}
     </div>
 {% endspaceless %}

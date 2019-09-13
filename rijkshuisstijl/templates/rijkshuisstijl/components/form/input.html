@@ -5,4 +5,5 @@
     {% capture as meta_atrs %}{% if id %} id="{{ id }}"{% endif %}{% endcapture %}
     {% capture as additional_attrs %}{% for attr, value in widget_attrs.items %} {{ attr }}="{{ value }}"{% endfor %}{% endcapture %}
     <input class="input{% if errors %} input--error{% endif %}{% if "readonly" in widget_attrs %} input--readonly{% endif %}{% if class %} {{ class }}{% endif %}"{{ base_attrs }}{{ optional_attrs }}{{ valdation_atrs }}{{ meta_atrs }}{{ additional_attrs }}>
+    {% if type == 'file' %}<label class="input__filepicker"{% if id %} for="{{ id }}"{% endif %}>{% firstof raw_value placeholder _('Bestand kiezen') %}</label>{% endif %}
 {% endspaceless %}

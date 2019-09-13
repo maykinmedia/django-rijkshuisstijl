@@ -13,7 +13,7 @@ describe('fake-link/fake-link.js - FakeLink ', function () {
         this.node = document.createElement('div');
         this.node.className = BEM.getBEMClassName(BLOCK_FAKE_LINK);
         this.node.dataset.href = '/foo/bar';
-        this.FakeLink = Utils.createTestableClass(FakeLink);
+        this.InputFilepicker = Utils.createTestableClass(FakeLink);
     });
 
     afterEach(() => {
@@ -21,7 +21,7 @@ describe('fake-link/fake-link.js - FakeLink ', function () {
     });
 
     it('should construct', () => {
-        let fakeLink = new this.FakeLink();
+        let fakeLink = new this.InputFilepicker();
         sinon.replace(fakeLink, 'bindEvents', sinon.fake());
         fakeLink.constructor(this.node);
         assert(FakeLink);
@@ -30,14 +30,14 @@ describe('fake-link/fake-link.js - FakeLink ', function () {
     });
 
     it('should call bindEvents() when constructor is called', () => {
-        let fakeLink = new this.FakeLink();
+        let fakeLink = new this.InputFilepicker();
         sinon.replace(fakeLink, 'bindEvents', sinon.fake());
         fakeLink.constructor(this.node);
         assert.equal(fakeLink.bindEvents.callCount, 1);
     });
 
     it('should call navigate() when this.node is double clicked if MODIFIER_DOUBLE_CLICK is present', () => {
-        let fakeLink = new this.FakeLink();
+        let fakeLink = new this.InputFilepicker();
         BEM.toggleModifier(this.node, MODIFIER_DOUBLE_CLICK, true);
         sinon.replace(fakeLink, 'navigate', sinon.fake());
         fakeLink.constructor(this.node);
@@ -48,7 +48,7 @@ describe('fake-link/fake-link.js - FakeLink ', function () {
     });
 
     it('should call navigate() when this.node is clicked if MODIFIER_DOUBLE_CLICK is not present', () => {
-        let fakeLink = new this.FakeLink();
+        let fakeLink = new this.InputFilepicker();
         BEM.toggleModifier(this.node, MODIFIER_DOUBLE_CLICK, false);
         sinon.replace(fakeLink, 'navigate', sinon.fake());
         fakeLink.constructor(this.node);

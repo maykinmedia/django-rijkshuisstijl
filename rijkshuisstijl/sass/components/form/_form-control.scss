@@ -17,7 +17,13 @@
     box-sizing: border-box;
   }
 
-  > .label ~ * {
+  > .label ~ .input,
+  > .label ~ .input__filepicker,
+  > .label ~ .select,
+  > .label ~ .textarea,
+  > .label ~ .form-control__choices,
+  > .label ~ .errors,
+  > .label ~ .help-text {
     width: 100%;
 
     @include tablet {
@@ -27,7 +33,11 @@
     }
   }
 
-  .input, .select {
+  .input, .select, .textarea {
+    z-index: 10;
+  }
+
+  .input, .input__filepicker, .select {
     &:not([type=checkbox]):not([type=radio]) {
       @include rows(1);
     }
@@ -50,5 +60,9 @@
 
   &__choices > *:not(:last-child) {
     margin-right: $input-padding-h;
+  }
+
+  &__link {
+    @include anchor;
   }
 }

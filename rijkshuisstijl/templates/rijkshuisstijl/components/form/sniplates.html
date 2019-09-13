@@ -3,6 +3,10 @@
         {% include './form-control.html' with class=widget.attrs.class %}
     {% endblock %}
 
+    {% block ClearableFileInput %}
+        {% reuse '_formControl' type='file' raw_value=raw_value %}
+    {% endblock %}
+
     {% block Select %}
         {% reuse '_formControl' type='select' %}
     {% endblock %}

@@ -1,5 +1,5 @@
 {% spaceless %}
-    <label class="help-text" {% if for %} for="{{ for }}"{% endif %}>
-        <div class="help-text__body">{{ help_text }}</div>
-    </label>
+    <div class="help-text" {% if for %} for="{{ for }}"{% endif %}>
+        <label class="help-text__body">{{ help_text }}</label>
+    </div>
 {% endspaceless %}

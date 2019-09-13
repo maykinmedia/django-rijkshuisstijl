@@ -50,6 +50,7 @@
   align-items: center;
   outline: none;
   padding: 0 $input-padding-h;
+  position: relative;
 
   &:disabled {
     opacity: 0.2;

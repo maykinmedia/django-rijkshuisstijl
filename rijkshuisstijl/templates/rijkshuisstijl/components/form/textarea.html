@@ -4,6 +4,6 @@
     {% capture as valdation_atrs %}{% if disabled %} disabled{% endif %}{% if readonly%} readonly{% endif %}{% if required %} required{% endif %}{% endcapture %}
     {% capture as meta_atrs %}{% if id %} id="{{ id }}"{% endif %}{% endcapture %}
     {% capture as additional_attrs %}{% for attr, value in widget.attrs.items %} {{ attr }}="{{ value }}"{% endfor %}{% endcapture %}
-    <textarea class="textarea{% if "readonly" in widget.attrs %} input--readonly{% endif %}{% if errors %} input--error{% endif %}{% if class %} {{ class }}{% endif %}"{{ base_attrs }}{{ optional_attrs }}{{ valdation_atrs }}{{ meta_atrs }}{{ additional_attrs }}>{% if value != 'None' %}{{ value }}{% endif %}</textarea>
+    <textarea class="textarea{% if "readonly" in widget.attrs %} textarea--readonly{% endif %}{% if errors %} textarea--error{% endif %}{% if class %} {{ class }}{% endif %}"{{ base_attrs }}{{ optional_attrs }}{{ valdation_atrs }}{{ meta_atrs }}{{ additional_attrs }}>{% if value != 'None' %}{{ value }}{% endif %}</textarea>
 {% endspaceless %}
 
