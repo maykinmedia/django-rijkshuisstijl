@@ -142,6 +142,11 @@ def image(**kwargs):
     return kwargs
 
 
+@register.inclusion_tag('rijkshuisstijl/components/key-value-list/key-value-list.html')
+def key_value_list(**kwargs):
+    return kwargs
+
+
 @register.inclusion_tag('rijkshuisstijl/components/login-bar/login-bar.html', takes_context=True)
 def login_bar(context, **kwargs):
     kwargs['request'] = context['request']

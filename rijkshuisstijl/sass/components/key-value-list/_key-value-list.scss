@@ -1,0 +1,23 @@
+@import 'microscope/typography';
+
+.key-value-list {
+  &__key,
+  &__value {
+    text-align: left;
+    vertical-align: top;
+    width: 50%;
+  }
+
+  &__pair:not(:last-child) &__key,
+  &__pair:not(:last-child) &__value {
+    @include border(bottom, $style: dotted);
+  }
+
+  &__key {
+    @include body;
+  }
+
+  &__value {
+    @include h4;
+  }
+}
