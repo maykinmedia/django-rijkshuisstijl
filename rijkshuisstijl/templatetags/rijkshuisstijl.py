@@ -39,10 +39,10 @@ def datagrid(context, **kwargs):
             for object in object_list:
                 object_value = getattr(object, key)
 
-                for key, value in modifier_map.items():
-                    pattern = re.compile(key)
+                for item_key, item_value in modifier_map.items():
+                    pattern = re.compile(item_key)
                     if pattern.match(object_value):
-                        object.modifier_class = value
+                        object.modifier_class = item_value
         except KeyError:
             pass
 
