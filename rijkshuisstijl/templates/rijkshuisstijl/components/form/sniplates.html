@@ -1,6 +1,7 @@
 {% extends 'sniplates/django.html' %}{% spaceless %}{% load sniplates rijkshuisstijl_filters %}
     {% block _formControl %}
-        {% include './form-control.html' with class=widget.attrs.class %}
+        {% firstof value field.initial as value %}
+        {% include './form-control.html' with class=widget.attrs.class value=value %}
     {% endblock %}
 
     {% block ClearableFileInput %}

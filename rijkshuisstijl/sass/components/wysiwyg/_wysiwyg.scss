@@ -1,0 +1,5 @@
+@import 'microscope/typography';
+
+.wysiwyg {
+  @include wysiwyg;
+}

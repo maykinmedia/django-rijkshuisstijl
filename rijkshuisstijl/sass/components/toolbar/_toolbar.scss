@@ -1,0 +1,32 @@
+@import 'microscope/grid';
+@import 'microscope/typography';
+@import '../../settings/lib/ro-shade';
+
+$toolbar-spacing: 0.4em;
+
+.toolbar {
+  @include border(all);
+  @include shade(1, background-color);
+  @include rows(1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: $toolbar-spacing;
+  position: sticky;
+  top: 0;
+
+  &__list,
+  &__list-item {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__list {
+    display: flex;
+  }
+
+  &__list-item:not(:last-child) {
+    margin-right: $toolbar-spacing * 2;
+  }
+}

@@ -65,6 +65,7 @@
     flex-shrink: 0;
     flex-wrap: wrap;
     float: left;
+    padding: 0;
   }
 
   &__list-item--active > &__link {

@@ -58,6 +58,12 @@
     }
   }
 
+  &--small,
+  &--no-text {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   &--small {
     @include button--small;
   }
@@ -126,12 +132,20 @@
     border-radius: $button-height-small / 2;
   }
 
-
   .icon {
     cursor: pointer;
     display: flex;
     align-items: center;
     flex-shrink: 0;
+  }
+
+  &__label + .icon {
+    margin-left: $button-spacing;
+  }
+
+  &--no-text .icon {
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .icon:before {
@@ -151,7 +165,7 @@
     @include color-primary(color);
 
     .icon:before {
-      @include color-primary(background-color);
+      background-color: transparent !important;
     }
   }
 

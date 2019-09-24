@@ -1,5 +1,4 @@
 @import 'microscope/color';
-@import 'microscope/grid';
 @import 'microscope/responsive';
 @import 'microscope/transform';
 @import 'microscope/typography';
@@ -16,7 +15,6 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
 .datagrid {
   @include border(all);
-  //@include shadow;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -44,7 +42,6 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
   &__toolbar {
     @include border;
     @include shade(1, background-color);
-    @include rows(1);
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -92,7 +89,6 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   &__row {
     @include color-background;
-    @include rows(1);
   }
 
   &__thead &__row {
@@ -159,7 +155,6 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
   }
 
   &__caption--orderable &__link {
-    @include rows(1, height);
     box-sizing: border-box;
     display: flex;
     align-items: center;

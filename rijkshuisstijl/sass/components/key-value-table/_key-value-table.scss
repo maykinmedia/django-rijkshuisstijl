@@ -1,6 +1,6 @@
 @import 'microscope/typography';
 
-.key-value-list {
+.key-value-table {
   &__key,
   &__value {
     text-align: left;
@@ -8,8 +8,8 @@
     width: 50%;
   }
 
-  &__pair:not(:last-child) &__key,
-  &__pair:not(:last-child) &__value {
+  &__row:not(:last-child) &__key,
+  &__row:not(:last-child) &__value {
     @include border(bottom, $style: dotted);
   }
 

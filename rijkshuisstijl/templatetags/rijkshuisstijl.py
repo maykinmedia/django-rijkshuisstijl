@@ -23,7 +23,7 @@ def datagrid(context, **kwargs):
         return kwargs.get('id', 'datagrid-' + str(uuid4()))
 
     def get_columns():
-        columns = parse_kwarg('columns', {})
+        columns = parse_kwarg(kwargs, 'columns', {})
         return [{'key': key, 'label': value} for key, value in columns.items()]
 
     def get_object_list():
@@ -33,8 +33,8 @@ def datagrid(context, **kwargs):
 
     def add_modifier_class(object_list):
         try:
-            key = parse_kwarg('modifier_key', '')
-            modifier_map = parse_kwarg('modifier_mapping', {})
+            key = parse_kwarg(kwargs, 'modifier_key', '')
+            modifier_map = parse_kwarg(kwargs, 'modifier_mapping', {})
 
             for object in object_list:
                 object_value = getattr(object, key)
@@ -50,16 +50,16 @@ def datagrid(context, **kwargs):
         return kwargs.get('modifier_column', kwargs.get('modifier_key', False))
 
     def get_orderable_column_keys():
-        return [key for key in parse_kwarg('orderable_columns', {}).keys()]
+        return [key for key in parse_kwarg(kwargs, 'orderable_columns', {}).keys()]
 
     def get_ordering():
         request = context['request']
-        orderable_columns = parse_kwarg('orderable_columns', {})
+        orderable_columns = parse_kwarg(kwargs, 'orderable_columns', {})
 
         ordering = {}
         for orderable_column_key, orderable_column_field in orderable_columns.items():
             querydict = QueryDict(request.GET.urlencode(), mutable=True)
-            ordering_key = parse_kwarg('ordering_key', 'ordering')
+            ordering_key = parse_kwarg(kwargs, 'ordering_key', 'ordering')
             current_ordering = querydict.get(ordering_key, False)
 
             directions = {
@@ -82,28 +82,6 @@ def datagrid(context, **kwargs):
                 'url': '?' + querydict.urlencode()
             }
         return ordering
-
-    def parse_kwarg(name, default=None):
-        string = kwargs.get(name, None)
-
-        if not string:
-            return default
-
-        if ',' in string or ':' in string:
-            lst = [entry.strip() for entry in string.split(',')]
-
-            if ':' in string or isinstance(default, dict):
-                dct = {}
-                for value in lst:
-                    try:
-                        key, val = value.split(':')
-                    except ValueError:
-                        key = value
-                        val = value
-                    dct[key] = val or key
-                return dct
-            return lst
-        return string
 
     kwargs['id'] = get_id()
     kwargs['columns'] = get_columns()
@@ -142,8 +120,8 @@ def image(**kwargs):
     return kwargs
 
 
-@register.inclusion_tag('rijkshuisstijl/components/key-value-list/key-value-list.html')
-def key_value_list(**kwargs):
+@register.inclusion_tag('rijkshuisstijl/components/key-value-table/key-value-table.html')
+def key_value_table(**kwargs):
     return kwargs
 
 
@@ -199,6 +177,40 @@ def skiplink_target(**kwargs):
     return kwargs
 
 
+@register.inclusion_tag('rijkshuisstijl/components/toolbar/toolbar.html')
+def toolbar(*args, **kwargs):
+    kwargs['items'] = kwargs.get('items', [])
+    for arg in args:
+        kwargs['items'].append(parse_arg(arg))
+    return kwargs
+
+
 @register.inclusion_tag('rijkshuisstijl/components/textbox/textbox.html')
 def textbox(**kwargs):
     return kwargs
+
+
+def parse_arg(arg, default=None):
+    if not arg:
+        return default
+
+    if ',' in arg or ':' in arg:
+        lst = [entry.strip() for entry in arg.split(',')]
+
+        if ':' in arg or isinstance(default, dict):
+            dct = {}
+            for value in lst:
+                try:
+                    key, val = value.split(':')
+                except ValueError:
+                    key = value
+                    val = value
+                dct[key] = val or key
+            return dct
+        return lst
+    return arg
+
+
+def parse_kwarg(kwargs, name, default=None):
+    value = kwargs.get(name, None)
+    return parse_arg(value, default)
