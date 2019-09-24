@@ -5,6 +5,7 @@ __pycache__
 build/lib
 dist/
 docs/_build/
+*.pyc
 
 # Coverage reports
 /reports/

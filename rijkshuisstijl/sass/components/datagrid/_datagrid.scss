@@ -6,6 +6,7 @@
 @import '../../settings/color';
 @import '../../settings/lib/ro-shade';
 @import '../header/constants';
+@import '../form/constants';
 @import '../icon/mixins';
 
 
@@ -87,6 +88,10 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     width: 100%;
   }
 
+  &--fixed &__table {
+    table-layout: fixed;
+  }
+
   &__row {
     @include color-background;
   }
@@ -121,6 +126,15 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     padding: $datagrid-spacing;
     position: relative;
     text-align: left;
+
+    &--checkbox {
+      width: calc(#{$checkbox-size} + 2 * #{$datagrid-spacing});
+    }
+  }
+
+  &--ellipsis &__caption,
+  &--ellipsis &__cell {
+    @include ellipsis;
   }
 
   &__caption {
@@ -182,6 +196,7 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     text-align: center;
   }
 
+  a,
   &__link {
     @include anchor;
     color: inherit;

@@ -11,6 +11,12 @@ def form(context, form, label='', **kwargs):
     return kwargs
 
 
+@register.inclusion_tag('rijkshuisstijl/components/form/form-control.html')
+def form_control(**kwargs):
+    return kwargs
+
+
+
 @register.inclusion_tag('rijkshuisstijl/components/form/input.html')
 def form_input(**kwargs):
     return kwargs

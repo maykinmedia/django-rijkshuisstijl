@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 from uuid import uuid4
 
 from django import template
@@ -33,7 +34,11 @@ def datagrid(context, **kwargs):
 
     def add_modifier_class(object_list):
         try:
-            key = parse_kwarg(kwargs, 'modifier_key', '')
+            key = parse_kwarg(kwargs, 'modifier_key', None)
+
+            if not key:
+                return
+
             modifier_map = parse_kwarg(kwargs, 'modifier_mapping', {})
 
             for object in object_list:
@@ -198,7 +203,7 @@ def parse_arg(arg, default=None):
         lst = [entry.strip() for entry in arg.split(',')]
 
         if ':' in arg or isinstance(default, dict):
-            dct = {}
+            dct = OrderedDict()
             for value in lst:
                 try:
                     key, val = value.split(':')

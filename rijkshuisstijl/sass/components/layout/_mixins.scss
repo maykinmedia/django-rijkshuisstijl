@@ -1,0 +1,13 @@
+@import 'microscope/grid';
+@import 'microscope/responsive';
+@import 'microscope/util';
+
+@mixin layout {
+  @include container;
+
+  @include mobile-only {
+    .datagrid {
+      @include breakout-padding(normal);
+    }
+  }
+}

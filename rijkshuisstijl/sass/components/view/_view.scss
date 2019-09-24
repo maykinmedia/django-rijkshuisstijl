@@ -38,8 +38,4 @@ $view-min-height-content-tablet: calc(100vh - #{$login-bar-min-height + $header-
   .login-bar {
     @include hide-on-mobile;
   }
-
-  .layout {
-    @include container-padding(normal, (padding-top, padding-bottom));
-  }
 }

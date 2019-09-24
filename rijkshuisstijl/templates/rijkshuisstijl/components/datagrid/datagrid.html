@@ -1,5 +1,8 @@
-{% spaceless %}{% load i18n rijkshuisstijl rijkshuisstijl_filters %}
-    <div class="datagrid{% if class %} {{ class }}{% endif %}"{% if id %} id="{{ id }}"{% endif %} role="group">
+{% spaceless %}{% load i18n rijkshuisstijl rijkshuisstijl_filters rijkshuisstijl_form %}
+    <div class="datagrid{% if class %} {{ class }}{% endif %}" id="{{ id }}" role="group">
+        {% if form %}
+            <form class="datagrid__form" method="post">
+        {% endif %}
         <header class="datagrid__header">
             {% if title %}
                 <div class="datagrid__infobar">
@@ -24,10 +27,16 @@
             <table class="datagrid__table">
                 <thead class="datagrid__table-header">
                 <tr class="datagrid__row">
+                    {% if form %}
+                        <th class="datagrid__caption datagrid__caption--checkbox">
+                            {% form_control type='checkbox' name='datagrid-selected' value=object.pk select_all='#'|add:id|add:' .datagrid__cell--checkbox .input' %}
+                        </th>
+                    {% endif %}
+
                     {% for column in columns %}
                         {% if column.key in orderable_column_keys %}
                             {% with ordering|get:column.key as ordering %}
-                                <th class="datagrid__caption datagrid__caption--orderable{% if ordering.direction%} datagrid__caption--ordered-{{ ordering.direction }}{% endif %}">
+                                <th class="datagrid__caption datagrid__caption--orderable{% if ordering.direction %} datagrid__caption--ordered-{{ ordering.direction }}{% endif %}">
                                     <a class="datagrid__link" href="{{ ordering.url }}">{{ column.label }}</a>
                                 </th>
                             {% endwith %}
@@ -40,20 +49,32 @@
 
                 <tbody class="datagrid__table-body">
                 {% for object in object_list %}
-                    <tr class="datagrid__row{% if object.modifier_class %} datagrid__row--{{ object.modifier_class }}{% endif %}{% if object.get_absolute_url %} fake-link fake-link--double-click"
-                        data-href="{{ object.get_absolute_url }}"{% else %}"{% endif %}>
-                    {% for column in columns %}
-                        <td class="datagrid__cell{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">
-                            {% if forloop.counter0 == 0 and object.get_absolute_url %}
-                                <a class="datagrid__link"
-                                   href="{{ object.get_absolute_url }}">{{ object|get_attr:column.key }}</a>
-                            {% else %}
-                                {{ object|get_attr:column.key }}
-                            {% endif %}
-                        </td>
-                    {% endfor %}
+                    <tr class="datagrid__row{% if object.modifier_class %} datagrid__row--{{ object.modifier_class }}{% endif %}{% if object.get_absolute_url %} fake-link fake-link--double-click" data-href="{{ object.get_absolute_url }}"{% else %}"{% endif %}>
+                        {% if form %}
+                            <td class="datagrid__cell datagrid__cell--checkbox">
+                                {% form_control type='checkbox' name='datagrid-selected' value=object.pk %}
+                            </td>
+                        {% endif %}
+
+                        {% for column in columns %}
+                            <td class="datagrid__cell{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">
+                                {% if forloop.counter0 == 0 and object.get_absolute_url %}
+                                    <a class="datagrid__link"
+                                       href="{{ object.get_absolute_url }}">{{ object|get_attr:column.key }}</a>
+                                {% else %}
+                                    {% if urlize %}
+                                        {{ object|get_attr:column.key|urlize }}
+                                    {% elif urlizetrunc %}
+                                        {{ object|get_attr:column.key|urlizetrunc:urlizetrunc }}
+                                    {% else %}
+                                        {{ object|get_attr:column.key }}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
                     </tr>
                 {% endfor %}
+
                 {% if not object_list %}
                     <tr class="datagrid__row datagrid__row--placeholder">
                         <td class="datagrid__cell" colspan="{{ columns|length }}">{{ _('Geen resultaten') }}</td>
@@ -68,5 +89,8 @@
                 {% paginator %}
             </div>
         </footer>
+        {% if form %}
+            </form>
+        {% endif %}
     </div>
 {% endspaceless %}
