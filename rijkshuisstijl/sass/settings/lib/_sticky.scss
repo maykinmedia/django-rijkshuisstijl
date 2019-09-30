@@ -1,7 +1,7 @@
 @import 'microscope/responsive';
 @import '../../components/navigation-bar/constants';
 
-@mixin sticky($offset: null, $position: 'top') {
+@mixin sticky($offset: null, $position: 'top', $clear: false) {
   position: sticky;
   @if ($position == 'top') {
 
@@ -17,6 +17,13 @@
         @include responsive($position, calc(#{$datagrid-offset-caption-mobile} + #{$offset}), calc(#{$navigation-bar-min-height-tablet-stuck} + #{$offset}));
       } @else {
         @include responsive($position, $datagrid-offset-caption-mobile, $navigation-bar-min-height-tablet-stuck);
+      }
+    }
+
+    @if $clear {
+      .navigation-bar--stuck ~ * & {
+        margin-left: 0!important;
+        margin-right: 0!important;
       }
     }
 

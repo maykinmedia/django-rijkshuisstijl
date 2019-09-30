@@ -17,17 +17,17 @@
                 </div>
             {% endif %}
 
-            <div class="toolbar{% if form_buttons %} toolbar--justify{% endif %}">
-                <ul class="toolbar__list">
-                    {% if form_buttons and toolbar_position in 'top,both' %}
+            <div class="toolbar{% if form_buttons %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
+                {% if form_buttons and toolbar_position in 'top,both' %}
+                    <ul class="toolbar__list">
                         {% for item in form_buttons %}
                             <li class="toolbar__list-item">
                                 {% firstof item.class 'button--transparent' as item_class %}
                                 {% button class='button--small '|add:item_class name=item.name label=item.label title=item.title|default:None icon=item.icon|default:None %}
                             </li>
                         {% endfor %}
-                    {% endif %}
-                </ul>
+                    </ul>
+                {% endif %}
 
                 <ul class="toolbar__list">
                     <li class="toolbar__list-item">
@@ -98,17 +98,17 @@
 
         {% if is_paginated %}
             <footer class="datagrid__footer">
-                <div class="toolbar toolbar--justify">
-                    <ul class="toolbar__list">
-                        {% if form_buttons and toolbar_position in 'bottom,both' %}
+                <div class="toolbar{% if form_buttons %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
+                    {% if form_buttons and toolbar_position in 'bottom,both' %}
+                        <ul class="toolbar__list">
                             {% for item in form_buttons %}
                                 <li class="toolbar__list-item">
                                     {% firstof item.class 'button--transparent' as item_class %}
                                     {% button class='button--small '|add:item_class name=item.name label=item.label title=item.title|default:None icon=item.icon|default:None %}
                                 </li>
                             {% endfor %}
-                        {% endif %}
-                    </ul>
+                        </ul>
+                    {% endif %}
 
                     <ul class="toolbar__list">
                         <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_obj=page_obj form=False %}</li>

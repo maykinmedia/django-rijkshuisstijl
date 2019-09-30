@@ -40,6 +40,11 @@
     margin: 0;
   }
 
+  &--full-width .layout > .key-value-table,
+  &--full-width .layout > .toolbar{
+    @include container-padding(normal, ('margin-left', 'margin-right'));
+  }
+
   &--full-width .layout {
     padding: 0;
   }

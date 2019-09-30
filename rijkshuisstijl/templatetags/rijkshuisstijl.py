@@ -5,6 +5,7 @@ from django import template
 from django.http import QueryDict
 from django.templatetags.static import static
 from django.utils import formats
+from django.utils.safestring import SafeText
 from django.utils.translation import gettext_lazy as _
 
 register = template.Library()
@@ -129,6 +130,8 @@ def datagrid(context, **kwargs):
 
     def add_display(obj):
         for column in get_columns():
+            # from ipdb import set_trace
+            # set_trace()
             key = column['key']
             fn = kwargs.get('get_{}_display'.format(key), None)
             if fn:
@@ -546,7 +549,7 @@ def parse_arg(arg, default=None):
     if arg is None:
         return default
 
-    if type(arg) != str:
+    if type(arg) != str and type(arg) != SafeText:
         return arg
 
     if ',' in arg or ':' in arg:

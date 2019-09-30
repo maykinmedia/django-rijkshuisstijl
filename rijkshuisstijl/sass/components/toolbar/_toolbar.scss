@@ -8,7 +8,7 @@
   @include border(all);
   @include shade(1, background-color);
   @include rows(1);
-  @include sticky;
+  @include sticky(null, top, true);
   display: flex;
   align-items: center;
   justify-content: flex-start;
