@@ -5,9 +5,12 @@
 @import 'microscope/util';
 @import '../../settings/color';
 @import '../../settings/lib/ro-shade';
-@import '../header/constants';
+@import '../../settings/lib/sticky';
+@import '../button/constants';
 @import '../form/constants';
+@import '../header/constants';
 @import '../icon/mixins';
+@import '../toolbar/constants';
 
 
 $datagrid-spacing: 0.4em;
@@ -29,6 +32,15 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     flex-shrink: 0;
   }
 
+  &__header {
+    @include sticky;
+    z-index: 10;
+  }
+
+  &__footer {
+    @include sticky(0, 'bottom');
+  }
+
   &__infobar {
     @include outline;
     @include border(all);
@@ -40,16 +52,7 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     padding: $datagrid-spacing;
   }
 
-  &__toolbar {
-    @include border;
-    @include shade(1, background-color);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: $datagrid-spacing;
-  }
-
-  &__toolbar:empty {
+  .toolbar:empty {
     display: none;
   }
 
@@ -139,9 +142,8 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   &__caption {
     @include outline;
-    @include responsive(top, $datagrid-offset-caption-mobile, 0);
     @include shade(1, background-color);
-    position: sticky;
+    @include sticky('#{$toolbar-spacing} * 2 + #{$button-height-small}');
     z-index: 10;
   }
 
@@ -198,7 +200,10 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   a,
   &__link {
-    @include anchor;
+    @include anchor(true);
+  }
+
+  &__caption &__link {
     color: inherit;
   }
 }

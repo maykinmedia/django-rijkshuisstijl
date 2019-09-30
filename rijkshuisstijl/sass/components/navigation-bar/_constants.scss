@@ -1,5 +1,7 @@
+@import 'microscope/grid';
 @import '../search/constants';
 
 
 $navigation-bar-min-height-tablet: 70px;
+$navigation-bar-min-height-tablet-stuck: $grid-row-height;
 $navigation-bar-height-search: $search-height;

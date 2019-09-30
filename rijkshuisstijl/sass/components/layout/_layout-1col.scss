@@ -3,18 +3,4 @@
 
 .layout {
   @include layout;
-
-  .view--small & {
-    @include container--small;
-  }
-
-  .view--big & {
-    @include container--big;
-  }
-
-  .view--full-width & {
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-  }
 }

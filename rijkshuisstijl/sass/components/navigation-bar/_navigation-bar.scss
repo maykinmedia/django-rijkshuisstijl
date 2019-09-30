@@ -41,8 +41,8 @@
     }
 
     &__actions .menu {
-      width: $navigation-bar-height-search!important;
-      height: $navigation-bar-height-search!important;
+      width: $navigation-bar-height-search !important;
+      height: $navigation-bar-height-search !important;
     }
 
     &__actions .menu .menu {
@@ -57,7 +57,7 @@
     }
 
     .menu,
-    &__body > ul {  // Fixme: ul doesn't get class on empty menu.
+    &__body > ul { // Fixme: ul doesn't get class on empty menu.
       width: 100%;
       height: 100%;
     }
@@ -89,6 +89,12 @@
     @include container(flex, false);
     @include container--big(false);
 
+    &--sticky {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
     .login-bar {
       display: none !important;
     }
@@ -99,6 +105,11 @@
       align-items: center;
       min-height: $navigation-bar-min-height-tablet;
       position: relative;
+    }
+
+    &--sticky#{&}--stuck &__body {
+      min-height: $navigation-bar-min-height-tablet-stuck;
+      padding-right: 0;
     }
 
     &__actions {
@@ -128,6 +139,17 @@
 
     &__actions .menu .menu {
       right: 0;
+    }
+
+
+    &--sticky#{&}--stuck .menu__link,
+    &--sticky#{&}--stuck .menu__label {
+      @include body;
+      @include color-background(color);
+    }
+
+    &--sticky#{&}--stuck .menu__list-item--active .menu__link {
+      @include color-primary(color);
     }
   }
 }

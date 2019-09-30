@@ -1,7 +1,7 @@
 {% extends 'sniplates/django.html' %}{% spaceless %}{% load sniplates rijkshuisstijl_filters %}
     {% block _formControl %}
         {% firstof value field.initial as value %}
-        {% include './form-control.html' with class=widget.attrs.class value=value %}
+        {% include 'rijkshuisstijl/components/form/form-control.html' with class=widget.attrs.class value=value %}
     {% endblock %}
 
     {% block ClearableFileInput %}
@@ -14,6 +14,10 @@
 
     {% block SelectMultiple %}
         {% reuse '_formControl' type='select' multiple=True %}
+    {% endblock %}
+
+    {% block MultipleChoiceField %}
+        {% reuse 'SelectMultiple' %}
     {% endblock %}
 
     {% block CheckboxSelectMultiple %}

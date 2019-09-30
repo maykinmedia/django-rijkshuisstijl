@@ -4,13 +4,22 @@
 
 .textbox {
   @include shade(1, background-color);
-  @include rows(1, padding);
   box-sizing: border-box;
 
+  &:not(#{&}--compact) {
+    @include rows(1, padding);
+  }
+
+  &--compact {
+    @include container-padding(normal, padding);
+  }
+
+  &--error,
   &--danger {
     @include color-danger(background-color);
   }
 
+  &--debug,
   &--info {
     @include color-info(background-color);
   }
@@ -29,5 +38,9 @@
 
   &__text {
     @include body;
+  }
+
+  a {
+    @include anchor;
   }
 }

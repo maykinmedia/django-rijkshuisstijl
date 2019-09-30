@@ -48,7 +48,7 @@ export class Search {
         if (keyCode === 13) {
             e.preventDefault();
             if (this.input.value) {
-                window.location = `${this.node.action}?search=${this.input.value}`;
+                this.input.form.submit();
             }
         }
     }
@@ -60,11 +60,10 @@ export class Search {
      * Blurs this.input otherwise.
      */
     onClickButtonPrimary() {
-        if (this.input.value) {
-            window.location = `${this.node.action}?search=${this.input.value}`;
-        }
-
         if (BEM.hasModifier(this.node, MODIFIER_OPEN)) {
+            if (this.input.value) {
+                this.input.form.submit();
+            }
             this.input.focus();
         } else {
             this.input.blur();

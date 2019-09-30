@@ -4,6 +4,11 @@ from django.template.defaulttags import register
 
 
 @register.filter
+def add(value, arg):
+    return value + arg
+
+
+@register.filter
 def input_date_format(value):
     if value:
         regex = re.compile('(\d\d)-(\d\d)-(\d\d\d\d)')

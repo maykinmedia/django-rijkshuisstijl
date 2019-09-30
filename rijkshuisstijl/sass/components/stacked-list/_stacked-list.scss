@@ -1,0 +1,26 @@
+@import 'microscope/grid';
+@import 'microscope/typography';
+
+$stacked-list-spacing: 0.4em;
+
+.stacked-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &__item {
+    @include body;
+    @include body--small;
+    @include border;
+    box-sizing: border-box;
+    padding: $stacked-list-spacing;
+  }
+
+  &__item:not(:last-child) {
+    @include border(bottom, $style: dotted);
+  }
+
+  &__link {
+    @include anchor;
+  }
+}

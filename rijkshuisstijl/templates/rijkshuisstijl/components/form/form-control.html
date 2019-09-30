@@ -1,7 +1,20 @@
 {% spaceless %}{% load i18n %}
     <div class="form-control{% if class %} {{ class }}{% endif %}">
-        {% if label and required %}{% include 'rijkshuisstijl/components/form/label.html' with label=label|add:' *' for=id %}{% endif %}
-        {% if label and not required %}{% include 'rijkshuisstijl/components/form/label.html' with label=label for=id %}{% endif %}
+
+        {% if label %}
+            <header class="form-control__header">
+                {% if label and required %}
+                    {% include 'rijkshuisstijl/components/form/label.html' with label=label|add:'&nbsp;*'|safe for=id %}{% endif %}
+                {% if label and not required %}
+                    {% include 'rijkshuisstijl/components/form/label.html' with label=label for=id %}{% endif %}
+            </header>
+        {% endif %}
+
+
+        {% if label %}
+            <div class="form-control__body">
+        {% endif %}
+
 
         {% if type == 'checkbox' %}
             {% if choices %}
@@ -12,15 +25,12 @@
                 {% include 'rijkshuisstijl/components/form/checkbox.html' with type=type name=name value=value checked=checked id=id errors=errors select_all=select_all widget_attrs=widget.attrs only %}
             {% endif %}
 
-
         {% elif type == 'radio' %}
             <div class="form-control__choices">
                 {% for choice in choices %}
                     {% include 'rijkshuisstijl/components/form/checkbox.html' with choice=choice type=type name=name value=value id=id errors=errors widget_attrs=widget.attrs only %}
                 {% endfor %}
             </div>
-
-
 
         {% elif type == 'file' %}
             {% include 'rijkshuisstijl/components/form/input.html' with type=type name=name value=value raw_value=raw_value checked=checked placeholder=placeholder id=id errors=errors widget_attrs=widget.attrs only %}
@@ -42,7 +52,18 @@
             {% include 'rijkshuisstijl/components/form/input.html' with type=type name=name value=value checked=checked placeholder=placeholder id=id errors=errors widget_attrs=widget.attrs only %}
         {% endif %}
 
-        {% if errors %}{% include 'rijkshuisstijl/components/form/errors.html' with errors=errors for=id %}{% endif %}
-        {% if help_text %}{% include 'rijkshuisstijl/components/form/help-text.html' with help_text=help_text for=id %}{% endif %}
+
+        {% if errors %}
+            {% include 'rijkshuisstijl/components/form/errors.html' with errors=errors for=id %}
+        {% endif %}
+        {% if help_text %}
+            {% include 'rijkshuisstijl/components/form/help-text.html' with help_text=help_text for=id %}
+        {% endif %}
+
+
+        {% if label %}
+            </div>
+        {% endif %}
+
     </div>
 {% endspaceless %}

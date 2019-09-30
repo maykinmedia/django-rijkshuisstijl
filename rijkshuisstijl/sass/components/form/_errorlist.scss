@@ -16,7 +16,7 @@
   @include body;
   @include color-danger(background-color);
   box-sizing: border-box;
-  height: $errorlist-height-error;
+  min-height: $errorlist-height-error;
   padding: calc((#{$errorlist-height-error} - #{$typography-line-height-text * 1em}) / 2) $input-padding-h;
   padding-left: $errorlist-size-icon + 2 * $input-padding-h;
   position: relative;

@@ -6,24 +6,21 @@
   @include responsive(flex-direction, column, row);
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: space-between;
   box-sizing: border-box;
 
-  > .label {
+  &__header {
     @include responsive(width, 100%, $label-width);
     @include responsive(margin-bottom, $form-control-margin-top, 0);
-    align-self: flex-start;
+  }
+
+  &__header .label {
     padding-top: calc((#{$grid-row-height} - #{$typography-line-height-text * 1em}) / 2);
+    align-self: flex-start;
     box-sizing: border-box;
   }
 
-  > .label ~ .input,
-  > .label ~ .input__filepicker,
-  > .label ~ .select,
-  > .label ~ .textarea,
-  > .label ~ .form-control__choices,
-  > .label ~ .errors,
-  > .label ~ .help-text {
+  &__body {
     width: 100%;
 
     @include tablet {
@@ -31,6 +28,10 @@
       margin-left: $form-control-spacing !important;
       width: calc(100% - #{$label-width} - #{$form-control-spacing});
     }
+  }
+
+  &__body > * {
+    width: 100%;
   }
 
   .input, .select, .textarea {

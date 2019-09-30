@@ -1,12 +1,6 @@
 @import 'microscope/responsive';
 @import 'microscope/grid';
-@import '../login-bar/constants';
-@import '../header/constants';
-@import '../navigation-bar/constants';
-@import '../footer/constants';
-
-$view-min-height-content-mobile: calc(100vh - #{$header-height-mobile + $footer-min-height});
-$view-min-height-content-tablet: calc(100vh - #{$login-bar-min-height + $header-height-tablet + $navigation-bar-min-height-tablet + $footer-min-height});
+@import 'constants';
 
 .view {
   &__body {
@@ -24,10 +18,40 @@ $view-min-height-content-tablet: calc(100vh - #{$login-bar-min-height + $header-
     align-items: center;
   }
 
+  &--small .article__body,
+  &--small .layout,
+  &--small .login-bar__body,
+  &--small .navigation-bar__body {
+    @include container--small;
+  }
+
   &--big .article__body,
+  &--big .layout,
   &--big .login-bar__body,
   &--big .navigation-bar__body {
     @include container--big;
+  }
+
+  &--full-width .article__body,
+  &--full-width .layout,
+  &--full-width .login-bar__body,
+  &--full-width .navigation-bar__body {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  &--full-width .layout {
+    padding: 0;
+  }
+
+  &--full-width .navigation-bar__body {
+    padding-left: 0;
+  }
+
+  &--full-width .form__header {
+    @include mobile-only {
+      @include container-padding;
+    }
   }
 
   .header {

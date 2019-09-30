@@ -1,29 +1,37 @@
 @import 'microscope/grid';
 @import 'microscope/typography';
 @import '../../settings/lib/ro-shade';
-
-$toolbar-spacing: 0.4em;
+@import '../../settings/lib/sticky';
+@import 'constants';
 
 .toolbar {
   @include border(all);
   @include shade(1, background-color);
   @include rows(1);
+  @include sticky;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: $toolbar-spacing;
-  position: sticky;
-  top: 0;
+
+  &--align-right {
+    justify-content: flex-end;
+  }
+
+  &--justify {
+    justify-content: space-between;
+  }
 
   &__list,
   &__list-item {
+    display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  &__list {
-    display: flex;
+  &__list:not(:last-child) {
+    margin-right: $toolbar-spacing * 4;
   }
 
   &__list-item:not(:last-child) {
