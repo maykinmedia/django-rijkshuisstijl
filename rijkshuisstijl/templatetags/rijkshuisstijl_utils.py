@@ -32,3 +32,36 @@ def capture(parser, token):
     nodelist = parser.parse(('endcapture',))
     parser.delete_first_token()
     return CaptureNode(nodelist, var_name)
+
+
+@register.tag('try')
+def tryexcept(parser, token):
+    """
+    Creates try/except blog within a template.
+
+    Example:
+
+        {% try %}
+            {% foo %}
+        {% except %}
+            Something went wrong...
+        {% endtry %}
+    """
+    nodelist_try = parser.parse(('except',))
+    parser.next_token()
+    nodelist_except = parser.parse(('endtry',))
+    parser.delete_first_token()
+    return TryNode(nodelist_try, nodelist_except)
+
+
+class TryNode(template.Node):
+    def __init__(self, nodelist_try, nodelist_except):
+        self.nodelist_try = nodelist_try
+        self.nodelist_except = nodelist_except
+
+    def render(self, context):
+        try:
+            return self.nodelist_try.render(context)
+        except:
+            return self.nodelist_except.render(context)
+

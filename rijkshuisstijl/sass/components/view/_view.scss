@@ -12,6 +12,10 @@
     @include responsive(min-height, $view-min-height-content-mobile, $view-min-height-content-tablet);
   }
 
+  .layout {
+    @include responsive(min-height, $view-min-height-content-mobile, $view-min-height-content-tablet);
+  }
+
   &--vcenter &__content {
     display: flex;
     flex-wrap: wrap;
@@ -49,7 +53,8 @@
     padding: 0;
   }
 
-  &--full-width .navigation-bar__body {
+  &--full-width .navigation-bar__body,
+  &--full-width .menu {
     padding-left: 0;
   }
 

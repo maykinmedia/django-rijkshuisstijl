@@ -1,4 +1,4 @@
-{% spaceless %}{% load i18n %}
+{% spaceless %}{% load i18n rijkshuisstijl_filters %}
     <div class="form-control{% if class %} {{ class }}{% endif %}">
 
         {% if label %}
@@ -31,6 +31,18 @@
                     {% include 'rijkshuisstijl/components/form/checkbox.html' with choice=choice type=type name=name value=value id=id errors=errors widget_attrs=widget.attrs only %}
                 {% endfor %}
             </div>
+
+        {% elif type == 'datetime' %}
+
+
+        {% with date_name=name|add:'_0' time_name=name|add:'_1' %}
+        {% with date_value=raw_value|input_date_format time_value=raw_value|input_time_format %}
+            {% include 'rijkshuisstijl/components/form/input.html' with type='date' name=date_name value=date_value id=id errors=errors widget_attrs=widget.attrs only %}
+            {% include 'rijkshuisstijl/components/form/input.html' with type='time' name=time_name value=time_value id=id errors=errors widget_attrs=widget.attrs only %}
+        {% endwith %}
+        {% endwith %}
+
+
 
         {% elif type == 'file' %}
             {% include 'rijkshuisstijl/components/form/input.html' with type=type name=name value=value raw_value=raw_value checked=checked placeholder=placeholder id=id errors=errors widget_attrs=widget.attrs only %}

@@ -37,4 +37,8 @@
   &__list-item:not(:last-child) {
     margin-right: $toolbar-spacing * 2;
   }
+
+  + .datagrid {
+    border-top: none;
+  }
 }

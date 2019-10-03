@@ -3,5 +3,6 @@
 
 
 $navigation-bar-min-height-tablet: 70px;
-$navigation-bar-min-height-tablet-stuck: $grid-row-height;
+$navigation-bar-min-height-tablet-compact: $grid-row-height;
+$navigation-bar-min-height-tablet-stuck: $navigation-bar-min-height-tablet-compact;
 $navigation-bar-height-search: $search-height;

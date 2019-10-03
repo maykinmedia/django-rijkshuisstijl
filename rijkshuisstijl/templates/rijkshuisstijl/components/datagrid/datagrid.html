@@ -1,9 +1,10 @@
-{% spaceless %}{% load rijkshuisstijl rijkshuisstijl_filters rijkshuisstijl_form %}
+{% spaceless %}{% load l10n rijkshuisstijl rijkshuisstijl_filters rijkshuisstijl_form %}
     <div class="datagrid{% if class %} {{ class }}{% endif %}" id="{{ id }}" role="group">
         {% if form %}
             <form class="datagrid__form" method="post"{% if form_action %} action="{{ form_action }}"{% endif %}>
             {% csrf_token %}
         {% endif %}
+
         <header class="datagrid__header">
             {% if title %}
                 <div class="datagrid__infobar">
@@ -23,7 +24,11 @@
                         {% for item in form_buttons %}
                             <li class="toolbar__list-item">
                                 {% firstof item.class 'button--transparent' as item_class %}
-                                {% button class='button--small '|add:item_class name=item.name label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                {% if item.href %}
+                                    {% button_link class='button--small '|add:item_class href=item.href label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                {% else %}
+                                    {% button class='button--small '|add:item_class name=item.name value=item.value label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>
@@ -64,19 +69,20 @@
 
                 <tbody class="datagrid__table-body">
                 {% for object in object_list %}
-                    <tr class="datagrid__row{% if object.datagrid_modifier_class %} datagrid__row--{{ object.datagrid_modifier_class }}{% endif %}{% if object.get_absolute_url %} fake-link fake-link--double-click"
-                        data-href="{{ object.get_absolute_url }}"{% else %}"{% endif %}>
+                    {% url url_reverse object.pk|unlocalize as reversed_url %}
+                    {% firstof reversed_url object.get_absolute_url as url %}
+                    <tr class="datagrid__row{% if object.datagrid_modifier_class %} datagrid__row--{{ object.datagrid_modifier_class }}{% endif %}{% if url %} fake-link fake-link--double-click" data-href="{{ url }}"{% endif %}>
                     {% if form %}
                         <td class="datagrid__cell datagrid__cell--checkbox">
-                            {% form_control type='checkbox' name=form_checkbox_name value=object.pk %}
+                            {% form_control type='checkbox' name=form_checkbox_name value=object.pk|unlocalize %}
                         </td>
                     {% endif %}
 
                     {% for column in columns %}
                         {% firstof object|datagrid_label:column.key '' as label %}
                         <td class="datagrid__cell{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">{% spaceless %}
-                                {% if forloop.counter0 == 0 and object.get_absolute_url %}
-                                    <a class="datagrid__link" href="{{ object.get_absolute_url }}">{{ object|get_attr:column.key }}</a>
+                                {% if forloop.counter0 == 0 and url %}
+                                    <a class="datagrid__link" href="{{ url }}">{{ label }}</a>
                                 {% else %}
                                     {% if urlize %}{{ label|urlize }}
                                         {% elif urlizetrunc %}{{ label|urlizetrunc:urlizetrunc }}
@@ -98,20 +104,24 @@
 
         {% if is_paginated %}
             <footer class="datagrid__footer">
-                <div class="toolbar{% if form_buttons %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
+                <div class="toolbar{% if form_buttons and toolbar_position in 'bottom,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
                     {% if form_buttons and toolbar_position in 'bottom,both' %}
                         <ul class="toolbar__list">
                             {% for item in form_buttons %}
                                 <li class="toolbar__list-item">
                                     {% firstof item.class 'button--transparent' as item_class %}
-                                    {% button class='button--small '|add:item_class name=item.name label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                    {% if item.href %}
+                                        {% button_link class='button--small '|add:item_class href=item.href label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                    {% else %}
+                                        {% button class='button--small '|add:item_class name=item.name value=item.value label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>
                     {% endif %}
 
                     <ul class="toolbar__list">
-                        <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_obj=page_obj form=False %}</li>
+                        <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_key=page_key page_number=page_number page_obj=page_obj form=False zero_index=paginator_zero_index %}</li>
                     </ul>
                 </div>
             </footer>

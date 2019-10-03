@@ -10,4 +10,10 @@
       @include breakout-padding(normal);
     }
   }
+
+  &__section--flex {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
 }

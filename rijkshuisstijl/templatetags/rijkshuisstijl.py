@@ -1,12 +1,16 @@
+import json
 import re
+from json import JSONDecodeError
 from uuid import uuid4
 
 from django import template
 from django.http import QueryDict
 from django.templatetags.static import static
+from django.urls import reverse_lazy
 from django.utils import formats
 from django.utils.safestring import SafeText
 from django.utils.translation import gettext_lazy as _
+from rijkshuisstijl.templatetags.rijkshuisstijl_filters import get_attr
 
 register = template.Library()
 
@@ -101,16 +105,39 @@ def datagrid(context, **kwargs):
         return kwargs.get('id', 'datagrid-' + str(uuid4()))
 
     def get_columns():
-        columns = parse_kwarg(kwargs, 'columns', {})
+        columns = parse_kwarg(kwargs, 'columns', [])
 
         try:
+            # Convert dict to dict
             return [{'key': key, 'label': value} for key, value in columns.items()]
         except AttributeError:
+            # Convert string to column dict
+            if type(columns) == str or type(columns) == SafeText:
+                columns = [{'key': columns, 'label': columns}]
+
+            # Convert list to dict
+            elif type(columns) == list:
+                columns = [{'key': column, 'label': column} for column in columns]
+
+            # Get label from model
+            for column in columns:
+                try:
+                    context_queryset = context.get('queryset')
+                    queryset = kwargs.get('queryset', context_queryset)
+                    model = queryset.model
+
+                    if column['key'] == '__str__':
+                        column['label'] = model.__name__
+                    else:
+                        field = model._meta.get_field(column['key'])
+                        column['label'] = field.verbose_name
+                except:
+                    pass
+
             return columns
 
     def get_form_buttons():
         form_actions = parse_kwarg(kwargs, 'form_buttons', {})
-
         try:
             return [{'name': key, 'label': value} for key, value in form_actions.items()]
 
@@ -130,8 +157,6 @@ def datagrid(context, **kwargs):
 
     def add_display(obj):
         for column in get_columns():
-            # from ipdb import set_trace
-            # set_trace()
             key = column['key']
             fn = kwargs.get('get_{}_display'.format(key), None)
             if fn:
@@ -159,74 +184,94 @@ def datagrid(context, **kwargs):
 
     def get_orderable_column_keys():
         orderable_columns = parse_kwarg(kwargs, 'orderable_columns', {})
-        return [key for key in orderable_columns.keys()]
+        try:
+            return [key for key in orderable_columns.keys()]
+        except AttributeError:
+            return []
 
     def get_ordering():
         request = context['request']
         orderable_columns = parse_kwarg(kwargs, 'orderable_columns', {})
+        order_by_index = kwargs.get('order_by_index', False)
         ordering = {}
-        for orderable_column_key, orderable_column_field in orderable_columns.items():
-            querydict = QueryDict(request.GET.urlencode(), mutable=True)
-            ordering_key = parse_kwarg(kwargs, 'ordering_key', 'ordering')
-            current_ordering = querydict.get(ordering_key, False)
 
-            directions = {
-                'asc': orderable_column_field,
-                'desc': '-' + orderable_column_field
-            }
-            direction_url = directions['asc']
-            direction = None
+        try:
+            i = 1
+            for orderable_column_key, orderable_column_field in orderable_columns.items():
+                querydict = QueryDict(request.GET.urlencode(), mutable=True)
+                ordering_key = parse_kwarg(kwargs, 'ordering_key', 'ordering')
+                ordering_value = str(i) if order_by_index else orderable_column_field
+                current_ordering = querydict.get(ordering_key, False)
 
-            if current_ordering == directions['asc']:
-                direction = 'asc'
-                direction_url = directions['desc']
-            elif current_ordering == directions['desc']:
-                direction = 'desc'
+                directions = {
+                    'asc': ordering_value,
+                    'desc': '-' + ordering_value
+                }
+
                 direction_url = directions['asc']
+                direction = None
 
-            querydict[ordering_key] = direction_url
-            ordering[orderable_column_key] = {
-                'direction': direction,
-                'url': '?' + querydict.urlencode()
-            }
+                if current_ordering == directions['asc']:
+                    direction = 'asc'
+                    direction_url = directions['desc']
+                elif current_ordering == directions['desc']:
+                    direction = 'desc'
+                    direction_url = directions['asc']
+
+                querydict[ordering_key] = direction_url
+                ordering[orderable_column_key] = {
+                    'direction': direction,
+                    'url': '?' + querydict.urlencode()
+                }
+
+                i += 1
+        except AttributeError:
+            pass
+
         return ordering
 
-    def add_paginator():
-        paginator_kwargs = kwargs.copy()
-        paginator_kwargs['is_paginated'] = kwargs.get('is_paginated', context.get('is_paginated'))
+    def add_paginator(ctx):
+        paginator_ctx = ctx.copy()
+        paginator_ctx['is_paginated'] = kwargs.get('is_paginated', context.get('is_paginated'))
 
-        if paginator_kwargs['is_paginated']:
-            paginator_kwargs['paginator'] = kwargs.get('paginator', context.get('paginator'))
-            paginator_kwargs['page_obj'] = kwargs.get('page_obj', context.get('page_obj'))
-            return paginator_kwargs
-        return paginator_kwargs
+        if paginator_ctx['is_paginated']:
+            paginator_ctx['paginator'] = kwargs.get('paginator', context.get('paginator'))
+            paginator_ctx['paginator_zero_index'] = kwargs.get('paginator_zero_index')
+            paginator_ctx['page_key'] = kwargs.get('page_key')
+            paginator_ctx['page_number'] = kwargs.get('page_number')
+            paginator_ctx['page_obj'] = kwargs.get('page_obj', context.get('page_obj'))
+            return paginator_ctx
+        return paginator_ctx
 
     kwargs = merge_config(kwargs)
+    ctx = kwargs.copy()
 
     # i18n
-    kwargs['label_result_count'] = parse_kwarg(kwargs, 'label_result_count', _('resultaten'))
-    kwargs['label_no_results'] = parse_kwarg(kwargs, 'label_no_results', _('Geen resultaten'))
+    ctx['label_result_count'] = parse_kwarg(kwargs, 'label_result_count', _('resultaten'))
+    ctx['label_no_results'] = parse_kwarg(kwargs, 'label_no_results', _('Geen resultaten'))
 
     # kwargs
-    kwargs['class'] = kwargs.get('class', None)
-    kwargs['columns'] = get_columns()
-    kwargs['orderable_column_keys'] = get_orderable_column_keys()
-    kwargs['form_action'] = parse_kwarg(kwargs, 'form_action', '')
-    kwargs['form_buttons'] = get_form_buttons()
-    kwargs['form_checkbox_name'] = kwargs.get('form_checkbox_name', 'objects')
-    kwargs['form'] = parse_kwarg(kwargs, 'form', False) or bool(kwargs['form_action']) or bool(kwargs['form_buttons'])
-    kwargs['id'] = get_id()
-    kwargs['modifier_column'] = get_modifier_column()
-    kwargs['object_list'] = get_object_list()
-    kwargs['ordering'] = get_ordering()
-    kwargs['urlize'] = kwargs.get('urlize', True)
-    kwargs['title'] = kwargs.get('title', None)
-    kwargs['toolbar_position'] = kwargs.get('toolbar_position', 'top')
-    kwargs['request'] = context['request']
-    kwargs = add_paginator()
+    ctx['class'] = kwargs.get('class', None)
+    ctx['columns'] = get_columns()
+    ctx['orderable_column_keys'] = get_orderable_column_keys()
+    ctx['form_action'] = parse_kwarg(kwargs, 'form_action', '')
+    ctx['form_buttons'] = get_form_buttons()
+    ctx['form_checkbox_name'] = kwargs.get('form_checkbox_name', 'objects')
+    ctx['form'] = parse_kwarg(kwargs, 'form', False) or bool(kwargs.get('form_action')) or bool(kwargs.get('form_buttons'))
+    ctx['id'] = get_id()
+    ctx['modifier_column'] = get_modifier_column()
+    ctx['object_list'] = get_object_list()
+    ctx['ordering'] = get_ordering()
+    ctx['urlize'] = kwargs.get('urlize', True)
+    ctx['title'] = kwargs.get('title', None)
+    ctx['toolbar_position'] = kwargs.get('toolbar_position', 'top')
+    ctx['url_reverse'] = kwargs.get('url_reverse')
+    ctx['request'] = context['request']
 
-    kwargs['config'] = kwargs
-    return kwargs
+    ctx = add_paginator(ctx)
+
+    ctx['config'] = kwargs
+    return ctx
 
 
 @register.filter
@@ -240,11 +285,19 @@ def datagrid_label(obj, column_key):
     try:
         return getattr(obj, 'datagrid_display_{}'.format(column_key))
     except:
-        value = getattr(obj, column_key)
+        if column_key == '__str__':
+            return str(obj)
         try:
+            value = getattr(obj, column_key)
             return formats.date_format(value)
         except AttributeError:
-            return value
+            try:
+                val = obj.get(column_key)
+                if val:
+                    return val
+            except:
+                pass
+            return obj
 
 
 @register.inclusion_tag('rijkshuisstijl/components/footer/footer.html', takes_context=True)
@@ -304,8 +357,29 @@ def image(**kwargs):
 def key_value_table(**kwargs):
     kwargs = merge_config(kwargs)
 
+    def get_fields():
+        fields = parse_kwarg(kwargs, 'fields', {})
+        # from pdb import set_trace
+        # set_trace()
+
+        try:
+            return [{'key': key, 'label': value} for key, value in fields.items()]
+        except AttributeError:
+            return [{'key': fields, 'label': fields} for fields in fields]
+
+    def get_data():
+        obj = kwargs.get('object')
+        fields = get_fields()
+
+        data = []
+        if obj and fields:
+            data = [(field.get('label'), getattr(obj, field.get('key'))) for field in fields]
+
+        data = data + parse_kwarg(kwargs, 'data', [])
+        return data
+
     # kwargs
-    kwargs['data'] = kwargs.get('data', [])
+    kwargs['data'] = get_data()
 
     kwargs['config'] = kwargs
     return kwargs
@@ -394,6 +468,30 @@ def navigation_bar(context, **kwargs):
 def paginator(context, **kwargs):
     kwargs = merge_config(kwargs)
 
+    def get_page_min():
+        zero_index = kwargs.get('zero_index', False)
+
+        if zero_index:
+            return 0
+        return 1
+
+    def get_page_max():
+        paginator = kwargs.get('paginator')
+        zero_index = kwargs.get('zero_index', False)
+
+        if zero_index:
+            return paginator.num_pages - 1
+        return paginator.num_pages
+
+    def get_page_number():
+        page_obj = kwargs.get('page_obj')
+        zero_index = kwargs.get('zero_index', False)
+
+        if page_obj:
+            return page_obj.number
+
+        return kwargs.get('page_number', 0 if zero_index else 1)
+
     # i18n
     kwargs['label_first'] = parse_kwarg(kwargs, 'first', _('Eerste'))
     kwargs['label_previous'] = parse_kwarg(kwargs, 'first', _('Vorige'))
@@ -401,12 +499,17 @@ def paginator(context, **kwargs):
     kwargs['label_last'] = parse_kwarg(kwargs, 'first', _('Laatste'))
 
     # kwargs
+    kwargs['form'] = parse_kwarg(kwargs, 'form', True)
     kwargs['is_paginated'] = kwargs.get('is_paginated', context.get('is_paginated'))
     kwargs['paginator'] = kwargs.get('paginator', context.get('paginator'))
+    kwargs['page_min'] = get_page_min()
+    kwargs['page_max'] = get_page_max()
+    kwargs['page_number'] = get_page_number()
+    kwargs['page_key'] = kwargs.get('page_key', 'page')
     kwargs['page_obj'] = kwargs.get('page_obj', context.get('page_obj'))
-    kwargs['request'] = context['request']
-    kwargs['form'] = parse_kwarg(kwargs, 'form', True)
     kwargs['tag'] = 'div' if not kwargs['form'] else 'form'
+    kwargs['zero_index'] = kwargs.get('zero_index', False)
+    kwargs['request'] = context['request']
 
     kwargs['config'] = kwargs
     return kwargs
@@ -460,8 +563,38 @@ def skiplink_target(**kwargs):
 def stacked_list(*args, **kwargs):
     kwargs = merge_config(kwargs)
 
+    def get_items():
+        object_list = kwargs.get('object_list')
+        field = kwargs.get('field')
+        items = []
+
+        if object_list and field:
+            items = [get_item(obj, field) for obj in object_list]
+
+        return items + kwargs.get('items', [])
+
+    def get_item(obj, field):
+        url_field = kwargs.get('url_field')
+        url_reverse = kwargs.get('url_reverse')
+        item = {'label': get_attr(obj, field)}
+
+        if url_field:
+            item['url'] = get_attr(obj, url_field)
+
+        if url_reverse:
+            item['url'] = reverse_lazy(url_reverse, object.pk)
+
+        if 'url' in item and not item['url']:
+            try:
+                if item.get_absolute_url:
+                    item['url'] = item.get_absolute_url
+            except AttributeError:
+                pass
+
+        return item
+
     # kwargs
-    kwargs['items'] = kwargs.get('items', [])
+    kwargs['items'] = get_items()
 
     # args
     for arg in args:
@@ -505,6 +638,7 @@ def textbox(**kwargs):
     kwargs['status'] = kwargs.get('status', None)
     kwargs['title'] = kwargs.get('title', None)
     kwargs['text'] = kwargs.get('text', None)
+    kwargs['wysiwyg'] = kwargs.get('wysiwyg')
     kwargs['urlize'] = kwargs.get('urlize', True)
 
     kwargs['config'] = kwargs
@@ -532,9 +666,17 @@ def parse_arg(arg, default=None):
 
     Syntax::
 
+        Comma separated:
         - dict (Key value): "foo:bar,bar:baz" -> {'foo': 'bar', 'bar: 'baz')
         - list: "foo,bar,baz" -> ['foo, 'bar', baz']
         - string: "foo": "foo"
+
+        JSON:
+        - "[{"foo": "bar"}, {"bar": "baz"}]" -> [{'foo': 'bar'}, {'bar: 'baz')]
+
+        Edge case:
+        Given a dict as default ({}) list is converted into matching pair dict:
+        - parse_arg("foo,bar,baz", {}) -> {'foo': 'foo', 'bar': 'bar', 'baz': 'baz}
 
         Given None returns default:
         - None -> default
@@ -553,7 +695,12 @@ def parse_arg(arg, default=None):
         return arg
 
     if ',' in arg or ':' in arg:
-        lst = [entry.strip() for entry in arg.split(',')]
+        try:
+            return json.loads(arg)
+        except JSONDecodeError:
+            pass
+
+        lst = [entry.strip() for entry in arg.strip().split(',') if entry]
 
         if ':' in arg or isinstance(default, dict):
             dct = {}

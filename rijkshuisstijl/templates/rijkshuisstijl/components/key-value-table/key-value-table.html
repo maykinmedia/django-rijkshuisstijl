@@ -3,7 +3,7 @@
         <tbody class="key-value-table__body">
         {% for key, value in data %}
             <tr class="key-value-table__row">
-                <th class="key-value-table__key">{{ key }}</th>
+                <th class="key-value-table__key">{% firstof key.label key %}</th>
                 <td class="key-value-table__value">{{ value }}</td>
             </tr>
         {% endfor %}

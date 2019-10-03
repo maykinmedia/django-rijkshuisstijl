@@ -85,4 +85,8 @@
   &__actions .button {
     margin-top: $form-control-margin-top;
   }
+
+  &__actions .button:not(:last-child) {
+    margin-right: $form-control-spacing;
+  }
 }

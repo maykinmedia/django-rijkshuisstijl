@@ -15,4 +15,8 @@
   .checkbox {
     float: right;
   }
+
+  a {
+    @include anchor;
+  }
 }

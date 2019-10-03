@@ -1,4 +1,5 @@
 @import 'microscope/color';
+@import 'microscope/grid';
 @import 'microscope/responsive';
 @import 'microscope/transform';
 @import 'microscope/typography';
@@ -22,6 +23,10 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
   position: relative;
   display: flex;
   flex-direction: column;
+
+  &--fit {
+    width: 100%;
+  }
 
   &--scroll {
     max-height: 50vh;
@@ -54,6 +59,14 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   .toolbar:empty {
     display: none;
+  }
+
+  &--fit &__form {
+    height: 100%;
+  }
+
+  &--fit &__body {
+    height: calc(100% - #{2* $grid-row-height});
   }
 
   &--overflow &__body {
@@ -198,7 +211,7 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     text-align: center;
   }
 
-  a,
+  &__cell a,
   &__link {
     @include anchor(true);
   }

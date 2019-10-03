@@ -1,11 +1,17 @@
 @import 'microscope/typography';
+@import '../form/constants';
 
 .key-value-table {
+
   &__key,
   &__value {
     text-align: left;
     vertical-align: top;
-    width: 50%;
+    word-break: break-all;
+  }
+
+  &__key {
+    width: calc(#{$label-width} + #{$form-control-spacing});
   }
 
   &__row:not(:last-child) &__key,

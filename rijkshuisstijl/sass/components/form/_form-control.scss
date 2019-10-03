@@ -9,9 +9,17 @@
   justify-content: space-between;
   box-sizing: border-box;
 
+  &--stacked {
+    flex-direction: column;
+  }
+
   &__header {
     @include responsive(width, 100%, $label-width);
     @include responsive(margin-bottom, $form-control-margin-top, 0);
+  }
+
+  &--stacked &__header {
+    width: 100%;
   }
 
   &__header .label {
@@ -22,7 +30,13 @@
 
   &__body {
     width: 100%;
+  }
 
+  &--stacked &__body {
+    margin-bottom: $form-control-margin-top;
+  }
+
+  &:not(#{&}--stacked) &__body {
     @include tablet {
       @include body;
       margin-left: $form-control-spacing !important;
@@ -38,10 +52,16 @@
     z-index: 10;
   }
 
-  .input, .input__filepicker, .select {
-    &:not([type=checkbox]):not([type=radio]) {
-      @include rows(1);
+  &:not(#{&}--compact) {
+    .input, .input__filepicker, .select {
+      &:not([type=checkbox]):not([type=radio]) {
+        @include rows(1);
+      }
     }
+  }
+
+  & &__body .input + .input {
+    @include border(top, $style: dashed);
   }
 
   &__choices {

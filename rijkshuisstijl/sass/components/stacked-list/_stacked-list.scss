@@ -1,7 +1,7 @@
 @import 'microscope/grid';
 @import 'microscope/typography';
 
-$stacked-list-spacing: 0.4em;
+$stacked-list-spacing-v: 0.4em;
 
 .stacked-list {
   list-style: none;
@@ -12,8 +12,10 @@ $stacked-list-spacing: 0.4em;
     @include body;
     @include body--small;
     @include border;
+    @include container-padding(normal);
     box-sizing: border-box;
-    padding: $stacked-list-spacing;
+    padding-top: $stacked-list-spacing-v;
+    padding-bottom: $stacked-list-spacing-v;
   }
 
   &__item:not(:last-child) {

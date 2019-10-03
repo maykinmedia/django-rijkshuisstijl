@@ -1,8 +1,12 @@
+@import 'microscope/animation';
 @import 'microscope/color';
 @import 'microscope/grid';
 @import 'microscope/typography';
 @import 'microscope/transform';
 @import 'microscope/util';
+@import '../../settings/lib/ro-shade';
+@import '../header/constants';
+@import '../login-bar/constants';
 @import 'constants';
 
 
@@ -107,8 +111,12 @@
       position: relative;
     }
 
+    &--compact &__body,
     &--sticky#{&}--stuck &__body {
       min-height: $navigation-bar-min-height-tablet-stuck;
+    }
+
+    &--sticky#{&}--stuck &__body {
       padding-right: 0;
     }
 
@@ -142,6 +150,8 @@
     }
 
 
+    &--compact .menu__link,
+    &--compact .menu__label,
     &--sticky#{&}--stuck .menu__link,
     &--sticky#{&}--stuck .menu__label {
       @include body;
@@ -150,6 +160,31 @@
 
     &--sticky#{&}--stuck .menu__list-item--active .menu__link {
       @include color-primary(color);
+    }
+
+    &--dropdown {
+      .menu:before {
+        display: none;
+      }
+
+      .menu__list-item {
+        position: relative;
+      }
+
+      .menu .menu {
+        @include absolute;
+        @include shade-color($scheme, 1, background-color);
+        flex-direction: column;
+        width: auto;
+        height: auto;
+        max-height: calc(100vh - #{$header-height-tablet + $login-bar-min-height + $grid-row-height});
+        overflow-y: auto;
+      }
+
+      .menu .menu .menu__list-item:hover .menu__link {
+        @include color-background;
+        text-decoration: none;
+      }
     }
   }
 }

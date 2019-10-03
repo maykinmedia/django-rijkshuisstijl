@@ -1,12 +1,10 @@
 @import '../../settings/lib/ro-shade';
-@import 'microscope/animation';
 @import 'microscope/color';
 @import 'microscope/grid';
 @import 'microscope/typography';
 @import 'microscope/responsive';
 
 .menu {
-  @include animate(visibility, $delay: 0.3s);
   @include clearfix;
   @include responsive(flex-direction, column, row);
   align-self: stretch;
@@ -37,7 +35,6 @@
 
   &__list-item:hover &,
   &__list-item--active & {
-    @include animate(visibility, $delay: 0s);
     visibility: visible;
   }
 
