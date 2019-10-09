@@ -58,6 +58,10 @@
     padding-left: 0;
   }
 
+  &--full-width .navigation-bar__body {
+    padding-right: 0;
+  }
+
   &--full-width .form__header {
     @include mobile-only {
       @include container-padding;

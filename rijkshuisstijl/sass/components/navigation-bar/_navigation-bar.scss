@@ -158,6 +158,7 @@
       @include color-background(color);
     }
 
+    &--compact .menu__list-item--active .menu__link,
     &--sticky#{&}--stuck .menu__list-item--active .menu__link {
       @include color-primary(color);
     }

@@ -11,7 +11,7 @@
             {% csrf_token %}
 
             {% for error in form.non_field_errors %}
-                {% include './errors.html' with class='errors--non-field' errors=error only %}
+                {% include 'rijkshuisstijl/components/form/errors.html' with class='errors--non-field' errors=error only %}
             {% endfor %}
 
             {# Allow admin like fieldsets to be defined on regular forms. #}

@@ -1,7 +1,11 @@
 //jshint ignore:start
-import {INPUT_FILEPICKERS, LINK_SELECTS} from './constants';
+import {FORM_CONTROLS, INPUT_FILEPICKERS, LINK_SELECTS} from './constants';
 
 // Start!
+if (FORM_CONTROLS.length) {
+    import(/* webpackChunkName: 'form-control' */ './form-control');
+}
+
 if (INPUT_FILEPICKERS.length) {
     import(/* webpackChunkName: 'input-filepicker' */ './input-filepicker');
 }

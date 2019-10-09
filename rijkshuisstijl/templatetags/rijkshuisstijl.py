@@ -1,16 +1,24 @@
 import json
 import re
-from json import JSONDecodeError
 from uuid import uuid4
 
 from django import template
 from django.http import QueryDict
 from django.templatetags.static import static
-from django.urls import reverse_lazy
 from django.utils import formats
 from django.utils.safestring import SafeText
 from django.utils.translation import gettext_lazy as _
-from rijkshuisstijl.templatetags.rijkshuisstijl_filters import get_attr
+from .rijkshuisstijl_filters import get_attr
+
+try:
+    from json import JSONDecodeError
+except ImportError:
+    JSONDecodeError = ValueError
+
+try:
+    from django.urls import reverse_lazy
+except ImportError:
+    from django.core.urlresolvers import reverse_lazy
 
 register = template.Library()
 
@@ -115,9 +123,17 @@ def datagrid(context, **kwargs):
             if type(columns) == str or type(columns) == SafeText:
                 columns = [{'key': columns, 'label': columns}]
 
-            # Convert list to dict
+            # Convert list to list of dicts
             elif type(columns) == list:
-                columns = [{'key': column, 'label': column} for column in columns]
+                processed_columns = []
+                for column in columns:
+                    # Already dict
+                    if type(column) == dict:
+                        processed_columns.append(column)
+                    # Not dict
+                    else:
+                        processed_columns.append({'key': column, 'label': column})
+                columns = processed_columns
 
             # Get label from model
             for column in columns:
@@ -237,7 +253,7 @@ def datagrid(context, **kwargs):
         if paginator_ctx['is_paginated']:
             paginator_ctx['paginator'] = kwargs.get('paginator', context.get('paginator'))
             paginator_ctx['paginator_zero_index'] = kwargs.get('paginator_zero_index')
-            paginator_ctx['page_key'] = kwargs.get('page_key')
+            paginator_ctx['page_key'] = kwargs.get('page_key', 'page')
             paginator_ctx['page_number'] = kwargs.get('page_number')
             paginator_ctx['page_obj'] = kwargs.get('page_obj', context.get('page_obj'))
             return paginator_ctx
@@ -257,7 +273,8 @@ def datagrid(context, **kwargs):
     ctx['form_action'] = parse_kwarg(kwargs, 'form_action', '')
     ctx['form_buttons'] = get_form_buttons()
     ctx['form_checkbox_name'] = kwargs.get('form_checkbox_name', 'objects')
-    ctx['form'] = parse_kwarg(kwargs, 'form', False) or bool(kwargs.get('form_action')) or bool(kwargs.get('form_buttons'))
+    ctx['form'] = parse_kwarg(kwargs, 'form', False) or bool(kwargs.get('form_action')) or bool(
+        kwargs.get('form_buttons'))
     ctx['id'] = get_id()
     ctx['modifier_column'] = get_modifier_column()
     ctx['object_list'] = get_object_list()
@@ -265,9 +282,8 @@ def datagrid(context, **kwargs):
     ctx['urlize'] = kwargs.get('urlize', True)
     ctx['title'] = kwargs.get('title', None)
     ctx['toolbar_position'] = kwargs.get('toolbar_position', 'top')
-    ctx['url_reverse'] = kwargs.get('url_reverse')
+    ctx['url_reverse'] = kwargs.get('url_reverse', '')
     ctx['request'] = context['request']
-
     ctx = add_paginator(ctx)
 
     ctx['config'] = kwargs
@@ -290,9 +306,9 @@ def datagrid_label(obj, column_key):
         try:
             value = getattr(obj, column_key)
             return formats.date_format(value)
-        except AttributeError:
+        except (AttributeError, TypeError):
             try:
-                val = obj.get(column_key)
+                val = get_attr(obj, column_key)
                 if val:
                     return val
             except:

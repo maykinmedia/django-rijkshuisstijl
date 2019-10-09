@@ -18,7 +18,7 @@
                 </div>
             {% endif %}
 
-            <div class="toolbar{% if form_buttons %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
+            <div class="toolbar{% if form_buttons and toolbar_position in 'top,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
                 {% if form_buttons and toolbar_position in 'top,both' %}
                     <ul class="toolbar__list">
                         {% for item in form_buttons %}
@@ -71,7 +71,7 @@
                 {% for object in object_list %}
                     {% url url_reverse object.pk|unlocalize as reversed_url %}
                     {% firstof reversed_url object.get_absolute_url as url %}
-                    <tr class="datagrid__row{% if object.datagrid_modifier_class %} datagrid__row--{{ object.datagrid_modifier_class }}{% endif %}{% if url %} fake-link fake-link--double-click" data-href="{{ url }}"{% endif %}>
+                    <tr class="datagrid__row{% if object.datagrid_modifier_class %} datagrid__row--{{ object.datagrid_modifier_class }}{% endif %}{% if url %} fake-link fake-link--double-click" data-href="{{ url }}"{% else %}"{% endif %}>
                     {% if form %}
                         <td class="datagrid__cell datagrid__cell--checkbox">
                             {% form_control type='checkbox' name=form_checkbox_name value=object.pk|unlocalize %}
