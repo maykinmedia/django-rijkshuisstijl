@@ -1,5 +1,5 @@
 {% spaceless %}{% load rijkshuisstijl %}
-    <header class="header">
+    <header class="header{% if class %} {{ class }}{% endif %}">
         {% button icon='hamburger' toggle_target='.view' toggle_modifier='menu-open' %}
         {% logo %}
     </header>

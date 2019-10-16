@@ -1,5 +1,5 @@
 {% spaceless %}
-    <ul class="stacked-list">
+    <ul class="stacked-list{% if class %} {{ class }}{% endif %}">
         {% for item in items %}
             <li class="stacked-list__item">{% spaceless %}
             {% if item.url %}

@@ -2,7 +2,6 @@
 @import '../form/constants';
 
 .key-value-table {
-
   &__key,
   &__value {
     text-align: left;
@@ -10,7 +9,12 @@
     word-break: break-all;
   }
 
-  &__key {
+  &--justify &__key,
+  &--justify &__value {
+    width: 50%;
+  }
+
+  &:not(#{&}--justify) &__key {
     width: calc(#{$label-width} + #{$form-control-spacing});
   }
 

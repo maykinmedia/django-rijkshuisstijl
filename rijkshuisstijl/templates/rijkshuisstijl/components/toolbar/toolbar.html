@@ -1,5 +1,5 @@
 {% spaceless %}{% load rijkshuisstijl %}
-    <nav class="toolbar">
+    <nav class="toolbar{% if class %} {{ class }}{% endif %}">
         <ul class="toolbar__list">
             {% for item in items %}
                 <li class="toolbar__list-item">

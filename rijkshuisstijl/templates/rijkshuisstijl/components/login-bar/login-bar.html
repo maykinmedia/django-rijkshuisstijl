@@ -1,5 +1,5 @@
 {% spaceless %}
-<div class="login-bar">
+<div class="login-bar{% if class %} {{ class }}{% endif %}">
     <p class="login-bar__body">
         {% if request.user.is_authenticated %}
             <a class="login-bar__link login-bar__link--primary" href="{{ details_url }}">{{ label_logged_in_as }} {{ request.user }}</a>

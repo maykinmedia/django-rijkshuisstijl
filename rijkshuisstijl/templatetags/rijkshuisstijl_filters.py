@@ -1,16 +1,15 @@
 import re
 
-
 from django.template.defaulttags import register
 
 
 @register.filter
-def add(value, arg):
-    return value + arg
-
-
-@register.filter
 def input_date_format(value):
+    """
+    Tries to convert value to a valid <input type="date"> value.
+    :param value: Can be either datetime or "dd-mm-yyyy" formatted string.
+    :return: "yyyy-mm-dd" formatted string, compatible with <input type="date">.
+    """
     if value:
         try:
             if value.date:
@@ -28,6 +27,11 @@ def input_date_format(value):
 
 @register.filter
 def input_time_format(value):
+    """
+    Tries to convert value to a valid <input type="time"> value.
+    :param value: Can be either datetime or "hh:mm:ss" formatted string.
+    :return: "hh:mm" formatted string, compatible with <input type="time">.
+    """
     if value:
         try:
             if value.date:
@@ -44,32 +48,30 @@ def input_time_format(value):
 
 
 @register.filter
-def get(obj, key):
+def get(value, key):
+    """
+    Gets a value from a dict by key.
+    Returns empty string on failure.
+    :param value: A dict containing key.
+    :return: The key's value or ''.
+    """
     try:
-        return obj.get(key)
+        return value.get(key, '')
     except:
         return ''
 
 
 @register.filter
-def get_attr(obj, key):
+def get_attr_or_get(value, key):
+    """
+    Gets an attribute from an object or a value from a dict by key.
+    Returns empty string on failure.
+    :param value: An object or dict containing key.
+    :return: The key's value or ''.
+    """
     try:
-        return getattr(obj, key)
+        return getattr(value, key, '')
     except AttributeError:
-        return get(obj, key)
+        return get(value, key, '')
     except:
         return ''
-
-
-@register.filter()
-def make_object(value, key):
-    class TemplateObject:
-        pass
-
-    obj = TemplateObject()
-    setattr(obj, key, value)
-    setattr(obj, 'name', 'foo')
-    setattr(obj, 'auto_id', 'id')
-    setattr(obj, 'css_classes', 'id')
-    setattr(obj, 'errors', 'id')
-    return obj
