@@ -1,5 +1,5 @@
 {% spaceless %}
-    <table class="key-value-table">
+    <table class="key-value-table{% if class %} {{ class }}{% endif %}">
         <tbody class="key-value-table__body">
         {% for key, value in data %}
             <tr class="key-value-table__row">
