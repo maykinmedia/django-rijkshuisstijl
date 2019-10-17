@@ -62,6 +62,16 @@
     padding-right: 0;
   }
 
+  &--full-width .datagrid__caption:first-child,
+  &--full-width .datagrid__cell:first-child {
+    @include container-padding($properties: padding-left);
+  }
+
+  &--full-width .datagrid__caption:last-child,
+  &--full-width .datagrid__cell:last-child {
+    @include container-padding($properties: padding-right);
+  }
+
   &--full-width .form__header {
     @include mobile-only {
       @include container-padding;

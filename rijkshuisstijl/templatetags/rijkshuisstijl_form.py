@@ -1,8 +1,7 @@
 from django import template
 
+from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from .rijkshuisstijl_helpers import merge_config, parse_kwarg
-
-register = template.Library()
 
 
 @register.inclusion_tag('rijkshuisstijl/components/button/button.html')

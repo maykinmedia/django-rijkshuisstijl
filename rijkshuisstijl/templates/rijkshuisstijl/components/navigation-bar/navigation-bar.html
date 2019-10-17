@@ -1,7 +1,7 @@
 {% spaceless %}{% load i18n rijkshuisstijl sitetree %}
     <nav class="navigation-bar{% if class %} {{ class }}{% endif %}">
         <div class="navigation-bar__body">
-            {% login_bar config=config %}
+            {% login_bar config=config class=None %}
             {% sitetree_menu from 'navigation-bar' include 'trunk,topmenu' template 'rijkshuisstijl/components/navigation-bar/menu.html' %}
 
             {% if search_url %}

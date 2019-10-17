@@ -1,6 +1,6 @@
 from django import template
 
-register = template.Library()
+from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
 
 class CaptureNode(template.Node):
@@ -64,4 +64,3 @@ class TryNode(template.Node):
             return self.nodelist_try.render(context)
         except:
             return self.nodelist_except.render(context)
-

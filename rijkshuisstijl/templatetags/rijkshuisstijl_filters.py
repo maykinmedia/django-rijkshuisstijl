@@ -1,6 +1,6 @@
 import re
 
-from django.template.defaulttags import register
+from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
 
 @register.filter

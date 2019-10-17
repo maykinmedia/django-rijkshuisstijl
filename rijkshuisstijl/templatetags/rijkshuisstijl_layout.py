@@ -1,16 +1,14 @@
-from django import template
 from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 
+from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from .rijkshuisstijl_helpers import merge_config, parse_kwarg
-
-register = template.Library()
 
 
 @register.inclusion_tag('rijkshuisstijl/components/footer/footer.html', takes_context=True)
 def footer(context, **kwargs):
     """
-    Renders a page footer which may contain (django-sitetree) navigation.
+    Renders a page footer which may contain (django-sitetree) navigation. Use "footer" as the sitetree alias.
 
     Example:
 
@@ -20,17 +18,17 @@ def footer(context, **kwargs):
     Available options:
 
         - class: Optional, a string with additional CSS classes.
-        - sitetree_from: Optional, a string defining the sitetree menu to use for navigation, defaults to 'footer'.
 
+    :param context:
     :param kwargs:
     """
     kwargs = merge_config(kwargs)
 
     # kwargs
     kwargs['class'] = kwargs.get('class', None)
-    kwargs['sitetree_from'] = kwargs.get('sitetree_from', 'footer')
 
     kwargs['request'] = context['request']
+
     kwargs['config'] = kwargs
     return kwargs
 
@@ -127,6 +125,7 @@ def login_bar(context, **kwargs):
         - label_request_account: Optional, alternative label for the registration link.
 
 
+    :param context:
     :param kwargs:
     """
     kwargs = merge_config(kwargs)
@@ -183,7 +182,7 @@ def logo(**kwargs):
 @register.inclusion_tag('rijkshuisstijl/components/navigation-bar/navigation-bar.html', takes_context=True)
 def navigation_bar(context, **kwargs):
     """
-    Renders a login bar.
+    Renders a navigation bar which may contain (django-sitetree) navigation. Use "navigation-bar" as the sitetree alias.
 
     Example:
 
@@ -208,6 +207,7 @@ def navigation_bar(context, **kwargs):
         - search_name: Optional, The method to use for the search input.
 
 
+    :param context:
     :param kwargs:
     """
     kwargs = merge_config(kwargs)
@@ -253,6 +253,7 @@ def search(context, **kwargs):
         - method: Optional, The method to use for the search form, defaults to 'GET'.
 
 
+    :param context:
     :param kwargs:
     """
     kwargs = merge_config(kwargs)
@@ -267,6 +268,7 @@ def search(context, **kwargs):
 
     request_dict = getattr(request, kwargs['method'], {})
     kwargs['value'] = request_dict.get(kwargs['name'], '')
+
     kwargs['request'] = context['request']
     kwargs['config'] = kwargs
     return kwargs
