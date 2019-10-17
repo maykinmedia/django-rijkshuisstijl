@@ -1,6 +1,7 @@
 from django import template
 from django.utils.translation import gettext_lazy as _
 
+from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from .rijkshuisstijl_filters import get_attr_or_get
 from .rijkshuisstijl_helpers import merge_config, parse_kwarg, parse_arg
 
@@ -8,8 +9,6 @@ try:
     from django.urls import reverse_lazy
 except ImportError:
     from django.core.urlresolvers import reverse_lazy
-
-register = template.Library()
 
 
 @register.inclusion_tag('rijkshuisstijl/components/filter/filter.html')
@@ -69,6 +68,7 @@ def icon(icon, **kwargs):
         - href: Optional, an optional url to link to.
         - label: Optional, An additional label to show.
 
+    :param icon:
     :param kwargs:
     """
     kwargs = merge_config(kwargs)
@@ -147,7 +147,7 @@ def paginator(context, **kwargs):
     Available options:
 
         - paginator: Required, A Django Paginator instance, may be obtained from context.
-        - page_obj: Required, The paginator page object may be obtained from context.
+        - page_obj: Required, The paginator page object, may be obtained from context.
 
         - class: Optional, a string with additional CSS classes.
         - form: Optional, if true (default), treat the paginator as form, only works if tag is set to 'form'.
@@ -162,6 +162,7 @@ def paginator(context, **kwargs):
         - tag: Optional, The outer tag used for the paginator, defaults to 'form'.
         - zero_index: Optional, Use zero-based indexing for page numbers, not fully supported.
 
+    :param context:
     :param kwargs:
     """
     kwargs = merge_config(kwargs)
@@ -217,7 +218,7 @@ def paginator(context, **kwargs):
 @register.inclusion_tag('rijkshuisstijl/components/stacked-list/stacked-list.html')
 def stacked_list(*args, **kwargs):
     """
-    Renders a stacked list.
+    Renders a stacked list, optionally containing hyperlinks.
 
     Example:
 
@@ -228,12 +229,14 @@ def stacked_list(*args, **kwargs):
     Available options:
 
         - class: Optional, a string with additional CSS classes.
-        - field: Optional, A key in every object in object_list.
-        - items: Optional, A dict (label, [url]) or a list defining with values to show, can be obtained from args.
+        - field: Optional, a key in every object in object_list.
+        - items: Optional, a dict (label, [url]) or a list defining with values to show, can be obtained from args.
         - url_field: Optional, A key in every object on object_list for a URL, creates hyperlinks.
-        - url_reverse: Optional, A URL name to reverse using the object's 'pk' attribute as one and only attribute, , creates hyperlinks.
+        - url_reverse: Optional, A URL name to reverse using the object's 'pk' attribute as one and only attribute,
+          creates hyperlinks.
         - object_list: Optional, a list of objects for which to show the value of the attribute defined by field.
 
+    :param args:
     :param kwargs:
     """
     kwargs = merge_config(kwargs)
@@ -285,6 +288,36 @@ def stacked_list(*args, **kwargs):
     return kwargs
 
 
+@register.inclusion_tag("rijkshuisstijl/components/title-header/title-header.html")
+def title_header(title, **kwargs):
+    """
+    Renders a title.
+
+    Example:
+
+        {% title_header config=config %}
+        {% title_header option1='foo' option2='bar' %}
+
+    Available options:
+
+        - title: Required, The title to show, may be obtained from first argument.
+
+        - class: Optional, a string with additional CSS classes.
+
+    :param title:
+    :param kwargs:
+    """
+    kwargs = merge_config(kwargs)
+
+    # kwargs
+    kwargs["class"] = title
+    kwargs["title"] = title
+
+    kwargs['config'] = kwargs
+    return kwargs
+
+
+
 @register.inclusion_tag('rijkshuisstijl/components/toolbar/toolbar.html')
 def toolbar(*args, **kwargs):
     """
@@ -298,8 +331,10 @@ def toolbar(*args, **kwargs):
     Available options:
 
         - class: Optional, a string with additional CSS classes.
-        - items: Optional, A dict (label, [href], [icon], [name], [target], [title]) defining which buttons to create.
+        - items: Optional, a list_of_dict (label, [href], [icon], [name], [target], [title]) defining which buttons to
+          create (see rijkshuisstijl_form.button).
 
+    :param args:
     :param kwargs:
     """
     kwargs = merge_config(kwargs)
