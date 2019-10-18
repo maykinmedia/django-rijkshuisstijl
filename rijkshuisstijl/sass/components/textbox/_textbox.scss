@@ -16,8 +16,8 @@ $texbox-padding-v-compact-desktop: calc((#{$grid-row-height} - #{$typography-lin
     @include border(all);
   }
 
-  &--sticky {
-    @include sticky;
+  &--centered {
+    @include center-hv;
   }
 
   &:not(#{&}--compact) {
@@ -28,6 +28,9 @@ $texbox-padding-v-compact-desktop: calc((#{$grid-row-height} - #{$typography-lin
     @include container-padding(normal);
     @include responsive(padding-top, $texbox-padding-v-compact-mobile, $texbox-padding-v-compact-tablet, $texbox-padding-v-compact-laptop, $texbox-padding-v-compact-desktop);
     @include responsive(padding-bottom, $texbox-padding-v-compact-mobile, $texbox-padding-v-compact-tablet, $texbox-padding-v-compact-laptop, $texbox-padding-v-compact-desktop);
+  }
+  &--sticky {
+    @include sticky;
   }
 
   &--transparent {

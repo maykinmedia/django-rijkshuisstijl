@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from .rijkshuisstijl_filters import get_attr_or_get
-from .rijkshuisstijl_helpers import merge_config, parse_kwarg
+from .rijkshuisstijl_helpers import merge_config, parse_kwarg, get_field_label
 
 
 @register.inclusion_tag('rijkshuisstijl/components/datagrid/datagrid.html', takes_context=True)
@@ -221,32 +221,17 @@ def datagrid(context, **kwargs):
 
     def get_id():
         """
-        - id: Optional, a string specifying the datagrid id, defaults to a generated uuid4 string.
+        Gets the id to put on the datagrid based on kwargs["id'}, if no id is provided a uuid4 is created and prefixed
+        with "datagrid-".
+        :return: A str which should be unique to this datagrid.
         """
         return kwargs.get('id', 'datagrid-' + str(uuid4()))
 
     def get_columns():
         """
-        - columns: Required, a dict or a list defining which columns/values to show for each object in object_list or
-          queryset.
-
-            - If a dict is passed, each key will represent a field in an object to obtain the data from and each value
-              will represent the label to use for the column heading.
-              Example: {'author': 'Written by', 'title': 'Title'}
-
-            - If a list is passed, each item will represent a field in an object to obtain the data from and will also
-              represent the label to use for the column heading.
-              Example: ['author', 'title']
-
-        - orderable_columns: Optional, a dict or a list defining which columns should be orderable.
-
-            - If a dict is passed each key will map to a field (the key) in columns, each value will be used to describe
-              a field lookup.
-              Example: {"author": "author__first_name"}
-
-            - If a list is passed each value will map to a field (the key) in columns and will also be used to describe
-              a field lookup
-              Example: ['author', 'title']
+        Gets the columns to show based on kwargs['columns']. If no label is provided an attempt is made to create it
+        based on the model or a simple replacement of dashes and underscores.
+        :return: A list_of_dict where each dict contains "key" and "label" keys.
         """
         columns = parse_kwarg(kwargs, 'columns', [])
 
@@ -259,7 +244,7 @@ def datagrid(context, **kwargs):
                 columns = [{'key': columns, 'label': columns}]
 
             # Convert list to list_of_dict.
-            elif type(columns) == list:
+            elif type(columns) is list or type(columns) is tuple:
                 processed_columns = []
                 for column in columns:
                     # Already dict
@@ -270,21 +255,12 @@ def datagrid(context, **kwargs):
                         processed_columns.append({'key': column, 'label': column})
                 columns = processed_columns
 
-            # Get label from model.
+            # Get column label.
             for column in columns:
-                try:
-                    context_queryset = context.get('queryset')
-                    queryset = kwargs.get('queryset', context_queryset)
-                    model = queryset.model
+                context_queryset = context.get('queryset')
+                queryset = kwargs.get('queryset', context_queryset)
 
-                    if column['key'] == '__str__':
-                        column['label'] = model.__name__
-                    else:
-                        field = model._meta.get_field(column['key'])
-                        column['label'] = field.verbose_name
-                except:
-                    pass
-
+                column['label'] = get_field_label(queryset, column['label'])
             return columns
 
     def get_form_buttons():
@@ -366,14 +342,14 @@ def datagrid(context, **kwargs):
 
     def get_orderable_column_keys():
         """
-        Returns the keys of the fiels which should be made orderable.
+        Returns the keys of the fields which should be made orderable.
         :return: list_of_str
         """
         orderable_columns = parse_kwarg(kwargs, 'orderable_columns', {})
         try:
             return [key for key in orderable_columns.keys()]
         except AttributeError:
-            return []
+            return orderable_columns
 
     def get_ordering():
         """
@@ -385,6 +361,10 @@ def datagrid(context, **kwargs):
         order_by_index = kwargs.get('order_by_index', False)
         ordering = {}
 
+        # Convert list to list_of_dict.
+        if type(orderable_columns) is list or type(orderable_columns) is tuple:
+            orderable_columns = {column: column for column in orderable_columns}
+
         try:
             i = 1
             for orderable_column_key, orderable_column_field in orderable_columns.items():
@@ -392,6 +372,7 @@ def datagrid(context, **kwargs):
                 ordering_key = parse_kwarg(kwargs, 'ordering_key', 'ordering')
                 ordering_value = str(i) if order_by_index else orderable_column_field
                 current_ordering = querydict.get(ordering_key, False)
+
 
                 directions = {
                     'asc': ordering_value,

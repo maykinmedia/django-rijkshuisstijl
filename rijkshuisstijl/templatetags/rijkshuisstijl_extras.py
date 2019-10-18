@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from .rijkshuisstijl_filters import get_attr_or_get
-from .rijkshuisstijl_helpers import merge_config, parse_kwarg, parse_arg
+from .rijkshuisstijl_helpers import merge_config, parse_kwarg, parse_arg, get_field_label
 
 try:
     from django.urls import reverse_lazy
@@ -108,12 +108,20 @@ def key_value_table(**kwargs):
     kwargs = merge_config(kwargs)
 
     def get_fields():
+        obj = kwargs.get('object')
         fields = parse_kwarg(kwargs, 'fields', {})
 
         try:
-            return [{'key': key, 'label': value} for key, value in fields.items()]
+            fields = [{'key': key, 'label': value} for key, value in fields.items()]
         except AttributeError:
-            return [{'key': field, 'label': field} for field in fields]
+            fields = [{'key': field, 'label': field} for field in fields]
+
+        if obj:
+            for field in fields:
+                field['label'] = get_field_label(obj, field['label'])
+
+        return fields
+
 
     def get_data():
         obj = kwargs.get('object')
@@ -122,8 +130,7 @@ def key_value_table(**kwargs):
         data = []
         if obj and fields:
             data = [(field.get('label'), getattr(obj, field.get('key'))) for field in fields]
-
-        data = data + parse_kwarg(kwargs, 'data', [])
+        data = data + list(parse_kwarg(kwargs, 'data', []))
         return data
 
     # kwargs

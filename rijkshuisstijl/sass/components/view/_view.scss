@@ -14,6 +14,11 @@
 
   .layout {
     @include responsive(min-height, $view-min-height-content-mobile, $view-min-height-content-tablet);
+    position: relative;
+  }
+
+  .navigation-bar--compact + &__content .layout {
+    min-height: $view-min-height-content-tablet-compact;
   }
 
   &--vcenter &__content {

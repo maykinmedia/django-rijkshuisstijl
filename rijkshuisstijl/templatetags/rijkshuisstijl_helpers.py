@@ -1,4 +1,5 @@
 import json
+import re
 
 from django.utils.safestring import SafeText
 
@@ -6,6 +7,47 @@ try:
     from json import JSONDecodeError
 except ImportError:
     JSONDecodeError = ValueError
+
+
+def get_field_label(obj, field):
+    """
+    Returns the label for a field based preferably based on obj's model.
+    Falls back to replacing dashes and underscores with " ".
+    :param obj: A model instance or a QuerySet.
+    :param field: A string indicating the field to get the label for.
+    :return:
+    """
+    try:
+        model = get_model(obj)
+
+        # If column key is "__str__", use model name as label.
+        if field == '__str__':
+            field = model.__name__
+
+        # If model field can be found, use it's verbose name as label.
+        else:
+            field = model._meta.get_field(field)
+            field = field.verbose_name
+
+    # If label cannot be found, fall back to replacing dashes and underscores with " ".
+    except:
+        regex = re.compile('[_-]+')
+        field = re.sub(regex, ' ', field)
+    return field
+
+
+def get_model(obj):
+    """
+    Tries to return a model based obj.
+    :param obj: A model instance or a QuerySet.
+    :return: The found model class or None.
+    """
+    try:
+        return obj._meta.model
+    except AttributeError:
+        return obj.model
+    except:
+        return None
 
 
 def merge_config(kwargs):

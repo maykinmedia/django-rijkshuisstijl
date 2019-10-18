@@ -73,6 +73,8 @@ def confirm_form(context, **kwargs):
 
 @register.inclusion_tag('rijkshuisstijl/components/form/form.html', takes_context=True)
 def form(context, form=None, label='', **kwargs):
+    kwargs = merge_config(kwargs)
+
     kwargs['form'] = form or parse_kwarg(kwargs, 'form', context.get('form'))
     kwargs['label'] = label
     kwargs['title'] = kwargs.get('title')
@@ -80,20 +82,28 @@ def form(context, form=None, label='', **kwargs):
     kwargs['wysiwyg'] = kwargs.get('wysiwyg')
     kwargs['status'] = kwargs.get('status')
     kwargs['tag'] = kwargs.get('tag', 'form')
+
     kwargs['request'] = context['request']
+    kwargs['config'] = kwargs
     return kwargs
 
 
 @register.inclusion_tag('rijkshuisstijl/components/form/form-control.html')
 def form_control(**kwargs):
+    kwargs = merge_config(kwargs)
+    kwargs['config'] = kwargs
     return kwargs
 
 
 @register.inclusion_tag('rijkshuisstijl/components/form/input.html')
 def form_input(**kwargs):
+    kwargs = merge_config(kwargs)
+    kwargs['config'] = kwargs
     return kwargs
 
 
 @register.inclusion_tag('rijkshuisstijl/components/form/label.html')
 def label(**kwargs):
+    kwargs = merge_config(kwargs)
+    kwargs['config'] = kwargs
     return kwargs
