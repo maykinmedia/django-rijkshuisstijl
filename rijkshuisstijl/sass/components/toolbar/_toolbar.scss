@@ -14,6 +14,10 @@
   justify-content: flex-start;
   padding: $toolbar-spacing;
 
+  @media print {
+    display: none;
+  }
+
   &--align-right {
     justify-content: flex-end;
   }
