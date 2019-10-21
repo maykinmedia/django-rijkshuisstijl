@@ -50,7 +50,7 @@ def dom_filter(**kwargs):
 
 
 @register.inclusion_tag('rijkshuisstijl/components/icon/icon.html')
-def icon(icon, **kwargs):
+def icon(icon=None, **kwargs):
     """
     Renders an icon.
 
@@ -62,7 +62,8 @@ def icon(icon, **kwargs):
 
     Available options:
 
-        - icon: Required, The name of the icon to be rendered, can be defined by first argument.
+        - icon: Optional, The name of the icon to be rendered, can be defined by first argument.
+        - src: Optional, The source of the icon to be rendered.
 
         - class: Optional, a string with additional CSS classes.
         - href: Optional, an optional url to link to.
@@ -78,6 +79,7 @@ def icon(icon, **kwargs):
     kwargs['href'] = kwargs.get('href', None)
     kwargs['icon'] = kwargs.get('icon', None)
     kwargs['label'] = kwargs.get('label', None)
+    kwargs['src'] = kwargs.get('src', None)
 
     # args
     kwargs['icon'] = icon
@@ -121,7 +123,6 @@ def key_value_table(**kwargs):
                 field['label'] = get_field_label(obj, field['label'])
 
         return fields
-
 
     def get_data():
         obj = kwargs.get('object')
@@ -324,7 +325,6 @@ def title_header(title, **kwargs):
     return kwargs
 
 
-
 @register.inclusion_tag('rijkshuisstijl/components/toolbar/toolbar.html')
 def toolbar(*args, **kwargs):
     """
@@ -358,6 +358,9 @@ def toolbar(*args, **kwargs):
 
         for item in arg_items:
             kwargs['items'].append(parse_arg(item))
+
+    for item in kwargs['items']:
+        item['config'] = item
 
     kwargs['config'] = kwargs
     return kwargs

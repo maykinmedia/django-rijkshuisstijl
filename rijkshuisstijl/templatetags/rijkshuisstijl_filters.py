@@ -12,8 +12,10 @@ def input_date_format(value):
     """
     if value:
         try:
-            if value.date:
+            if hasattr(value, 'date'):
                 return value.date().isoformat()
+            if hasattr(value, 'isoformat'):
+                return value.isoformat()
 
             regex = re.compile('(\d\d)-(\d\d)-(\d\d\d\d)')
             match = re.match(regex, value)
@@ -34,8 +36,10 @@ def input_time_format(value):
     """
     if value:
         try:
-            if value.date:
+            if hasattr(value, 'time'):
                 return value.time().isoformat()
+            if hasattr(value, 'isoformat'):
+                return value.isoformat()
 
             regex = re.compile('^(\d\d):(\d\d):(\d\d)$')
             match = re.match(regex, value)

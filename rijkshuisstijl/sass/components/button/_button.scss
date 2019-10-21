@@ -34,6 +34,25 @@
     @include color-primary(background-color);
   }
 
+  &--secondary {
+    @include color-primary(color);
+    @include color-secondary(background-color);
+    @include color-secondary(border-color);
+
+    .icon:before {
+      @include color-background(background-color);
+    }
+  }
+
+  &--secondary#{&}--hover:hover {
+    background-color: darken($color-secondary, 10);
+    border-color: darken($color-secondary, 10);
+
+    .icon:before {
+      @include color-secondary(background-color);
+    }
+  }
+
   &--open {
     @include color-primary(border-color);
   }
@@ -99,9 +118,9 @@
   }
 
   &--info#{&}--hover:hover {
-    @include color-background(background-color, true);
-    color: $button-color-info;
+    background-color: darken($color-info, 10);
     border-color: $button-color-info;
+    color: $button-color-info;
 
     .icon:before {
       background-color: $button-color-info;
