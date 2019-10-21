@@ -49,8 +49,7 @@
     margin: 0;
   }
 
-  &--full-width .layout > .key-value-table,
-  &--full-width .layout > .toolbar{
+  &--full-width .layout > .key-value-table {
     @include container-padding(normal, ('margin-left', 'margin-right'));
   }
 

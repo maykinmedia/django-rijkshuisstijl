@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from .rijkshuisstijl_filters import get_attr_or_get
-from .rijkshuisstijl_helpers import merge_config, parse_kwarg, get_field_label
+from .rijkshuisstijl_helpers import merge_config, parse_kwarg, get_field_label, get_recursed_field_value
 
 
 @register.inclusion_tag('rijkshuisstijl/components/datagrid/datagrid.html', takes_context=True)
@@ -373,7 +373,6 @@ def datagrid(context, **kwargs):
                 ordering_value = str(i) if order_by_index else orderable_column_field
                 current_ordering = querydict.get(ordering_key, False)
 
-
                 directions = {
                     'asc': ordering_value,
                     'desc': '-' + ordering_value
@@ -463,11 +462,14 @@ def datagrid_label(obj, column_key):
         if column_key == '__str__':
             return str(obj)
         try:
-            value = getattr(obj, column_key)
-            return formats.date_format(value)
+            val = get_attr_or_get(obj, column_key)
+            return formats.date_format(val)
         except (AttributeError, TypeError):
             try:
-                val = get_attr_or_get(obj, column_key)
+                if type(obj) is list:
+                    val = obj.get(column_key)
+                else:
+                    val = get_recursed_field_value(obj, column_key)
                 if val:
                     return val
             except:

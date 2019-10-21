@@ -1,6 +1,8 @@
+@import 'microscope/typography';
 @import 'constants';
 
 @mixin button--small {
+  @include body--small;
   height: $button-height-small;
   line-height: $button-height-small;
 

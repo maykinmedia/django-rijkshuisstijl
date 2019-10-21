@@ -133,3 +133,17 @@ def parse_kwarg(kwargs, name, default=None):
     """
     value = kwargs.get(name, default)
     return parse_arg(value, default)
+
+
+def get_recursed_field_value(obj, field):
+    """
+    Finds a field value in an object by recursing through related fields.
+    :param obj: A model instance.
+    :param field: A field, possibly on a related instance. Example: "author__first_name".
+    :return: The value of the final field.
+    """
+    fields = field.split('__')
+    while len(fields) > 1:
+        field = fields.pop(0)
+        obj = getattr(obj, field)
+    return getattr(obj, fields[0])

@@ -5,14 +5,14 @@
 @import 'constants';
 
 .toolbar {
-  @include border(all);
-  @include shade(1, background-color);
+  @include color-secondary(background-color);
   @include rows(1);
   @include sticky(null, top, true);
+  outline: 1px solid;
+  outline-color: darken($color-info, 10);
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: $toolbar-spacing;
 
   @media print {
     display: none;
@@ -38,11 +38,20 @@
     margin-right: $toolbar-spacing * 4;
   }
 
-  &__list-item:not(:last-child) {
-    margin-right: $toolbar-spacing * 2;
+  .button {
+    outline: 1px solid;
+    outline-color: darken($color-secondary, 10);
+  }
+
+  .button:hover {
+    background-color: darken($color-secondary, 10);
   }
 
   + .datagrid {
     border-top: none;
+  }
+
+  + .key-value-table {
+    @include margin(true, margin-top);
   }
 }

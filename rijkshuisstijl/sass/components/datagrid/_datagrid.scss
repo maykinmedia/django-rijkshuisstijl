@@ -49,12 +49,18 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
   &__infobar {
     @include outline;
     @include border(all);
-    @include color-info(background-color);
+    @include color-secondary(background-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
     padding: $datagrid-spacing;
+  }
+
+  .toolbar {
+    //@include shade(1, background-color);
+    outline: none;
+    padding: 0 $toolbar-spacing;
   }
 
   .toolbar:empty {
@@ -130,7 +136,7 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
   }
 
   &__table-body &__row:not(&__row--placeholder):hover {
-    @include color-info(background-color);
+    @include color-secondary(background-color);
   }
 
   &__caption,
@@ -155,7 +161,8 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   &__caption {
     @include outline;
-    @include shade(1, background-color);
+    @include color-primary(color);
+    @include color-secondary(background-color);
     @include sticky('#{$toolbar-spacing} * 2 + #{$button-height-small}');
     z-index: 10;
   }
@@ -172,7 +179,7 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   &__caption--ordered-asc,
   &__caption--ordered-desc {
-    @include shade(2, background-color);
+    background-color: darken($color-secondary, 10);
   }
 
   &__caption--ordered-asc {

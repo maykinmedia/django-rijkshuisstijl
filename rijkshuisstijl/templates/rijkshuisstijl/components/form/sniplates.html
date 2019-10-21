@@ -1,7 +1,7 @@
-{% extends 'sniplates/django.html' %}{% spaceless %}{% load sniplates rijkshuisstijl_filters %}
+{% extends 'sniplates/django.html' %}{% spaceless %}{% load sniplates rijkshuisstijl %}
     {#  Form control wrapper. #}
     {% block _formControl %}
-        {% include 'rijkshuisstijl/components/form/form-control.html' with class=widget.attrs.class value=value %}
+        {% include 'rijkshuisstijl/components/form/form-control.html' with class=widget.attrs.class %}
     {% endblock %}
     {#  End form control wrapper. #}
 
@@ -18,11 +18,15 @@
     {# TODO: ComboField #}
 
     {% block DateField %}
-        {% reuse '_formControl' type='date' value=value|input_date_format %}
+        {% reuse '_formControl' type='date' raw_value=value|input_date_format %}
     {% endblock %}
 
     {% block DateTimeField %}
-        {% reuse '_formControl' type='datetime' %}
+        {% with date_value=raw_value|input_date_format time_value=raw_value|input_time_format %}
+        {% with raw_value=date_value|add:' '|add:time_value %}
+            {% reuse '_formControl' type='text' raw_value=raw_value %}
+        {% endwith %}
+        {% endwith %}
     {% endblock %}
 
     {# TODO: DecimalField #}
@@ -60,7 +64,7 @@
     {# TODO: SlugField #}
 
     {% block SplitDateTimeField %}
-        {% reuse '_formControl' type='datetime' %}
+        {% reuse '_formControl' type='datetime' split=True %}
     {% endblock %}
 
     {% block TimeField %}
@@ -91,11 +95,11 @@
     {% endblock %}
 
     {% block DateInput %}
-        {% reuse '_formControl' type='date' value=value|input_date_format %}
+        {% reuse 'DateField' %}
     {% endblock %}
 
     {% block DateTimeInput %}
-        {% reuse 'TextInput' %}
+        {% reuse 'DateTimeField' %}
     {% endblock %}
 
     {% block EmailInput %}
@@ -131,7 +135,7 @@
     {% endblock %}
 
     {% block SplitDateTimeWidget %}
-        {% reuse '_formControl' type='datetime' %}
+        {% reuse 'SplitDateTimeField' %}
     {% endblock %}
 
     {# TODO SplitHiddenDateTimeWidget #}

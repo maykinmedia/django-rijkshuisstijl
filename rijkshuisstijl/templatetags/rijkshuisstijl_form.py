@@ -11,6 +11,7 @@ def button(**kwargs):
     # kwargs
     kwargs['class'] = kwargs.get('class', None)
     kwargs['icon'] = kwargs.get('icon', None)
+    kwargs['icon_src'] = kwargs.get('icon_src', None)
     kwargs['id'] = kwargs.get('id', None)
     kwargs['label'] = kwargs.get('label', None)
     kwargs['title'] = kwargs.get('title', kwargs.get('label'))
@@ -30,6 +31,7 @@ def button_link(**kwargs):
 
     kwargs['class'] = kwargs.get('class', None)
     kwargs['icon'] = kwargs.get('icon', None)
+    kwargs['icon_src'] = kwargs.get('icon_src', None)
     kwargs['href'] = kwargs.get('href', '')
     kwargs['target'] = kwargs.get('target', None)
     kwargs['label'] = kwargs.get('label', None)
