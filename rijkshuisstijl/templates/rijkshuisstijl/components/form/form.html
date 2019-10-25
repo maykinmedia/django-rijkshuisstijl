@@ -49,6 +49,7 @@
 
 
                         {# Support read only fields in AdminForm. #}
+                        {# TODO: Get rid of {% capture %}. #}
                         {% capture as key_value_fields %}{% spaceless %}
                         {% for readonly_field in form.readonly_fields %}
                             {% if readonly_field in fieldset.1.fields %}

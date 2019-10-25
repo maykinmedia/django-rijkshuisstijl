@@ -83,7 +83,7 @@
 
     {# Built in widgets. #}
     {% block CheckboxInput %}
-        {% reuse '_formControl' type='checkbox' checked=form_field.value %}
+        {% reuse '_formControl' type='checkbox' %}
     {% endblock %}
 
     {% block CheckboxSelectMultiple %}
@@ -131,7 +131,7 @@
     {% endblock %}
 
     {% block SelectMultiple %}
-        {% reuse '_formControl' type='select' multiple=True %}
+        {% reuse 'MultipleChoiceField'  %}
     {% endblock %}
 
     {% block SplitDateTimeWidget %}

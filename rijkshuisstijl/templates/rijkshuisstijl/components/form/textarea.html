@@ -1,9 +1,23 @@
-{% spaceless %}{% load rijkshuisstijl_utils %}
-    {% capture as base_attrs %}{% if name %} name="{% if form.prefix %}{{ form.prefix }}-{% endif %}{{ name }}"{% endif %}{% endcapture %}
-    {% capture as optional_attrs %}{% if placeholder %} placeholder="{{ placeholder }}"{% endif %}{% endcapture %}
-    {% capture as valdation_atrs %}{% if disabled %} disabled{% endif %}{% if readonly%} readonly{% endif %}{% if required %} required{% endif %}{% endcapture %}
-    {% capture as meta_atrs %}{% if id %} id="{{ id }}"{% endif %}{% endcapture %}
-    {% capture as additional_attrs %}{% for attr, value in widget.attrs.items %} {{ attr }}="{{ value }}"{% endfor %}{% endcapture %}
-    <textarea class="textarea{% if "readonly" in widget.attrs %} textarea--readonly{% endif %}{% if errors %} textarea--error{% endif %}{% if class %} {{ class }}{% endif %}"{{ base_attrs }}{{ optional_attrs }}{{ valdation_atrs }}{{ meta_atrs }}{{ additional_attrs }}>{% if value != 'None' %}{{ value }}{% endif %}</textarea>
-{% endspaceless %}
+{% load sniplates rijkshuisstijl %}{% singleline %}
 
+    {% comment %}
+
+    class: Sets additional wrapper classes.
+    id: Sets the textarea id.
+    name: Sets the textarea name.
+    placeholder: Sets the placeholder label.
+    value: Sets the textarea value.
+    disabled: Makes the textarea disabled.
+    readonly: Makes the textarea read-only.
+    required: Makes the textarea required.
+
+    {% endcomment %}
+
+    <textarea class="textarea{% if errors %} textarea--error{% endif %}{% if class %} {{ class }}{% endif %}"
+            {% if id %} id="{{ id }}"{% endif %}
+            {% if name %} name="{{ name }}"{% endif %}
+            {% if placeholder %} placeholder="{{ placeholder }}"{% endif %}
+            {% if disabled %} disabled{% endif %}
+            {% if readonly %} readonly{% endif %}
+            {% if required %} required{% endif %}
+            {% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>{% endsingleline %}{% if value %}{{ value }}{% endif %}</textarea>

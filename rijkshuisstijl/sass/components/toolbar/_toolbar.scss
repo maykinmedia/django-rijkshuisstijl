@@ -1,15 +1,14 @@
 @import 'microscope/grid';
 @import 'microscope/typography';
-@import '../../settings/lib/ro-shade';
 @import '../../settings/lib/sticky';
 @import 'constants';
 
 .toolbar {
-  @include color-secondary(background-color);
   @include rows(1);
   @include sticky(null, top, true);
+  background-color: $toolbar-color-background;
   outline: 1px solid;
-  outline-color: darken($color-info, 10);
+  outline-color: $toolbar-color-border;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -36,15 +35,6 @@
 
   &__list:not(:last-child) {
     margin-right: $toolbar-spacing * 4;
-  }
-
-  .button {
-    outline: 1px solid;
-    outline-color: darken($color-secondary, 10);
-  }
-
-  .button:hover {
-    background-color: darken($color-secondary, 10);
   }
 
   + .datagrid {
