@@ -1,3 +1,5 @@
+import re
+
 from django import template
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
@@ -32,6 +34,37 @@ def capture(parser, token):
     nodelist = parser.parse(('endcapture',))
     parser.delete_first_token()
     return CaptureNode(nodelist, var_name)
+
+
+class SingleLineNode(template.Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        content = self.nodelist.render(context)
+        # singleline = content.replace('\n', '')
+        return re.sub(r'\s+', ' ', content)
+
+
+@register.tag('singleline')
+def singleline(parser, token):
+    """
+    Puts content on a single line.
+    Intended as replacement for {% spaceless %} compressing content within tags.
+
+    Example:
+
+        {% singleline %}
+
+        <input class="input"
+               name="foo"
+               value="bar">
+
+        {% endsingleline %}
+    """
+    nodelist = parser.parse(('endsingleline',))
+    parser.delete_first_token()
+    return SingleLineNode(nodelist)
 
 
 @register.tag('try')

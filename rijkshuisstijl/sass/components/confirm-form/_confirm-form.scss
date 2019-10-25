@@ -1,4 +1,5 @@
 @import '../../settings/lib/_sticky.scss';
+@import '../toolbar/constants';
 @import '../view/constants';
 
 .confirm-form {
@@ -12,5 +13,6 @@
 
   .toolbar {
     @include sticky(0, 'bottom');
+    padding: 0 $toolbar-spacing;
   }
 }

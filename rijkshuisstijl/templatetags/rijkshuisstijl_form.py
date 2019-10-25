@@ -1,5 +1,6 @@
-from django import template
+from uuid import uuid4
 
+from django.utils.translation import gettext_lazy as _
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from .rijkshuisstijl_helpers import merge_config, parse_kwarg
 
@@ -99,6 +100,20 @@ def form_control(**kwargs):
 
 @register.inclusion_tag('rijkshuisstijl/components/form/input.html')
 def form_input(**kwargs):
+    kwargs = merge_config(kwargs)
+    kwargs['config'] = kwargs
+    return kwargs
+
+
+@register.inclusion_tag('rijkshuisstijl/components/form/checkbox.html')
+def form_checkbox(**kwargs):
+    kwargs = merge_config(kwargs)
+    kwargs['config'] = kwargs
+    return kwargs
+
+
+@register.inclusion_tag('rijkshuisstijl/components/form/radio.html')
+def form_radio(**kwargs):
     kwargs = merge_config(kwargs)
     kwargs['config'] = kwargs
     return kwargs

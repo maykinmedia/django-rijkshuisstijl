@@ -1,4 +1,4 @@
-{% spaceless %}{% load l10n rijkshuisstijl rijkshuisstijl_filters rijkshuisstijl_form %}
+{% spaceless %}{% load l10n rijkshuisstijl %}
     <div class="datagrid{% if class %} {{ class }}{% endif %}" id="{{ id }}" role="group">
         {% if form %}
             <form class="datagrid__form" method="post"{% if form_action %} action="{{ form_action }}"{% endif %}>
@@ -48,7 +48,7 @@
                 <tr class="datagrid__row">
                     {% if form %}
                         <th class="datagrid__caption datagrid__caption--checkbox">
-                            {% form_control type='checkbox' select_all='#'|add:id|add:' .datagrid__cell--checkbox .input' %}
+                            {% form_checkbox select_all='#'|add:id|add:' .datagrid__cell--checkbox .input' %}
                         </th>
                     {% endif %}
 
@@ -74,7 +74,7 @@
                     <tr class="datagrid__row{% if object.datagrid_modifier_class %} datagrid__row--{{ object.datagrid_modifier_class }}{% endif %}{% if url %} fake-link fake-link--double-click" data-href="{{ url }}"{% else %}"{% endif %}>
                     {% if form %}
                         <td class="datagrid__cell datagrid__cell--checkbox">
-                            {% form_control type='checkbox' name=form_checkbox_name value=object.pk|unlocalize %}
+                            {% form_checkbox name=form_checkbox_name value=object.pk|unlocalize %}
                         </td>
                     {% endif %}
 

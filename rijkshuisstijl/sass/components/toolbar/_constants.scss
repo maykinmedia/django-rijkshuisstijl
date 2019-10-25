@@ -1,2 +1,4 @@
+@import '../../settings/lib/ro-shade';
 $toolbar-spacing: 0.4em;
-$toolbar-color-border: darken($color-secondary, 10);
+$toolbar-color-background: shade(1);
+$toolbar-color-border: darken($toolbar-color-background, 10);

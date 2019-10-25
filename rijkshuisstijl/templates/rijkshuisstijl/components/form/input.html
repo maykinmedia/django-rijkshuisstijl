@@ -1,9 +1,36 @@
-{% spaceless %}{% load rijkshuisstijl_utils %}
-    {% capture as base_attrs %} type="{{ type|default:'text' }}"{% if name %} name="{{ name }}"{% endif %}{% endcapture %}
-    {% capture as optional_attrs %}{% if value != None and value != 'None' %} value="{% firstof value raw_value '' %}"{% endif %}{% if placeholder %} placeholder="{{ placeholder }}"{% endif %}{% if size %} size={{ size }}{% endif %}{% endcapture %}
-    {% capture as valdation_atrs %}{% if date_format %} date-format="{{ date_format }}"{% endif %}{% if disabled %} disabled{% endif %}{% if min %} min="{{ min }}"{% endif %}{% if max %} max={{ max }}{% endif %}{% if readonly%} readonly{% endif %}{% if required %} required{% endif %}{% if type == 'time' or step %} step="{{ step|default:60 }}"{% endif %}{% endcapture %}
-    {% capture as meta_atrs %}{% if id %} id="{{ id }}"{% endif %}{% endcapture %}
-    {% capture as additional_attrs %}{% for attr, value in widget_attrs.items %} {{ attr }}="{{ value }}"{% endfor %}{% endcapture %}
-    <input class="input{% if errors %} input--error{% endif %}{% if "readonly" in widget_attrs %} input--readonly{% endif %}{% if class %} {{ class }}{% endif %}"{{ base_attrs }}{{ optional_attrs }}{{ valdation_atrs }}{{ meta_atrs }}{{ additional_attrs }}>
-    {% if type == 'file' %}<label class="input__filepicker"{% if id %} for="{{ id }}"{% endif %}>{% firstof raw_value placeholder _('Bestand kiezen') %}</label>{% endif %}
-{% endspaceless %}
+{% load sniplates rijkshuisstijl %}{% singleline %}
+
+    {% comment %}
+
+    class: Sets additional wrapper classes.
+    id: Sets the input id.
+    name: Sets the input name.
+    placeholder: Sets the placeholder label.
+    value: Sets the input value.
+    type: Sets the input type.
+    size: Sets the input size.
+    disabled: Makes the input disabled.
+    min: Sets the input mininum value.
+    max: Sets the input maximum value.
+    readonly: Makes the input read-only.
+    required: Makes the input required.
+
+    {% endcomment %}
+
+    <input class="input{% if errors %} input--error{% endif %}{% if class %} {{ class }}{% endif %}"
+            {% if id %} id="{{ id }}"{% endif %}
+            {% if name %} name="{{ name }}"{% endif %}
+            {% if placeholder %} placeholder="{{ placeholder }}"{% endif %}
+            {% if value %} value="{{ value }}"{% endif %}
+            {% if type %} type="{{ type }}"{% endif %}
+            {% if size %} size={{ size }}{% endif %}
+            {% if disabled %} disabled{% endif %}
+            {% if min %} min="{{ min }}"{% endif %}
+            {% if max %} max={{ max }}{% endif %}
+            {% if readonly %} readonly{% endif %}
+            {% if required %} required{% endif %}
+            {% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>
+    {% if type == 'file' %}<label class="input__filepicker"
+            {% if id %} for="{{ id }}"{% endif %}>{% firstof raw_value placeholder _('Bestand kiezen') %}</label>
+    {% endif %}
+{% endsingleline %}

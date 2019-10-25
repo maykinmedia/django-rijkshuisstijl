@@ -80,8 +80,7 @@
     outline: 2px solid;
   }
 
-  &[readonly]:focus,
-  &--readonly:focus {
+  &[readonly]:focus {
     outline-color: $color-gray!important;
   }
 }
