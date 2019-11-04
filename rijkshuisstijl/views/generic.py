@@ -18,8 +18,11 @@ class FormMixin:
     """
     Provides form_config using context and the get_form_config() method.
     """
-    title = None
     label = None
+    status = 'info'
+    title = None
+    text = None
+    wysiwyg = None
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -29,8 +32,11 @@ class FormMixin:
     def get_form_config(self):
         return {
             "form": self.get_form(),
+            "label": self.label,
+            "status": self.status,
             "title": self.title,
-            "label": self.label
+            "text": self.text,
+            "wysiwyg": self.wysiwyg,
         }
 
 

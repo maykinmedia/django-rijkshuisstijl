@@ -13,6 +13,10 @@
   @include responsive(padding-bottom, $footer-padding-mobile, $footer-padding-tablet, $footer-padding-desktop);
   min-height: $footer-min-height;
 
+  @media print {
+    display: none;
+  }
+
   &__body {
     @include container;
     padding: 0;
@@ -47,5 +51,9 @@
     @include body;
     @include color-background(color);
     text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

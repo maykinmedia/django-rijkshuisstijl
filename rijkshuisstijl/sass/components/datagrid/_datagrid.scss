@@ -57,10 +57,6 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     padding: $datagrid-spacing;
   }
 
-  .toolbar {
-    padding: 0 $toolbar-spacing;
-  }
-
   .toolbar:empty {
     display: none;
   }

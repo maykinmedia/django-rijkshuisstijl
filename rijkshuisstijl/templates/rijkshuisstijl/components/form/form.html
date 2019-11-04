@@ -1,4 +1,4 @@
-{% spaceless %}{% load i18n sniplates rijkshuisstijl rijkshuisstijl_form rijkshuisstijl_filters rijkshuisstijl_utils %}
+{% spaceless %}{% load i18n sniplates rijkshuisstijl %}
     {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
     <{{ tag }} class="form{% if class %} {{ class }}{% endif %}"{% if id %} id="{{ id }}"{% endif %}{% if tag == 'form' %} method="{{ method|default:'post' }}" enctype="{{ enctype|default:'multipart/form-data' }}"{% endif %}>
         <header class="form__header">
@@ -66,7 +66,7 @@
                         {# Last fieldset gets actions appended to it.  #}
                         {% if forloop.last %}
                             <div class="form__actions">
-                                <button class="button {{ button_class|default:'button--primary' }}" type="submit">{{ label|default:_('Verzenden') }}</button>
+                                {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') %}
                             </div>
                         {% endif %}
                     </fieldset>
@@ -79,7 +79,7 @@
                     {% endfor %}
 
                     <div class="form__actions">
-                        <button class="button {{ button_class|default:'button--primary' }}" type="submit">{{ label|default:_('Verzenden') }}</button>
+                        {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') %}
                     </div>
                 </fieldset>
             {% endif %}

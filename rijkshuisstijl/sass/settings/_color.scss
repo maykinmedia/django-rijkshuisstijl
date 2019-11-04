@@ -121,12 +121,12 @@ desbetreffende invulveld te laten zien om onnodig heen en weer scrollen te voork
 
 $color-danger: map-get($colors, 'red-shade-2');
 $color-danger-dark: map-get($colors, 'red');
-
-$color-warning: map-get($colors, 'orange-shade-2');
 $color-info: map-get($colors, 'heaven-blue-shade-2');
 $color-info-dark: map-get($colors, 'heaven-blue');
 $color-success: map-get($colors, 'green-shade-2');
 $color-success-dark: map-get($colors, 'green');
+$color-warning: map-get($colors, 'orange-shade-2');
+$color-warning-dark: map-get($colors, 'orange');
 
 $color-red: map-get($colors, 'red');
 $color-green: map-get($colors, 'pink');

@@ -10,71 +10,47 @@
   @include body;
   @include rows(1);
   @include color-background;
-  @include color-primary(color);
   @include ellipsis;
   appearance: none;
-  border: 1px solid transparent;
+  background-color: transparent;
+  border: none;
   box-sizing: border-box;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-size: 20px !important;
   padding: $button-padding;
+  position: relative;
   text-decoration: none;
 
-  &[disabled] {
+  @media print {
+    display: none;
+  }
+
+  &:before,
+  &:after {
+    @include overlay;
+    content: '';
+  }
+
+  &:after {
+    background-color: $color-black;
+    opacity: 0;
+  }
+
+  &[disabled]:before {
     opacity: 0.2;
-    border-style: dashed;
   }
 
-  &--active,
-  &--primary,
-  &--hover:hover {
-    @include color-background(color);
-    @include color-primary(background-color);
+  &[disabled]:after {
+    opacity: 0 !important;
   }
 
-  &--secondary {
-    @include color-primary(color);
-    @include color-secondary(background-color);
-    @include color-secondary(border-color);
-
-    .icon:before {
-      @include color-background(background-color);
-    }
-  }
-
-  &--secondary#{&}--hover:hover {
-    background-color: darken($color-secondary, 10);
-    border-color: darken($color-secondary, 10);
-
-    .icon:before {
-      @include color-secondary(background-color);
-    }
-  }
-
-  &--open {
-    @include color-primary(border-color);
-  }
-
-  @each $color-name, $color in $colors {
-    &--#{$color-name} {
-      @include color-background(color);
-      background-color: $color;
-
-      &:hover {
-        @include color-background(background-color);
-        border-color: $color;
-        color: $color;
-      }
-    }
-
-    &--open#{&}--#{$color-name} {
-      &:hover {
-        @include color-background(color);
-        background-color: $color;
-      }
-    }
+  &:active:after,
+  &:focus:after,
+  &:hover:after {
+    opacity: 0.2;
   }
 
   &--no-pad,
@@ -87,157 +63,100 @@
     @include button--small;
   }
 
-  &--danger {
-    @include color-background(color);
-    background-color: $button-color-danger;
-    border-color: $button-color-danger;
+  &__label,
+  .icon {
+    position: relative;
+    z-index: 20;
+  }
 
-    .icon:before {
-      @include color-background(background-color);
+  .icon {
+    @include rows(1, min-width);
+  }
+
+  &--icon-left {
+    flex-direction: row-reverse;
+  }
+
+  &--icon-left .icon:not(:first-child) {
+    margin-left: 0;
+    margin-right: $button-spacing;
+  }
+
+  &:not(#{&}--icon-left):not(:first-child) .icon {
+    margin-left: $button-spacing;
+    margin-right: 0;
+  }
+
+  [type=submit],
+  &--primary,
+  &--active {
+    @include color-background(color);
+
+    &:before {
+      @include color-primary(background-color);
     }
   }
 
-  &--danger#{&}--hover:hover {
-    @include color-background(background-color, true);
-    color: $button-color-danger;
-    border-color: $button-color-danger;
+  &--secondary {
+    @include color-primary(color);
 
-    .icon:before {
-      background-color: $button-color-danger;
+    &:before {
+      @include color-secondary(background-color);
+    }
+  }
+
+  &--secondary[disabled]:before {
+    opacity: 1;
+  }
+
+  &--secondary[disabled] &__label {
+    opacity: 0.2;
+  }
+
+  &--transparent:before {
+    background-color: transparent;
+  }
+
+
+  &--success {
+    @include color-background(color);
+
+    &:before {
+      background-color: $button-color-success;
     }
   }
 
   &--info {
     @include color-background(color);
-    background-color: $button-color-info;
-    border-color: $button-color-info;
 
-    .icon:before {
-      @include color-background(background-color);
-    }
-  }
-
-  &--info#{&}--hover:hover {
-    background-color: darken($color-info, 10);
-    border-color: $button-color-info;
-    color: $button-color-info;
-
-    .icon:before {
+    &:before {
       background-color: $button-color-info;
     }
   }
 
-  &--success {
+  &--warning {
     @include color-background(color);
-    background-color: $button-color-success;
-    border-color: $button-color-success;
 
-    .icon:before {
-      @include color-background(background-color);
+    &:before {
+      background-color: $button-color-warning;
     }
   }
 
-  &--success#{&}--hover:hover {
-    @include color-background(background-color, true);
-    color: $button-color-success;
-    border-color: $button-color-success;
-
-    .icon:before {
-      background-color: $button-color-success;
-    }
-  }
-
-  &--rounded {
-    border-radius: $button-height-small / 2;
-  }
-
-  .icon {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  &__label + .icon {
-    margin-left: $button-spacing;
-  }
-
-  &--no-text .icon {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .icon:before {
-    padding: 0 !important;
-  }
-
-  &--dashed {
-    border-style: dashed;
-  }
-
-  &--no-text &__label {
-    display: none;
-  }
-
-  &--transparent {
-    background-color: transparent !important;
-    @include color-primary(color);
-
-    .icon:before {
-      background-color: transparent !important;
-    }
-  }
-
-  &--transparent#{&}--dashed {
-    @include color-primary(border-color);
-  }
-
-
-  &--transparent#{&}--hover:hover {
+  &--danger {
     @include color-background(color);
-    @include color-primary(background-color, true);
 
-
-    .icon:before {
-      @include color-background(background-color);
-    }
-  }
-
-  &--transparent#{&}--success {
-    color: $button-color-success;
-    border-color: $button-color-success;
-
-    .icon:before {
-      background-color: $button-color-success;
-    }
-  }
-
-  &--transparent#{&}--hover#{&}--success:hover {
-    @include color-background(color);
-    background-color: $button-color-success !important;
-
-    .icon:before {
-      @include color-background(background-color);
-    }
-  }
-
-  &--transparent#{&}--danger {
-    @include color-background(background-color, true);
-    color: $button-color-danger;
-    border-color: $button-color-danger;
-
-    .icon:before {
+    &:before {
       background-color: $button-color-danger;
     }
   }
 
-  &--transparent#{&}--hover#{&}--danger:hover {
-    @include color-background(color);
-    background-color: $button-color-danger !important;
-    border-color: $button-color-danger;
+  @each $color-name, $color in $colors {
+    &--#{$color-name} {
+      @include color-background(color);
 
-    .icon:before {
-      @include color-background(background-color);
+      &:before {
+        background-color: $color
+      }
     }
   }
 }

@@ -11,6 +11,10 @@
 
 
 .navigation-bar {
+  @media print {
+    display: none;
+  }
+
   @include mobile-only {
     @include animate;
     @include overlay;

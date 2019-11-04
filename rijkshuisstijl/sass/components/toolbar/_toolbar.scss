@@ -1,17 +1,20 @@
 @import 'microscope/grid';
+@import 'microscope/transform';
 @import 'microscope/typography';
 @import '../../settings/lib/sticky';
 @import 'constants';
 
 .toolbar {
+  @include body;
   @include rows(1);
   @include sticky(null, top, true);
   background-color: $toolbar-color-background;
-  outline: 1px solid;
-  outline-color: $toolbar-color-border;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  outline: 1px solid;
+  outline-color: $toolbar-color-border;
 
   @media print {
     display: none;
@@ -23,6 +26,18 @@
 
   &--justify {
     justify-content: space-between;
+  }
+
+  &--compact {
+    height: auto;
+  }
+
+  &--dark {
+    background-color: darken($toolbar-color-background, 4);
+  }
+
+  &--pad {
+    padding: 0 $toolbar-spacing;
   }
 
   &__list,
@@ -37,6 +52,7 @@
     margin-right: $toolbar-spacing * 4;
   }
 
+  &__label
   + .datagrid {
     border-top: none;
   }

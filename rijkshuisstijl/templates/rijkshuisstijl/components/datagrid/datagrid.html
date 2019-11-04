@@ -18,7 +18,7 @@
                 </div>
             {% endif %}
 
-            <div class="toolbar{% if form_buttons and toolbar_position in 'top,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
+            <div class="toolbar toolbar--pad{% if form_buttons and toolbar_position in 'top,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
                 {% if form_buttons and toolbar_position in 'top,both' %}
                     <ul class="toolbar__list">
                         {% for item in form_buttons %}
@@ -104,7 +104,7 @@
 
         {% if is_paginated %}
             <footer class="datagrid__footer">
-                <div class="toolbar{% if form_buttons and toolbar_position in 'bottom,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
+                <div class="toolbar toolbar--pad{% if form_buttons and toolbar_position in 'bottom,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
                     {% if form_buttons and toolbar_position in 'bottom,both' %}
                         <ul class="toolbar__list">
                             {% for item in form_buttons %}

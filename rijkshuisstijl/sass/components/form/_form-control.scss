@@ -29,6 +29,7 @@
   }
 
   &__body {
+    font-size: 0;
     width: 100%;
   }
 
@@ -38,7 +39,7 @@
 
   &:not(#{&}--stacked) &__body {
     @include tablet {
-      @include body;
+      //@include body;
       margin-left: $form-control-spacing !important;
       width: calc(100% - #{$label-width} - #{$form-control-spacing});
     }
@@ -67,6 +68,17 @@
   &__choices {
     @include responsive(flex-direction, column, row);
     display: flex;
+  }
+
+  &--choices-stacked &__choices {
+    flex-direction: column;
+  }
+
+  &--choices-stacked &__choices .checkbox,
+  &--choices-stacked &__choices .radio {
+    &:not(:last-child) {
+      margin-bottom: $form-control-margin-top;
+    }
   }
 
   &__choices > * {
