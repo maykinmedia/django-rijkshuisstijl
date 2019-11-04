@@ -20,7 +20,7 @@
                 {% if name %} name="{{ name }}"{% endif %}
                 {% if value %} value="{{ value }}"{% endif %}
                 {% if disabled %} disabled{% endif %}
-               {% if required %} required{% endif %}
+                {% if required %} required{% endif %}
                 {% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>
         <div class="radio__checkmark"></div>
         {% if label %}{% include 'rijkshuisstijl/components/form/label.html' with for=id label=label %}{% endif %}

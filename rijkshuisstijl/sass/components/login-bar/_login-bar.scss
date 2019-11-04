@@ -11,6 +11,10 @@
   min-height: 32px;
   text-align: right;
 
+  @media print {
+    display: none;
+  }
+
   &__body {
     @include body;
     @include container;

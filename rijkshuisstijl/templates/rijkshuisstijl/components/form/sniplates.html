@@ -18,9 +18,10 @@
     {# TODO: ComboField #}
 
     {% block DateField %}
-        {% reuse '_formControl' type='date' raw_value=value|input_date_format %}
+        {% reuse '_formControl' type='date' %}
     {% endblock %}
 
+    {# Fixme - Validate implementation, remove input_date_format/input_timpe_format. #}
     {% block DateTimeField %}
         {% with date_value=raw_value|input_date_format time_value=raw_value|input_time_format %}
         {% with raw_value=date_value|add:' '|add:time_value %}
@@ -68,7 +69,7 @@
     {% endblock %}
 
     {% block TimeField %}
-        {% reuse '_formControl' type="time" value=value|input_time_format %}
+        {% reuse '_formControl' type="time" %}
     {% endblock %}
 
     {# TODO: TypedChoiceField #}
@@ -149,7 +150,7 @@
     {% endblock %}
 
     {% block TimeInput %}
-        {% reuse '_formControl' type="time" value=value|input_time_format %}
+        {% reuse 'TimeField' %}
     {% endblock %}
 
     {% block URLInput %}

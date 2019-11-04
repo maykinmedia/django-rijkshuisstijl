@@ -21,5 +21,6 @@
 
   .input:checked + &__checkmark:before {
     @include shade-color(dark-blue, $property: background-color);
+    color-adjust: exact;
   }
 }

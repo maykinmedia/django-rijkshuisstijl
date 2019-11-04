@@ -20,4 +20,4 @@
             {% if disabled %} disabled{% endif %}
             {% if readonly %} readonly{% endif %}
             {% if required %} required{% endif %}
-            {% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>{% endsingleline %}{% if value %}{{ value }}{% endif %}</textarea>
+            {% endsingleline %}{% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>{% if value %}{{ value }}{% endif %}</textarea>

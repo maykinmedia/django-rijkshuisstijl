@@ -18,7 +18,7 @@
 
     {% endcomment %}
 
-    <button class="button{% if class %} {{ class }}{% endif %}{% if toggle_target %} toggle{% endif %}"
+    <button class="button{% if not label %} button--no-text{% endif %}{% if class %} {{ class }}{% endif %}{% if toggle_target %} toggle{% endif %}"
             {% if id %} id="{{ id }}"{% endif %}
             {% if name %} name="{{ name }}"{% endif %}
             {% if value %} value="{{ value }}"{% endif %}

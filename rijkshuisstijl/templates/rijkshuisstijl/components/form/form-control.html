@@ -83,6 +83,15 @@
             {% endif %}
 
 
+        {% elif type == 'date' %}
+            {% if form_field %}
+                {# Form field #}
+                {% include 'rijkshuisstijl/components/form/input.html' with value=form_field.value|date:'Y-m-d' %}
+            {% else %}
+                 Custom
+                {% include 'rijkshuisstijl/components/form/input.html' with value=value %}
+            {% endif %}
+
         {% elif type == 'datetime' %}
             {# Datetime inputs #}
             {% with date_name=name|add:'_0' time_name=name|add:'_1' %}

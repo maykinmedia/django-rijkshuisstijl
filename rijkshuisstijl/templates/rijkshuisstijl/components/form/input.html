@@ -29,7 +29,7 @@
             {% if max %} max={{ max }}{% endif %}
             {% if readonly %} readonly{% endif %}
             {% if required %} required{% endif %}
-            {% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>
+            {% endsingleline %}{% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>{% singleline %}
     {% if type == 'file' %}<label class="input__filepicker"
             {% if id %} for="{{ id }}"{% endif %}>{% firstof raw_value placeholder _('Bestand kiezen') %}</label>
     {% endif %}

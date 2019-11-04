@@ -3,6 +3,10 @@
 @import 'constants';
 
 .view {
+  @media print {
+    font-size: 10pt !important;
+  }
+
   &__body {
     margin: 0;
     overflow-x: hidden;
@@ -69,6 +73,10 @@
   &--full-width .datagrid__caption:first-child,
   &--full-width .datagrid__cell:first-child {
     @include container-padding($properties: padding-left);
+  }
+
+  &--full-width .datagrid__caption:first-child .datagrid__link {
+    padding-left: 0;
   }
 
   &--full-width .datagrid__caption--checkbox:first-child,
