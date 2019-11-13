@@ -4,7 +4,7 @@
         <header class="form__header">
             {% if title %}<h1 class="form__title">{{ title }}</h1>{% endif %}
             {% if form.fieldsets %}<p class="form__text">* {{ _('verplichte velden') }}</p>{% endif %}
-            {% if text or wysiwyg %}{% textbox text=text wysiwyg=wysiwyg status=status %}{% endif %}
+            {% if text or wysiwyg %}{% textbox text=text urlize=urlize wysiwyg=wysiwyg status=status %}{% endif %}
         </header>
 
         <div class="form__body">
@@ -59,14 +59,14 @@
                         {% endspaceless %}{% endcapture %}
 
                         {% if key_value_fields %}
-                            {% key_value_table object=form.form.instance fields=key_value_fields %}
+
                         {% endif %}
 
 
                         {# Last fieldset gets actions appended to it.  #}
                         {% if forloop.last %}
                             <div class="form__actions">
-                                {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') %}
+                                {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') type='submit' %}
                             </div>
                         {% endif %}
                     </fieldset>
@@ -79,7 +79,7 @@
                     {% endfor %}
 
                     <div class="form__actions">
-                        {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') %}
+                        {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') type='submit' %}
                     </div>
                 </fieldset>
             {% endif %}

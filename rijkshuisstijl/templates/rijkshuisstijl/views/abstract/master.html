@@ -1,4 +1,4 @@
-{% spaceless %}{% load i18n rijkshuisstijl_meta staticfiles %}
+{% spaceless %}{% load i18n static rijkshuisstijl_meta %}
 <!DOCTYPE html>
 <html lang="nl" class="view view--full-width {% block body-class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}" {% block html-data %}{% endblock %}>
 <head>

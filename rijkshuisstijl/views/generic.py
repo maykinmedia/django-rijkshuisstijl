@@ -147,7 +147,6 @@ class TemplateView(TemplateMixin, DjTemplateView):
     text = None
     wysiwyg = None
     template_name = "rijkshuisstijl/views/generic/template.html"
-    textbox_config = {}
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -159,5 +158,5 @@ class TemplateView(TemplateMixin, DjTemplateView):
             "status": self.status,
             "title": self.title,
             "text": self.text,
-            "wysiwy": self.wysiwyg
+            "wysiwyg": self.wysiwyg
         }

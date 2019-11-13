@@ -1,4 +1,4 @@
-{% load sniplates rijkshuisstijl %}{% singleline %}
+{% load l10n sniplates rijkshuisstijl %}{% singleline %}
 
     {% comment %}
 
@@ -21,7 +21,7 @@
             {% if multiple %} multiple{% endif %}
             {% if name %} name="{{ name }}"{% endif %}
             {% if placeholder %} placeholder="{{ placeholder }}"{% endif %}
-            {% if value %} value="{{ value }}"{% endif %}
+            {% if value %} value="{{ value|unlocalize }}"{% endif %}
             {% if type %} type="{{ type }}"{% endif %}
             {% if size %} size={{ size }}{% endif %}
             {% if disabled %} disabled{% endif %}
@@ -32,7 +32,7 @@
         {% if multiple %}
 
             {% for val, display in choices %}
-                <option class="select__option" value="{{ val }}"
+                <option class="select__option" value="{{ val|unlocalize }}"
                         {% if val in value %} selected{% endif %}>{{ display }}</option>
             {% endfor %}
 
@@ -42,11 +42,11 @@
                 {% if choice.is_group %}
                     <optgroup label="{{ choice.value }}">
                         {% for val, display in choice.display %}
-                            <option class="select__option" value="{{ val }}" {% if val == value|default:None %}selected{% endif %}>{{ display }}</option>
+                            <option class="select__option" value="{{ val|unlocalize }}" {% if val|unlocalize == value|default:None|unlocalize %}selected{% endif %}>{{ display }}</option>
                         {% endfor %}
                     </optgroup>
                 {% else %}
-                    <option class="select__option" value="{{ choice.value }}" {% if choice.value == value|default:None %}selected{% endif %}>{{ choice.display }}</option>
+                    <option class="select__option" value="{{ choice.value }}" {% if choice.value|unlocalize == value|default:None|unlocalize %}selected{% endif %}>{{ choice.display }}</option>
                 {% endif %}
             {% endfor %}
 

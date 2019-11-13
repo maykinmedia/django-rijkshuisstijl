@@ -17,7 +17,12 @@
             <div class="form-control__body">
         {% endif %}
 
-        {% if type == 'checkbox' %}
+        {% firstof input_template field.input_template as input_template %}
+        {% if input_template %}
+            {# Custom input template #}
+            {% include input_template %}
+
+        {% elif type == 'checkbox' %}
             {# (Mutliple) checkbox inputs  #}
             {% if choices %}
 
@@ -88,7 +93,7 @@
                 {# Form field #}
                 {% include 'rijkshuisstijl/components/form/input.html' with value=form_field.value|date:'Y-m-d' %}
             {% else %}
-                 Custom
+                {# Custom #}
                 {% include 'rijkshuisstijl/components/form/input.html' with value=value %}
             {% endif %}
 
