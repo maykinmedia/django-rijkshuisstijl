@@ -70,7 +70,7 @@ def singleline(parser, token):
 @register.tag('try')
 def tryexcept(parser, token):
     """
-    Creates try/except blog within a template.
+    Creates try/except block within a template.
 
     Example:
 
