@@ -1,4 +1,4 @@
-{% load sniplates rijkshuisstijl %}{% singleline %}
+{% load l10n sniplates rijkshuisstijl %}{% singleline %}
 
     {% comment %}
 
@@ -21,12 +21,12 @@
             {% if id %} id="{{ id }}"{% endif %}
             {% if name %} name="{{ name }}"{% endif %}
             {% if placeholder %} placeholder="{{ placeholder }}"{% endif %}
-            {% if value %} value="{{ value }}"{% endif %}
+            {% if value %} value="{{ value|unlocalize }}"{% endif %}
             {% if type %} type="{{ type }}"{% endif %}
             {% if size %} size={{ size }}{% endif %}
             {% if disabled %} disabled{% endif %}
-            {% if min %} min="{{ min }}"{% endif %}
-            {% if max %} max={{ max }}{% endif %}
+            {% if min %} min="{{ min|unlocalize }}"{% endif %}
+            {% if max %} max="{{ max|unlocalize }}"{% endif %}
             {% if readonly %} readonly{% endif %}
             {% if required %} required{% endif %}
             {% endsingleline %}{% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>{% singleline %}

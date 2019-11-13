@@ -74,6 +74,16 @@ class FormControl {
                 const datasetItem = `${namedInput.name}Value`;
                 let value = namedInput.value;
 
+                // Checkbox
+                if (namedInput.type == 'checkbox' && !namedInput.checked) {
+                    return;
+                }
+
+                // Radio
+                if (namedInput.type == 'radio' && !namedInput.checked) {
+                    return;
+                }
+
                 // Select multiple
                 if (namedInput.multiple && namedInput.options) {
                     const values = [...namedInput.options]

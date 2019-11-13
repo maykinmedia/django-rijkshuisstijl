@@ -91,7 +91,7 @@
     }
   }
 
-  &__choices > *:not(:last-child) {
+  &:not(#{&}--choices-stacked) &__choices > *:not(:last-child) {
     margin-right: $input-padding-h;
   }
 

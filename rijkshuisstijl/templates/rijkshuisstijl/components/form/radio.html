@@ -1,4 +1,4 @@
-{% load sniplates rijkshuisstijl %}{% singleline %}
+{% load l10n sniplates rijkshuisstijl %}{% singleline %}
 
     {% comment %}
 
@@ -18,11 +18,11 @@
                 {% if checked %} checked{% endif %}
                 {% if id %} id="{{ id }}"{% endif %}
                 {% if name %} name="{{ name }}"{% endif %}
-                {% if value %} value="{{ value }}"{% endif %}
+                {% if value %} value="{{ value|unlocalize }}"{% endif %}
                 {% if disabled %} disabled{% endif %}
                 {% if required %} required{% endif %}
                 {% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>
         <div class="radio__checkmark"></div>
-        {% if label %}{% include 'rijkshuisstijl/components/form/label.html' with for=id label=label %}{% endif %}
+        {% if label %}{% include 'rijkshuisstijl/components/form/label.html' with for=id label=label only %}{% endif %}
     </div>
 {% endsingleline %}

@@ -1,4 +1,4 @@
-{% load sniplates rijkshuisstijl %}{% singleline %}
+{% load l10n sniplates rijkshuisstijl %}{% singleline %}
 
     {% comment %}
 
@@ -20,4 +20,4 @@
             {% if disabled %} disabled{% endif %}
             {% if readonly %} readonly{% endif %}
             {% if required %} required{% endif %}
-            {% endsingleline %}{% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>{% if value %}{{ value }}{% endif %}</textarea>
+            {% endsingleline %}{% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>{% if value %}{{ value|unlocalize }}{% endif %}</textarea>

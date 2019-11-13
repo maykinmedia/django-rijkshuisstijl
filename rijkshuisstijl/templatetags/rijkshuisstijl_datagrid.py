@@ -56,20 +56,6 @@ def datagrid(context, **kwargs):
               Example: ['author', 'title']
 
 
-        Pagination
-        ----------
-
-        Data my be paginated using a Django paginator. Pagination detais may be obtained from the context if not
-        explicitly set.
-        **The actual pagination is not implemented in the datagrid itself and should be provided by the view.
-
-        - paginator: Optional, A Django Paginator instance, may be obtained from context.
-        - page_obj: Optional, The paginator page object, may be obtained from context.
-        - page_number: Optional, The current page number.
-        - page_key: Optional, The GET parameter to use for the page, defaults to 'page'.
-        - paginator_zero_index: Optional, Use zero-based indexing for page numbers, not fully supported.
-
-
         Ordering
         --------
 
@@ -98,13 +84,28 @@ def datagrid(context, **kwargs):
           *The actual ordering is not implemented in the datagrid itself and should be provided by the view.
 
 
+        Pagination
+        ----------
+
+        Data my be paginated using a Django paginator. Pagination details may be obtained from the context if not
+        explicitly set.
+        **The actual pagination is not implemented in the datagrid itself and should be provided by the view.
+
+        - is_paginated: Optional, if true, paginate based on paginator configuration, may be obtained from context.
+        - paginator: Optional, A Django Paginator instance, may be obtained from context.
+        - page_obj: Optional, The paginator page object, may be obtained from context.
+        - page_number: Optional, The current page number.
+        - page_key: Optional, The GET parameter to use for the page, defaults to 'page'.
+        - paginator_zero_index: Optional, Use zero-based indexing for page numbers, not fully supported.
+
+
         Custom presentation (get_<field>_display)
         -----------------------------------------
 
         - get_<field>_display: Optional, allows a callable to be used to generate a custom cell display value. Replace
          <field> with a key which will map to a field (a key in columns) and set a callable as it's value.
 
-         The callable will receive the row's object and shoud return SafeText.
+         The callable will receive the row's object and should return SafeText.
          Example: lambda object: mark_safe(<a href="{}">{}</a>.format(object.author.get_absolute_url, object.author))
 
 
@@ -121,8 +122,8 @@ def datagrid(context, **kwargs):
 
         - form_action: Optional, specifies the url to submit form actions to. If set, form will default to True.
 
-        - form_buttons: Optional, a list_of_dict (label, [href], [icon], [name], [target], [title]) defining which
-          buttons to create (see rijkshuisstijl_form.button). The name attribute of the buttons should be used to
+        - form_buttons: Optional, a list_of_dict (label, [href], [icon], [icon_src] [name], [target], [title]) defining
+          which buttons to create (see rijkshuisstijl_form.button). The name attribute of the buttons should be used to
           specify the performed action.
           example: [{'name': 'delete', 'label': 'delete' 'class': 'button--danger'}]
 
@@ -144,11 +145,11 @@ def datagrid(context, **kwargs):
 
         - modifier_key Optional, a string defining the field in an object to get the value to match for.
         - modifier_column Optional, a string defining the column key to apply the colored styling for.
-        - modifier_mapping, a dict containing a key which possibly partially matches an object's field value and which
-          value is one of the supported colors****.
+        - modifier_mapping, Optional, a dict containing a key which possibly partially matches an object's field value
+          and which value is one of the supported colors****.
           Example: [{'1984': 'purple'}]
 
-        The supported colors are:
+        ****The supported colors are:
 
          - purple
          - purple-shade-1
@@ -327,7 +328,7 @@ def datagrid(context, **kwargs):
 
             for item_key, item_value in modifier_map.items():
                 pattern = re.compile(item_key)
-                if pattern.match(object_value):
+                if pattern.match(str(object_value)):
                     obj.datagrid_modifier_class = item_value
         except KeyError:
             pass

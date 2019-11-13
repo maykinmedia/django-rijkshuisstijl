@@ -25,9 +25,9 @@
                             <li class="toolbar__list-item">
                                 {% firstof item.class 'button--transparent' as item_class %}
                                 {% if item.href %}
-                                    {% button_link class='button--small '|add:item_class href=item.href label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                    {% button_link class='button--small '|add:item_class config=item %}
                                 {% else %}
-                                    {% button class='button--small '|add:item_class name=item.name value=item.value label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                    {% button class='button--small '|add:item_class config=item %}
                                 {% endif %}
                             </li>
                         {% endfor %}
@@ -111,9 +111,9 @@
                                 <li class="toolbar__list-item">
                                     {% firstof item.class 'button--transparent' as item_class %}
                                     {% if item.href %}
-                                        {% button_link class='button--small '|add:item_class href=item.href label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                        {% button_link class='button--small '|add:item_class config=item %}
                                     {% else %}
-                                        {% button class='button--small '|add:item_class name=item.name value=item.value label=item.label title=item.title|default:None icon=item.icon|default:None %}
+                                        {% button class='button--small '|add:item_class config=item %}
                                     {% endif %}
                                 </li>
                             {% endfor %}
@@ -122,6 +122,23 @@
 
                     <ul class="toolbar__list">
                         <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_key=page_key page_number=page_number page_obj=page_obj form=False zero_index=paginator_zero_index %}</li>
+                    </ul>
+                </div>
+            </footer>
+        {% elif form_buttons and toolbar_position in 'bottom,both' %}
+            <footer class="datagrid__footer">
+                <div class="toolbar toolbar--pad{% if form_buttons and toolbar_position in 'bottom,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
+                    <ul class="toolbar__list">
+                    {% for item in form_buttons %}
+                        <li class="toolbar__list-item">
+                            {% firstof item.class 'button--transparent' as item_class %}
+                            {% if item.href %}
+                                {% button_link class='button--small '|add:item_class config=item %}
+                            {% else %}
+                                {% button class='button--small '|add:item_class config=item %}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
                     </ul>
                 </div>
             </footer>

@@ -82,6 +82,7 @@ def form(context, form=None, label='', **kwargs):
     kwargs['label'] = label
     kwargs['title'] = kwargs.get('title')
     kwargs['text'] = kwargs.get('text')
+    kwargs['urlize'] = kwargs.get('urlize')
     kwargs['wysiwyg'] = kwargs.get('wysiwyg')
     kwargs['status'] = kwargs.get('status')
     kwargs['tag'] = kwargs.get('tag', 'form')

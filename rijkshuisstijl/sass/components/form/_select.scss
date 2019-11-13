@@ -19,6 +19,7 @@
   &[multiple],
   &--multiple {
     @include rows(3, min-height);
+    padding: 0!important;
   }
 
   &__option {
