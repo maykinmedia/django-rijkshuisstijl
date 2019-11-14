@@ -21,11 +21,11 @@ class DatagridTestCase(TestCase):
 
         self.book_3 = Book.objects.create(title='Dolor', publisher=self.publisher_1)
 
-    def template_render(self, config=None):
+    def template_render(self, config=None, data={}):
         config = config or {}
         config = Context({
             'config': config,
-            'request': RequestFactory().get('/foo')
+            'request': RequestFactory().get('/foo', data)
         })
         return Template('{% load rijkshuisstijl %}{% datagrid config=config %}').render(config)
 
@@ -37,9 +37,12 @@ class DatagridTestCase(TestCase):
             'queryset': Book.objects.all(),
             'request': RequestFactory().get('/foo')
         })
-        html = Template('{% load rijkshuisstijl %}{% datagrid queryset=queryset columns="title,publisher__name:publisher name" orderable_columns="title,publisher__name" %}').render(config)
+        html = Template(
+            '{% load rijkshuisstijl %}{% datagrid queryset=queryset columns="title,publisher__name:publisher name" orderable_columns="title,publisher__name" %}').render(
+            config)
         self.assertInHTML('<a class="datagrid__link" href="{}">{}</a>'.format('?ordering=title', 'title'), html)
-        self.assertInHTML('<a class="datagrid__link" href="{}">{}</a>'.format('?ordering=publisher__name', 'publisher name'), html)
+        self.assertInHTML(
+            '<a class="datagrid__link" href="{}">{}</a>'.format('?ordering=publisher__name', 'publisher name'), html)
         self.assertInHTML('Lorem', html)
         self.assertInHTML('Foo', html)
         self.assertInHTML('Dolor', html)
@@ -78,15 +81,23 @@ class DatagridTestCase(TestCase):
         self.assertInHTML('Bar', html)
 
     def test_orderable_columns_list(self):
+        """
+        Configure the table headers for ordering using a list.
+        """
+
         html = self.template_render({
             'columns': ('title', {'key': 'publisher__name', 'label': 'publisher name'}),
             'orderable_columns': ['title', 'publisher__name']
         })
 
         self.assertInHTML('<a class="datagrid__link" href="{}">{}</a>'.format('?ordering=title', 'title'), html)
-        self.assertInHTML('<a class="datagrid__link" href="{}">{}</a>'.format('?ordering=publisher__name', 'publisher name'), html)
+        self.assertInHTML(
+            '<a class="datagrid__link" href="{}">{}</a>'.format('?ordering=publisher__name', 'publisher name'), html)
 
     def test_orderable_columns_dict(self):
+        """
+        Configure the table headers for ordering using a dict.
+        """
         html = self.template_render({
             'columns': ('title', 'author'),
             'orderable_columns': {
@@ -98,7 +109,52 @@ class DatagridTestCase(TestCase):
         self.assertInHTML('<a class="datagrid__link" href="{}">{}</a>'.format('?ordering=title', 'title'), html)
         self.assertInHTML('<a class="datagrid__link" href="{}">{}</a>'.format('?ordering=author__first_name', 'author'), html)
 
+    def test_order_asc(self):
+        """
+        Let the datagrid order the queryset (ascending).
+        :return:
+        """
+        html = self.template_render({
+            'columns': ('title', 'publisher'),
+            'queryset': Book.objects.all(),
+
+            'order': True,
+            'orderable_columns': ('title', 'publisher'),
+            'ordering_key': 'o',
+        }, {'o': 'title'})
+
+        book_1_pos = html.find(str(self.book_1))
+        book_2_pos = html.find(str(self.book_2))
+        book_3_pos = html.find(str(self.book_3))
+
+        self.assertLess(book_3_pos, book_2_pos)
+        self.assertLess(book_2_pos, book_1_pos)
+
+    def test_order_desc(self):
+        """
+        Let the datagrid order the queryset (descending).
+        :return:
+        """
+        html = self.template_render({
+            'columns': ('title', 'publisher'),
+            'queryset': Book.objects.all(),
+
+            'order': True,
+            'orderable_columns': ('title', 'publisher'),
+            'ordering_key': 'o',
+        }, {'o': '-title'})
+
+        book_1_pos = html.find(str(self.book_1))
+        book_2_pos = html.find(str(self.book_2))
+        book_3_pos = html.find(str(self.book_3))
+
+        self.assertGreater(book_3_pos, book_2_pos)
+        self.assertGreater(book_2_pos, book_1_pos)
+
     def test_no_pagination(self):
+        """
+        Don't paginate the datagrid.
+        """
         paginator = Paginator(Book.objects.all(), 2)
         page_number = 1
         page_obj = paginator.page(page_number)
@@ -115,15 +171,57 @@ class DatagridTestCase(TestCase):
 
         self.assertNotIn('paginator', html)
 
+    def test_paginate(self):
+        """
+        Let the datagrid paginate the queryset/object list.
+        """
+
+        # queryset
+        html = self.template_render({
+            'columns': ('title', 'publisher'),
+            'queryset': Book.objects.all(),
+
+            'paginate': True,
+            'paginate_by': 2,
+            'page_key': 'p',
+        }, {'p': 2})
+
+        self.assertNotIn(str(self.book_1), html)
+        self.assertNotIn(str(self.book_2), html)
+        self.assertIn(str(self.book_3), html)
+        self.assertIn('paginator', html)
+        self.assertInHTML('<input class="input" name="p" value="2" type="number" min="1" max="2">', html)
+
+        # object_list
+        html = self.template_render({
+            'columns': ('title', 'publisher'),
+            'object_list': [*Book.objects.all()],
+
+            'paginate': True,
+            'paginate_by': 2,
+            'page_key': 'p',
+        }, {'p': 2})
+
+        self.assertNotIn(str(self.book_1), html)
+        self.assertNotIn(str(self.book_2), html)
+        self.assertIn(str(self.book_3), html)
+        self.assertIn('paginator', html)
+        self.assertIn('paginator', html)
+        self.assertInHTML('<input class="input" name="p" value="2" type="number" min="1" max="2">', html)
+
     def test_pagination(self):
+        """
+        Pass an external paginator.
+        """
         paginator = Paginator(Book.objects.all(), 2)
         page_number = 2
         page_obj = paginator.page(page_number)
 
         html = self.template_render({
             'columns': ('title', 'publisher'),
-            'queryset': Book.objects.all(),
+            'object_list': page_obj.object_list,
 
+            'paginate': False,
             'is_paginated': True,
             'paginator': paginator,
             'page_key': 'p',
@@ -131,6 +229,10 @@ class DatagridTestCase(TestCase):
             'page_obj': page_obj,
         })
 
+        self.assertNotIn(str(self.book_1), html)
+        self.assertNotIn(str(self.book_2), html)
+        self.assertIn(str(self.book_3), html)
+        self.assertIn('paginator', html)
         self.assertIn('paginator', html)
         self.assertInHTML('<input class="input" name="p" value="2" type="number" min="1" max="2">', html)
 
@@ -172,9 +274,15 @@ class DatagridTestCase(TestCase):
 
         self.assertIn('id="my-first-datagrid"', html)
         self.assertIn('<form class="datagrid__form" method="post" action="/foo">', html)
-        self.assertInHTML('<button class="button button--small button--transparent" name="Lorem" title="Foo" ><span class="button__label">Foo</span><img class="icon icon--image" alt="Foo" src="data:image/png;base64,"></button>', html)
-        self.assertInHTML('<button class="button button--small button--danger" name="Ipsum" title="Bar" ><span class="button__label">Bar</span><img class="icon icon--image" alt="Bar" src="data:image/png;base64,"></button>', html)
-        self.assertInHTML('<input class="input select-all" type="checkbox" data-select-all="#my-first-datagrid .datagrid__cell--checkbox .input">', html)
+        self.assertInHTML(
+            '<button class="button button--small button--transparent" name="Lorem" title="Foo" ><span class="button__label">Foo</span><img class="icon icon--image" alt="Foo" src="data:image/png;base64,"></button>',
+            html)
+        self.assertInHTML(
+            '<button class="button button--small button--danger" name="Ipsum" title="Bar" ><span class="button__label">Bar</span><img class="icon icon--image" alt="Bar" src="data:image/png;base64,"></button>',
+            html)
+        self.assertInHTML(
+            '<input class="input select-all" type="checkbox" data-select-all="#my-first-datagrid .datagrid__cell--checkbox .input">',
+            html)
         self.assertInHTML('<input class="input" type="checkbox" name="bar" value="3">', html)
 
     def test_toolbar_position_top(self):
