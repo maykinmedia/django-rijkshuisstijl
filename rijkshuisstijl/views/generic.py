@@ -88,15 +88,26 @@ class ListView(TemplateMixin, DjListView):
     modifier_key = None
     modifier_column = None
     modifier_mapping = None
+    order = True
     orderable_columns = None
     ordering_key = "ordering"
+    paginate = True
     paginate_by = 30
+    page_key = 'page'
     template_name = "rijkshuisstijl/views/generic/list.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['datagrid_config'] = self.get_datagrid_config()
         return ctx
+
+    def get_paginate_by(self, queryset):
+        """
+        Leave pagination to the datagrid.
+        :param queryset:
+        :return: None
+        """
+        return None
 
     def get_datagrid_config(self):
         datagrid_config = {}
@@ -105,7 +116,18 @@ class ListView(TemplateMixin, DjListView):
         datagrid_config['modifier_key'] = self.modifier_key
         datagrid_config['modifier_column'] = self.modifier_column
         datagrid_config['modifier_mapping'] = self.modifier_mapping
+        datagrid_config['order'] = self.order
         datagrid_config['ordering_key'] = self.ordering_key
+
+        # Reset context, leave pagination to the datagrid.
+        datagrid_config['is_paginated'] = False
+        datagrid_config['paginator'] = None
+        datagrid_config['page_obj'] = None
+
+        # Paginate
+        datagrid_config['paginate'] = self.paginate
+        datagrid_config['paginate_by'] = self.paginate_by
+        datagrid_config['page_key'] = self.page_key
 
         if self.orderable_columns is None:
             datagrid_config['orderable_columns'] = self.get_orderable_columns()
@@ -118,12 +140,6 @@ class ListView(TemplateMixin, DjListView):
         if self.orderable_columns is None:
             return self.fields or []
         return self.orderable_columns
-
-    def get_ordering(self):
-        ordering = self.request.GET.get(self.ordering_key)
-        if ordering and ordering.replace("-", "") in self.get_orderable_columns():
-            return ordering
-        return None
 
 
 class UpdateView(TemplateMixin, FormMixin, DjUpdateView):
