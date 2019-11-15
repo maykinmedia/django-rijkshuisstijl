@@ -4,6 +4,7 @@
 
     class: Sets additional wrapper classes.
     id: Sets the select id.
+    form_id: Sets the form attribute.
     name: Sets the select name.
     placeholder: Sets the placeholder label.
     value: Sets the select value.
@@ -18,6 +19,7 @@
 
     <select class="select{% if errors %} select--error{% endif %}{% if class %} {{ class }}{% endif %}"
             {% if id %} id="{{ id }}"{% endif %}
+            {% if form_id %} form="{{ form_id }}"{% endif %}
             {% if multiple %} multiple{% endif %}
             {% if name %} name="{{ name }}"{% endif %}
             {% if placeholder %} placeholder="{{ placeholder }}"{% endif %}
@@ -26,6 +28,7 @@
             {% if size %} size={{ size }}{% endif %}
             {% if disabled %} disabled{% endif %}
             {% if required %} required{% endif %}
+            {% if onchange %} onchange="{{ onchange }}"{% endif %}
             {% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>
 
 

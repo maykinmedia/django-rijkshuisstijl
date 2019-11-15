@@ -6,7 +6,7 @@
         {% endif %}
 
         {% if filters %}
-            <form id="datagrid-filter-form-{{ id }}" method="GET">
+            <form id="datagrid-filter-form-{{ id }}" method="GET"">
                 <input class="input input--hidden" type="submit">
             </form>
         {% endif %}
@@ -83,9 +83,9 @@
                             {% for filter in filters %}
                                 {% if filter.key == column.key %}
                                     {% if filter.type == 'DateField' or filter.type == 'DateTimeField' %}
-                                        {% form_input type='date' name=filter.key value=filter.value placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
+                                        {% form_input type='date' name=filter.key value=filter.value placeholder=column.label form_id='datagrid-filter-form-'|add:id onchange='this.form.submit()' %}
                                     {% else %}
-                                        {% form_input id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
+                                        {% form_input id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form_id='datagrid-filter-form-'|add:id onchange='this.form.submit()' %}
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}

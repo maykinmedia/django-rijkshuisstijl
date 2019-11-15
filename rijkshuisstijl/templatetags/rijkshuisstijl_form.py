@@ -120,6 +120,13 @@ def form_radio(**kwargs):
     return kwargs
 
 
+@register.inclusion_tag('rijkshuisstijl/components/form/select.html')
+def form_select(**kwargs):
+    kwargs = merge_config(kwargs)
+    kwargs['config'] = kwargs
+    return kwargs
+
+
 @register.inclusion_tag('rijkshuisstijl/components/form/label.html')
 def label(**kwargs):
     kwargs = merge_config(kwargs)

@@ -1,15 +1,14 @@
 import re
-from dateutil import parser
 from uuid import uuid4
 
 from django.core.paginator import Paginator
 from django.http import QueryDict
 from django.utils import formats
+from django.utils.dateparse import parse_date
 from django.utils.safestring import SafeText
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
-from .rijkshuisstijl_filters import get_attr_or_get
 from .rijkshuisstijl_helpers import merge_config, parse_kwarg, get_field_label, get_recursed_field_value
 
 
@@ -283,7 +282,7 @@ def datagrid(context, **kwargs):
                     type = active_filter.get('type')
 
                     if type is 'DateTimeField':
-                        value = parser.parse(value)
+                        value = parse_date(value)
                         filter_kwargs = {
                             filter_key + '__year': value.year,
                             filter_key + '__month': value.month,
@@ -367,7 +366,8 @@ def datagrid(context, **kwargs):
             if not 'filter_key' in filterable_column:
                 filterable_column['filter_key'] = filterable_column.get('key')
 
-            field_name = filterable_column.get('key', '').split('__')[0]
+            field_key = filterable_column.get('key', '')
+            field_name = field_key.split('__')[0]
             field = queryset.model._meta.get_field(field_name)
 
             if not 'type' in filterable_column:
@@ -375,11 +375,17 @@ def datagrid(context, **kwargs):
 
             if not 'choices' in filterable_column:
                 choices = field.choices
+                if filterable_column.get('type') == 'BooleanField' and not field.null:
+                    choices = ((True, _('waar')), (False, _('onwaar')))
 
                 if field.is_relation:
                     filterable_column['is_relation'] = field.is_relation
-                    remote_field_name = filterable_column.get('key', '').split('__')[-1]
-                    choices = field.remote_field.model.objects.values_list(remote_field_name, flat=True)
+
+                    if '__' in field_key:
+                        remote_field_name = field_key.split('__')[-1]
+                        choices = field.remote_field.model.objects.values_list(remote_field_name, flat=True)
+                    else:
+                        choices = field.remote_field.model.objects.all()
                 filterable_column['choices'] = choices
 
             request = context.get('request')
