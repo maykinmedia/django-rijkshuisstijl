@@ -112,9 +112,11 @@ class ListView(TemplateMixin, DjListView):
 
     def get_datagrid_config(self):
         datagrid_config = {}
+        datagrid_config['class'] = 'datagrid--overflow-mobile'
         datagrid_config['columns'] = self.get_fields()
         datagrid_config['queryset'] = self.get_queryset()
 
+        # Filter
         datagrid_config['filterable_columns'] = self.get_filterable_columns()
 
         # Order

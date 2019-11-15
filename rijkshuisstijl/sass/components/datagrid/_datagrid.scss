@@ -178,9 +178,19 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
       width: 100%;
       height: $datagrid-filter-height;
       padding: $datagrid-spacing;
-      padding-right: $datagrid-spacing * 4;
+
+      &[value] {
+        @include color-info(background-color);
+      }
     }
   }
+
+  &--overflow-mobile &__filter {
+    @include mobile-only {
+      position: static;
+    }
+  }
+
 
   &__caption--orderable {
     padding: 0;
