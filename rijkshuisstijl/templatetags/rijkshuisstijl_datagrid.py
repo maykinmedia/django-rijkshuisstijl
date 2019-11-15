@@ -1,4 +1,5 @@
 import re
+from dateutil import parser
 from uuid import uuid4
 
 from django.core.paginator import Paginator
@@ -241,47 +242,15 @@ def datagrid(context, **kwargs):
         :return: A list_of_dict where each dict contains "key" and "label" keys.
         """
         columns = parse_kwarg(kwargs, 'columns', [])
+        columns = create_list_of_dict(columns)
 
-        try:
-            # Convert dict to list_of_dict.
-            return [{'key': key, 'label': value} for key, value in columns.items()]
-        except AttributeError:
-            # Convert string to list_of_dict.
-            if type(columns) == str or type(columns) == SafeText:
-                columns = [{'key': columns, 'label': columns}]
+        # Get column label.
+        for column in columns:
+            context_queryset = context.get('queryset')
+            queryset = kwargs.get('queryset', context_queryset)
 
-            # Convert list to list_of_dict.
-            elif type(columns) is list or type(columns) is tuple:
-                processed_columns = []
-                for column in columns:
-                    # Already dict
-                    if type(column) == dict:
-                        processed_columns.append(column)
-                    # Not dict
-                    else:
-                        processed_columns.append({'key': column, 'label': column})
-                columns = processed_columns
-
-            # Get column label.
-            for column in columns:
-                context_queryset = context.get('queryset')
-                queryset = kwargs.get('queryset', context_queryset)
-
-                column['label'] = get_field_label(queryset, column['label'])
-            return columns
-
-    def get_form_buttons():
-        """
-        Gets the buttons to use for the form based on kwargs['form_buttons'].
-        :return: A list_of_dict where each dict contains at least "name" and "label" keys.
-        """
-        form_actions = parse_kwarg(kwargs, 'form_buttons', {})
-
-        # Convert dict to list_of_dict
-        try:
-            return [{'name': key, 'label': value} for key, value in form_actions.items()]
-        except AttributeError:
-            return form_actions
+            column['label'] = get_field_label(queryset, column['label'])
+        return columns
 
     def get_object_list():
         """
@@ -292,14 +261,43 @@ def datagrid(context, **kwargs):
             3) context['queryset']
             4) context['object_list']
 
-        add_display and add_modifier_class() are called for every object in the found object_list.
+        Ordering is applied if required.
+        add_display() and add_modifier_class() are called for every object in the found object_list.
         :return: A list of objects to show data for.
         """
+
+        # Get object list.
         context_object_list = context.get('object_list', [])
         context_queryset = context.get('queryset', context_object_list)
         object_list = kwargs.get('object_list', context_queryset)
         object_list = kwargs.get('queryset', object_list)
 
+        # Filtering
+        filters = get_filter_dict()
+        if filters and hasattr(object_list, 'filter') and callable(object_list.filter):
+            try:
+                active_filters = [active_filter for active_filter in filters if active_filter.get('value')]
+                for active_filter in active_filters:
+                    filter_key = active_filter.get('filter_key')
+                    value = active_filter.get('value')
+                    type = active_filter.get('type')
+
+                    if type is 'DateTimeField':
+                        value = parser.parse(value)
+                        filter_kwargs = {
+                            filter_key + '__year': value.year,
+                            filter_key + '__month': value.month,
+                            filter_key + '__day': value.day,
+                        }
+                    elif active_filter.get('is_relation'):
+                        filter_kwargs = {filter_key: value}
+                    else:
+                        filter_kwargs = {filter_key + '__icontains': value}
+                    object_list = object_list.filter(**filter_kwargs)
+            except:
+                object_list = object_list.none()
+
+        # Ordering
         order = kwargs.get('order')
         if order and hasattr(object_list, 'order_by') and callable(object_list.order_by):
             order_by = get_ordering()
@@ -307,6 +305,7 @@ def datagrid(context, **kwargs):
             if order_by:
                 object_list = object_list.order_by(order_by)
 
+        # Color coded rows.
         for obj in object_list:
             add_display(obj)
             add_modifier_class(obj)
@@ -348,11 +347,45 @@ def datagrid(context, **kwargs):
 
     def get_modifier_column():
         """
-        Returns the key of the column to colorize the value of is a modifier configuration is set. Defaults to hte value
+        Returns the key of the column to colorize the value of is a modifier configuration is set. Defaults to the value
         of the modifier_key option.
         :return: A string othe modifier column or False.
         """
         return kwargs.get('modifier_column', kwargs.get('modifier_key', False))
+
+    def get_filter_dict():
+        filterable_columns = parse_kwarg(kwargs, 'filterable_columns', [])
+        filterable_columns = create_list_of_dict(filterable_columns)
+
+        context_queryset = context.get('queryset')
+        queryset = kwargs.get('queryset', context_queryset)
+
+        if not queryset:  # Filtering is only supported on querysets.
+            return {}
+
+        for filterable_column in filterable_columns:
+            if not 'filter_key' in filterable_column:
+                filterable_column['filter_key'] = filterable_column.get('key')
+
+            field_name = filterable_column.get('key', '').split('__')[0]
+            field = queryset.model._meta.get_field(field_name)
+
+            if not 'type' in filterable_column:
+                filterable_column['type'] = type(field).__name__
+
+            if not 'choices' in filterable_column:
+                choices = field.choices
+
+                if field.is_relation:
+                    filterable_column['is_relation'] = field.is_relation
+                    remote_field_name = filterable_column.get('key', '').split('__')[-1]
+                    choices = field.remote_field.model.objects.values_list(remote_field_name, flat=True)
+                filterable_column['choices'] = choices
+
+            request = context.get('request')
+            filter_key = filterable_column['filter_key']
+            filterable_column['value'] = request.GET.get(filter_key)
+        return filterable_columns
 
     def get_ordering():
         """
@@ -475,6 +508,47 @@ def datagrid(context, **kwargs):
             return paginator_context
         return paginator_context
 
+    def get_form_buttons():
+        """
+        Gets the buttons to use for the form based on kwargs['form_buttons'].
+        :return: A list_of_dict where each dict contains at least "name" and "label" keys.
+        """
+        form_actions = parse_kwarg(kwargs, 'form_buttons', {})
+
+        # Convert dict to list_of_dict
+        try:
+            return [{'name': key, 'label': value} for key, value in form_actions.items()]
+        except AttributeError:
+            return form_actions
+
+    def create_list_of_dict(obj, name_key='key', name_value='label'):
+        """
+        Converst obj to a list of dict containg name_key and name_value for every dict.
+        :param obj: Value to convert
+        :param name_key: Name for the key in every dict.
+        :param name_value: Name for the value in every dict.
+        :return: list_of_dict
+        """
+        try:
+            # Convert dict to list_of_dict.
+            return [{name_key: key, name_value: value} for key, value in obj.items()]
+        except AttributeError:
+            # Convert string to list_of_dict.
+            if type(obj) == str or type(obj) == SafeText:
+                return [{name_key: obj, name_value: obj}]
+
+            # Convert list to list_of_dict.
+            elif type(obj) is list or type(obj) is tuple:
+                list_of_dict = []
+                for column in obj:
+                    # Already dict
+                    if type(column) == dict:
+                        list_of_dict.append(column)
+                    # Not dict
+                    else:
+                        list_of_dict.append({name_key: column, name_value: column})
+            return list_of_dict
+
     kwargs = merge_config(kwargs)
     datagrid_context = kwargs.copy()
 
@@ -486,10 +560,12 @@ def datagrid(context, **kwargs):
     datagrid_context['class'] = kwargs.get('class', None)
     datagrid_context['columns'] = get_columns()
     datagrid_context['orderable_column_keys'] = get_orderable_column_keys()
+    datagrid_context['filters'] = get_filter_dict()
     datagrid_context['form_action'] = parse_kwarg(kwargs, 'form_action', '')
     datagrid_context['form_buttons'] = get_form_buttons()
     datagrid_context['form_checkbox_name'] = kwargs.get('form_checkbox_name', 'objects')
-    datagrid_context['form'] = parse_kwarg(kwargs, 'form', False) or bool(kwargs.get('form_action')) or bool(kwargs.get('form_buttons'))
+    datagrid_context['form'] = parse_kwarg(kwargs, 'form', False) or bool(kwargs.get('form_action')) or bool(
+        kwargs.get('form_buttons'))
     datagrid_context['id'] = get_id()
     datagrid_context['modifier_column'] = get_modifier_column()
     datagrid_context['object_list'] = get_object_list()
@@ -519,9 +595,11 @@ def datagrid_label(obj, column_key):
         if column_key == '__str__':
             return str(obj)
         try:
-            val = get_attr_or_get(obj, column_key)
+            val = get_recursed_field_value(obj, column_key)
+            if not val:
+                return ''
             return formats.date_format(val)
-        except (AttributeError, TypeError):
+        except (AttributeError, TypeError) as e:
             try:
                 if type(obj) is list:
                     val = obj.get(column_key)

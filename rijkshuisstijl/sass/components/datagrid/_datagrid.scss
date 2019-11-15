@@ -134,6 +134,7 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
   }
 
   &__caption,
+  &__filter,
   &__cell {
     @include body;
     @include body--small;
@@ -154,14 +155,30 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     @include ellipsis;
   }
 
-  &__caption {
+  &__caption,
+  &__filter {
     @include outline;
-    @include sticky('#{$toolbar-spacing} * 2 + #{$button-height-small}');
     background-color: $toolbar-color-background;
     z-index: 10;
+  }
+
+  &__caption {
+    @include sticky('#{$toolbar-spacing} * 2 + #{$button-height-small}');
 
     &--orderable {
       @include anchor(true);
+    }
+  }
+
+  &__filter {
+    @include sticky('#{$toolbar-spacing} * 2 + #{$button-height-small} + #{$datagrid-filter-height}');
+    padding: 0;
+
+    .input {
+      width: 100%;
+      height: $datagrid-filter-height;
+      padding: $datagrid-spacing;
+      padding-right: $datagrid-spacing * 4;
     }
   }
 
