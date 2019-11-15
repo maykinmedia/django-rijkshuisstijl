@@ -3,6 +3,8 @@
     {% comment %}
 
     class: Sets additional wrapper classes.
+    choices: Set to model choices to create datalist providing suggestions (requires id).
+    form_id: Sets the form attribute.
     id: Sets the input id.
     name: Sets the input name.
     placeholder: Sets the placeholder label.
@@ -18,7 +20,9 @@
     {% endcomment %}
 
     <input class="input{% if errors %} input--error{% endif %}{% if class %} {{ class }}{% endif %}"
+            {% if form_id %} form="{{ form_id }}"{% endif %}
             {% if id %} id="{{ id }}"{% endif %}
+            {% if choices %}list="datalist-{{ id }}"{% endif %}
             {% if name %} name="{{ name }}"{% endif %}
             {% if placeholder %} placeholder="{{ placeholder }}"{% endif %}
             {% if value %} value="{{ value|unlocalize }}"{% endif %}
@@ -32,5 +36,18 @@
             {% endsingleline %}{% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>{% singleline %}
     {% if type == 'file' %}<label class="input__filepicker"
             {% if id %} for="{{ id }}"{% endif %}>{% firstof raw_value placeholder _('Bestand kiezen') %}</label>
+    {% endif %}
+    {% if choices %}
+        <datalist id="datalist-{{ id }}">
+            {% try %}
+                {% for key, value in choices %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            {% except %}
+                {% for choice in choices %}
+                    <option value="{{ choice }}">{{ choice }}</option>
+                {% endfor %}
+            {% endtry %}
+        </datalist>
     {% endif %}
 {% endsingleline %}

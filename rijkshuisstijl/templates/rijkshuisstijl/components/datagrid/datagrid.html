@@ -5,6 +5,12 @@
             {% csrf_token %}
         {% endif %}
 
+        {% if filters %}
+            <form id="datagrid-filter-form-{{ id }}" method="GET">
+                <input class="input input--hidden" type="submit">
+            </form>
+        {% endif %}
+
         <header class="datagrid__header">
             {% if title %}
                 <div class="datagrid__infobar">
@@ -65,6 +71,28 @@
                         {% endif %}
                     {% endfor %}
                 </tr>
+
+                {% if filters %}
+                    <tr class="datagrid__row">
+                    {% if form %}
+                        <th class="datagrid__caption datagrid__caption--checkbox"></th>
+                    {% endif %}
+
+                    {% for column in columns %}
+                        <th class="datagrid__filter datagrid__filter--{{ column.key }}">
+                            {% for filter in filters %}
+                                {% if filter.key == column.key %}
+                                    {% if filter.type == 'DateField' or filter.type == 'DateTimeField' %}
+                                        {% form_input type='date' name=filter.key value=filter.value placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
+                                    {% else %}
+                                        {% form_input id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </th>
+                    {% endfor %}
+                    </tr>
+                {% endif %}
                 </thead>
 
                 <tbody class="datagrid__table-body">

@@ -85,14 +85,15 @@ class ListView(TemplateMixin, DjListView):
     """
     datagrid_config = {}
     fields = []
-    modifier_key = None
-    modifier_column = None
-    modifier_mapping = None
+    filterable_columns = None
     order = True
     orderable_columns = None
     ordering_key = "ordering"
     paginate = True
     paginate_by = 30
+    modifier_key = None
+    modifier_column = None
+    modifier_mapping = None
     page_key = 'page'
     template_name = "rijkshuisstijl/views/generic/list.html"
 
@@ -113,21 +114,27 @@ class ListView(TemplateMixin, DjListView):
         datagrid_config = {}
         datagrid_config['columns'] = self.get_fields()
         datagrid_config['queryset'] = self.get_queryset()
-        datagrid_config['modifier_key'] = self.modifier_key
-        datagrid_config['modifier_column'] = self.modifier_column
-        datagrid_config['modifier_mapping'] = self.modifier_mapping
+
+        datagrid_config['filterable_columns'] = self.get_filterable_columns()
+
+        # Order
         datagrid_config['order'] = self.order
         datagrid_config['ordering_key'] = self.ordering_key
 
-        # Reset context, leave pagination to the datagrid.
+        # Paginate
+        # Reset context.
         datagrid_config['is_paginated'] = False
         datagrid_config['paginator'] = None
         datagrid_config['page_obj'] = None
-
-        # Paginate
+        # Leave pagination to the datagrid.
         datagrid_config['paginate'] = self.paginate
         datagrid_config['paginate_by'] = self.paginate_by
         datagrid_config['page_key'] = self.page_key
+
+        # Colors
+        datagrid_config['modifier_key'] = self.modifier_key
+        datagrid_config['modifier_column'] = self.modifier_column
+        datagrid_config['modifier_mapping'] = self.modifier_mapping
 
         if self.orderable_columns is None:
             datagrid_config['orderable_columns'] = self.get_orderable_columns()
@@ -135,6 +142,11 @@ class ListView(TemplateMixin, DjListView):
 
     def get_fields(self):
         return self.fields
+
+    def get_filterable_columns(self):
+        if self.filterable_columns is None:
+            return self.fields or []
+        return self.orderable_columns
 
     def get_orderable_columns(self):
         if self.orderable_columns is None:

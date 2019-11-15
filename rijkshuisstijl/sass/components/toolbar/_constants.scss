@@ -1,4 +1,7 @@
 @import '../../settings/lib/ro-shade';
+@import '../button/constants';
+
 $toolbar-spacing: 0.4em;
 $toolbar-color-background: shade(1);
 $toolbar-color-border: darken($toolbar-color-background, 10);
+$datagrid-filter-height: $button-height-small + 6px;
