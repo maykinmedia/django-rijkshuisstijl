@@ -80,11 +80,25 @@ class DatagridTestCase(TestCase):
         self.assertInHTML('Dolor', html)
         self.assertInHTML('Bar', html)
 
+    def test_filter(self):
+        html = self.template_render({
+            'columns': ('title', 'publisher'),
+            'queryset': Book.objects.all(),
+            'id': 'my-first-datagrid',
+
+            'filterable_columns': ['title']
+        }, {'title': 'm'})
+
+        self.assertInHTML('<form id="datagrid-filter-form-my-first-datagrid" method="GET"><input class="input input--hidden" type="submit"></form>', html)
+        self.assertInHTML('<input class="input" id="datagrid-filter-title-my-first-datagrid" form="datagrid-filter-form-my-first-datagrid" name="title" value="m" placeholder="title" onchange="this.form.submit()">', html)
+        self.assertInHTML('Lorem', html)
+        self.assertInHTML('Ipsum', html)
+        self.assertNotIn('Dolor', html)
+
     def test_orderable_columns_list(self):
         """
         Configure the table headers for ordering using a list.
         """
-
         html = self.template_render({
             'columns': ('title', {'key': 'publisher__name', 'label': 'publisher name'}),
             'orderable_columns': ['title', 'publisher__name']
