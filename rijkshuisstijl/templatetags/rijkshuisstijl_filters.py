@@ -12,16 +12,16 @@ def input_date_format(value):
     """
     if value:
         try:
-            if hasattr(value, 'date'):
+            if hasattr(value, "date"):
                 return value.date().isoformat()
-            if hasattr(value, 'isoformat'):
+            if hasattr(value, "isoformat"):
                 return value.isoformat()
 
-            regex = re.compile('(\d\d)-(\d\d)-(\d\d\d\d)')
+            regex = re.compile("(\d\d)-(\d\d)-(\d\d\d\d)")
             match = re.match(regex, value)
 
             if match:
-                return '{}-{}-{}'.format(match[3], match[2], match[1])
+                return "{}-{}-{}".format(match[3], match[2], match[1])
             return value
         except AttributeError:
             return value
@@ -36,16 +36,16 @@ def input_time_format(value):
     """
     if value:
         try:
-            if hasattr(value, 'time'):
+            if hasattr(value, "time"):
                 return value.time().isoformat()
-            if hasattr(value, 'isoformat'):
+            if hasattr(value, "isoformat"):
                 return value.isoformat()
 
-            regex = re.compile('^(\d\d):(\d\d):(\d\d)$')
+            regex = re.compile("^(\d\d):(\d\d):(\d\d)$")
             match = re.match(regex, value)
 
             if match:
-                return '{}:{}'.format(match[1], match[2])
+                return "{}:{}".format(match[1], match[2])
             return value
         except AttributeError:
             return value
@@ -60,9 +60,9 @@ def get(value, key):
     :return: The key's value or ''.
     """
     try:
-        return value.get(key, '')
+        return value.get(key, "")
     except:
-        return ''
+        return ""
 
 
 @register.filter
@@ -74,8 +74,8 @@ def get_attr_or_get(value, key):
     :return: The key's value or ''.
     """
     try:
-        return getattr(value, key, '')
+        return getattr(value, key, "")
     except AttributeError:
-        return get(value, key, '')
+        return get(value, key, "")
     except:
-        return ''
+        return ""

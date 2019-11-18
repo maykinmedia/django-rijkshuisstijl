@@ -9,10 +9,15 @@ from django.utils.safestring import SafeText
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
-from .rijkshuisstijl_helpers import merge_config, parse_kwarg, get_field_label, get_recursed_field_value
+from .rijkshuisstijl_helpers import (
+    merge_config,
+    parse_kwarg,
+    get_field_label,
+    get_recursed_field_value,
+)
 
 
-@register.inclusion_tag('rijkshuisstijl/components/datagrid/datagrid.html', takes_context=True)
+@register.inclusion_tag("rijkshuisstijl/components/datagrid/datagrid.html", takes_context=True)
 def datagrid(context, **kwargs):
     """
     Renders a table like component with support for filtering, ordering and  paginating. It's main use if to display
@@ -242,7 +247,7 @@ def datagrid(context, **kwargs):
         with "datagrid-".
         :return: A str which should be unique to this datagrid.
         """
-        return kwargs.get('id', 'datagrid-' + str(uuid4()))
+        return kwargs.get("id", "datagrid-" + str(uuid4()))
 
     def get_columns():
         """
@@ -250,15 +255,15 @@ def datagrid(context, **kwargs):
         based on the model or a simple replacement of dashes and underscores.
         :return: A list_of_dict where each dict contains "key" and "label" keys.
         """
-        columns = parse_kwarg(kwargs, 'columns', [])
+        columns = parse_kwarg(kwargs, "columns", [])
         columns = create_list_of_dict(columns)
 
         # Get column label.
         for column in columns:
-            context_queryset = context.get('queryset')
-            queryset = kwargs.get('queryset', context_queryset)
+            context_queryset = context.get("queryset")
+            queryset = kwargs.get("queryset", context_queryset)
 
-            column['label'] = get_field_label(queryset, column['label'])
+            column["label"] = get_field_label(queryset, column["label"])
         return columns
 
     def get_object_list():
@@ -277,39 +282,41 @@ def datagrid(context, **kwargs):
         """
 
         # Get object list.
-        context_object_list = context.get('object_list', [])
-        context_queryset = context.get('queryset', context_object_list)
-        object_list = kwargs.get('object_list', context_queryset)
-        object_list = kwargs.get('queryset', object_list)
+        context_object_list = context.get("object_list", [])
+        context_queryset = context.get("queryset", context_object_list)
+        object_list = kwargs.get("object_list", context_queryset)
+        object_list = kwargs.get("queryset", object_list)
 
         # Filtering
         filters = get_filter_dict()
-        if filters and hasattr(object_list, 'filter') and callable(object_list.filter):
+        if filters and hasattr(object_list, "filter") and callable(object_list.filter):
             try:
-                active_filters = [active_filter for active_filter in filters if active_filter.get('value')]
+                active_filters = [
+                    active_filter for active_filter in filters if active_filter.get("value")
+                ]
                 for active_filter in active_filters:
-                    filter_key = active_filter.get('filter_key')
-                    value = active_filter.get('value')
-                    type = active_filter.get('type')
+                    filter_key = active_filter.get("filter_key")
+                    value = active_filter.get("value")
+                    type = active_filter.get("type")
 
-                    if type is 'DateTimeField':
+                    if type is "DateTimeField":
                         value = parse_date(value)
                         filter_kwargs = {
-                            filter_key + '__year': value.year,
-                            filter_key + '__month': value.month,
-                            filter_key + '__day': value.day,
+                            filter_key + "__year": value.year,
+                            filter_key + "__month": value.month,
+                            filter_key + "__day": value.day,
                         }
-                    elif active_filter.get('is_relation'):
+                    elif active_filter.get("is_relation"):
                         filter_kwargs = {filter_key: value}
                     else:
-                        filter_kwargs = {filter_key + '__icontains': value}
+                        filter_kwargs = {filter_key + "__icontains": value}
                     object_list = object_list.filter(**filter_kwargs)
             except:
                 object_list = object_list.none()
 
         # Ordering
-        order = kwargs.get('order')
-        if order and hasattr(object_list, 'order_by') and callable(object_list.order_by):
+        order = kwargs.get("order")
+        if order and hasattr(object_list, "order_by") and callable(object_list.order_by):
             order_by = get_ordering()
 
             if order_by:
@@ -328,10 +335,10 @@ def datagrid(context, **kwargs):
         :param obj:
         """
         for column in get_columns():
-            key = column['key']
-            fn = kwargs.get('get_{}_display'.format(key), None)
+            key = column["key"]
+            fn = kwargs.get("get_{}_display".format(key), None)
             if fn:
-                setattr(obj, 'datagrid_display_{}'.format(key), fn(obj))
+                setattr(obj, "datagrid_display_{}".format(key), fn(obj))
 
     def add_modifier_class(obj):
         """
@@ -340,12 +347,12 @@ def datagrid(context, **kwargs):
         :param obj:
         """
         try:
-            key = parse_kwarg(kwargs, 'modifier_key', None)
+            key = parse_kwarg(kwargs, "modifier_key", None)
 
             if not key:
                 return
 
-            modifier_map = parse_kwarg(kwargs, 'modifier_mapping', {})
+            modifier_map = parse_kwarg(kwargs, "modifier_mapping", {})
             object_value = getattr(obj, key)
 
             for item_key, item_value in modifier_map.items():
@@ -361,7 +368,7 @@ def datagrid(context, **kwargs):
         of the modifier_key option.
         :return: A string othe modifier column or False.
         """
-        return kwargs.get('modifier_column', kwargs.get('modifier_key', False))
+        return kwargs.get("modifier_column", kwargs.get("modifier_key", False))
 
     def get_filter_dict():
         """
@@ -374,44 +381,46 @@ def datagrid(context, **kwargs):
 
         :return: list_of_dict.
         """
-        filterable_columns = parse_kwarg(kwargs, 'filterable_columns', [])
+        filterable_columns = parse_kwarg(kwargs, "filterable_columns", [])
         filterable_columns = create_list_of_dict(filterable_columns)
 
-        context_queryset = context.get('queryset')
-        queryset = kwargs.get('queryset', context_queryset)
+        context_queryset = context.get("queryset")
+        queryset = kwargs.get("queryset", context_queryset)
 
         if not queryset:  # Filtering is only supported on querysets.
             return {}
 
         for filterable_column in filterable_columns:
-            if not 'filter_key' in filterable_column:
-                filterable_column['filter_key'] = filterable_column.get('key')
+            if not "filter_key" in filterable_column:
+                filterable_column["filter_key"] = filterable_column.get("key")
 
-            field_key = filterable_column.get('key', '')
-            field_name = field_key.split('__')[0]
+            field_key = filterable_column.get("key", "")
+            field_name = field_key.split("__")[0]
             field = queryset.model._meta.get_field(field_name)
 
-            if not 'type' in filterable_column:
-                filterable_column['type'] = type(field).__name__
+            if not "type" in filterable_column:
+                filterable_column["type"] = type(field).__name__
 
-            if not 'choices' in filterable_column:
+            if not "choices" in filterable_column:
                 choices = field.choices
-                if filterable_column.get('type') == 'BooleanField' and not field.null:
-                    choices = ((True, _('waar')), (False, _('onwaar')))
+                if filterable_column.get("type") == "BooleanField" and not field.null:
+                    choices = ((True, _("waar")), (False, _("onwaar")))
 
                 if field.is_relation:
-                    filterable_column['is_relation'] = field.is_relation
+                    filterable_column["is_relation"] = field.is_relation
 
-                    if '__' in field_key:
-                        remote_field_name = field_key.split('__')[-1]
-                        choices = field.remote_field.model.objects.values_list(remote_field_name, flat=True)
+                    if "__" in field_key:
+                        remote_field_name = field_key.split("__")[-1]
+                        choices = field.remote_field.model.objects.values_list(
+                            remote_field_name, flat=True
+                        )
                     else:
                         choices = field.remote_field.model.objects.all()
-                filterable_column['choices'] = choices
+                filterable_column["choices"] = choices
 
-            request = context.get('request')
-            filter_key = filterable_column['filter_key']
-            filterable_column['value'] = request.GET.get(filter_key)
+            request = context.get("request")
+            filter_key = filterable_column["filter_key"]
+            filterable_column["value"] = request.GET.get(filter_key)
         return filterable_columns
 
     def get_ordering():
@@ -420,12 +429,12 @@ def datagrid(context, **kwargs):
         Only allows ordering by dict keys found in the orderable_columns option.
         :return: string or None
         """
-        request = context['request']
+        request = context["request"]
         ordering_key = get_ordering_key()
         ordering = request.GET.get(ordering_key)
         orderable_columns_keys = get_orderable_column_keys()
 
-        if ordering and ordering.replace('-', '') in orderable_columns_keys:
+        if ordering and ordering.replace("-", "") in orderable_columns_keys:
             return ordering
         return None
 
@@ -434,14 +443,14 @@ def datagrid(context, **kwargs):
         Returns the query parameter to use for ordering.
         :return: string
         """
-        return parse_kwarg(kwargs, 'ordering_key', 'ordering')
+        return parse_kwarg(kwargs, "ordering_key", "ordering")
 
     def get_orderable_column_keys():
         """
         Returns the keys of the fields which should be made orderable.
         :return: list_of_str
         """
-        orderable_columns = parse_kwarg(kwargs, 'orderable_columns', {})
+        orderable_columns = parse_kwarg(kwargs, "orderable_columns", {})
         try:
             return [key for key in orderable_columns.keys()]
         except AttributeError:
@@ -452,9 +461,9 @@ def datagrid(context, **kwargs):
         Returns a dict containing a dict with ordering information (direction, url) for every orderable column.
         :return: dict
         """
-        request = context['request']
-        orderable_columns = parse_kwarg(kwargs, 'orderable_columns', {})
-        order_by_index = kwargs.get('order_by_index', False)
+        request = context["request"]
+        orderable_columns = parse_kwarg(kwargs, "orderable_columns", {})
+        order_by_index = kwargs.get("order_by_index", False)
         ordering_dict = {}
 
         # Convert list to list_of_dict.
@@ -463,31 +472,31 @@ def datagrid(context, **kwargs):
 
         try:
             i = 1
-            for orderable_column_key, orderable_column_field in orderable_columns.items():
+            for (orderable_column_key, orderable_column_field) in orderable_columns.items():
                 querydict = QueryDict(request.GET.urlencode(), mutable=True)
                 ordering_key = get_ordering_key()
                 ordering_value = str(i) if order_by_index else orderable_column_field
                 current_ordering = get_ordering()
 
                 directions = {
-                    'asc': ordering_value.replace('-', ''),
-                    'desc': '-' + ordering_value.replace('-', ''),
+                    "asc": ordering_value.replace("-", ""),
+                    "desc": "-" + ordering_value.replace("-", ""),
                 }
 
-                direction_url = directions['asc']
+                direction_url = directions["asc"]
                 direction = None
 
-                if current_ordering == directions['asc']:
-                    direction = 'asc'
-                    direction_url = directions['desc']
-                elif current_ordering == directions['desc']:
-                    direction = 'desc'
-                    direction_url = directions['asc']
+                if current_ordering == directions["asc"]:
+                    direction = "asc"
+                    direction_url = directions["desc"]
+                elif current_ordering == directions["desc"]:
+                    direction = "desc"
+                    direction_url = directions["asc"]
 
                 querydict[ordering_key] = direction_url
                 ordering_dict[orderable_column_key] = {
-                    'direction': direction,
-                    'url': '?' + querydict.urlencode()
+                    "direction": direction,
+                    "url": "?" + querydict.urlencode(),
                 }
 
                 i += 1
@@ -501,37 +510,37 @@ def datagrid(context, **kwargs):
         :param datagrid_context: A processed clone of kwargs.
         """
         paginator_context = datagrid_context.copy()
-        paginator_context['is_paginated'] = kwargs.get('is_paginated', context.get('is_paginated'))
+        paginator_context["is_paginated"] = kwargs.get("is_paginated", context.get("is_paginated"))
 
-        if paginator_context.get('paginate'):
+        if paginator_context.get("paginate"):
             """
             Paginate object_list.
             """
-            request = paginator_context.get('request')
-            page_key = paginator_context.get('page_key', 'page')
+            request = paginator_context.get("request")
+            page_key = paginator_context.get("page_key", "page")
             page_number = request.GET.get(page_key, 1)
-            paginate_by = paginator_context.get('paginate_by', 30)
-            paginator = Paginator(paginator_context.get('object_list', []), paginate_by)
+            paginate_by = paginator_context.get("paginate_by", 30)
+            paginator = Paginator(paginator_context.get("object_list", []), paginate_by)
             page_obj = paginator.get_page(page_number)
             object_list = page_obj.object_list
 
-            paginator_context['is_paginated'] = True
-            paginator_context['paginator'] = paginator
-            paginator_context['page_key'] = page_key
-            paginator_context['page_number'] = page_number
-            paginator_context['page_obj'] = page_obj
-            paginator_context['object_list'] = object_list
+            paginator_context["is_paginated"] = True
+            paginator_context["paginator"] = paginator
+            paginator_context["page_key"] = page_key
+            paginator_context["page_number"] = page_number
+            paginator_context["page_obj"] = page_obj
+            paginator_context["object_list"] = object_list
             return paginator_context
 
-        if paginator_context['is_paginated']:
+        if paginator_context["is_paginated"]:
             """
             Rely on view/context for pagination.
             """
-            paginator_context['paginator'] = kwargs.get('paginator', context.get('paginator'))
-            paginator_context['paginator_zero_index'] = kwargs.get('paginator_zero_index')
-            paginator_context['page_key'] = kwargs.get('page_key', 'page')
-            paginator_context['page_number'] = kwargs.get('page_number')
-            paginator_context['page_obj'] = kwargs.get('page_obj', context.get('page_obj'))
+            paginator_context["paginator"] = kwargs.get("paginator", context.get("paginator"))
+            paginator_context["paginator_zero_index"] = kwargs.get("paginator_zero_index")
+            paginator_context["page_key"] = kwargs.get("page_key", "page")
+            paginator_context["page_number"] = kwargs.get("page_number")
+            paginator_context["page_obj"] = kwargs.get("page_obj", context.get("page_obj"))
             return paginator_context
         return paginator_context
 
@@ -540,15 +549,15 @@ def datagrid(context, **kwargs):
         Gets the buttons to use for the form based on kwargs['form_buttons'].
         :return: A list_of_dict where each dict contains at least "name" and "label" keys.
         """
-        form_actions = parse_kwarg(kwargs, 'form_buttons', {})
+        form_actions = parse_kwarg(kwargs, "form_buttons", {})
 
         # Convert dict to list_of_dict
         try:
-            return [{'name': key, 'label': value} for key, value in form_actions.items()]
+            return [{"name": key, "label": value} for key, value in form_actions.items()]
         except AttributeError:
             return form_actions
 
-    def create_list_of_dict(obj, name_key='key', name_value='label'):
+    def create_list_of_dict(obj, name_key="key", name_value="label"):
         """
         Converst obj to a list of dict containg name_key and name_value for every dict.
         :param obj: Value to convert
@@ -580,31 +589,38 @@ def datagrid(context, **kwargs):
     datagrid_context = kwargs.copy()
 
     # i18n
-    datagrid_context['label_result_count'] = parse_kwarg(kwargs, 'label_result_count', _('resultaten'))
-    datagrid_context['label_no_results'] = parse_kwarg(kwargs, 'label_no_results', _('Geen resultaten'))
+    datagrid_context["label_result_count"] = parse_kwarg(
+        kwargs, "label_result_count", _("resultaten")
+    )
+    datagrid_context["label_no_results"] = parse_kwarg(
+        kwargs, "label_no_results", _("Geen resultaten")
+    )
 
     # kwargs
-    datagrid_context['class'] = kwargs.get('class', None)
-    datagrid_context['columns'] = get_columns()
-    datagrid_context['orderable_column_keys'] = get_orderable_column_keys()
-    datagrid_context['filters'] = get_filter_dict()
-    datagrid_context['form_action'] = parse_kwarg(kwargs, 'form_action', '')
-    datagrid_context['form_buttons'] = get_form_buttons()
-    datagrid_context['form_checkbox_name'] = kwargs.get('form_checkbox_name', 'objects')
-    datagrid_context['form'] = parse_kwarg(kwargs, 'form', False) or bool(kwargs.get('form_action')) or bool(
-        kwargs.get('form_buttons'))
-    datagrid_context['id'] = get_id()
-    datagrid_context['modifier_column'] = get_modifier_column()
-    datagrid_context['object_list'] = get_object_list()
-    datagrid_context['ordering'] = get_ordering_dict()
-    datagrid_context['urlize'] = kwargs.get('urlize', True)
-    datagrid_context['title'] = kwargs.get('title', None)
-    datagrid_context['toolbar_position'] = kwargs.get('toolbar_position', 'top')
-    datagrid_context['url_reverse'] = kwargs.get('url_reverse', '')
-    datagrid_context['request'] = context['request']
+    datagrid_context["class"] = kwargs.get("class", None)
+    datagrid_context["columns"] = get_columns()
+    datagrid_context["orderable_column_keys"] = get_orderable_column_keys()
+    datagrid_context["filters"] = get_filter_dict()
+    datagrid_context["form_action"] = parse_kwarg(kwargs, "form_action", "")
+    datagrid_context["form_buttons"] = get_form_buttons()
+    datagrid_context["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
+    datagrid_context["form"] = (
+        parse_kwarg(kwargs, "form", False)
+        or bool(kwargs.get("form_action"))
+        or bool(kwargs.get("form_buttons"))
+    )
+    datagrid_context["id"] = get_id()
+    datagrid_context["modifier_column"] = get_modifier_column()
+    datagrid_context["object_list"] = get_object_list()
+    datagrid_context["ordering"] = get_ordering_dict()
+    datagrid_context["urlize"] = kwargs.get("urlize", True)
+    datagrid_context["title"] = kwargs.get("title", None)
+    datagrid_context["toolbar_position"] = kwargs.get("toolbar_position", "top")
+    datagrid_context["url_reverse"] = kwargs.get("url_reverse", "")
+    datagrid_context["request"] = context["request"]
     datagrid_context = add_paginator(datagrid_context)
 
-    datagrid_context['config'] = kwargs
+    datagrid_context["config"] = kwargs
     return datagrid_context
 
 
@@ -617,14 +633,14 @@ def datagrid_label(obj, column_key):
     :return: Formatted string.
     """
     try:
-        return getattr(obj, 'datagrid_display_{}'.format(column_key))
+        return getattr(obj, "datagrid_display_{}".format(column_key))
     except:
-        if column_key == '__str__':
+        if column_key == "__str__":
             return str(obj)
         try:
             val = get_recursed_field_value(obj, column_key)
             if not val:
-                return ''
+                return ""
             return formats.date_format(val)
         except (AttributeError, TypeError) as e:
             try:
