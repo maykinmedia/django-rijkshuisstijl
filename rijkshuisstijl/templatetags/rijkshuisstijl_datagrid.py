@@ -55,6 +55,16 @@ def datagrid(context, **kwargs):
               Example: ['author', 'title']
 
 
+        Filtering
+        ---------
+
+        If an (unpaginated) queryset is passed or obtained from the context, it can be filtered using controls.
+        Pagination provided by the datagrid itself can be used in combination with filtering. The queryset's model is
+        inspected to determince the type of the filters and optionally the choices.
+
+         - filterable_columns: Optional, a list defining which columns should be orderable.
+
+
         Ordering
         --------
 
@@ -260,6 +270,7 @@ def datagrid(context, **kwargs):
             3) context['queryset']
             4) context['object_list']
 
+        Queryset filtering is applied if required.
         Ordering is applied if required.
         add_display() and add_modifier_class() are called for every object in the found object_list.
         :return: A list of objects to show data for.
@@ -353,6 +364,16 @@ def datagrid(context, **kwargs):
         return kwargs.get('modifier_column', kwargs.get('modifier_key', False))
 
     def get_filter_dict():
+        """
+        Returns a list_of_dict for filter configuration, each dict (if present) contains:
+
+        - filter_key: matching a column.
+        - type: matching the field class name.
+        - choices: a tuple containing choice tuples. Used to provide options/suggestions for filter.
+        - value: The value of the filter.
+
+        :return: list_of_dict.
+        """
         filterable_columns = parse_kwarg(kwargs, 'filterable_columns', [])
         filterable_columns = create_list_of_dict(filterable_columns)
 
