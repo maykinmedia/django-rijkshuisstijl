@@ -13,7 +13,7 @@ class CaptureNode(template.Node):
     def render(self, context):
         output = self.nodelist.render(context)
         context[self.var_name] = output
-        return ''
+        return ""
 
 
 @register.tag
@@ -28,10 +28,12 @@ def capture(parser, token):
         {% include 'components/text/text.html' with body=body only %}
     """
     args = token.split_contents()
-    if len(args) < 3 or args[-2] != 'as':
-        raise template.TemplateSyntaxError("'capture' tag requires a variable name after keyword 'as'.")
+    if len(args) < 3 or args[-2] != "as":
+        raise template.TemplateSyntaxError(
+            "'capture' tag requires a variable name after keyword 'as'."
+        )
     var_name = args[-1]
-    nodelist = parser.parse(('endcapture',))
+    nodelist = parser.parse(("endcapture",))
     parser.delete_first_token()
     return CaptureNode(nodelist, var_name)
 
@@ -43,10 +45,10 @@ class SingleLineNode(template.Node):
     def render(self, context):
         content = self.nodelist.render(context)
         # singleline = content.replace('\n', '')
-        return re.sub(r'\s+', ' ', content)
+        return re.sub(r"\s+", " ", content)
 
 
-@register.tag('singleline')
+@register.tag("singleline")
 def singleline(parser, token):
     """
     Puts content on a single line.
@@ -62,12 +64,12 @@ def singleline(parser, token):
 
         {% endsingleline %}
     """
-    nodelist = parser.parse(('endsingleline',))
+    nodelist = parser.parse(("endsingleline",))
     parser.delete_first_token()
     return SingleLineNode(nodelist)
 
 
-@register.tag('try')
+@register.tag("try")
 def tryexcept(parser, token):
     """
     Creates try/except block within a template.
@@ -80,9 +82,9 @@ def tryexcept(parser, token):
             Something went wrong...
         {% endtry %}
     """
-    nodelist_try = parser.parse(('except',))
+    nodelist_try = parser.parse(("except",))
     parser.next_token()
-    nodelist_except = parser.parse(('endtry',))
+    nodelist_except = parser.parse(("endtry",))
     parser.delete_first_token()
     return TryNode(nodelist_try, nodelist_except)
 

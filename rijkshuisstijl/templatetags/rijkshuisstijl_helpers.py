@@ -21,7 +21,7 @@ def get_field_label(obj, field):
         model = get_model(obj)
 
         # If column key is "__str__", use model name as label.
-        if field == '__str__':
+        if field == "__str__":
             field = model.__name__
 
         # If model field can be found, use it's verbose name as label.
@@ -31,8 +31,8 @@ def get_field_label(obj, field):
 
     # If label cannot be found, fall back to replacing dashes and underscores with " ".
     except:
-        regex = re.compile('[_-]+')
-        field = re.sub(regex, ' ', field)
+        regex = re.compile("[_-]+")
+        field = re.sub(regex, " ", field)
     return field
 
 
@@ -57,7 +57,7 @@ def merge_config(kwargs):
     :param kwargs: (optional) dict in in kwargs mirroring other kwargs.
     :return: A merged dict containing configuration.
     """
-    config = kwargs.pop('config', {})
+    config = kwargs.pop("config", {})
     _kwargs = config.copy()
     _kwargs.update(kwargs)
     kwargs = _kwargs
@@ -99,19 +99,19 @@ def parse_arg(arg, default=None):
     if type(arg) != str and type(arg) != SafeText:
         return arg
 
-    if ',' in arg or ':' in arg:
+    if "," in arg or ":" in arg:
         try:
             return json.loads(arg)
         except JSONDecodeError:
             pass
 
-        lst = [entry.strip() for entry in arg.strip().split(',') if entry]
+        lst = [entry.strip() for entry in arg.strip().split(",") if entry]
 
-        if ':' in arg or isinstance(default, dict):
+        if ":" in arg or isinstance(default, dict):
             dct = {}
             for value in lst:
                 try:
-                    key, val = value.split(':')
+                    key, val = value.split(":")
                 except ValueError:
                     key = value
                     val = value
@@ -142,7 +142,7 @@ def get_recursed_field_value(obj, field):
     :param field: A field, possibly on a related instance. Example: "author__first_name".
     :return: The value of the final field.
     """
-    fields = field.split('__')
+    fields = field.split("__")
     while len(fields) > 1:
         field = fields.pop(0)
         obj = getattr(obj, field)
