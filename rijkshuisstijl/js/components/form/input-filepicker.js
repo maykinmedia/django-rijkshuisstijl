@@ -17,7 +17,7 @@ class InputFilePicker {
         /** @type {HTMLInputElement} */
         this.input = this.node.previousElementSibling;
 
-        this.bindEvents()
+        this.bindEvents();
     }
 
     /**
@@ -26,7 +26,7 @@ class InputFilePicker {
      */
     getFileName() {
         if (this.input.files.length) {
-            return this.input.files[0].name
+            return this.input.files[0].name;
         }
         return '';
     }

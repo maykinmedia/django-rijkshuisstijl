@@ -55,7 +55,9 @@ $tabs-scheme: $scheme;
     text-decoration: none;
     display: flex;
     align-items: center;
+  }
 
+  &:not(#{&}--stuck) &__link {
     @include laptop {
       height: 60px;
     }

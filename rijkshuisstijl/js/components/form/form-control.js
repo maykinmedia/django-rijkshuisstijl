@@ -75,12 +75,12 @@ class FormControl {
                 let value = namedInput.value;
 
                 // Checkbox
-                if (namedInput.type == 'checkbox' && !namedInput.checked) {
+                if (namedInput.type === 'checkbox' && !namedInput.checked) {
                     return;
                 }
 
                 // Radio
-                if (namedInput.type == 'radio' && !namedInput.checked) {
+                if (namedInput.type === 'radio' && !namedInput.checked) {
                     return;
                 }
 
@@ -88,7 +88,7 @@ class FormControl {
                 if (namedInput.multiple && namedInput.options) {
                     const values = [...namedInput.options]
                         .filter(option => option.selected)
-                        .map(selectedOption => selectedOption.value || selectedOption.textContent)
+                        .map(selectedOption => selectedOption.value || selectedOption.textContent);
 
                     if (values.length) {
                         value = values;
@@ -98,7 +98,7 @@ class FormControl {
                 }
 
                 if (value) {
-                    this.node.dataset[datasetItem] = value
+                    this.node.dataset[datasetItem] = value;
                 } else {
                     delete this.node.dataset[datasetItem];
                 }
@@ -109,7 +109,7 @@ class FormControl {
             namedInputs.filter(namedInput => namedInput.checked && namedInput.value)
                 .forEach(checkedInput => {
                     const datasetItem = `${checkedInput.name}Value`;
-                    this.node.dataset[datasetItem] = checkedInput.value
+                    this.node.dataset[datasetItem] = checkedInput.value;
                 });
         } catch (e) {
             const str = this.node.dataset.inputNames || this.node.id || this.node;

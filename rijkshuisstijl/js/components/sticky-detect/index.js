@@ -1,7 +1,7 @@
 //jshint ignore:start
-import {STICKY_NAVIGATION_BARS} from './constants';
+import {STICKY_DETECTS} from './constants';
 
 // Start!
-if (STICKY_NAVIGATION_BARS.length) {
+if (STICKY_DETECTS.length) {
     import(/* webpackChunkName: 'sticky-navigation-bar' */ './sticky-navigation-bar');
 }

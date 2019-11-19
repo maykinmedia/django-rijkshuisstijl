@@ -56,7 +56,7 @@
   &--full-width .layout > .title-header,
   &--full-width .layout > .key-value-table,
   &--full-width .layout > .tabs .tabs__tab {
-    @include container-padding(normal, ('margin-left', 'margin-right'));
+    @include container-padding;
   }
 
   &--full-width .layout {

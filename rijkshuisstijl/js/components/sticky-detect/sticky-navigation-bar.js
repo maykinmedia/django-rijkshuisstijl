@@ -1,6 +1,6 @@
 import BEM from 'bem.js';
 
-import {MODIFIER_STUCK, STICKY_NAVIGATION_BARS} from './constants';
+import {MODIFIER_STUCK, STICKY_DETECTS} from './constants';
 import * as debounce from 'debounce';
 
 
@@ -8,7 +8,7 @@ import * as debounce from 'debounce';
  * Keeps track of sticky state.
  * @class
  */
-class StickyNavigationBar {
+class StickyDetect {
     /**
      * Constructor method.
      * @param {HTMLElement} node
@@ -30,7 +30,7 @@ class StickyNavigationBar {
     update() {
         const threshold = this.node.style.top || 0;
         const exp = this.node.getClientRects()[0].top <= threshold;
-        const state = BEM.hasModifier(this.node, MODIFIER_STUCK)
+        const state = BEM.hasModifier(this.node, MODIFIER_STUCK);
         BEM.toggleModifier(this.node, MODIFIER_STUCK, exp);
 
         if(!state && exp) {
@@ -40,4 +40,4 @@ class StickyNavigationBar {
 }
 
 // Start!
-[...STICKY_NAVIGATION_BARS].forEach(node => new StickyNavigationBar(node));
+[...STICKY_DETECTS].forEach(node => new StickyDetect(node));
