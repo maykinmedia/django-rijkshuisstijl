@@ -3,10 +3,6 @@
 .title-header {
   @include container-padding(normal, (padding-top, padding-bottom));
 
-  .view--full-width & {
-    @include container-padding(normal);
-  }
-
   &__title {
     @include h1;
   }
