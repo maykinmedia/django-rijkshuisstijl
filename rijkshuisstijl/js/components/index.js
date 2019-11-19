@@ -6,5 +6,6 @@ import './form';
 import './navigation-bar';
 import './paginator';
 import './search';
+import './tabs';
 import './toggle';
 import './view';
