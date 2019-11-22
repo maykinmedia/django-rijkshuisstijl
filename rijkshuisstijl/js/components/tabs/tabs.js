@@ -35,8 +35,10 @@ class Tabs {
         this.tabs = BEM.getChildBEMNodes(this.node, BLOCK_TABS, ELEMENT_TAB);
 
         this.bindEvents();
-        this.activateCurrentTab();
-        this.activateHashLinkTab();
+        if (!this.activateHashLinkTab()) {
+            this.activateCurrentTab();
+        }
+
     }
 
     /**
@@ -70,10 +72,12 @@ class Tabs {
      * (Re)activates the active tab, or the first tab.
      */
     activateHashLinkTab() {
-        let id = window.location.hash.replace('#', '');
-        let node = document.getElementById(id);
+        const id = window.location.hash.replace('#', '');
+
+        const node = document.getElementById(id);
         if (node && node.classList.contains(BEM.getBEMClassName(BLOCK_TABS, ELEMENT_TAB))) {
             this.activateTab(id);
+            return true;
         }
     }
 
@@ -109,6 +113,8 @@ class Tabs {
 
     /**
      * Activates tab with id.
+     * @param {string} id The id of the tab.
+     * @return {HTMLElement}
      */
     activateTab(id) {
         let link = [...this.links].find(link => link.attributes.href.value === '#' + id);
@@ -118,10 +124,6 @@ class Tabs {
 
         [...this.listItems, ...this.tabs].forEach(node => BEM.removeModifier(node, MODIFIER_ACTIVE));
         [listItem, tab].forEach(node => BEM.addModifier(node, MODIFIER_ACTIVE));
-
-        let offset = -tabIndex * this.track.clientWidth;
-        [...this.tabs].forEach(tab => tab.style.transform = `translateX(${offset}px)`);
-
         this.node.dataset.tabId = id;
     }
 

@@ -32,7 +32,7 @@ $tabs-scheme: $scheme;
   }
 
   &__list-item {
-    @include animate();
+    //@include animate();
     @include color-primary;
     outline: 2px solid transparent;
     position: relative;
@@ -50,7 +50,7 @@ $tabs-scheme: $scheme;
     @include h3;
     @include responsive(justify-content, flex-start, flex-start, center);
     @include rows(1, height);
-    @include shade-color(dark-blue, 2, background-color);
+    @include color-info(background-color);
     color: inherit;
     text-decoration: none;
     display: flex;
@@ -65,21 +65,18 @@ $tabs-scheme: $scheme;
 
   &__track {
     white-space: nowrap;
-    overflow: hidden;
   }
 
   &__tab {
-    @include animate();
-    -webkit-overflow-scrolling: touch;
-    display: inline-block;
+    display: none;
     width: 100%;
-    overflow-y: auto;
     vertical-align: top;
     visibility: hidden;
     white-space: normal;
   }
 
   &__tab--active {
+    display: block;
     visibility: visible;
   }
 
