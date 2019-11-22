@@ -14,6 +14,7 @@ class FormMixin:
 
     label = None
     status = "info"
+    template_name = "rijkshuisstijl/views/generic/form.html"
     title = None
     text = None
     wysiwyg = None
