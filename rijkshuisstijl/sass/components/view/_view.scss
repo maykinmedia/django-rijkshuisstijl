@@ -53,9 +53,10 @@
     margin: 0;
   }
 
-  &--full-width .layout > .title-header,
+  &--full-width .layout > .form,
   &--full-width .layout > .key-value-table,
-  &--full-width .layout > .tabs .tabs__tab {
+  &--full-width .layout > .tabs .tabs__tab,
+  &--full-width .layout > .title-header {
     @include container-padding;
   }
 
@@ -89,12 +90,6 @@
   &--full-width .datagrid__caption:last-child,
   &--full-width .datagrid__cell:last-child {
     @include container-padding($properties: padding-right);
-  }
-
-  &--full-width .form__header {
-    @include mobile-only {
-      @include container-padding;
-    }
   }
 
   .header {
