@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 
@@ -137,10 +138,12 @@ def login_bar(context, **kwargs):
     kwargs["label_request_account"] = kwargs.get("label_request_account", _("Account aanvragen"))
 
     # kwargs
-    kwargs["details_url"] = kwargs.get("details_url", "#")
-    kwargs["logout_url"] = kwargs.get("logout_url", "#")
-    kwargs["login_url"] = kwargs.get("login_url", "#")
-    kwargs["registration_url"] = kwargs.get("registration_url", "#")
+    kwargs["details_url"] = kwargs.get("details_url", getattr(settings, "LOGIN_REDIRECT_URL", "#"))
+    kwargs["logout_url"] = kwargs.get("logout_url", getattr(settings, "LOGOUT_URL", "#"))
+    kwargs["login_url"] = kwargs.get("login_url", getattr(settings, "LOGIN_URL", "#"))
+    kwargs["registration_url"] = kwargs.get(
+        "registration_url", getattr(settings, "REGISTRATION_URL", "#")
+    )
 
     kwargs["request"] = context["request"]
     kwargs["config"] = kwargs
@@ -223,10 +226,12 @@ def navigation_bar(context, **kwargs):
     kwargs["label_request_account"] = kwargs.get("label_request_account", _("Account aanvragen"))
 
     # kwargs
-    kwargs["details_url"] = kwargs.get("details_url", "#")
-    kwargs["logout_url"] = kwargs.get("logout_url", "#")
-    kwargs["login_url"] = kwargs.get("login_url", "#")
-    kwargs["registration_url"] = kwargs.get("registration_url", "#")
+    kwargs["details_url"] = kwargs.get("details_url", getattr(settings, "LOGIN_REDIRECT_URL", "#"))
+    kwargs["logout_url"] = kwargs.get("logout_url", getattr(settings, "LOGOUT_URL", "#"))
+    kwargs["login_url"] = kwargs.get("login_url", getattr(settings, "LOGIN_URL", "#"))
+    kwargs["registration_url"] = kwargs.get(
+        "registration_url", getattr(settings, "REGISTRATION_URL", "#")
+    )
     kwargs["search_url"] = kwargs.get("search_url", None)
     kwargs["search_placeholder"] = kwargs.get("search_placeholder", None)
     kwargs["search_method"] = kwargs.get("search_method", "get")

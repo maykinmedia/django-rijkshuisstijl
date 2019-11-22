@@ -1,9 +1,9 @@
 {% extends 'rijkshuisstijl/views/abstract/master.html' %}{% load i18n rijkshuisstijl %}{% spaceless %}
     {% block body %}
         {% skiplink %}
-        {% login_bar details_url='#' logout_url='#' login_url='#' registration_url='#' %}
+        {% login_bar %}
         {% header %}
-        {% navigation_bar class='navigation-bar--compact navigation-bar--dropdown navigation-bar--sticky sticky-detect' details_url='#' logout_url='#' login_url='#' registration_url='#' %}
+        {% navigation_bar class='navigation-bar--compact navigation-bar--dropdown navigation-bar--sticky sticky-detect' %}
 
         <main class="view__content">
             {% skiplink_target %}
