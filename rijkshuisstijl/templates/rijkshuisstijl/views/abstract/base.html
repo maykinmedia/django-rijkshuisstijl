@@ -7,6 +7,11 @@
 
         <main class="view__content">
             {% skiplink_target %}
+            {% block messages %}
+                {% for message in messages %}
+                    {% textbox class='textbox--compact' text=message status=message.level_tag %}
+                {% endfor %}
+            {% endblock %}
             {% block content %}{% endblock %}
         </main>
 
