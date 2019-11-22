@@ -47,7 +47,8 @@
                 {% endfor %}
             {% except %}
                 {% for choice in choices %}
-                    <option value="{% firstof choice.pk choice %}">{{ choice }}</option>
+                    {% firstof choice.0 choice.pk as choice_value %}
+                    <option value="{{ choice_value|unlocalize }}"{% if choice_value|unlocalize == value %} selected{% endif %}>{% firstof choice.1 choice %}</option>
                 {% endfor %}
             {% endtry %}
         </datalist>

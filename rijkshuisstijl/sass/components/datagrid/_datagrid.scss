@@ -174,11 +174,13 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     @include sticky('#{$toolbar-spacing} * 2 + #{$button-height-small} + #{$datagrid-filter-height}');
     padding: 0;
 
-    .input {
+    .input,
+    .select {
       width: 100%;
       height: $datagrid-filter-height;
       padding: $datagrid-spacing;
 
+      &[select],
       &[value] {
         @include color-info(background-color);
       }

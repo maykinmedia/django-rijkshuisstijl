@@ -84,6 +84,8 @@
                                 {% if filter.key == column.key %}
                                     {% if filter.type == 'DateField' or filter.type == 'DateTimeField' %}
                                         {% form_input type='date' name=filter.key value=filter.value placeholder=column.label form_id='datagrid-filter-form-'|add:id onchange='this.form.submit()' %}
+                                    {% elif filter.choices %}
+                                        {% form_select id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices form_id='datagrid-filter-form-'|add:id onchange='this.form.submit()' %}
                                     {% else %}
                                         {% form_input id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form_id='datagrid-filter-form-'|add:id onchange='this.form.submit()' %}
                                     {% endif %}
