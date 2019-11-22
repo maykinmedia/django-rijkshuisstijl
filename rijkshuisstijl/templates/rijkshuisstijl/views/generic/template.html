@@ -1,4 +1,4 @@
-{% extends template_base %}{% spaceless %}{% load rijkshuisstijl %}
+{% extends template_base|default:'rijkshuisstijl/views/abstract/base.html' %}{% spaceless %}{% load rijkshuisstijl %}
     {% block body-class %}{{ block.super }} view--vcenter{% endblock %}
     {% block content %}
         <div class="layout layout--small" role="row">

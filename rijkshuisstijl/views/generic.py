@@ -7,19 +7,6 @@ from django.views.generic import (
 )
 
 
-class TemplateMixin:
-    """
-    Provides template_base using context.
-    """
-
-    template_base = "rijkshuisstijl/views/abstract/base.html"
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx["template_base"] = self.template_base
-        return ctx
-
-
 class FormMixin:
     """
     Provides form_config using context and the get_form_config() method.
@@ -47,7 +34,7 @@ class FormMixin:
         }
 
 
-class CreateView(TemplateMixin, FormMixin, DjCreateView):
+class CreateView(FormMixin, DjCreateView):
     """
     Create view.
     Requires additional "title" property to be set to a form title.
@@ -56,7 +43,7 @@ class CreateView(TemplateMixin, FormMixin, DjCreateView):
     template_name = "rijkshuisstijl/views/generic/create.html"
 
 
-class DetailView(TemplateMixin, DjDetailView):
+class DetailView(DjDetailView):
     """
     Detail view.
     Requires additional "fields" property to be set to model fields that should be shown.
@@ -86,7 +73,7 @@ class DetailView(TemplateMixin, DjDetailView):
         return self.fields
 
 
-class ListView(TemplateMixin, DjListView):
+class ListView(DjListView):
     """
     List view.
     Shows a datagrid.
@@ -166,7 +153,7 @@ class ListView(TemplateMixin, DjListView):
         return self.orderable_columns
 
 
-class UpdateView(TemplateMixin, FormMixin, DjUpdateView):
+class UpdateView(FormMixin, DjUpdateView):
     """
     Update view.
     Shows a form.
@@ -176,7 +163,7 @@ class UpdateView(TemplateMixin, FormMixin, DjUpdateView):
     template_name = "rijkshuisstijl/views/generic/update.html"
 
 
-class TemplateView(TemplateMixin, DjTemplateView):
+class TemplateView(DjTemplateView):
     """
     Template view.
     Shows a textbox.
