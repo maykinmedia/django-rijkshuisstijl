@@ -26,21 +26,17 @@
             {% if value %} value="{{ value|unlocalize }}"{% endif %}
             {% if type %} type="{{ type }}"{% endif %}
             {% if size %} size={{ size }}{% endif %}
-            {% if disabled %} disabled{% endif %}
+    {% if disabled %} disabled{% endif %}
             {% if required %} required{% endif %}
             {% if onchange %} onchange="{{ onchange }}"{% endif %}
             {% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>
 
 
         {% if multiple %}
-
             {% for val, display in choices %}
-                <option class="select__option" value="{{ val|unlocalize }}"
-                        {% if val in value %} selected{% endif %}>{{ display }}</option>
+                <option class="select__option" value="{{ val|unlocalize }}"{% if val in value %} selected{% endif %}>{{ display }}</option>
             {% endfor %}
-
         {% else %}
-
             {% for choice in choices %}
                 {% if choice.is_group %}
                     <optgroup label="{{ choice.value }}">
@@ -49,7 +45,12 @@
                         {% endfor %}
                     </optgroup>
                 {% else %}
-                    <option class="select__option" value="{{ choice.value }}" {% if choice.value|unlocalize == value|default:None|unlocalize %}selected{% endif %}>{{ choice.display }}</option>
+                    {% if choice.display %}
+                        <option class="select__option" value="{{ choice.value }}" {% if choice.value|unlocalize == value|default:None|unlocalize %}selected{% endif %}>{{ choice.display }}</option>
+                    {% else %}
+                        {% firstof choice.0 choice.pk as choice_value %}
+                        <option value="{{ choice_value|unlocalize }}"{% if choice_value|unlocalize == value %} selected{% endif %}>{% firstof choice.1 choice %}</option>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
 

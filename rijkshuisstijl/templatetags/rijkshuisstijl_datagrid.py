@@ -403,7 +403,7 @@ def datagrid(context, **kwargs):
 
             if not "choices" in filterable_column:
                 choices = field.choices
-                if filterable_column.get("type") == "BooleanField" and not field.null:
+                if filterable_column.get("type") == "BooleanField":
                     choices = ((True, _("waar")), (False, _("onwaar")))
 
                 if field.is_relation:
@@ -411,12 +411,17 @@ def datagrid(context, **kwargs):
 
                     if "__" in field_key:
                         remote_field_name = field_key.split("__")[-1]
-                        choices = field.remote_field.model.objects.values_list(
-                            remote_field_name, flat=True
-                        )
+                        choices = [
+                            (value, value)
+                            for value in field.remote_field.model.objects.values_list(
+                                remote_field_name, flat=True
+                            )
+                        ]
                     else:
                         choices = field.remote_field.model.objects.all()
-                filterable_column["choices"] = choices
+
+                if choices:
+                    filterable_column["choices"] = [("", "---------")] + list(choices)
 
             request = context.get("request")
             filter_key = filterable_column["filter_key"]
