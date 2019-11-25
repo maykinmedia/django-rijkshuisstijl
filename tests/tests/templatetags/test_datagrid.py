@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.template import Context, Template
 from django.test import TestCase, RequestFactory
 
-from ....models import Publisher, Author, Book
+from ...models import Publisher, Author, Book
 
 
 class DatagridTestCase(TestCase):
