@@ -7,6 +7,12 @@
 
         {% if filters %}
             <form id="datagrid-filter-form-{{ id }}" method="GET">
+                {% firstof ordering_key 'ordering' as ordering_key %}
+
+                {% if request.GET|get:ordering_key %}
+                    <input type="hidden" name="{{ ordering_key }}" value="{{ request.GET|get:ordering_key }}">
+                {% endif %}
+
                 <input class="input input--hidden" type="submit">
             </form>
         {% endif %}
@@ -83,11 +89,11 @@
                             {% for filter in filters %}
                                 {% if filter.key == column.key %}
                                     {% if filter.type == 'DateField' or filter.type == 'DateTimeField' %}
-                                        {% form_input type='date' name=filter.key value=filter.value placeholder=column.label form_id='datagrid-filter-form-'|add:id onchange='this.form.submit()' %}
+                                        {% form_input type='date' name=filter.key value=filter.value placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
                                     {% elif filter.choices %}
-                                        {% form_select id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices form_id='datagrid-filter-form-'|add:id onchange='this.form.submit()' %}
+                                        {% form_select id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices form_id='datagrid-filter-form-'|add:id %}
                                     {% else %}
-                                        {% form_input id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form_id='datagrid-filter-form-'|add:id onchange='this.form.submit()' %}
+                                        {% form_input id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
