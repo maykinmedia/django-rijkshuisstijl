@@ -29,7 +29,7 @@ class ViewTestCaseMixin:
 
     def test_script(self):
         response = self.client_get()
-        self.assertContains(response, "main.js")
+        self.assertContains(response, "rijkshuisstijl.js")
 
     def test_css(self):
         response = self.client_get()

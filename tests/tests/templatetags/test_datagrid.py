@@ -97,7 +97,7 @@ class DatagridTestCase(TestCase):
             html,
         )
         self.assertInHTML(
-            '<input class="input" id="datagrid-filter-title-my-first-datagrid" form="datagrid-filter-form-my-first-datagrid" name="title" value="m" placeholder="title" onchange="this.form.submit()">',
+            '<input class="input" id="datagrid-filter-title-my-first-datagrid" form="datagrid-filter-form-my-first-datagrid" name="title" value="m" placeholder="title">',
             html,
         )
         self.assertInHTML("Lorem", html)
