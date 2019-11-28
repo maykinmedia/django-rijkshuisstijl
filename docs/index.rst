@@ -1,13 +1,10 @@
-=================================================
-Welcome to django-rijkshuisstijl's documentation!
-=================================================
-
-Rijkshuisstijl boilerplate for Django.
-
-Features
-========
+=====================
+Django-rijkshuisstijl
+=====================
 
 * Basic rijkshuisstijl (Dutch government branding) layout including headers, footer, buttons, forms and more.
+* Default generic views for dealing with models. (CreateView, DetailView, Listview, UpdateView)
+* TemplateView for showing simple messages.
 * Modular setup using inclusion tags.
 * Responsive
 
