@@ -1,10 +1,7 @@
 {% spaceless %}{% load l10n rijkshuisstijl %}
     <div class="datagrid{% if class %} {{ class }}{% endif %}" id="{{ id }}" role="group">
-        {% if form %}
-            <form class="datagrid__form" method="post"{% if form_action %} action="{{ form_action }}"{% endif %}>
-            {% csrf_token %}
-        {% endif %}
 
+        {# This (filter) form is located outside the datagrid to avoid conflict with selection form. #}
         {% if filters %}
             <form id="datagrid-filter-form-{{ id }}" method="GET">
                 {% firstof ordering_key 'ordering' as ordering_key %}
@@ -15,6 +12,11 @@
 
                 <input class="input input--hidden" type="submit">
             </form>
+        {% endif %}
+
+        {% if form %}
+            <form class="datagrid__form" method="post"{% if form_action %} action="{{ form_action }}"{% endif %}>
+            {% csrf_token %}
         {% endif %}
 
         <header class="datagrid__header">
@@ -68,12 +70,12 @@
                         {% if column.key in orderable_column_keys %}
 
                             {% with ordering|get:column.key as ordering %}
-                                <th class="datagrid__caption datagrid__caption--{{ column.key }} datagrid__caption--orderable{% if ordering.direction %} datagrid__caption--ordered-{{ ordering.direction }}{% endif %}">
+                                <th class="datagrid__caption datagrid__caption--{{ column.key }} datagrid__caption--orderable{% if ordering.direction %} datagrid__caption--ordered-{{ ordering.direction }}{% endif %}"{% if column.width %} style="width: {{ column.width }};"{% endif %}>
                                     <a class="datagrid__link" href="{{ ordering.url }}">{{ column.label }}</a>
                                 </th>
                             {% endwith %}
                         {% else %}
-                            <th class="datagrid__caption datagrid--{{ column.key }}">{{ column.label }}</th>
+                            <th class="datagrid__caption datagrid--{{ column.key }}"{% if column.width %} style="width: {{ column.width }};"{% endif %}>{{ column.label }}</th>
                         {% endif %}
                     {% endfor %}
                 </tr>
@@ -81,7 +83,7 @@
                 {% if filters %}
                     <tr class="datagrid__row">
                     {% if form %}
-                        <th class="datagrid__caption datagrid__caption--checkbox"></th>
+                        <th class="datagrid__filter"></th>
                     {% endif %}
 
                     {% for column in columns %}
