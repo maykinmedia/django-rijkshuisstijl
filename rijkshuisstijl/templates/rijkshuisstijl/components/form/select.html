@@ -26,7 +26,7 @@
             {% if value %} value="{{ value|unlocalize }}"{% endif %}
             {% if type %} type="{{ type }}"{% endif %}
             {% if size %} size={{ size }}{% endif %}
-    {% if disabled %} disabled{% endif %}
+            {% if disabled %} disabled{% endif %}
             {% if required %} required{% endif %}
             {% if onchange %} onchange="{{ onchange }}"{% endif %}
             {% if widget.attrs %} {{ widget.attrs|flatattrs }}{% endif %}>
