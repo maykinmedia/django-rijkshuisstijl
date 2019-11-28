@@ -67,7 +67,7 @@ def datagrid(context, **kwargs):
         Pagination provided by the datagrid itself can be used in combination with filtering. The queryset's model is
         inspected to determince the type of the filters and optionally the choices.
 
-         - filterable_columns: Optional, a list defining which columns should be orderable.
+         - filterable_columns: Optional, a list defining which columns should be filterable.
 
 
         Ordering
@@ -321,46 +321,7 @@ def datagrid(context, **kwargs):
 
             if order_by:
                 object_list = object_list.order_by(order_by)
-
-        # Color coded rows.
-        for obj in object_list:
-            add_display(obj)
-            add_modifier_class(obj)
         return object_list
-
-    def add_display(obj):
-        """
-        If a get_<field>_display callable is set, add the evaluated result to the datagrid_display_<field> field on the
-        object passed to obj.
-        :param obj:
-        """
-        for column in get_columns():
-            key = column["key"]
-            fn = kwargs.get("get_{}_display".format(key), None)
-            if fn:
-                setattr(obj, "datagrid_display_{}".format(key), fn(obj))
-
-    def add_modifier_class(obj):
-        """
-        If a modifier configuration is set, add the result color as datagrid_modifier_class to the object passed to
-        obj.
-        :param obj:
-        """
-        try:
-            key = parse_kwarg(kwargs, "modifier_key", None)
-
-            if not key:
-                return
-
-            modifier_map = parse_kwarg(kwargs, "modifier_mapping", {})
-            object_value = getattr(obj, key)
-
-            for item_key, item_value in modifier_map.items():
-                pattern = re.compile(item_key)
-                if pattern.match(str(object_value)):
-                    obj.datagrid_modifier_class = item_value
-        except KeyError:
-            pass
 
     def get_modifier_column():
         """
@@ -509,6 +470,19 @@ def datagrid(context, **kwargs):
             pass
         return ordering_dict
 
+    def get_form_buttons():
+        """
+        Gets the buttons to use for the form based on kwargs['form_buttons'].
+        :return: A list_of_dict where each dict contains at least "name" and "label" keys.
+        """
+        form_actions = parse_kwarg(kwargs, "form_buttons", {})
+
+        # Convert dict to list_of_dict
+        try:
+            return [{"name": key, "label": value} for key, value in form_actions.items()]
+        except AttributeError:
+            return form_actions
+
     def add_paginator(datagrid_context):
         """
         Return datagrid_context with added paginator configuration.
@@ -522,10 +496,14 @@ def datagrid(context, **kwargs):
             Paginate object_list.
             """
             request = paginator_context.get("request")
-            page_key = paginator_context.get("page_key", "page")
-            page_number = request.GET.get(page_key, 1)
             paginate_by = paginator_context.get("paginate_by", 30)
             paginator = Paginator(paginator_context.get("object_list", []), paginate_by)
+            page_key = paginator_context.get("page_key", "page")
+            page_number = request.GET.get(page_key, 1)
+
+            if str(page_number).upper() == "LAST":
+                page_number = paginator.num_pages
+
             page_obj = paginator.get_page(page_number)
             object_list = page_obj.object_list
 
@@ -549,18 +527,52 @@ def datagrid(context, **kwargs):
             return paginator_context
         return paginator_context
 
-    def get_form_buttons():
+    def add_object_attributes(datagrid_context):
         """
-        Gets the buttons to use for the form based on kwargs['form_buttons'].
-        :return: A list_of_dict where each dict contains at least "name" and "label" keys.
+        Calls add_display(obj) and add_modifier_class(obj) for every obj in (paginated) object_list.
+        :param datagrid_context:
+        :return: datagrid_context
         """
-        form_actions = parse_kwarg(kwargs, "form_buttons", {})
+        object_list = datagrid_context.get("object_list", [])
 
-        # Convert dict to list_of_dict
+        for obj in object_list:
+            add_display(obj)
+            add_modifier_class(obj)
+        return datagrid_context
+
+    def add_display(obj):
+        """
+        If a get_<field>_display callable is set, add the evaluated result to the datagrid_display_<field> field on the
+        object passed to obj.
+        :param obj:
+        """
+        for column in get_columns():
+            key = column["key"]
+            fn = kwargs.get("get_{}_display".format(key), None)
+            if fn:
+                setattr(obj, "datagrid_display_{}".format(key), fn(obj))
+
+    def add_modifier_class(obj):
+        """
+        If a modifier configuration is set, add the result color as datagrid_modifier_class to the object passed to
+        obj.
+        :param obj:
+        """
         try:
-            return [{"name": key, "label": value} for key, value in form_actions.items()]
-        except AttributeError:
-            return form_actions
+            key = parse_kwarg(kwargs, "modifier_key", None)
+
+            if not key:
+                return
+
+            modifier_map = parse_kwarg(kwargs, "modifier_mapping", {})
+            object_value = getattr(obj, key)
+
+            for item_key, item_value in modifier_map.items():
+                pattern = re.compile(item_key)
+                if pattern.match(str(object_value)):
+                    obj.datagrid_modifier_class = item_value
+        except KeyError:
+            pass
 
     def create_list_of_dict(obj, name_key="key", name_value="label"):
         """
@@ -624,6 +636,7 @@ def datagrid(context, **kwargs):
     datagrid_context["url_reverse"] = kwargs.get("url_reverse", "")
     datagrid_context["request"] = context["request"]
     datagrid_context = add_paginator(datagrid_context)
+    datagrid_context = add_object_attributes(datagrid_context)
 
     datagrid_context["config"] = kwargs
     return datagrid_context

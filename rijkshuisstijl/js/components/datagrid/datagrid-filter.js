@@ -27,7 +27,9 @@ class DataGridFilter {
      * Binds events to callbacks.
      */
     bindEvents() {
-        this.input.addEventListener('change', this.onSubmit.bind(this));
+        if (this.input) {
+            this.input.addEventListener('change', this.onSubmit.bind(this));
+        }
     }
 
     /**
@@ -82,6 +84,7 @@ class DataGridFilter {
 }
 
 
+// Start!
 [...DATAGRID_FILTERS].forEach(node => new DataGridFilter(node));
 
 
