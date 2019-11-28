@@ -242,7 +242,7 @@ def navigation_bar(context, **kwargs):
         "registration_url", resolve_url(getattr(settings, "REGISTRATION_URL", "#/"))
     )
     kwargs["search_url"] = kwargs.get("search_url", None)
-    kwargs["search_placeholder"] = kwargs.get("search_placeholder", None)
+    kwargs["search_placeholder"] = kwargs.get("search_placeholder", _("Zoeken"))
     kwargs["search_method"] = kwargs.get("search_method", "get")
     kwargs["search_name"] = kwargs.get("search_name", "q")
 
