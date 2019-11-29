@@ -2,8 +2,8 @@ from django.views.generic import (
     CreateView as DjCreateView,
     DetailView as DjDetailView,
     ListView as DjListView,
-    UpdateView as DjUpdateView,
     TemplateView as DjTemplateView,
+    UpdateView as DjUpdateView,
 )
 
 
@@ -50,7 +50,8 @@ class DetailView(DjDetailView):
     Requires additional "fields" property to be set to model fields that should be shown.
     """
 
-    fields = []
+    fields = None
+    fieldsets = None
     template_name = "rijkshuisstijl/views/generic/detail.html"
     toolbar_config = None
 
@@ -68,10 +69,14 @@ class DetailView(DjDetailView):
             "class": "key-value-table--justify",
             "object": self.get_object(),
             "fields": self.get_fields(),
+            "fieldsets": self.get_fieldsets(),
         }
 
     def get_fields(self):
         return self.fields
+
+    def get_fieldsets(self):
+        return self.fieldsets
 
 
 class ListView(DjListView):

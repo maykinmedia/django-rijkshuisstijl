@@ -1,12 +1,21 @@
 {% spaceless %}
-    <table class="key-value-table{% if class %} {{ class }}{% endif %}">
-        <tbody class="key-value-table__body">
-        {% for key, value in data %}
-            <tr class="key-value-table__row">
-                <th class="key-value-table__key">{% firstof key.label key %}</th>
-                <td class="key-value-table__value">{{ value }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% for title, fields in data %}
+        <table class="key-value-table{% if class %} {{ class }}{% endif %}">
+            {% if title %}
+                <thead class="key-value-table__header">
+                <tr class="key-value-table__row">
+                    <th class="key-value-table__caption" colspan="2">{{ title }}</th>
+                </tr>
+                </thead>
+            {% endif %}
+            <tbody class="key-value-table__body">
+            {% for field in fields %}
+                <tr class="key-value-table__row">
+                    <th class="key-value-table__key">{% firstof field.label field %}</th>
+                    <td class="key-value-table__value">{{ field.value }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
 {% endspaceless %}

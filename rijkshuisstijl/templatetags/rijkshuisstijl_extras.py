@@ -1,8 +1,14 @@
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
-from .rijkshuisstijl_filters import get_attr_or_get
-from .rijkshuisstijl_helpers import merge_config, parse_kwarg, parse_arg, get_field_label
+from rijkshuisstijl.templatetags.rijkshuisstijl_filters import get_attr_or_get
+from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import (
+    get_field_label,
+    get_recursed_field_value,
+    merge_config,
+    parse_arg,
+    parse_kwarg,
+)
 
 try:
     from django.urls import reverse_lazy
@@ -109,13 +115,22 @@ def key_value_table(**kwargs):
     kwargs = merge_config(kwargs)
 
     def get_fields():
+        """
+        :return: list of dicts
+        """
         obj = kwargs.get("object")
         fields = parse_kwarg(kwargs, "fields", {})
 
         try:
-            fields = [{"key": key, "label": value} for key, value in fields.items()]
+            fields = [
+                {"key": key, "label": value, "value": get_recursed_field_value(obj, key)}
+                for key, value in fields.items()
+            ]
         except AttributeError:
-            fields = [{"key": field, "label": field} for field in fields]
+            fields = [
+                {"key": field, "label": field, "value": get_recursed_field_value(obj, field)}
+                for field in fields
+            ]
 
         if obj:
             for field in fields:
@@ -123,14 +138,40 @@ def key_value_table(**kwargs):
 
         return fields
 
+    def get_fieldset_fields(fields):
+        """
+        Creates dict (label, value) for every field in fields.
+        :param fields: a tuple of strings matching fields to create tuple for.
+        :return: list of dicts
+        """
+        fieldset_fields = get_fields()
+        return [field for field in fieldset_fields if field.get("key") in fields]
+
     def get_data():
-        obj = kwargs.get("object")
-        fields = get_fields()
+        """
+        Return a list of tuples for every fieldset, creates a default fieldset is none provided.
+        Every fieldset tuple contains a title and a list of dict (label, value) for every field in object.
+        :return:
+        """
+
+        # Normalize kwargs["fields"] to tuple.
+        fields = parse_kwarg(kwargs, "fields", [])
+        try:
+            fields = fields.keys()
+        except AttributeError:
+            pass
+        fields = tuple(fields)
+
+        # Get fieldsets or default fieldsets.
+        fieldsets = parse_kwarg(kwargs, "fieldsets", [(None, {"fields": tuple(fields)})])
 
         data = []
-        if obj and fields:
-            data = [(field.get("label"), getattr(obj, field.get("key"))) for field in fields]
-        data = data + list(parse_kwarg(kwargs, "data", []))
+        for fieldset in fieldsets:
+            fieldset_title = fieldset[0]
+            fieldset_fields = fieldset[1].get("fields", ())
+            field_dict = get_fieldset_fields(fieldset_fields)
+            data.append((fieldset_title, field_dict))
+
         return data
 
     # kwargs

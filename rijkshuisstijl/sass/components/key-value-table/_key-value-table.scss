@@ -1,7 +1,22 @@
+@import 'microscope/grid';
 @import 'microscope/typography';
+@import '../../settings/lib/ro-shade';
 @import '../form/constants';
 
+$key-value-table-padding-caption: 1em 0 0.15em;
+
 .key-value-table {
+  width: 100%;
+
+  &__caption {
+    @include h2;
+    @include shade-color('dark-blue');
+    font-weight: normal;
+    margin: $form-subtitle-margin;
+    padding: $key-value-table-padding-caption;
+    text-align: left;
+  }
+
   &__key,
   &__value {
     text-align: left;
@@ -18,8 +33,13 @@
     width: calc(#{$label-width} + #{$form-control-spacing});
   }
 
-  &__row:not(:last-child) &__key,
-  &__row:not(:last-child) &__value {
+  &__row:first-child &__key,
+  &__row:first-child &__value {
+    @include border(top, $style: dotted);
+  }
+
+  &__row &__key,
+  &__row &__value {
     @include border(bottom, $style: dotted);
   }
 
