@@ -653,24 +653,35 @@ def datagrid_label(obj, column_key):
     :param column_key key of field to get label for.
     :return: Formatted string.
     """
-    try:
-        return getattr(obj, "datagrid_display_{}".format(column_key))
-    except:
-        if column_key == "__str__":
-            return str(obj)
+
+    # Check for datagrid_display_<column> on object.
+    datagrid_display = "datagrid_display_{}".format(column_key)
+    if hasattr(obj, datagrid_display):
+        return getattr(obj, datagrid_display)
+
+    # Check for get_<column>_display on object.
+    model_display = "get_{}_display".format(column_key)
+    if hasattr(obj, model_display):
+        display = getattr(obj, model_display)
+        if callable(display):
+            return display()
+
+    # Check for __str__.
+    if column_key is "__str__":
+        return str(obj)
+
+    # Check for list.
+    if type(obj) is list:
+        return obj.get(column_key)
+
+    # Check for (related) value.
+    val = get_recursed_field_value(obj, column_key)
+    if val:
         try:
-            val = get_recursed_field_value(obj, column_key)
-            if not val:
-                return ""
+            # Try to apply date formatting.
             return formats.date_format(val)
-        except (AttributeError, TypeError) as e:
-            try:
-                if type(obj) is list:
-                    val = obj.get(column_key)
-                else:
-                    val = get_recursed_field_value(obj, column_key)
-                if val:
-                    return val
-            except:
-                pass
-            return obj
+        except AttributeError:
+            return val
+
+    # Return empty string
+    return ""
