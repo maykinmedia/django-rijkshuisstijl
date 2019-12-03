@@ -14,8 +14,10 @@
   }
 
   &__header {
+    @include responsive(display, block, flex);
     @include responsive(width, 100%, $label-width);
     @include responsive(margin-bottom, $form-control-margin-top, 0);
+    flex-direction: column;
   }
 
   &--stacked &__header {
@@ -68,6 +70,10 @@
   &__choices {
     @include responsive(flex-direction, column, row);
     display: flex;
+
+    @include tablet {
+      margin-top: calc((#{$checkbox-size} - #{$typography-line-height-text * 1em}) / 2);
+    }
   }
 
   &--choices-stacked &__choices {

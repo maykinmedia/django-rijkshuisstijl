@@ -4,10 +4,11 @@
         {% if label %}
             {# Form control label #}
             <header class="form-control__header">
-                {% if label and required %}
-                    {% include 'rijkshuisstijl/components/form/label.html' with label=label|add:'&nbsp;*'|safe for=id %}{% endif %}
-                {% if label and not required %}
-                    {% include 'rijkshuisstijl/components/form/label.html' with label=label for=id %}{% endif %}
+                {% if label and required or field.mark_required %}
+                    {% include 'rijkshuisstijl/components/form/label.html' with label=label|add:'&nbsp;*'|safe for=id %}
+                {% elif label %}
+                    {% include 'rijkshuisstijl/components/form/label.html' with label=label for=id %}
+                {% endif %}
             </header>
         {% endif %}
 
