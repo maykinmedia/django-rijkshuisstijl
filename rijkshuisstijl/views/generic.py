@@ -87,6 +87,7 @@ class ListView(DjListView):
     """
 
     datagrid_config = {}
+    columns = None
     fields = []
     filterable_columns = None
     order = True
@@ -116,7 +117,7 @@ class ListView(DjListView):
     def get_datagrid_config(self):
         datagrid_config = {}
         datagrid_config["class"] = "datagrid--overflow-mobile"
-        datagrid_config["columns"] = self.get_fields()
+        datagrid_config["columns"] = self.get_columns()
         datagrid_config["queryset"] = self.get_queryset()
 
         # Filter
@@ -145,8 +146,8 @@ class ListView(DjListView):
             datagrid_config["orderable_columns"] = self.get_orderable_columns()
         return datagrid_config
 
-    def get_fields(self):
-        return self.fields
+    def get_columns(self):
+        return self.columns or self.get_fields()
 
     def get_filterable_columns(self):
         if self.filterable_columns is None:
@@ -155,8 +156,11 @@ class ListView(DjListView):
 
     def get_orderable_columns(self):
         if self.orderable_columns is None:
-            return self.fields or []
+            return self.get_fields() or []
         return self.orderable_columns
+
+    def get_fields(self):
+        return self.fields
 
 
 class UpdateView(FormMixin, DjUpdateView):
