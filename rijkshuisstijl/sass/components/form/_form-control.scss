@@ -101,6 +101,12 @@
     margin-right: $input-padding-h;
   }
 
+  &__body > .checkbox {
+    @include tablet {
+      margin-top: calc((#{$checkbox-size} - #{$typography-line-height-text * 1em}) / 2);
+    }
+  }
+
   &__link {
     @include anchor;
   }
