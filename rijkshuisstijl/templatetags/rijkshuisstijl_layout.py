@@ -4,6 +4,7 @@ from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
+
 from .rijkshuisstijl_helpers import merge_config, parse_kwarg
 
 
@@ -98,6 +99,40 @@ def image(**kwargs):
     kwargs["width"] = kwargs.get("width", None)
     kwargs["height"] = kwargs.get("height", None)
     kwargs["hide_on_error"] = kwargs.get("hide_on_error", False)
+
+    kwargs["config"] = kwargs
+    return kwargs
+
+
+@register.inclusion_tag("rijkshuisstijl/components/intro/intro.html")
+def intro(**kwargs):
+    """
+    Renders an intro.
+
+    Example:
+
+        {% intro config=config %}
+        {% intro option1='foo' option2='bar' %}
+
+    Available options:
+
+        - class: Optional, a string with additional CSS classes.
+        - title: Optional, Title to show.
+        - text: Optional, Text to show.
+        - wysiwyg: Optional, Raw HTML to be shown, styled automatically.
+        - urlize: Optional, if True text is passed to "urlize" template filter, automatically creating hyperlinks.
+
+
+    :param kwargs:
+    """
+    kwargs = merge_config(kwargs)
+
+    # kwargs
+    kwargs["class"] = kwargs.get("class", None)
+    kwargs["title"] = kwargs.get("title", None)
+    kwargs["text"] = kwargs.get("text", None)
+    kwargs["wysiwyg"] = kwargs.get("wysiwyg")
+    kwargs["urlize"] = kwargs.get("urlize", True)
 
     kwargs["config"] = kwargs
     return kwargs
@@ -371,7 +406,7 @@ def textbox(**kwargs):
         - title: Optional, Title to show.
         - text: Optional, Text to show.
         - wysiwyg: Optional, Raw HTML to be shown, styled automatically.
-
+        - urlize: Optional, if True text is passed to "urlize" template filter, automatically creating hyperlinks.
 
     :param kwargs:
     """

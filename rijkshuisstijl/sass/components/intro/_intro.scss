@@ -1,0 +1,18 @@
+@import 'microscope/typography';
+
+.intro {
+  box-sizing: border-box;
+
+  &__title {
+    @include h2;
+  }
+
+  &__text {
+    @include body;
+    @include body--big;
+  }
+
+  a {
+    @include anchor;
+  }
+}

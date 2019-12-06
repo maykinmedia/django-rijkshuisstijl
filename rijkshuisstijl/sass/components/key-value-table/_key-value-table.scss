@@ -12,7 +12,7 @@ $key-value-table-padding-caption: 1em 0 0.15em;
     @include h2;
     @include shade-color('dark-blue');
     font-weight: normal;
-    margin: $form-subtitle-margin;
+    //margin: $form-subtitle-margin;
     padding: $key-value-table-padding-caption;
     text-align: left;
   }

@@ -1,7 +1,9 @@
 from uuid import uuid4
 
 from django.utils.translation import gettext_lazy as _
+
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
+
 from .rijkshuisstijl_helpers import merge_config, parse_kwarg
 
 
@@ -83,6 +85,7 @@ def form(context, form=None, label="", **kwargs):
     kwargs["form"] = form or parse_kwarg(kwargs, "form", context.get("form"))
     kwargs["label"] = label
     kwargs["title"] = kwargs.get("title")
+    kwargs["subtitle"] = kwargs.get("subtitle")
     kwargs["text"] = kwargs.get("text")
     kwargs["urlize"] = kwargs.get("urlize")
     kwargs["wysiwyg"] = kwargs.get("wysiwyg")

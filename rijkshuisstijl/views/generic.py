@@ -12,10 +12,12 @@ class FormMixin:
     Provides form_config using context and the get_form_config() method.
     """
 
+    intro = None
     label = None
     status = "info"
     template_name = "rijkshuisstijl/views/generic/form.html"
     title = None
+    subtitle = None
     text = None
     wysiwyg = None
 
@@ -27,9 +29,11 @@ class FormMixin:
     def get_form_config(self):
         return {
             "form": self.get_form(),
+            "intro": self.intro,
             "label": self.label,
             "status": self.status,
             "title": self.title,
+            "subtitle": self.subtitle,
             "text": self.text,
             "wysiwyg": self.wysiwyg,
         }

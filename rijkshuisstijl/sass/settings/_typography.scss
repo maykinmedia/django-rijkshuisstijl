@@ -155,15 +155,15 @@ $typography-line-height-h4-desktop: 29/18;
 $typography-margin-base: .8125rem;
 $typography-margin-h: 0;
 
-$typography-margin-h1-mobile: 0px 0px 20px;
-$typography-margin-h1-tablet: 0px 0px 21px;
-$typography-margin-h1-laptop: 0px 0px 28px;
-$typography-margin-h1-desktop: 0px 0px 31px;
+$typography-margin-h1-mobile: 0px 0px .7692em;
+$typography-margin-h1-tablet: 0px 0px .7692em;
+$typography-margin-h1-laptop: 0px 0px 1em;
+$typography-margin-h1-desktop: 0px 0px 1em;
 
-$typography-margin-h2-mobile: 20px 0px 4px;
-$typography-margin-h2-tablet: 20px 0px 4px;
-$typography-margin-h2-laptop: 42px 0px 4px;
-$typography-margin-h2-desktop: 47px 0px 5px;
+$typography-margin-h2-mobile: .952em 0 .2em;
+$typography-margin-h2-tablet: .952em 0 .2em;
+$typography-margin-h2-laptop: 2em 0 .2em;
+$typography-margin-h2-desktop: 2em 0 .2em;
 
 $typography-margin-h3-mobile: 0px 0px 0px;
 $typography-margin-h3-tablet: 0px 0px 0px;
@@ -176,7 +176,7 @@ $typography-margin-h4-laptop: 0px 0px 60px;
 $typography-margin-h4-desktop: 0px 0px 60px;
 
 
-$typography-margin-property-h2: margin;
+$typography-margin-property-h: margin;
 
 
 $typography-padding-table: 0;

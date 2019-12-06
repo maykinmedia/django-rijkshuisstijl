@@ -16,25 +16,29 @@
   }
 
   &__title {
-    @include h1;
-    font-weight: normal;
-    margin: $form-title-margin;
+    @include h1(auto);
+    margin-top: $form-title-margin!important;
   }
 
   &__subtitle {
     @include h2;
+  }
+
+  &__caption {
+    @include h2(auto);
     @include shade-color('dark-blue');
     font-weight: normal;
-    margin: $form-subtitle-margin;
+    //margin: $form-subtitle-margin;
+  }
+
+  &__required-label {
+    @include body;
+    float: right;
   }
 
   &__legend {
     opacity: 0;
     position: absolute;
-  }
-
-  &__text {
-    @include body;
   }
 
   &__body {

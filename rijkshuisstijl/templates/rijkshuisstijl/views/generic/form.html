@@ -1,4 +1,8 @@
 {% extends template_base|default:'rijkshuisstijl/views/abstract/base.html' %}{% spaceless %}{% load rijkshuisstijl %}
+    {% block navigation %}
+        {% navigation_bar class='navigation-bar--compact navigation-bar--dropdown' %}
+    {% endblock %}
+
     {% block content %}
         <div class="layout">
             {% form config=form_config %}

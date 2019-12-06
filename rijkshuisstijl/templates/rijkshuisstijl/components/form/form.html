@@ -3,8 +3,9 @@
     <{{ tag }} class="form{% if class %} {{ class }}{% endif %}"{% if id %} id="{{ id }}"{% endif %}{% if tag == 'form' %} method="{{ method|default:'post' }}" enctype="{{ enctype|default:'multipart/form-data' }}"{% endif %}>
         <header class="form__header">
             {% if title %}<h1 class="form__title">{{ title }}</h1>{% endif %}
-            {% if form.fieldsets %}<p class="form__text">* {{ _('verplichte velden') }}</p>{% endif %}
-            {% if text or wysiwyg %}{% textbox text=text urlize=urlize wysiwyg=wysiwyg status=status %}{% endif %}
+            {% if subtitle %}<h1 class="form__subtitle">{{ subtitle }}</h1>{% endif %}
+            {% if intro or wysiwyg %}{% intro text=intro urlize=urlize wysiwyg=wysiwyg status=status %}{% endif %}
+            {% if text %}{% textbox text=text urlize=urlize status=status %}{% endif %}
         </header>
 
         <div class="form__body">
@@ -17,13 +18,13 @@
             {# Allow admin like fieldsets to be defined on regular forms. #}
             {% if form.fieldsets %}
                 {% for fieldset in form.fieldsets %}
-                    {% if fieldset.0 %}<h2 class="form__subtitle" aria-hidden="true">{{ fieldset.0 }}</h2>{% endif %}
+                    {% if forloop.first %}<p class="form__required-label">* {{ _('verplichte velden') }}</p>{% endif %}
+                    {% if fieldset.0 %}<h2 class="form__caption" aria-hidden="true">{{ fieldset.0 }}</h2>{% endif %}
                     <fieldset class="form__fieldset{% if fieldset.1.classes %} {{ fieldset.1.classes|join:' ' }}{% endif %}">
                         {% if fieldset.0 %}<legend class="form__legend">{{ fieldset.0 }}</legend>{% endif %}
-
                          {# TODO: Possible candidate for optimisation. #}
                         {% for field in form %}
-                            {% if  field.name in fieldset.1.fields %}
+                            {% if field.name in fieldset.1.fields %}
                                 {% form_field field %}
                             {% endif %}
                         {% endfor %}
