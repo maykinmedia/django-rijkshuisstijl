@@ -30,7 +30,7 @@
                     {% endif %}
 
                     {% if forloop.first %}<p class="form__required-label">* {{ _('verplichte velden') }}</p>{% endif %}
-                    {% if fieldset.0 %}<h2 class="form__caption" aria-hidden="true">{{ fieldset.0 }}</h2>{% endif %}
+                    {% if fieldset.0 %}<h2 class="form__caption" id="{{ fieldset.0|slugify }}" aria-hidden="true">{{ fieldset.0 }}</h2>{% endif %}
                     <fieldset class="form__fieldset{% if fieldset.1.classes %} {{ fieldset.1.classes|join:' ' }}{% endif %}">
                         {% if fieldset.0 %}<legend class="form__legend">{{ fieldset.0 }}</legend>{% endif %}
                          {# TODO: Possible candidate for optimisation. #}

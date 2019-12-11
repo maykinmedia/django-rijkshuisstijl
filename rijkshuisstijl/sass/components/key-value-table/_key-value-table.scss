@@ -6,13 +6,13 @@
 $key-value-table-padding-caption: 1em 0 0.15em;
 
 .key-value-table {
+  border-spacing: 0;
   width: 100%;
 
   &__caption {
     @include h2;
     @include shade-color('dark-blue');
     font-weight: normal;
-    //margin: $form-subtitle-margin;
     padding: $key-value-table-padding-caption;
     text-align: left;
   }
@@ -33,13 +33,18 @@ $key-value-table-padding-caption: 1em 0 0.15em;
     width: calc(#{$label-width} + #{$form-control-spacing});
   }
 
-  &__row:first-child &__key,
-  &__row:first-child &__value {
+  &:not(#{&}--no-border) &__row:first-child &__key,
+  &:not(#{&}--no-border) &__row:first-child &__value {
     @include border(top, $style: dotted);
   }
 
-  &__row &__key,
-  &__row &__value {
+  & + & &__row:first-child &__key,
+  & + & &__row:first-child &__value {
+    border-top-width: 0;
+  }
+
+  &:not(#{&}--no-border) &__row &__key,
+  &:not(#{&}--no-border) &__row &__value {
     @include border(bottom, $style: dotted);
   }
 
