@@ -25,9 +25,12 @@
   }
 
   &__header .label {
-    padding-top: calc((#{$grid-row-height} - #{$typography-line-height-text * 1em}) / 2);
     align-self: flex-start;
     box-sizing: border-box;
+  }
+
+  &:not(#{&}--compact) &__header .label {
+    padding-top: calc((#{$grid-row-height} - #{$typography-line-height-text * 1em}) / 2);
   }
 
   &__body {
@@ -53,6 +56,10 @@
 
   .input, .select, .textarea {
     z-index: 10;
+  }
+
+  &--compact .textarea {
+    min-height: 0;
   }
 
   &:not(#{&}--compact) {

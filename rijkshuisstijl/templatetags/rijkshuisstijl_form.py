@@ -83,6 +83,7 @@ def form(context, form=None, label="", **kwargs):
     kwargs = merge_config(kwargs)
 
     kwargs["form"] = form or parse_kwarg(kwargs, "form", context.get("form"))
+    kwargs["compact"] = kwargs.get("compact")
     kwargs["label"] = label
     kwargs["title"] = kwargs.get("title")
     kwargs["subtitle"] = kwargs.get("subtitle")
@@ -91,6 +92,7 @@ def form(context, form=None, label="", **kwargs):
     kwargs["wysiwyg"] = kwargs.get("wysiwyg")
     kwargs["status"] = kwargs.get("status")
     kwargs["tag"] = kwargs.get("tag", "form")
+    kwargs["actions_position"] = kwargs.get("actions_position", "auto")
 
     kwargs["request"] = context["request"]
     kwargs["config"] = kwargs

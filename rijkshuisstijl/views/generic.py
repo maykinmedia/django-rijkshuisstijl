@@ -12,6 +12,7 @@ class FormMixin:
     Provides form_config using context and the get_form_config() method.
     """
 
+    compact = False
     intro = None
     label = None
     status = "info"
@@ -20,6 +21,7 @@ class FormMixin:
     subtitle = None
     text = None
     wysiwyg = None
+    actions_position = None
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -29,6 +31,7 @@ class FormMixin:
     def get_form_config(self):
         return {
             "form": self.get_form(),
+            "compact": self.compact,
             "intro": self.intro,
             "label": self.label,
             "status": self.status,
@@ -36,6 +39,7 @@ class FormMixin:
             "subtitle": self.subtitle,
             "text": self.text,
             "wysiwyg": self.wysiwyg,
+            "actions_position": self.actions_position,
         }
 
 

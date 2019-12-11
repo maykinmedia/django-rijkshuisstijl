@@ -1,5 +1,5 @@
 {% spaceless %}{% load i18n rijkshuisstijl_filters sniplates %}
-    <div class="form-control{% if class %} {{ class }}{% endif %}">
+    <div class="form-control{% if compact %} form-control--compact{% endif %}{% if class %} {{ class }}{% endif %}">
 
         {% if label %}
             {# Form control label #}

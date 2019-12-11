@@ -1,12 +1,15 @@
 {% spaceless %}{% load i18n sniplates rijkshuisstijl %}
     {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
-    <{{ tag }} class="form{% if class %} {{ class }}{% endif %}"{% if id %} id="{{ id }}"{% endif %}{% if tag == 'form' %} method="{{ method|default:'post' }}" enctype="{{ enctype|default:'multipart/form-data' }}"{% endif %}>
-        <header class="form__header">
-            {% if title %}<h1 class="form__title">{{ title }}</h1>{% endif %}
-            {% if subtitle %}<h1 class="form__subtitle">{{ subtitle }}</h1>{% endif %}
-            {% if intro or wysiwyg %}{% intro text=intro urlize=urlize wysiwyg=wysiwyg status=status %}{% endif %}
-            {% if text %}{% textbox text=text urlize=urlize status=status %}{% endif %}
-        </header>
+    <{{ tag }} class="form{% if compact %} form--compact{% endif %}{% if class %} {{ class }}{% endif %}"{% if id %} id="{{ id }}"{% endif %}{% if tag == 'form' %} method="{{ method|default:'post' }}" enctype="{{ enctype|default:'multipart/form-data' }}"{% endif %}>
+
+        {% if title or subtitle or intro or wysiwyg or text %}
+            <header class="form__header">
+                {% if title %}<h1 class="form__title">{{ title }}</h1>{% endif %}
+                {% if subtitle %}<h1 class="form__subtitle">{{ subtitle }}</h1>{% endif %}
+                {% if intro or wysiwyg %}{% intro text=intro urlize=urlize wysiwyg=wysiwyg status=status %}{% endif %}
+                {% if text %}{% textbox text=text urlize=urlize status=status %}{% endif %}
+            </header>
+        {% endif %}
 
         <div class="form__body">
             {% csrf_token %}
@@ -18,6 +21,14 @@
             {# Allow admin like fieldsets to be defined on regular forms. #}
             {% if form.fieldsets %}
                 {% for fieldset in form.fieldsets %}
+                    {# Last fieldset gets actions appended to it if actions_postion equals auto.  #}
+                    {% if forloop.first and actions_position in 'top,both' %}
+                        <div class="form__body form__body--transparent">
+                            {% include 'rijkshuisstijl/components/form/actions.html' with align='right' button_class=button_class label=label %}
+                        </div>
+                        <br>
+                    {% endif %}
+
                     {% if forloop.first %}<p class="form__required-label">* {{ _('verplichte velden') }}</p>{% endif %}
                     {% if fieldset.0 %}<h2 class="form__caption" aria-hidden="true">{{ fieldset.0 }}</h2>{% endif %}
                     <fieldset class="form__fieldset{% if fieldset.1.classes %} {{ fieldset.1.classes|join:' ' }}{% endif %}">
@@ -60,17 +71,23 @@
                         {% endspaceless %}{% endcapture %}
 
                         {% if key_value_fields %}
-
+                            {% key_value_table object=form.form.instance fields=key_value_fields %}
                         {% endif %}
 
 
-                        {# Last fieldset gets actions appended to it.  #}
-                        {% if forloop.last %}
-                            <div class="form__actions">
-                                {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') type='submit' %}
-                            </div>
+                        {# Last fieldset gets actions appended to it if actions_postion equals auto.  #}
+                        {% if forloop.last and actions_position == 'auto' %}
+                            {% include 'rijkshuisstijl/components/form/actions.html' with button_class=button_class label=label %}
                         {% endif %}
                     </fieldset>
+
+                    {# Last fieldset gets actions appended to it if actions_postion equals auto.  #}
+                    {% if forloop.last and actions_position in 'bottom,both' %}
+                        <br>
+                        <div class="form__body">
+                            {% include 'rijkshuisstijl/components/form/actions.html' with align='right' button_class=button_class label=label %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
 
             {% else %}
@@ -79,9 +96,7 @@
                         {% form_field field %}
                     {% endfor %}
 
-                    <div class="form__actions">
-                        {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') type='submit' %}
-                    </div>
+                    {% include 'rijkshuisstijl/components/form/actions.html' with button_class=button_class label=label %}
                 </fieldset>
             {% endif %}
         </div>
