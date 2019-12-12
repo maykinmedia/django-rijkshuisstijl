@@ -1,8 +1,10 @@
 import re
 
 from django import template
+from django.utils import formats
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
+from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_recursed_field_value
 
 
 class CaptureNode(template.Node):
@@ -14,6 +16,48 @@ class CaptureNode(template.Node):
         output = self.nodelist.render(context)
         context[self.var_name] = output
         return ""
+
+
+@register.filter
+def format_value(obj, field):
+    """
+    Formats field in obj, supporting get_<column_key>_display() and and date_format().
+    :param obj: (Model) Object containing key column_key.
+    :param field key of field to get label for.
+    :return: Formatted string.
+    """
+
+    # Check for rh_display_<column> on object.
+    datagrid_display = "rh_display_{}".format(field)
+    if hasattr(obj, datagrid_display):
+        return getattr(obj, datagrid_display)
+
+    # Check for get_<column>_display on object.
+    model_display = "get_{}_display".format(field)
+    if hasattr(obj, model_display):
+        display = getattr(obj, model_display)
+        if callable(display):
+            return display()
+
+    # Check for __str__.
+    if field is "__str__":
+        return str(obj)
+
+    # Check for list.
+    if type(obj) is list:
+        return obj.get(field)
+
+    # Check for (related) value.
+    val = get_recursed_field_value(obj, field)
+    if val:
+        try:
+            # Try to apply date formatting.
+            return formats.date_format(val)
+        except AttributeError:
+            return val
+
+    # Return empty string
+    return ""
 
 
 @register.tag

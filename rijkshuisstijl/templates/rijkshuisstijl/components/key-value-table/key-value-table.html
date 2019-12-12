@@ -1,4 +1,4 @@
-{% spaceless %}
+{% spaceless %}{% load rijkshuisstijl %}
     {% for title, fields in data %}
         <table class="key-value-table{% if class %} {{ class }}{% endif %}">
             {% if title %}
@@ -12,7 +12,7 @@
             {% for field in fields %}
                 <tr class="key-value-table__row">
                     <th class="key-value-table__key">{% firstof field.label field %}</th>
-                    <td class="key-value-table__value">{{ field.value }}</td>
+                    <td class="key-value-table__value">{{ object|format_value:field.key }}</td>
                 </tr>
             {% endfor %}
             </tbody>

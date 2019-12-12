@@ -545,7 +545,7 @@ def datagrid(context, **kwargs):
 
     def add_display(obj):
         """
-        If a get_<field>_display callable is set, add the evaluated result to the datagrid_display_<field> field on the
+        If a get_<field>_display callable is set, add the evaluated result to the rh_display_<field> field on the
         object passed to obj.
         :param obj:
         """
@@ -553,7 +553,7 @@ def datagrid(context, **kwargs):
             key = column["key"]
             fn = kwargs.get("get_{}_display".format(key), None)
             if fn:
-                setattr(obj, "datagrid_display_{}".format(key), fn(obj))
+                setattr(obj, "rh_display_{}".format(key), fn(obj))
 
     def add_modifier_class(obj):
         """
@@ -643,45 +643,3 @@ def datagrid(context, **kwargs):
 
     datagrid_context["config"] = kwargs
     return datagrid_context
-
-
-@register.filter
-def datagrid_label(obj, column_key):
-    """
-    Formats field in datagrid, supporting get_<column_key>_display() and and date_format().
-    :param obj: (Model) Object containing key column_key.
-    :param column_key key of field to get label for.
-    :return: Formatted string.
-    """
-
-    # Check for datagrid_display_<column> on object.
-    datagrid_display = "datagrid_display_{}".format(column_key)
-    if hasattr(obj, datagrid_display):
-        return getattr(obj, datagrid_display)
-
-    # Check for get_<column>_display on object.
-    model_display = "get_{}_display".format(column_key)
-    if hasattr(obj, model_display):
-        display = getattr(obj, model_display)
-        if callable(display):
-            return display()
-
-    # Check for __str__.
-    if column_key is "__str__":
-        return str(obj)
-
-    # Check for list.
-    if type(obj) is list:
-        return obj.get(column_key)
-
-    # Check for (related) value.
-    val = get_recursed_field_value(obj, column_key)
-    if val:
-        try:
-            # Try to apply date formatting.
-            return formats.date_format(val)
-        except AttributeError:
-            return val
-
-    # Return empty string
-    return ""

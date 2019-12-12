@@ -117,7 +117,7 @@
                     {% endif %}
 
                     {% for column in columns %}
-                        {% firstof object|datagrid_label:column.key '' as label %}
+                        {% firstof object|format_value:column.key '' as label %}
                         <td class="datagrid__cell{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">{% spaceless %}
                                 {% if forloop.counter0 == 0 and url %}
                                     <a class="datagrid__link" href="{{ url }}">{{ label }}</a>
