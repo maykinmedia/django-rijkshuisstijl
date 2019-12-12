@@ -107,6 +107,7 @@ class ListView(DjListView):
     modifier_column = None
     modifier_mapping = None
     page_key = "page"
+    urlize = True
     template_name = "rijkshuisstijl/views/generic/list.html"
 
     def get_context_data(self, **kwargs):
@@ -152,6 +153,9 @@ class ListView(DjListView):
 
         if self.orderable_columns is None:
             datagrid_config["orderable_columns"] = self.get_orderable_columns()
+
+        # Urlize
+        datagrid_config["urlize"] = self.urlize
         return datagrid_config
 
     def get_columns(self):
