@@ -63,6 +63,12 @@
     @include button--small;
   }
 
+  &--transparent {
+    @include color-primary;
+    @include border($position: all);
+    border-color: inherit;
+  }
+
   &__label,
   .icon {
     position: relative;

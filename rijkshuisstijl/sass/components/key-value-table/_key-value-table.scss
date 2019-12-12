@@ -38,11 +38,6 @@ $key-value-table-padding-caption: 1em 0 0.15em;
     @include border(top, $style: dotted);
   }
 
-  & + & &__row:first-child &__key,
-  & + & &__row:first-child &__value {
-    border-top-width: 0;
-  }
-
   &:not(#{&}--no-border) &__row &__key,
   &:not(#{&}--no-border) &__row &__value {
     @include border(bottom, $style: dotted);
