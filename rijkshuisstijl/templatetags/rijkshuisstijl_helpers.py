@@ -146,5 +146,4 @@ def get_recursed_field_value(obj, field):
     while len(fields) > 1:
         field = fields.pop(0)
         obj = getattr(obj, field)
-
     return getattr(obj, fields[0])

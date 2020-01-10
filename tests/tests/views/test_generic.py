@@ -8,13 +8,14 @@ from ...models import Book, Publisher, Author
 class ViewTestCaseMixin:
     url_name = ""
 
-    def client_get(self):
-        url_name = self.url_name
+    def client_get(self, url_name=None, kwargs=None):
+        url_name = url_name if url_name else self.url_name
 
-        try:
-            kwargs = {"pk": self.object.pk}
-        except AttributeError:
-            kwargs = None
+        if not kwargs:
+            try:
+                kwargs = {"pk": self.object.pk}
+            except AttributeError:
+                kwargs = None
 
         return self.client.get(reverse_lazy(url_name, kwargs=kwargs))
 
@@ -299,6 +300,23 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         response = self.client_get()
         self.assertNotContains(response, "last updated")
         self.assertNotContains(response, "last_updated")
+
+    def test_related_field(self):
+        kwargs = {"pk": self.publisher.pk}
+        url_name = "publisher-detail"
+
+        books = [
+            Book(title="Jungle Book", publisher=self.publisher),
+            Book(title="Pinkeltje", publisher=self.publisher),
+            Book(title="Harry Potter", publisher=self.publisher),
+        ]
+
+        Book.objects.bulk_create(books)
+
+        response = self.client_get(url_name=url_name, kwargs=kwargs)
+
+        expected_book_value = ", ".join([str(book) for book in books])
+        self.assertContains(response, expected_book_value)
 
 
 class ListViewTestCase(ViewTestCaseMixin, TestCase):
