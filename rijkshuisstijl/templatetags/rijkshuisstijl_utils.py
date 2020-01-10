@@ -49,6 +49,20 @@ def format_value(obj, field):
 
     # Check for (related) value.
     val = get_recursed_field_value(obj, field)
+
+    # In case the field is a related manager, return a comma seperated
+    # string with the string representation of each instance.
+    if field.endswith("_set"):
+        related_name = field.replace("_set", "")
+        related_object_names = [
+            related_field.name for related_field in obj._meta.related_objects
+        ]
+
+        # Double check if the field_name is actually a reverse relation
+        # and not just a name which ends with "_set".
+        if related_name in related_object_names:
+            return ", ".join([str(instance) for instance in val.all()])
+
     if val:
         try:
             # Try to apply date formatting.
