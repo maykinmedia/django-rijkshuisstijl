@@ -147,18 +147,4 @@ def get_recursed_field_value(obj, field):
         field = fields.pop(0)
         obj = getattr(obj, field)
 
-    field_name = fields[0]
-    value = getattr(obj, fields[0])
-
-    if field_name.endswith("_set"):
-        related_name = field_name.replace("_set", "")
-        related_object_names = [
-            related_field.name for related_field in obj._meta.related_objects
-        ]
-
-        # double check if the field_name is actually a reverse relation
-        # and not just a name which ends with "_set"
-        if related_name in related_object_names:
-            return ", ".join([str(instance) for instance in value.all()])
-
-    return value
+    return getattr(obj, fields[0])
