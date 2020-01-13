@@ -9,6 +9,41 @@ except ImportError:
     JSONDecodeError = ValueError
 
 
+def create_list_of_dict(obj, name_key="key", name_value="label"):
+    """
+    Converts obj to a list of dict containing name_key and name_value for every dict.
+    Obj can be dict, string or list.
+
+    Output format (name_key="key", name_value="label"):
+
+        [{"key": "foo", "label": "bar"}]
+
+    :param obj: Value to convert
+    :param name_key: Name for the key in every dict.
+    :param name_value: Name for the value in every dict.
+    :return: list_of_dict
+    """
+    try:
+        # Convert dict to list_of_dict.
+        return [{name_key: key, name_value: value} for key, value in obj.items()]
+    except AttributeError:
+        # Convert string to list_of_dict.
+        if type(obj) == str or type(obj) == SafeText:
+            return [{name_key: obj, name_value: obj}]
+
+        # Convert list to list_of_dict.
+        elif type(obj) is list or type(obj) is tuple:
+            list_of_dict = []
+            for column in obj:
+                # Already dict
+                if type(column) == dict:
+                    list_of_dict.append(column)
+                # Not dict
+                else:
+                    list_of_dict.append({name_key: column, name_value: column})
+        return list_of_dict
+
+
 def get_field_label(obj, field):
     """
     Returns the label for a field based preferably based on obj's model.

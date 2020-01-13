@@ -3,16 +3,14 @@ from uuid import uuid4
 
 from django.core.paginator import Paginator
 from django.http import QueryDict
-from django.utils import formats
 from django.utils.dateparse import parse_date
-from django.utils.safestring import SafeText
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
 from .rijkshuisstijl_helpers import (
+    create_list_of_dict,
     get_field_label,
-    get_recursed_field_value,
     merge_config,
     parse_kwarg,
 )
@@ -576,34 +574,6 @@ def datagrid(context, **kwargs):
                     obj.datagrid_modifier_class = item_value
         except KeyError:
             pass
-
-    def create_list_of_dict(obj, name_key="key", name_value="label"):
-        """
-        Converst obj to a list of dict containg name_key and name_value for every dict.
-        :param obj: Value to convert
-        :param name_key: Name for the key in every dict.
-        :param name_value: Name for the value in every dict.
-        :return: list_of_dict
-        """
-        try:
-            # Convert dict to list_of_dict.
-            return [{name_key: key, name_value: value} for key, value in obj.items()]
-        except AttributeError:
-            # Convert string to list_of_dict.
-            if type(obj) == str or type(obj) == SafeText:
-                return [{name_key: obj, name_value: obj}]
-
-            # Convert list to list_of_dict.
-            elif type(obj) is list or type(obj) is tuple:
-                list_of_dict = []
-                for column in obj:
-                    # Already dict
-                    if type(column) == dict:
-                        list_of_dict.append(column)
-                    # Not dict
-                    else:
-                        list_of_dict.append({name_key: column, name_value: column})
-            return list_of_dict
 
     kwargs = merge_config(kwargs)
     datagrid_context = kwargs.copy()
