@@ -12,7 +12,7 @@
 
     {% endcomment %}
 
-    <a class="button{% if not label %} button--no-text{% endif %}{% if class %} {{ class }}{% endif %}"
+    <a class="button{% if icon or icon_src %} button--icon{% endif %}{% if not label %} button--no-text{% endif %}{% if class %} {{ class }}{% endif %}"
         {% if href %} href="{{ href }}"{% endif %}
         {% if id %} id="{{ id }}"{% endif %}
         {% if target %} target="{{ target }}"{% endif %}

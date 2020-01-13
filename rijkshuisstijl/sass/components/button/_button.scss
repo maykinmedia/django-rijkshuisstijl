@@ -53,6 +53,14 @@
     opacity: 0.2;
   }
 
+  &--icon:not(#{&}--icon-right) {
+    padding-left: 0;
+  }
+
+  &--icon#{&}--icon-right {
+    padding-right: 0;
+  }
+
   &--no-pad,
   &--no-text {
     padding-left: 0;
@@ -69,28 +77,18 @@
     border-color: inherit;
   }
 
+
   &__label,
-  .icon {
+  &__icon {
     position: relative;
     z-index: 20;
   }
 
-  .icon {
+  &__icon {
     @include rows(1, min-width);
-  }
-
-  &--icon-left {
-    flex-direction: row-reverse;
-  }
-
-  &--icon-left .icon:not(:first-child) {
-    margin-left: 0;
-    margin-right: $button-spacing;
-  }
-
-  &:not(#{&}--icon-left):not(:first-child) .icon {
-    margin-left: $button-spacing;
-    margin-right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   [type=submit],
