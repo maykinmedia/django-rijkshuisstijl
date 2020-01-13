@@ -43,7 +43,7 @@ class DataGridFilter {
                 const formId = input.getAttribute('form');
                 return document.getElementById(formId);
             }
-            return input.form
+            return input.form;
         }
     }
 
@@ -68,15 +68,15 @@ class DataGridFilter {
         [...inputs].forEach(node => {
             const newNode = document.createElement('input');
 
-            if (node.form) {  // Browser support input form attribute.
-                return
+            if (node.form) {  // Browser supports input form attribute.
+                return;
             }
 
             newNode.name = node.name;
             newNode.type = 'hidden';
             newNode.value = node.value;
 
-            this.form.appendChild(newNode)
+            this.form.appendChild(newNode);
         });
 
         this.form.submit();
