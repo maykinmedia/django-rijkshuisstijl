@@ -60,7 +60,16 @@
 
   &:not([type=checkbox]):not([type=radio]) {
     @include body;
+  }
+
+  &:not([type=checkbox]):not([type=radio]):not(#{&}--border) {
     border: none;
+  }
+
+  &--big  {
+    @include rows(1, min-height);
+    border-width: 2px;
+    font-weight: bold;
   }
 
   &#{&}--primary {
