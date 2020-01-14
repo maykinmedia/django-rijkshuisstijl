@@ -1,7 +1,7 @@
 from django.urls import path
 
 from rijkshuisstijl.views.generic import CreateView, DetailView, ListView, UpdateView, TemplateView
-from tests.models import Book, Publisher
+from tests.models import Author, Book, Publisher
 
 app_name = "test"
 fields = ("title", "authors", "publisher", "date_published", "stock")
@@ -18,5 +18,12 @@ urlpatterns = [
             model=Publisher, fields=("name", "book_set",)
         ),
         name="publisher-detail"
+    ),
+    path(
+        "/author/<int:pk>",
+        DetailView.as_view(
+            model=Author, fields=("name", "awards",)
+        ),
+        name="author-detail"
     ),
 ]

@@ -1,7 +1,9 @@
 import re
 
 from django import template
+from django.db.models import Field
 from django.utils import formats
+from django.core.exceptions import FieldDoesNotExist
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_recursed_field_value
@@ -50,27 +52,32 @@ def format_value(obj, field):
     # Check for (related) value.
     val = get_recursed_field_value(obj, field)
 
-    related_object_names = [
-        related_field.name for related_field in obj._meta.related_objects
-    ]
+    try:
+        model_field = obj._meta.get_field(field)
 
-    many_to_many_names = [
-        field.name for field in obj._meta.many_to_many
-    ]
+        if not isinstance(model_field, Field):
+            # field is a related manager
+            model_field = model_field.field
+    except FieldDoesNotExist:
+        model_field = None
 
-    # In case the field is a related manager, return a comma seperated
-    # string with the string representation of each instance.
     if field.endswith("_set"):
-        related_name = field.replace("_set", "")
+        possible_related_field = field.replace("_set", "")
 
-        # Double check if the field_name is actually a reverse relation
-        # and not just a name which ends with "_set".
-        if related_name in related_object_names:
+        try:
+            related_manager = obj._meta.get_field(possible_related_field)
+        except FieldDoesNotExist:
+            related_manager = None
+
+        if related_manager and any([related_manager.field.many_to_many, related_manager.field.one_to_many]):
             return ", ".join([str(instance) for instance in val.all()])
-    # If the field has a related_name set or is a many to many field
-    # apply the same behaviour
-    elif field in related_object_names or field in many_to_many_names:
+
+    if model_field and any([model_field.many_to_many, model_field.one_to_many]):
+        # In case the field is a related manager, return a comma seperated
+        # string with the string representation of each instance.
         return ", ".join([str(instance) for instance in val.all()])
+    elif model_field and model_field.many_to_one:
+        return str(val)
 
     if val:
         try:

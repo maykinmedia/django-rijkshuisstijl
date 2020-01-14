@@ -57,18 +57,25 @@ def get_field_label(obj, field):
 
         # If column key is "__str__", use model name as label.
         if field == "__str__":
-            field = model.__name__
+            return model.__name__
 
         # If model field can be found, use it's verbose name as label.
         else:
-            field = model._meta.get_field(field)
-            field = field.verbose_name
+            model_field = model._meta.get_field(field)
+
+            if hasattr(model_field, "verbose_name"):
+                return model_field.verbose_name
+            elif model_field.one_to_many:
+                plural_name = model_field.model._meta.verbose_name_plural
+                verbose_name = model_field.model._meta.verbose_name
+                return plural_name if plural_name else verbose_name
 
     # If label cannot be found, fall back to replacing dashes and underscores with " ".
     except:
-        regex = re.compile("[_-]+")
-        field = re.sub(regex, " ", field)
-    return field
+        pass
+
+    regex = re.compile("[_-]+")
+    return re.sub(regex, " ", field)
 
 
 def get_model(obj):

@@ -35,3 +35,17 @@ class Book(models.Model):
 
     class Meta:
         ordering = ("pk",)
+
+
+class Award(models.Model):
+    name = models.CharField(max_length=255)
+    author = models.ForeignKey(
+        Author, related_name="authors", on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Award"
+        verbose_name_plural = "Awards"
