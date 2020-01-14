@@ -22,7 +22,7 @@ urlpatterns = [
     path(
         "/author/<int:pk>",
         DetailView.as_view(
-            model=Author, fields=("name", "awards",)
+            model=Author, fields=("first_name", "awards",)
         ),
         name="author-detail"
     ),

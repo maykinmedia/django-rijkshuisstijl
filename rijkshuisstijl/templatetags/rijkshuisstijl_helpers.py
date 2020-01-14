@@ -66,8 +66,8 @@ def get_field_label(obj, field):
             if hasattr(model_field, "verbose_name"):
                 return model_field.verbose_name
             elif model_field.one_to_many:
-                plural_name = model_field.model._meta.verbose_name_plural
-                verbose_name = model_field.model._meta.verbose_name
+                plural_name = model_field.related_model._meta.verbose_name_plural
+                verbose_name = model_field.related_model._meta.verbose_name
                 return plural_name if plural_name else verbose_name
 
     # If label cannot be found, fall back to replacing dashes and underscores with " ".
