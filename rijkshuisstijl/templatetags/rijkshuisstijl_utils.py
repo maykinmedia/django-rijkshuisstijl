@@ -50,18 +50,27 @@ def format_value(obj, field):
     # Check for (related) value.
     val = get_recursed_field_value(obj, field)
 
+    related_object_names = [
+        related_field.name for related_field in obj._meta.related_objects
+    ]
+
+    many_to_many_names = [
+        field.name for field in obj._meta.many_to_many
+    ]
+
     # In case the field is a related manager, return a comma seperated
     # string with the string representation of each instance.
     if field.endswith("_set"):
         related_name = field.replace("_set", "")
-        related_object_names = [
-            related_field.name for related_field in obj._meta.related_objects
-        ]
 
         # Double check if the field_name is actually a reverse relation
         # and not just a name which ends with "_set".
         if related_name in related_object_names:
             return ", ".join([str(instance) for instance in val.all()])
+    # If the field has a related_name set or is a many to many field
+    # apply the same behaviour
+    elif field in related_object_names or field in many_to_many_names:
+        return ", ".join([str(instance) for instance in val.all()])
 
     if val:
         try:
