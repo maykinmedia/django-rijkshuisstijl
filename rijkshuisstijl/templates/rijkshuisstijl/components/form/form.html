@@ -1,6 +1,6 @@
 {% spaceless %}{% load i18n sniplates rijkshuisstijl %}
     {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
-    <{{ tag }} class="form{% if compact %} form--compact{% endif %}{% if class %} {{ class }}{% endif %}"{% if id %} id="{{ id }}"{% endif %}{% if tag == 'form' %} method="{{ method|default:'post' }}" enctype="{{ enctype|default:'multipart/form-data' }}"{% endif %}>
+    <{{ tag }} class="form{% if compact %} form--compact{% endif %}{% if class %} {{ class }}{% endif %}"{% if id %} id="{{ id }}"{% endif %}{% if tag == 'form' %}{% if action %} action="{{ action }}"{% endif %} method="{{ method|default:'post' }}" enctype="{{ enctype|default:'multipart/form-data' }}"{% endif %}>
 
         {% if title or subtitle or intro or wysiwyg or text %}
             <header class="form__header">

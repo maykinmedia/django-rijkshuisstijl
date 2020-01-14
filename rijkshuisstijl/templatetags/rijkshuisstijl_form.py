@@ -83,6 +83,7 @@ def form(context, form=None, label="", **kwargs):
     kwargs = merge_config(kwargs)
 
     kwargs["form"] = form or parse_kwarg(kwargs, "form", context.get("form"))
+    kwargs["action"] = kwargs.get("action")
     kwargs["compact"] = kwargs.get("compact")
     kwargs["label"] = label
     kwargs["title"] = kwargs.get("title")

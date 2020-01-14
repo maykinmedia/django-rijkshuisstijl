@@ -107,8 +107,9 @@ def key_value_table(**kwargs):
 
         - fields: Required, A dict (key, label) or a list defining which attributes of object to show.
         - object: Required, An object containing the keys defined fields.
+        - form: Optional, A (Django) form instance which fields become editable in the key/value table if provided.
 
-        - class: Optional, a string with additional CSS classes.§
+        - class: Optional, a string with additional CSS classes.
 
     :param kwargs:
     """
@@ -135,6 +136,14 @@ def key_value_table(**kwargs):
         if obj:
             for field in fields:
                 field["label"] = get_field_label(obj, field["label"])
+
+        # Add form field (if any).
+        form = kwargs.get("form")
+        if form:
+            for field in fields:
+                key = field.get("key")
+                if key in form.fields:
+                    field["form_field"] = form[key]
 
         return fields
 
@@ -177,6 +186,10 @@ def key_value_table(**kwargs):
     # kwargs
     kwargs["class"] = kwargs.get("class", None)
     kwargs["data"] = get_data()
+    kwargs["form"] = kwargs.get("form", None)
+    kwargs["form_action"] = kwargs.get("form_action", None)
+    kwargs["form_method"] = kwargs.get("form_method", "post")
+    kwargs["form_enctype"] = kwargs.get("form_enctype", "multipart/form-data")
 
     kwargs["config"] = kwargs
     return kwargs

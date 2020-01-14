@@ -60,7 +60,7 @@ def get(value, key):
     :return: The key's value or ''.
     """
     try:
-        return value.get(key, "")
+        return value[key]
     except:
         return ""
 
