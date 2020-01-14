@@ -77,8 +77,6 @@ def format_value(obj, field):
         if related_manager:
             return ", ".join([str(instance) for instance in val.all()])
 
-        return str(val)
-
     if val:
         try:
             # Try to apply date formatting.
