@@ -21,8 +21,10 @@ class Author(models.Model):
 
 
 class Book(models.Model):
-    authors = models.ManyToManyField(Author)
-    publisher = models.ForeignKey(Publisher, on_delete=models.PROTECT)
+    authors = models.ManyToManyField(Author, verbose_name="writers")
+    publisher = models.ForeignKey(
+        Publisher, on_delete=models.PROTECT, verbose_name="publishing house"
+    )
     available = models.BooleanField(default=True)
     avg_rating = models.DecimalField(default=4.55, decimal_places=2, max_digits=3)
     date_published = models.DateField(default=timezone.now)

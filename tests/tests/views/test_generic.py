@@ -295,7 +295,7 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
 
     def test_fields_visible(self):
         response = self.client_get()
-        fields = ("title", "authors", "publisher", "date published", "stock")
+        fields = ("title", "writers", "publishing house", "date published", "stock")
         for field in fields:
             self.assertContains(response, field)
 
@@ -341,12 +341,37 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertContains(response, expected_award_value)
         self.assertContains(response, expected_award_label)
 
-    @unittest.skip("Not implemented")
     def test_foreign_key(self):
-        pass
+        response = self.client_get()
+
+        model_field = Book._meta.get_field("publisher")
+
+        self.assertContains(response, model_field.verbose_name)
+        self.assertContains(response, str(self.object.publisher))
+
+    def test_many_to_many(self):
+        Author.objects.bulk_create([
+            Author(first_name="James", last_name="Bond"),
+            Author(first_name="John", last_name="Doe"),
+        ])
+
+        authors = Author.objects.all()
+
+        expected_authors_value = ", ".join([
+            f"{author.first_name} {author.last_name}" for author in authors
+        ])
+
+        self.object.authors.set(authors)
+
+        model_field = Book._meta.get_field("authors")
+
+        response = self.client_get()
+
+        self.assertContains(response, expected_authors_value)
+        self.assertContains(response, model_field.verbose_name)
 
     @unittest.skip("Not implemented")
-    def test_many_to_many(self):
+    def test_reverse_many_to_many(self):
         pass
 
 
