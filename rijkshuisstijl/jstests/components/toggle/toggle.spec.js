@@ -87,7 +87,7 @@ describe('toggle/toggle.js - Toggle ', function () {
         let toggle = new this.Toggle();
         this.node.dataset.toggleLinkMode = 'normal';
         toggle.constructor(this.node);
-        let eventMock = { target: toggle.node, preventDefault: sinon.fake() };
+        let eventMock = { target: toggle.node, preventDefault: sinon.fake(), stopPropagation: sinon.fake() };
         toggle.onClick(eventMock);
         assert.equal(eventMock.preventDefault.callCount, 1);
     });
@@ -96,7 +96,7 @@ describe('toggle/toggle.js - Toggle ', function () {
         let toggle = new this.Toggle();
         this.node.dataset.toggleLinkMode = 'positive';
         toggle.constructor(this.node);
-        let eventMock = { target: toggle.node, preventDefault: sinon.fake() };
+        let eventMock = { target: toggle.node, preventDefault: sinon.fake(), stopPropagation: sinon.fake() };
         toggle.onClick(eventMock);
         assert.equal(eventMock.preventDefault.callCount, 1);
     });
@@ -105,7 +105,7 @@ describe('toggle/toggle.js - Toggle ', function () {
         let toggle = new this.Toggle();
         this.node.dataset.toggleLinkMode = 'negative';
         toggle.constructor(this.node);
-        let eventMock = { target: toggle.node, preventDefault: sinon.fake() };
+        let eventMock = { target: toggle.node, preventDefault: sinon.fake(), stopPropagation: sinon.fake() };
         toggle.onClick(eventMock);
         assert.equal(eventMock.preventDefault.callCount, 1);
     });
@@ -114,7 +114,7 @@ describe('toggle/toggle.js - Toggle ', function () {
         let toggle = new this.Toggle();
         this.node.dataset.toggleLinkMode = 'prevent';
         toggle.constructor(this.node);
-        let eventMock = { target: toggle.node, preventDefault: sinon.fake() };
+        let eventMock = { target: toggle.node, preventDefault: sinon.fake(), stopPropagation: sinon.fake() };
         toggle.onClick(eventMock);
         assert.equal(eventMock.preventDefault.callCount, 1);
     });
@@ -124,7 +124,7 @@ describe('toggle/toggle.js - Toggle ', function () {
         sinon.spy(toggle, 'toggle');
         this.node.dataset.toggleLinkMode = 'normal';
         toggle.constructor(this.node);
-        let eventMock = { target: toggle.node, preventDefault: sinon.fake() };
+        let eventMock = { target: toggle.node, preventDefault: sinon.fake(), stopPropagation: sinon.fake() };
         toggle.onClick(eventMock);
 
         Utils.delay(100)
@@ -139,7 +139,7 @@ describe('toggle/toggle.js - Toggle ', function () {
         sinon.spy(toggle, 'saveState');
         this.node.dataset.toggleLinkMode = 'normal';
         toggle.constructor(this.node);
-        let eventMock = { target: toggle.node, preventDefault: sinon.fake() };
+        let eventMock = { target: toggle.node, preventDefault: sinon.fake(), stopPropagation: sinon.fake() };
         toggle.onClick(eventMock);
 
         Utils.delay(100)
@@ -154,7 +154,7 @@ describe('toggle/toggle.js - Toggle ', function () {
         sinon.spy(toggle, 'focus');
         this.node.dataset.toggleLinkMode = 'normal';
         toggle.constructor(this.node);
-        let eventMock = { target: toggle.node, preventDefault: sinon.fake() };
+        let eventMock = { target: toggle.node, preventDefault: sinon.fake(), stopPropagation: sinon.fake() };
         toggle.onClick(eventMock);
 
         Utils.delay(100)

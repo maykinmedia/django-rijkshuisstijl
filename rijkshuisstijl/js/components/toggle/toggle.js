@@ -55,17 +55,21 @@ export class Toggle {
         if (toggleLinkMode === 'normal') {
             if (!e.target.href || e.target.href === '#') {
                 e.preventDefault();
+                e.stopPropagation();
             }
         } else if (toggleLinkMode === 'positive') {
             if(!e.target.href || !this.getState()) {
                 e.preventDefault();
+                e.stopPropagation();
             }
         } else if (toggleLinkMode === 'negative') {
             if(!e.target.href || this.getState()) {
                 e.preventDefault();
+                e.stopPropagation();
             }
         } else if (toggleLinkMode === 'prevent') {
             e.preventDefault();
+            e.stopPropagation();
         }
 
 
