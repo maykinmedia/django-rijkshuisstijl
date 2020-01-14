@@ -1,8 +1,10 @@
+import unittest
+
 from django.test import TestCase, RequestFactory
 from django.urls import reverse_lazy
 
 from rijkshuisstijl.views.generic import TemplateView, CreateView, DetailView, ListView, UpdateView
-from ...models import Book, Publisher, Author
+from ...models import Author, Award, Book, Publisher
 
 
 class ViewTestCaseMixin:
@@ -213,6 +215,7 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.object = Book.objects.create(publisher=self.publisher)
         self.object.authors.set((self.author,))
 
+
     def test_context_default(self):
         response = self.client_get()
         context_toolbar = response.context_data.get("toolbar_config")
@@ -301,7 +304,7 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertNotContains(response, "last updated")
         self.assertNotContains(response, "last_updated")
 
-    def test_related_field(self):
+    def test_reverse_foreign_key_field(self):
         kwargs = {"pk": self.publisher.pk}
         url_name = "publisher-detail"
 
@@ -317,6 +320,34 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
 
         expected_book_value = ", ".join([str(book) for book in books])
         self.assertContains(response, expected_book_value)
+
+    def test_reverse_related_name_field(self):
+        kwargs = {"pk": self.author.pk}
+        url_name = "author-detail"
+
+        awards = [
+            Award(name="Book of the year 2012", author=self.author),
+            Award(name="Book of the decade 2020", author=self.author),
+            Award(name="Book of the century 1900", author=self.author),
+        ]
+
+        Award.objects.bulk_create(awards)
+
+        response = self.client_get(url_name=url_name, kwargs=kwargs)
+
+        expected_award_value = ", ".join([str(award) for award in awards])
+        expected_award_label = Award.Meta.verbose_name_plural
+
+        self.assertContains(response, expected_award_value)
+        self.assertContains(response, expected_award_label)
+
+    @unittest.skip("Not implemented")
+    def test_foreign_key(self):
+        pass
+
+    @unittest.skip("Not implemented")
+    def test_many_to_many(self):
+        pass
 
 
 class ListViewTestCase(ViewTestCaseMixin, TestCase):
