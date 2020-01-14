@@ -40,7 +40,7 @@ class Book(models.Model):
 class Award(models.Model):
     name = models.CharField(max_length=255)
     author = models.ForeignKey(
-        Author, related_name="authors", on_delete=models.CASCADE
+        Author, related_name="awards", on_delete=models.CASCADE
     )
 
     def __str__(self):

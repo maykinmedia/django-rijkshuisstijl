@@ -336,7 +336,7 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         response = self.client_get(url_name=url_name, kwargs=kwargs)
 
         expected_award_value = ", ".join([str(award) for award in awards])
-        expected_award_label = Award.Meta.verbose_name_plural
+        expected_award_label = Award._meta.verbose_name_plural
 
         self.assertContains(response, expected_award_value)
         self.assertContains(response, expected_award_label)

@@ -61,22 +61,22 @@ def format_value(obj, field):
     except FieldDoesNotExist:
         model_field = None
 
+    if model_field and model_field.is_relation:
+        if hasattr(val, "all"):
+            return ", ".join([str(instance) for instance in val.all()])
+        return str(val)
+
     if field.endswith("_set"):
         possible_related_field = field.replace("_set", "")
 
         try:
             related_manager = obj._meta.get_field(possible_related_field)
-        except FieldDoesNotExist:
+        except (FieldDoesNotExist, AttributeError) as e:
             related_manager = None
 
-        if related_manager and any([related_manager.field.many_to_many, related_manager.field.one_to_many]):
+        if related_manager:
             return ", ".join([str(instance) for instance in val.all()])
 
-    if model_field and any([model_field.many_to_many, model_field.one_to_many]):
-        # In case the field is a related manager, return a comma seperated
-        # string with the string representation of each instance.
-        return ", ".join([str(instance) for instance in val.all()])
-    elif model_field and model_field.many_to_one:
         return str(val)
 
     if val:
