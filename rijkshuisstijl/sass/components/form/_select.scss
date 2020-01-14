@@ -22,10 +22,6 @@
     padding: 0!important;
   }
 
-  &--border {
-    @include color-primary(border-color);
-  }
-
   &__option {
     padding: 0 $input-padding-h;
   }

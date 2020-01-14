@@ -44,10 +44,11 @@
 }
 
 @mixin input {
-  @include border(all);
   @include color-background;
   appearance: none;
+  border: none;
   border-radius: 0;
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   outline: none;
@@ -62,14 +63,18 @@
     @include body;
   }
 
-  &:not([type=checkbox]):not([type=radio]):not(#{&}--border) {
-    border: none;
-  }
-
   &--big  {
     @include rows(1, min-height);
-    border-width: 2px;
     font-weight: bold;
+  }
+
+  &--border {
+    @include border(all);
+    @include color-primary(border-color);
+  }
+
+  &--big#{&}--border {
+    border-width: 2px;
   }
 
   &#{&}--primary {

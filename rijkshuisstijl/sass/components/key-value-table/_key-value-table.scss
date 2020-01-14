@@ -50,4 +50,12 @@ $key-value-table-padding-caption: 1em 0 0.15em;
   &__value {
     @include h4;
   }
+
+  .input {
+    @extend .input--border;
+  }
+
+  .select {
+    @extend .select--border;
+  }
 }
