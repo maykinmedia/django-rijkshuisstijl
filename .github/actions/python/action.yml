@@ -1,5 +1,5 @@
-name: "Python test runner"
-description: "Run python tests with runtests.py"
+name: 'Python test runner'
+description: 'Run python tests with runtests.py'
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: 'docker'
+  image: '../../../Dockerfile'
