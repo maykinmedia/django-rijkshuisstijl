@@ -13,4 +13,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run the python tests
-      uses: actions/django-rijkshuisstijl@v1
+      uses: ./.github/actions/python
