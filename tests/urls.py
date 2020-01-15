@@ -26,4 +26,11 @@ urlpatterns = [
         ),
         name="author-detail"
     ),
+     path(
+        "/author/<int:pk>/books",
+        DetailView.as_view(
+            model=Author, fields=("book_set",)
+        ),
+        name="author-book-detail"
+    ),
 ]

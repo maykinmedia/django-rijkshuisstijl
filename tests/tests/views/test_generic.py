@@ -304,6 +304,14 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertNotContains(response, "last updated")
         self.assertNotContains(response, "last_updated")
 
+    def test_foreign_key(self):
+        response = self.client_get()
+
+        model_field = Book._meta.get_field("publisher")
+
+        self.assertContains(response, model_field.verbose_name)
+        self.assertContains(response, str(self.object.publisher))
+
     def test_reverse_foreign_key_field(self):
         kwargs = {"pk": self.publisher.pk}
         url_name = "publisher-detail"
@@ -341,14 +349,6 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertContains(response, expected_award_value)
         self.assertContains(response, expected_award_label)
 
-    def test_foreign_key(self):
-        response = self.client_get()
-
-        model_field = Book._meta.get_field("publisher")
-
-        self.assertContains(response, model_field.verbose_name)
-        self.assertContains(response, str(self.object.publisher))
-
     def test_many_to_many(self):
         Author.objects.bulk_create([
             Author(first_name="James", last_name="Bond"),
@@ -370,9 +370,24 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertContains(response, expected_authors_value)
         self.assertContains(response, model_field.verbose_name)
 
-    @unittest.skip("Not implemented")
     def test_reverse_many_to_many(self):
-        pass
+        kwargs = {"pk": self.author.pk}
+        url_name = "author-book-detail"
+
+        books = [
+            Book.objects.create(title="Lord Of The Rings", publisher=self.publisher),
+            Book.objects.create(title="The Witcher", publisher=self.publisher),
+        ]
+
+        self.author.book_set.set(books)
+
+        response = self.client_get(url_name=url_name, kwargs=kwargs)
+
+        expected_book_value = ", ".join([str(book) for book in books])
+        expected_book_label = "book set"
+
+        self.assertContains(response, expected_book_value)
+        self.assertContains(response, expected_book_label)
 
 
 class ListViewTestCase(ViewTestCaseMixin, TestCase):
