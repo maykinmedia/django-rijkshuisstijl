@@ -326,7 +326,10 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         response = self.client_get(url_name=url_name, kwargs=kwargs)
 
         expected_book_value = ", ".join([str(book) for book in books])
+        expected_book_label = "book set"
+
         self.assertContains(response, expected_book_value)
+        self.assertContains(response, expected_book_label)
 
     def test_reverse_related_name_field(self):
         kwargs = {"pk": self.author.pk}
