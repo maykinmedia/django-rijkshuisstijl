@@ -4,7 +4,7 @@ from rijkshuisstijl.views.generic import CreateView, DetailView, ListView, Updat
 from tests.models import Author, Book, Publisher
 
 app_name = "test"
-fields = ("title", "authors", "publisher", "date_published", "stock")
+fields = ("title", "authors", "publisher", "date_published", "stock", "random_set")
 
 urlpatterns = [
     path("template", TemplateView.as_view(), name="template"),

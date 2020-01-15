@@ -31,6 +31,9 @@ class Book(models.Model):
     last_updated = models.DateTimeField(default=timezone.now)
     stock = models.IntegerField(default=10)
     title = models.CharField(max_length=255, default="Lorem Ipsum")
+    random_set = models.CharField(
+        max_length=255, default="Lorem Lorem", verbose_name="random set"
+    )
 
     def __str__(self):
         return self.title

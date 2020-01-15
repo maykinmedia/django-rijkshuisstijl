@@ -215,7 +215,6 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.object = Book.objects.create(publisher=self.publisher)
         self.object.authors.set((self.author,))
 
-
     def test_context_default(self):
         response = self.client_get()
         context_toolbar = response.context_data.get("toolbar_config")
@@ -227,7 +226,7 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertEqual(context_key_value_table.get("object"), self.object)
         self.assertEqual(
             context_key_value_table.get("fields"),
-            ("title", "authors", "publisher", "date_published", "stock"),
+            ("title", "authors", "publisher", "date_published", "stock", "random_set"),
         )
 
     def test_context_custom(self):
@@ -389,6 +388,14 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertContains(response, expected_book_value)
         self.assertContains(response, expected_book_label)
 
+    def test_set_field_without_relation(self):
+        response = self.client_get()
+
+        model_field = Book._meta.get_field("random_set")
+
+        self.assertContains(response, model_field.verbose_name)
+        self.assertContains(response, model_field.default)
+
 
 class ListViewTestCase(ViewTestCaseMixin, TestCase):
     url_name = "list"
@@ -415,7 +422,8 @@ class ListViewTestCase(ViewTestCaseMixin, TestCase):
         context = response.context_data.get("datagrid_config")
 
         self.assertEqual(
-            context.get("columns"), ("title", "authors", "publisher", "date_published", "stock")
+            context.get("columns"),
+            ("title", "authors", "publisher", "date_published", "stock", "random_set")
         )
         self.assertEqual(context.get("queryset")[0], self.book_1)
         self.assertEqual(context.get("queryset")[1], self.book_2)
