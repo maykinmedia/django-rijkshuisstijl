@@ -407,7 +407,7 @@ class DatagridTestCase(TestCase):
         """
 
         footer_html = """
-		<footer class="datagrid__footer">
+        <footer class="datagrid__footer">
           <div class="toolbar toolbar--pad toolbar--justify">
             <ul class="toolbar__list">
               <li class="toolbar__list-item">
@@ -515,38 +515,38 @@ class DatagridTestCase(TestCase):
         )
 
         header_html = """
-		<header class="datagrid__header">
-		 <div class="toolbar toolbar--pad toolbar--justify">
-		  <ul class="toolbar__list">
-		   <li class="toolbar__list-item">
-			<button class="button button--icon button--small button--transparent" name="Lorem" title="Foo">
-			 <span class="button__icon">
-			  <img alt="Foo" class="icon icon--image" src="data:image/png;base64,"/>
-			 </span>
-			 <span class="button__label">
-			  Foo
-			 </span>
-			</button>
-		   </li>
-		   <li class="toolbar__list-item">
-			<button class="button button--icon button--small button--danger" name="Ipsum" title="Bar">
-			 <span class="button__icon">
-			  <img alt="Bar" class="icon icon--image" src="data:image/png;base64,"/>
-			 </span>
-			 <span class="button__label">
-			  Bar
-			 </span>
-			</button>
-		   </li>
-		  </ul>
-		  <ul class="toolbar__list">
-		   <li class="toolbar__list-item">
-			<div class="filter filter--class-only filter--filter" data-filter-target="#my-first-datagrid tbody tr">
-			 <input class="input filter__input" placeholder="Filteren op pagina" type="search"/>
-			</div>
-		   </li>
-		  </ul>
-		 </div>
+        <header class="datagrid__header">
+         <div class="toolbar toolbar--pad toolbar--justify">
+          <ul class="toolbar__list">
+           <li class="toolbar__list-item">
+            <button class="button button--icon button--small button--transparent" name="Lorem" title="Foo">
+             <span class="button__icon">
+              <img alt="Foo" class="icon icon--image" src="data:image/png;base64,"/>
+             </span>
+             <span class="button__label">
+              Foo
+             </span>
+            </button>
+           </li>
+           <li class="toolbar__list-item">
+            <button class="button button--icon button--small button--danger" name="Ipsum" title="Bar">
+             <span class="button__icon">
+              <img alt="Bar" class="icon icon--image" src="data:image/png;base64,"/>
+             </span>
+             <span class="button__label">
+              Bar
+             </span>
+            </button>
+           </li>
+          </ul>
+          <ul class="toolbar__list">
+           <li class="toolbar__list-item">
+            <div class="filter filter--class-only filter--filter" data-filter-target="#my-first-datagrid tbody tr">
+             <input class="input filter__input" placeholder="Filteren op pagina" type="search"/>
+            </div>
+           </li>
+          </ul>
+         </div>
 		</header>
         """
 
