@@ -22,6 +22,7 @@ class FormMixin:
     text = None
     wysiwyg = None
     actions_position = "auto"
+    help_text_position = "bottom"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -40,6 +41,7 @@ class FormMixin:
             "text": self.text,
             "wysiwyg": self.wysiwyg,
             "actions_position": self.actions_position,
+            "help_text_position": self.help_text_position,
         }
 
 

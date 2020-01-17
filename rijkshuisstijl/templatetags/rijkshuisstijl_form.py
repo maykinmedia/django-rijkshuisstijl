@@ -94,6 +94,7 @@ def form(context, form=None, label="", **kwargs):
     kwargs["status"] = kwargs.get("status")
     kwargs["tag"] = kwargs.get("tag", "form")
     kwargs["actions_position"] = kwargs.get("actions_position", "auto")
+    kwargs["help_text_position"] = kwargs.get("help_text_position", "bottom")
 
     kwargs["request"] = context["request"]
     kwargs["config"] = kwargs
@@ -103,6 +104,7 @@ def form(context, form=None, label="", **kwargs):
 @register.inclusion_tag("rijkshuisstijl/components/form/form-control.html")
 def form_control(**kwargs):
     kwargs = merge_config(kwargs)
+    kwargs["help_text_position"] = kwargs.get("help_text_position", "bottom")
     kwargs["config"] = kwargs
     return kwargs
 

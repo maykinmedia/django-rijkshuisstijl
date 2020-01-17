@@ -18,6 +18,11 @@
             <div class="form-control__body">
         {% endif %}
 
+        {% if help_text and help_text_position|default:'bottom' == 'top'%}
+            {# Input help text #}
+            {% include 'rijkshuisstijl/components/form/help-text.html' with for=id %}
+        {% endif %}
+
         {% firstof input_template field.input_template as input_template %}
         {% if input_template %}
             {# Custom input template #}
@@ -138,7 +143,7 @@
             {# Input errors #}
             {% include 'rijkshuisstijl/components/form/errors.html' with for=id %}
         {% endif %}
-        {% if help_text %}
+        {% if help_text and help_text_position|default:'bottom' == 'bottom'%}
             {# Input help text #}
             {% include 'rijkshuisstijl/components/form/help-text.html' with for=id %}
         {% endif %}
