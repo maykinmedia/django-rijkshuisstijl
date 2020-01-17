@@ -21,7 +21,8 @@
             {# Allow admin like fieldsets to be defined on regular forms. #}
             {% if form.fieldsets %}
                 {% for fieldset in form.fieldsets %}
-                    {# Last fieldset gets actions appended to it if actions_postion equals auto.  #}
+
+                    {# First fieldset gets actions appended to it if actions_postion equals top or both. #}
                     {% if forloop.first and actions_position in 'top,both' %}
                         <div class="form__body form__body--transparent">
                             {% include 'rijkshuisstijl/components/form/actions.html' with align='right' button_class=button_class label=label %}
@@ -33,6 +34,7 @@
                     {% if fieldset.0 %}<h2 class="form__caption" id="{{ fieldset.0|slugify }}" aria-hidden="true">{{ fieldset.0 }}</h2>{% endif %}
                     <fieldset class="form__fieldset{% if fieldset.1.classes %} {{ fieldset.1.classes|join:' ' }}{% endif %}">
                         {% if fieldset.0 %}<legend class="form__legend">{{ fieldset.0 }}</legend>{% endif %}
+
                          {# TODO: Possible candidate for optimisation. #}
                         {% for field in form %}
                             {% if field.name in fieldset.1.fields %}
@@ -40,13 +42,13 @@
                             {% endif %}
                         {% endfor %}
 
-                        {# Last fieldset gets actions appended to it if actions_postion equals auto.  #}
+                        {# Last fieldset gets actions appended to it if actions_postion equals bottom. #}
                         {% if forloop.last and actions_position == 'auto' %}
                             {% include 'rijkshuisstijl/components/form/actions.html' with button_class=button_class label=label %}
                         {% endif %}
                     </fieldset>
 
-                    {# Last fieldset gets actions appended to it if actions_postion equals auto.  #}
+                    {# Last fieldset gets actions appended to it if actions_postion equals auto, bottom or both. #}
                     {% if forloop.last and actions_position in 'bottom,both' %}
                         <br>
                         <div class="form__body">
