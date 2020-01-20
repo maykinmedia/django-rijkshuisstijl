@@ -3,17 +3,15 @@
 @import '../../settings/lib/ro-shade';
 @import '../form/constants';
 
-$key-value-table-padding-caption: 1em 0 0.15em;
-
 .key-value-table {
   border-spacing: 0;
   width: 100%;
 
   &__caption {
-    @include h2;
+    @include h2(true, padding);
     @include shade-color('dark-blue');
     font-weight: normal;
-    padding: $key-value-table-padding-caption;
+    //padding: $key-value-table-padding-caption;
     text-align: left;
   }
 

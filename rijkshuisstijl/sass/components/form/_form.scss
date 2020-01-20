@@ -11,6 +11,11 @@
     @include container--small;
   }
 
+  &--full-width &__header,
+  &--full-width &__body {
+    max-width: 100%;
+  }
+
   &__header {
     padding: 0;
   }
@@ -20,20 +25,22 @@
     margin-top: $form-title-margin!important;
   }
 
+  &--no-margin &__title {
+    margin-top: 0!important;
+  }
+
   &__subtitle {
     @include h2;
   }
 
   &__caption {
-    @include h2(auto);
+    @include h2(auto, padding);
     @include shade-color('dark-blue');
     font-weight: normal;
-    //margin: $form-subtitle-margin;
   }
 
   &__required-label {
     @include body;
-    float: right;
   }
 
   &__legend {
