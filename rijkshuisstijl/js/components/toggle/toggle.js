@@ -51,9 +51,8 @@ export class Toggle {
      */
     onClick(e) {
         let toggleLinkMode = this.node.dataset.toggleLinkMode || 'normal';
-
         if (toggleLinkMode === 'normal') {
-            if (!e.target.href || e.target.href === '#') {
+            if (!e.target.getAttribute('href') || e.target.getAttribute('href') === '#') {
                 e.preventDefault();
                 e.stopPropagation();
             }
