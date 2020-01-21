@@ -164,14 +164,18 @@ class ListView(DjListView):
         return self.columns or self.get_fields()
 
     def get_filterable_columns(self):
-        if self.filterable_columns is None:
-            return self.fields or []
-        return self.orderable_columns
+        if self.filterable_columns:
+            return self.filterable_columns
+        elif self.columns:
+            return [column.get("key", column) for column in self.columns]
+        return self.get_fields() or []
 
     def get_orderable_columns(self):
-        if self.orderable_columns is None:
-            return self.get_fields() or []
-        return self.orderable_columns
+        if self.orderable_columns:
+            return self.orderable_columns
+        elif self.columns:
+            return [column.get("key", column) for column in self.columns]
+        return self.get_fields() or []
 
     def get_fields(self):
         return self.fields
