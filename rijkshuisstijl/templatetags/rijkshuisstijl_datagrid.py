@@ -364,7 +364,8 @@ def datagrid(context, **kwargs):
                 filterable_column["type"] = type(field).__name__
 
             if not "choices" in filterable_column:
-                choices = field.choices
+                choices = getattr(field, "choices", [])
+
                 if filterable_column.get("type") == "BooleanField":
                     choices = ((True, _("waar")), (False, _("onwaar")))
 
