@@ -54,6 +54,7 @@ def get_field_label(obj, field):
     """
     try:
         model = get_model(obj)
+        field = str(getattr(field, "name", field))
 
         # If column key is "__str__", use model name as label.
         if field == "__str__":
