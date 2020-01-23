@@ -53,6 +53,12 @@
     margin: 0;
   }
 
+  &--full-width .navigation-bar--dropdown .menu .menu {
+    @include tablet {
+      @include container-padding;
+    }
+  }
+
   &--full-width .layout > .form,
   &--full-width .layout > .key-value-table,
   &--full-width .layout > .tabs .tabs__tab,

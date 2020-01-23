@@ -96,6 +96,8 @@
     @include color-primary(background-color);
     @include container(flex, false);
     @include container--big(false);
+    position: relative;
+    z-index: 10;
 
     &--sticky {
       position: sticky;
@@ -168,28 +170,59 @@
     }
 
     &--dropdown {
-      .menu:before {
-        display: none;
-      }
-
-      .menu__list-item {
-        position: relative;
+      .menu .menu {
+        @include absolute;
+        @include rows(1, top);
+        @include rows(1, padding-bottom);
+        flex-direction: column;
+        top: 100%;
+        width: 100%;
+        height: auto;
       }
 
       .menu .menu {
-        @include absolute;
-        @include shade-color($scheme, 1, background-color);
+        @include shadow;
+        @include color-background;
+        @include rows(1, padding-top);
+        @include rows(1, padding-bottom);
         flex-direction: column;
-        width: auto;
-        height: auto;
-        max-height: calc(100vh - #{$header-height-tablet + $login-bar-min-height + $grid-row-height});
-        overflow-y: auto;
+        z-index: -1;
+        visibility: hidden;
       }
 
-      .menu .menu .menu__list-item:hover .menu__link {
-        @include color-background;
+      .menu > .menu__list-item:hover .menu {
+        visibility: visible;
+      }
+
+      .menu .menu:before,
+      .menu .menu:after {
+        display: none;
+      }
+
+      .menu .menu .menu__link {
+        @include border(bottom);
+        @include shade(2, border-color);
+        @include columns-responsive(4, 4.5, 4, 3);
+        @include rows(1, min-height);
+        color: inherit!important;
+        display: flex;
+        align-items: center;
+      }
+
+      .menu .menu .menu__list-item .menu__link:hover {
+        @include color-info(background-color);
         text-decoration: none;
       }
+
+      .menu .menu .menu__list-item:first-child .menu__link {
+        @include border(top);
+      }
+
+      .menu .menu .menu__list-item--active .menu__link {
+        background-color: transparent;
+        font-weight: bold;
+      }
+
     }
   }
 }
