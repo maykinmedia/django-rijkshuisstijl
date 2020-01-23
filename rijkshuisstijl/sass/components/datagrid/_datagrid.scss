@@ -81,7 +81,6 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   &__title {
     @include h4;
-    @include color-primary;
   }
 
   &__count {
