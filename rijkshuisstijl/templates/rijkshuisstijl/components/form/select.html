@@ -5,15 +5,13 @@
     class: Sets additional wrapper classes.
     id: Sets the select id.
     form_id: Sets the form attribute.
+    multiple: Sets the multiple attribute.
     name: Sets the select name.
-    placeholder: Sets the placeholder label.
     value: Sets the select value.
-    type: Sets the select type.
     size: Sets the select size.
     disabled: Makes the select disabled.
-    min: Sets the select mininum value.
-    max: Sets the select maximum value.
     required: Makes the select required.
+    onchange: Sets the onchange attribute.
 
     {% endcomment %}
 
@@ -22,9 +20,7 @@
             {% if form_id %} form="{{ form_id }}"{% endif %}
             {% if multiple %} multiple{% endif %}
             {% if name %} name="{{ name }}"{% endif %}
-            {% if placeholder %} placeholder="{{ placeholder }}"{% endif %}
             {% if value %} value="{{ value|unlocalize }}"{% endif %}
-            {% if type %} type="{{ type }}"{% endif %}
             {% if size %} size={{ size }}{% endif %}
             {% if disabled %} disabled{% endif %}
             {% if required %} required{% endif %}

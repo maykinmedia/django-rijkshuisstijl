@@ -18,7 +18,7 @@
             <div class="form-control__body">
         {% endif %}
 
-        {% if help_text and help_text_position|default:'bottom' == 'top'%}
+        {% if help_text and help_text_position|default:'bottom' == 'top' %}
             {# Input help text #}
             {% include 'rijkshuisstijl/components/form/help-text.html' with for=id %}
         {% endif %}
@@ -108,9 +108,23 @@
             {% with date_name=name|add:'_0' time_name=name|add:'_1' %}
                 {% with date_value=raw_value|input_date_format time_value=raw_value|input_time_format %}
                     {% include 'rijkshuisstijl/components/form/input.html' with id=id|add:'_date' name=date_name type='date' value=date_value %}
-                    {% include 'rijkshuisstijl/components/form/input.html' with id=id|add:'_time' name=time_name type='time' value=time_value %}
+                    {% if html5 %}
+                        {% include 'rijkshuisstijl/components/form/input.html' with id=id|add:'_time' name=time_name type='time' value=time_value %}
+                    {% else %}
+                        {% include 'rijkshuisstijl/components/form/time.html' with id=id|add:'_time' name=time_name value=time_value %}
+                    {% endif %}
                 {% endwith %}
             {% endwith %}
+
+        {% elif type == 'time' and not html5 %}
+            {# Time input #}
+            {% if form_field %}
+                {# Form field #}
+                {% include 'rijkshuisstijl/components/form/time.html' with value=form_field.value %}
+            {% else %}
+                {# Custom #}
+                {% include 'rijkshuisstijl/components/form/time.html' with value=value %}
+            {% endif %}
 
 
         {% elif type == 'file' %}
@@ -143,7 +157,7 @@
             {# Input errors #}
             {% include 'rijkshuisstijl/components/form/errors.html' with for=id %}
         {% endif %}
-        {% if help_text and help_text_position|default:'bottom' == 'bottom'%}
+        {% if help_text and help_text_position|default:'bottom' == 'bottom' %}
             {# Input help text #}
             {% include 'rijkshuisstijl/components/form/help-text.html' with for=id %}
         {% endif %}
