@@ -137,6 +137,15 @@ def form_select(**kwargs):
     return kwargs
 
 
+@register.inclusion_tag("rijkshuisstijl/components/form/help-text.html")
+def help_text(help_text, **kwargs):
+    kwargs = merge_config(kwargs)
+    kwargs["config"] = kwargs
+    kwargs["for"] = kwargs.get("for")
+    kwargs["help_text"] = kwargs.get("help_text", help_text)
+    return kwargs
+
+
 @register.inclusion_tag("rijkshuisstijl/components/form/label.html")
 def label(**kwargs):
     kwargs = merge_config(kwargs)
