@@ -18,6 +18,7 @@
             <div class="form-control__body">
         {% endif %}
 
+        {% firstof help_text_position field.help_text_position as help_text_position %}
         {% if help_text and help_text_position|default:'bottom' == 'top' %}
             {# Input help text #}
             {% include 'rijkshuisstijl/components/form/help-text.html' with for=id %}
