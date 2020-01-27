@@ -94,6 +94,11 @@
     }
   }
 
+  &--choices-stacked &__choices .checkbox + .help-text,
+  &--choices-stacked &__choices .radio + .help-text {
+    margin-top: -$form-control-margin-top;
+  }
+
   &__choices > * {
     @include mobile-only {
       margin-bottom: $input-padding-h;
