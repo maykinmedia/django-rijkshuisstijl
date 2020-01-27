@@ -9,13 +9,13 @@
     {% block extra_css %}{% endblock %}
     {% meta_icons %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% meta_js %}
+    {% block extra_js %}{% endblock %}
 </head>
 
 <body class="view__body">
 {% block body %}
 {% endblock body %}
-{% meta_js %}
-{% block extra_js %}{% endblock %}
 </body>
 </html>
 {% endspaceless %}

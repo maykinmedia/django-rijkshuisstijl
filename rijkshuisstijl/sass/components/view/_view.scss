@@ -12,14 +12,21 @@
     overflow-x: hidden;
   }
 
-  &__content {
+  &__content,
+  .layout {
     @include responsive(min-height, $view-min-height-content-mobile, $view-min-height-content-tablet);
   }
 
+  .header + &__content:last-child,
+  .header + &__content:last-child .layout {
+    @include responsive(min-height, $view-min-height-content-no-nav-no-footer-mobile, $view-min-height-content-no-nav-no-footer-tablet)
+  }
+
   .layout {
-    @include responsive(min-height, $view-min-height-content-mobile, $view-min-height-content-tablet);
     position: relative;
   }
+
+
 
   .navigation-bar--compact + &__content .layout {
     min-height: $view-min-height-content-tablet-compact;
