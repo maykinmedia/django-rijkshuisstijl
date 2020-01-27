@@ -7,7 +7,9 @@
     id: Sets the input id.
     form_id: Sets the form attribute.
     name: Sets the input name.
+    pattern: Sets the input validation pattern (RegEx).
     placeholder: Sets the placeholder label.
+    title: Sets the title attribute.
     value: Sets the input value.
     type: Sets the input type.
     size: Sets the input size.
@@ -25,7 +27,9 @@
             {% if form_id %} form="{{ form_id }}"{% endif %}
             {% if choices %}list="datalist-{{ id }}"{% endif %}
             {% if name %} name="{{ name }}"{% endif %}
+            {% if pattern %} pattern="{{ pattern}}"{% endif %}
             {% if placeholder %} placeholder="{{ placeholder }}"{% endif %}
+            {% if title %} title="{{ title }}"{% endif %}
             {% if value %} value="{{ value|unlocalize }}"{% endif %}
             {% if type %} type="{{ type }}"{% endif %}
             {% if size %} size={{ size }}{% endif %}
