@@ -86,25 +86,6 @@
     padding-right: 0;
   }
 
-  &--full-width .datagrid__caption:first-child,
-  &--full-width .datagrid__cell:first-child {
-    @include container-padding($properties: padding-left);
-  }
-
-  &--full-width .datagrid__caption:first-child .datagrid__link {
-    padding-left: 0;
-  }
-
-  &--full-width .datagrid__caption--checkbox:first-child,
-  &--full-width .datagrid__cell--checkbox:first-child {
-    width: calc(#{$checkbox-size} + 2 * #{$datagrid-spacing} + #{$grid-container-padding});
-  }
-
-  &--full-width .datagrid__caption:last-child,
-  &--full-width .datagrid__cell:last-child {
-    @include container-padding($properties: padding-right);
-  }
-
   .header {
     @include responsive(position, sticky, static);
     top: 0;

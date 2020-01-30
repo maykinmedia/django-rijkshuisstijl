@@ -96,7 +96,7 @@ $shades: (
   gray-7: #535353,
 );
 
-$color-border: map_get($shades, 'gray-2');
+$color-border: map-get($colors, 'heaven-blue-shade-2');
 
 
 /**

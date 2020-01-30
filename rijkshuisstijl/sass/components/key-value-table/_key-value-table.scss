@@ -49,11 +49,8 @@
     @include h4;
   }
 
-  .input {
-    @extend .input--border;
-  }
-
+  .input,
   .select {
-    @extend .select--border;
+    @extend .input--bordered;
   }
 }

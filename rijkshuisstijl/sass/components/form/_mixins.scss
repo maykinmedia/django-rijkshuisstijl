@@ -44,6 +44,7 @@
 }
 
 @mixin input {
+  @include body;
   @include color-background;
   appearance: none;
   border: none;
@@ -59,36 +60,36 @@
     opacity: 0.2;
   }
 
-  &:not([type=checkbox]):not([type=radio]) {
-    @include body;
+  &:focus {
+    @include shade-color(heaven-blue, 1, outline-color, $force: true);
+    outline: 2px solid;
   }
 
-  &--big  {
-    @include rows(1, min-height);
-    font-weight: bold;
-  }
-
-  &--border {
-    @include border(all);
-    @include color-primary(border-color);
-  }
-
-  &--big#{&}--border {
-    border-width: 2px;
-  }
-
-  &#{&}--primary {
-    @include color-primary(border-color);
-    @include color-primary(color);
+  &[readonly]:focus {
+    outline-color: $color-gray !important;
   }
 
   &::placeholder {
     color: $input-color-placeholder;
   }
 
-  &:focus {
-    @include shade-color(heaven-blue, 1, outline-color, $force: true);
-    outline: 2px solid;
+  &--big {
+    @include rows(1, min-height);
+    font-weight: bold!important;
+  }
+
+  &--bordered {
+    @include border(all);
+    @include color-primary(border-color);
+  }
+
+  &--big#{&}--bordered {
+    border-width: 2px;
+  }
+
+  &--contrast {
+    @include shade(1, background-color);
+    @include shade(5, color);
   }
 
   &--error {
@@ -96,7 +97,8 @@
     outline: 2px solid;
   }
 
-  &[readonly]:focus {
-    outline-color: $color-gray !important;
+  &#{&}--primary {
+    @include color-primary(border-color);
+    @include color-primary(color);
   }
 }

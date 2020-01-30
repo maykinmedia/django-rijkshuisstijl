@@ -1,0 +1,20 @@
+{% spaceless %}{% load rijkshuisstijl %}
+    <ul class="toolbar__list">
+        {% if form_select %}
+            <li class="toolbar__list-item">
+                {% form_select config=form_select %}
+            </li>
+        {% endif %}
+
+        {% for item in form_buttons %}
+            <li class="toolbar__list-item">
+                {% firstof item.class 'button--transparent' as item_class %}
+                {% if item.href %}
+                    {% button_link class='button--small '|add:item_class config=item %}
+                {% else %}
+                    {% button class='button--small '|add:item_class config=item %}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endspaceless %}

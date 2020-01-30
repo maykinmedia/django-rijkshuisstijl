@@ -1,3 +1,4 @@
+@import "font-awesome/scss/font-awesome";
 @import 'microscope/color';
 @import 'microscope/grid';
 @import 'microscope/responsive';
@@ -14,12 +15,14 @@
 @import '../toolbar/constants';
 
 
-$datagrid-spacing: 0.4em;
-$datagrid-offset-caption-mobile: $header-height-mobile;
-
+$datagrid-offset-caption: $grid-row-height;
+$datagrid-offset-filter-mobile: $typography-line-height-text-small-mobile * $typography-font-size-text-small-mobile;
+$datagrid-offset-filter-desktop: $typography-line-height-text-small-desktop * $typography-font-size-text-small-desktop;
+$datagrid-spacing: $grid-container-padding;
+$datagrid-spacing-row-h: $datagrid-spacing;
+$datagrid-spacing-row-v: calc((#{$grid-row-height} - #{$typography-line-height-text} * 1em) / 2);
 
 .datagrid {
-  @include border(all);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -44,17 +47,6 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   &__footer {
     @include sticky(0, 'bottom');
-  }
-
-  &__infobar {
-    @include outline;
-    @include border(all);
-    background-color: $toolbar-color-background;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
-    padding: $datagrid-spacing;
   }
 
   .toolbar:empty {
@@ -98,7 +90,6 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
   }
 
   &__table {
-    @include outline;
     border-collapse: collapse;
     width: 100%;
   }
@@ -107,12 +98,8 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     table-layout: fixed;
   }
 
-  &__row {
-    @include color-background;
-  }
-
-  &__thead &__row {
-    @include border(all);
+  &__row--cells:not(&__row--placeholder):hover {
+    @include color-info(background-color);
   }
 
   @each $color-name, $color in $colors {
@@ -128,18 +115,11 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     }
   }
 
-  &__table-body &__row:not(&__row--placeholder):hover {
-    @include color-info(background-color);
-  }
-
   &__caption,
   &__filter,
   &__cell {
     @include body;
-    @include body--small;
-    @include border;
     box-sizing: border-box;
-    padding: $datagrid-spacing;
     position: relative;
     text-align: left;
 
@@ -156,28 +136,57 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   &__caption,
   &__filter {
-    @include outline;
     background-color: $toolbar-color-background;
     z-index: 10;
   }
 
   &__caption {
-    @include sticky('#{$toolbar-spacing} * 2 + #{$button-height-small}');
+    @include body--small;
+    @include color-background;
+    @include shade(3, color);
+    @include sticky($datagrid-offset-caption);
+    padding: 0 $datagrid-spacing-row-h / 2;
 
-    &--orderable {
-      @include anchor(true);
+    &:first-child {
+      padding-left: $datagrid-spacing-row-h;
+    }
+
+    &:last-child {
+      padding-right: $datagrid-spacing-row-h;
     }
   }
 
+  &__caption#{&}__caption--checkbox {
+     padding-left: $datagrid-spacing-row-h * 2;
+  }
+
+  &__caption--ordered-asc,
+  &__caption--ordered-desc {
+    @include anchor(true);
+  }
+
   &__filter {
-    @include sticky('#{$toolbar-spacing} * 2 + #{$button-height-small} + #{$datagrid-filter-height}');
-    padding: 0;
+    @include shade(1, background-color);
+    @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-mobile} + 4px');
+    padding: $datagrid-spacing-row-v $datagrid-spacing-row-h / 2;
+
+    @include desktop {
+      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-desktop} + 4px');
+    }
+
+    &:first-child {
+      padding-left: $datagrid-spacing-row-h;
+    }
+
+    &:last-child {
+      padding-right: $datagrid-spacing-row-h;
+    }
 
     .input,
     .select {
       width: 100%;
       height: $datagrid-filter-height;
-      padding: $datagrid-spacing;
+      padding: 0 $datagrid-spacing-row-h;
 
       &[select],
       &[value] {
@@ -192,28 +201,19 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     }
   }
 
-
-  &__caption--orderable {
-    padding: 0;
-
-    &:after {
-      @include center-v;
-      transform: tr_translate(null, -50%) tr_scale(0.5);
-      right: $datagrid-spacing;
-    }
+  &__caption--orderable &__icon {
+    @extend .fa;
+    @extend .fa-sort;
+    @include center-v;
+    right: $datagrid-spacing-row-h;
   }
 
-  &__caption--ordered-asc,
-  &__caption--ordered-desc {
-    background-color: $toolbar-color-border;
+  &__caption--ordered-asc &__icon {
+    @extend .fa-sort-up;
   }
 
-  &__caption--ordered-asc {
-    @include ro-icon-after('delta-omhoog');
-  }
-
-  &__caption--ordered-desc {
-    @include ro-icon-after('delta-omlaag');
+  &__caption--ordered-desc &__icon {
+    @extend .fa-sort-down;
   }
 
   &__caption--orderable &__link {
@@ -221,8 +221,6 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: $datagrid-spacing;
-    padding-right: $datagrid-spacing * 4;
   }
 
   &--overflow &__caption {
@@ -232,6 +230,21 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
   &--overflow-mobile &__caption {
     @include mobile-only {
       position: static;
+    }
+  }
+
+  &__cell {
+    $spacing-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-h;
+    @include border;
+    padding: $datagrid-spacing-row-v $spacing-h;
+    position: relative;
+
+    &:first-child {
+      padding-left: $datagrid-spacing-row-h * 2;
+    }
+
+    &:last-child {
+      padding-right: $datagrid-spacing-row-h * 2;
     }
   }
 
@@ -251,5 +264,13 @@ $datagrid-offset-caption-mobile: $header-height-mobile;
 
   &__caption &__link {
     color: inherit;
+  }
+
+  .toolbar__list {
+    margin: $datagrid-spacing-row-v 0;
+  }
+
+  .toolbar__list-item:not(:last-child) {
+    margin-right: $datagrid-spacing-row-h;
   }
 }

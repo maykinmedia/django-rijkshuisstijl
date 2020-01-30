@@ -1,8 +1,8 @@
 from django.core.paginator import Paginator
 from django.template import Context, Template
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 
-from ...models import Publisher, Author, Book
+from ...models import Author, Book, Publisher
 
 
 class DatagridTestCase(TestCase):
@@ -235,7 +235,8 @@ class DatagridTestCase(TestCase):
         self.assertIn(str(self.book_3), html)
         self.assertIn("paginator", html)
         self.assertInHTML(
-            '<input class="input" name="p" value="2" type="number" min="1" max="2">', html
+            '<input class="input input--contrast" name="p" value="2" type="number" min="1" max="2">',
+            html,
         )
 
         # object_list
@@ -256,7 +257,8 @@ class DatagridTestCase(TestCase):
         self.assertIn("paginator", html)
         self.assertIn("paginator", html)
         self.assertInHTML(
-            '<input class="input" name="p" value="2" type="number" min="1" max="2">', html
+            '<input class="input input--contrast" name="p" value="2" type="number" min="1" max="2">',
+            html,
         )
 
     def test_pagination(self):
@@ -286,7 +288,8 @@ class DatagridTestCase(TestCase):
         self.assertIn("paginator", html)
         self.assertIn("paginator", html)
         self.assertInHTML(
-            '<input class="input" name="p" value="2" type="number" min="1" max="2">', html
+            '<input class="input input--contrast" name="p" value="2" type="number" min="1" max="2">',
+            html,
         )
 
     def test_custom_presentation(self):
@@ -333,16 +336,16 @@ class DatagridTestCase(TestCase):
               <span class="button__label">Foo</span>
             </button>
             """,
-            html
+            html,
         )
         self.assertInHTML(
-          """
+            """
             <button class="button button--icon button--small button--danger" name="Ipsum" title="Bar" >
               <span class="button__icon"><img class="icon icon--image" alt="Bar" src="data:image/png;base64,"></span>
               <span class="button__label">Bar</span>
             </button>
             """,
-            html
+            html,
         )
         self.assertInHTML(
             '<input class="input select-all" type="checkbox" data-select-all="#my-first-datagrid .datagrid__cell--checkbox .input">',
@@ -370,63 +373,13 @@ class DatagridTestCase(TestCase):
             }
         )
 
-        header_html = """
-        <header class="datagrid__header">
-         <div class="toolbar toolbar--pad toolbar--justify">
-          <ul class="toolbar__list">
-           <li class="toolbar__list-item">
-            <button class="button button--icon button--small button--transparent" name="Lorem" title="Foo">
-             <span class="button__icon">
-              <img alt="Foo" class="icon icon--image" src="data:image/png;base64,"/>
-             </span>
-             <span class="button__label">
-              Foo
-             </span>
-            </button>
-           </li>
-           <li class="toolbar__list-item">
-            <button class="button button--icon button--small button--danger" name="Ipsum" title="Bar">
-             <span class="button__icon">
-              <img alt="Bar" class="icon icon--image" src="data:image/png;base64,"/>
-             </span>
-             <span class="button__label">
-              Bar
-             </span>
-            </button>
-           </li>
-          </ul>
-          <ul class="toolbar__list">
-           <li class="toolbar__list-item">
-            <div class="filter filter--class-only filter--filter" data-filter-target="#my-first-datagrid tbody tr">
-             <input class="input filter__input" placeholder="Filteren op pagina" type="search"/>
-            </div>
-           </li>
-          </ul>
-         </div>
-        </header>
-        """
+        button_pos = html.find('class="button')
+        table_body_pos = html.find('class="datagrid__table-body')
 
-        footer_html = """
-        <footer class="datagrid__footer">
-          <div class="toolbar toolbar--pad toolbar--justify">
-            <ul class="toolbar__list">
-              <li class="toolbar__list-item">
-                <button class="button button--small button--transparent" name="Lorem" title="Foo">
-                  <span class="button__label">Foo</span><img class="icon icon--image" alt="Foo" src="data:image/png;base64,">
-                </button>
-              </li>
-              <li class="toolbar__list-item">
-                <button class="button button--small button--danger" name="Ipsum" title="Bar">
-                    <span class="button__label">Bar</span><img class="icon icon--image" alt="Bar" src="data:image/png;base64,">
-                </button>
-              </li>
-            </ul>
-          </div>
-        </footer>
-        """
+        self.assertGreater(button_pos, -1)
+        self.assertGreater(table_body_pos, -1)
 
-        self.assertInHTML(header_html, html)
-        self.assertNotIn(footer_html, html)
+        self.assertLess(button_pos, table_body_pos)
 
     def test_toolbar_position_bottom(self):
         html = self.template_render(
@@ -448,51 +401,13 @@ class DatagridTestCase(TestCase):
             }
         )
 
-        header_html = """
-        <header class="datagrid__header">
-         <div class="toolbar toolbar--pad toolbar--align-right">
-          <ul class="toolbar__list">
-           <li class="toolbar__list-item">
-            <div class="filter filter--class-only filter--filter" data-filter-target="#my-first-datagrid tbody tr">
-             <input class="input filter__input" placeholder="Filteren op pagina" type="search"/>
-            </div>
-           </li>
-          </ul>
-         </div>
-        </header>
-        """
+        button_pos = html.find('class="button')
+        table_body_pos = html.find('class="datagrid__table-body')
 
-        footer_html = """
-        <footer class="datagrid__footer">
-         <div class="toolbar toolbar--pad toolbar--justify">
-          <ul class="toolbar__list">
-           <li class="toolbar__list-item">
-            <button class="button button--icon button--small button--transparent" name="Lorem" title="Foo">
-             <span class="button__icon">
-              <img alt="Foo" class="icon icon--image" src="data:image/png;base64,"/>
-             </span>
-             <span class="button__label">
-              Foo
-             </span>
-            </button>
-           </li>
-           <li class="toolbar__list-item">
-            <button class="button button--icon button--small button--danger" name="Ipsum" title="Bar">
-             <span class="button__icon">
-              <img alt="Bar" class="icon icon--image" src="data:image/png;base64,"/>
-             </span>
-             <span class="button__label">
-              Bar
-             </span>
-            </button>
-           </li>
-          </ul>
-         </div>
-        </footer>
-        """
+        self.assertGreater(button_pos, -1)
+        self.assertGreater(table_body_pos, -1)
 
-        self.assertNotIn(header_html, html)
-        self.assertInHTML(footer_html, html)
+        self.assertGreater(button_pos, table_body_pos)
 
     def test_toolbar_position_both(self):
         html = self.template_render(
@@ -514,73 +429,15 @@ class DatagridTestCase(TestCase):
             }
         )
 
-        header_html = """
-        <header class="datagrid__header">
-         <div class="toolbar toolbar--pad toolbar--justify">
-          <ul class="toolbar__list">
-           <li class="toolbar__list-item">
-            <button class="button button--icon button--small button--transparent" name="Lorem" title="Foo">
-             <span class="button__icon">
-              <img alt="Foo" class="icon icon--image" src="data:image/png;base64,"/>
-             </span>
-             <span class="button__label">
-              Foo
-             </span>
-            </button>
-           </li>
-           <li class="toolbar__list-item">
-            <button class="button button--icon button--small button--danger" name="Ipsum" title="Bar">
-             <span class="button__icon">
-              <img alt="Bar" class="icon icon--image" src="data:image/png;base64,"/>
-             </span>
-             <span class="button__label">
-              Bar
-             </span>
-            </button>
-           </li>
-          </ul>
-          <ul class="toolbar__list">
-           <li class="toolbar__list-item">
-            <div class="filter filter--class-only filter--filter" data-filter-target="#my-first-datagrid tbody tr">
-             <input class="input filter__input" placeholder="Filteren op pagina" type="search"/>
-            </div>
-           </li>
-          </ul>
-         </div>
-		</header>
-        """
+        button_pos_top = html.find('class="button')
+        button_pos_bottom = html.rfind('class="button')
+        table_body_pos = html.find('class="datagrid__table-body')
+        self.assertGreater(button_pos_top, -1)
+        self.assertGreater(button_pos_bottom, -1)
+        self.assertGreater(table_body_pos, -1)
 
-        footer_html = """
-        <footer class="datagrid__footer">
-         <div class="toolbar toolbar--pad toolbar--justify">
-          <ul class="toolbar__list">
-           <li class="toolbar__list-item">
-            <button class="button button--icon button--small button--transparent" name="Lorem" title="Foo">
-             <span class="button__icon">
-              <img alt="Foo" class="icon icon--image" src="data:image/png;base64,"/>
-             </span>
-             <span class="button__label">
-              Foo
-             </span>
-            </button>
-           </li>
-           <li class="toolbar__list-item">
-            <button class="button button--icon button--small button--danger" name="Ipsum" title="Bar">
-             <span class="button__icon">
-              <img alt="Bar" class="icon icon--image" src="data:image/png;base64,"/>
-             </span>
-             <span class="button__label">
-              Bar
-             </span>
-            </button>
-           </li>
-          </ul>
-         </div>
-        </footer>
-		"""
-
-        self.assertInHTML(header_html, html)
-        self.assertInHTML(footer_html, html)
+        self.assertLess(button_pos_top, table_body_pos)
+        self.assertGreater(button_pos_bottom, table_body_pos)
 
     def test_modifier_key(self):
         html = self.template_render(
@@ -592,8 +449,9 @@ class DatagridTestCase(TestCase):
                 "modifier_mapping": {"Foo": "purple", "Bar": "violet"},
             }
         )
-        foo_html = '<tr class="datagrid__row datagrid__row--purple"><td class="datagrid__cell datagrid__cell--modifier">Foo</td></tr>'
-        bar_html = '<tr class="datagrid__row datagrid__row--violet"><td class="datagrid__cell datagrid__cell--modifier">Bar</td></tr>'
+        foo_html = '<tr class="datagrid__row datagrid__row--cells datagrid__row--purple"><td class="datagrid__cell datagrid__cell--modifier">Foo</td></tr>'
+        bar_html = '<tr class="datagrid__row datagrid__row--cells datagrid__row--violet"><td class="datagrid__cell datagrid__cell--modifier">Bar</td></tr>'
+
         self.assertInHTML(foo_html, html)
         self.assertInHTML(bar_html, html)
 
@@ -605,19 +463,19 @@ class DatagridTestCase(TestCase):
             {"columns": ("title", "publisher"), "object_list": [self.book_1, self.book_2]}
         )
 
-        foo_html = '<tr class="datagrid__row fake-link fake-link--double-click" data-href="/foo"><td class="datagrid__cell"><a class="datagrid__link" href="/foo">Lorem</a></td><td class="datagrid__cell">Foo</td></tr>'
-        bar_html = '<tr class="datagrid__row fake-link fake-link--double-click" data-href="/bar"><td class="datagrid__cell"><a class="datagrid__link" href="/bar">Ipsum</a></td><td class="datagrid__cell">Bar</td></tr>'
-        self.assertInHTML(foo_html, html)
-        self.assertInHTML(bar_html, html)
+        foo_html = 'href="/foo"'
+        bar_html = 'href="/bar"'
+        self.assertIn(foo_html, html)
+        self.assertIn(bar_html, html)
 
     def test_url_reverse(self):
         html = self.template_render(
             {"columns": ("publisher"), "queryset": Book.objects.all(), "url_reverse": "detail"}
         )
 
-        foo_html = '<tr class="datagrid__row fake-link fake-link--double-click" data-href="/1"><td class="datagrid__cell"><a class="datagrid__link" href="/1">Foo</a></td></tr>'
-        bar_html = '<tr class="datagrid__row fake-link fake-link--double-click" data-href="/2"><td class="datagrid__cell"><a class="datagrid__link" href="/2">Bar</a></td></tr>'
-        baz_html = '<tr class="datagrid__row fake-link fake-link--double-click" data-href="/3"><td class="datagrid__cell"><a class="datagrid__link" href="/3">Foo</a></td></tr>'
-        self.assertInHTML(foo_html, html)
-        self.assertInHTML(bar_html, html)
-        self.assertInHTML(baz_html, html)
+        foo_html = 'href="/1"'
+        bar_html = 'href="/2"'
+        baz_html = 'href="/3"'
+        self.assertIn(foo_html, html)
+        self.assertIn(bar_html, html)
+        self.assertIn(baz_html, html)

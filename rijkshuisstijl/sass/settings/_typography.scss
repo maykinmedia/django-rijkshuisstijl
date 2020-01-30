@@ -18,48 +18,48 @@ versie toegpast worden.
  */
 @font-face {
   font-family: 'RO Sans';
-  src: url('/static/rijkshuisstijl/font/RO-SansWebText-Regular.eot');
-  src: url('/static/rijkshuisstijl/font/RO-SansWebText-Regular.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/font/RO-SansWebText-Regular.ttf') format('truetype'), url('/static/rijkshuisstijl/font/RO-SansWebText-Regular.woff') format('woff');
+  src: url('/static/rijkshuisstijl/fonts/RO-SansWebText-Regular.eot');
+  src: url('/static/rijkshuisstijl/fonts/RO-SansWebText-Regular.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/fonts/RO-SansWebText-Regular.ttf') format('truetype'), url('/static/rijkshuisstijl/fonts/RO-SansWebText-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RO Sans';
-  src: url('/static/rijkshuisstijl/font/RO-SansWebText-Bold.eot');
-  src: url('/static/rijkshuisstijl/font/RO-SansWebText-Bold.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/font/RO-SansWebText-Bold.ttf') format('truetype'), url('/static/rijkshuisstijl/font/RO-SansWebText-Bold.woff') format('woff');
+  src: url('/static/rijkshuisstijl/fonts/RO-SansWebText-Bold.eot');
+  src: url('/static/rijkshuisstijl/fonts/RO-SansWebText-Bold.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/fonts/RO-SansWebText-Bold.ttf') format('truetype'), url('/static/rijkshuisstijl/fonts/RO-SansWebText-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RO Sans';
-  src: url('/static/rijkshuisstijl/font/RO-SansWebText-Italic.eot');
-  src: url('/static/rijkshuisstijl/font/RO-SansWebText-Italic.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/font/RO-SansWebText-Italic.ttf') format('truetype'), url('/static/rijkshuisstijl/font/RO-SansWebText-Italic.woff') format('woff');
+  src: url('/static/rijkshuisstijl/fonts/RO-SansWebText-Italic.eot');
+  src: url('/static/rijkshuisstijl/fonts/RO-SansWebText-Italic.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/fonts/RO-SansWebText-Italic.ttf') format('truetype'), url('/static/rijkshuisstijl/fonts/RO-SansWebText-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'RO Serif';
-  src: url('/static/rijkshuisstijl/font/RO-SerifWeb-Regular.eot');
-  src: url('/static/rijkshuisstijl/font/RO-SerifWeb-Regular.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/font/RO-SerifWeb-Regular.ttf') format('truetype'), url('/static/rijkshuisstijl/font/RO-SerifWeb-Regular.woff') format('woff');
+  src: url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Regular.eot');
+  src: url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Regular.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Regular.ttf') format('truetype'), url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RO Serif';
-  src: url('/static/rijkshuisstijl/font/RO-SerifWeb-Bold.eot');
-  src: url('/static/rijkshuisstijl/font/RO-SerifWeb-Bold.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/font/RO-SerifWeb-Bold.ttf') format('truetype'), url('/static/rijkshuisstijl/font/RO-SerifWeb-Bold.woff') format('woff');
+  src: url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Bold.eot');
+  src: url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Bold.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Bold.ttf') format('truetype'), url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RO Serif';
-  src: url('/static/rijkshuisstijl/font/RO-SerifWeb-Italic.eot');
-  src: url('/static/rijkshuisstijl/font/RO-SerifWeb-Italic.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/font/RO-SerifWeb-Italic.ttf') format('truetype'), url('/static/rijkshuisstijl/font/RO-SerifWeb-Italic.woff') format('woff');
+  src: url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Italic.eot');
+  src: url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Italic.eot?#iefix') format('eot'), url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Italic.ttf') format('truetype'), url('/static/rijkshuisstijl/fonts/RO-SerifWeb-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
 }
@@ -68,11 +68,11 @@ versie toegpast worden.
     font-family: "RO Icons";
     font-style: normal;
     font-weight: bold;
-    src: url("/static/rijkshuisstijl/font/ro-icons-1.11.woff") format("opentype"),url("/static/rijkshuisstijl/font/ro-icons-1.11.ttf") format("truetype")
+    src: url("/static/rijkshuisstijl/fonts/ro-icons-1.11.woff") format("opentype"),url("/static/rijkshuisstijl/fonts/ro-icons-1.11.ttf") format("truetype")
 }
 
 $typography-default-hover-link: false;
-$typography-size-border: 1px;
+$typography-size-border: 2px;
 
 $typography-font-family-base: 'RO Sans', Calibri, sans-serif;
 
@@ -85,6 +85,11 @@ $typography-font-size-text-big-mobile: 20/16*1rem;
 $typography-font-size-text-big-tablet: 21/16*1rem;
 $typography-font-size-text-big-laptop: 21/16*1rem;
 $typography-font-size-text-big-desktop: 24/16*1rem;
+
+$typography-font-size-text-small-mobile: 12/16*1rem;
+$typography-font-size-text-small-tablet: 12/16*1rem;
+$typography-font-size-text-small-laptop: 12/16*1rem;
+$typography-font-size-text-small-desktop: 14/16*1rem;
 
 $typography-font-size-h1-mobile: 26/16*1rem;
 $typography-font-size-h1-tablet: 28/16*1rem;

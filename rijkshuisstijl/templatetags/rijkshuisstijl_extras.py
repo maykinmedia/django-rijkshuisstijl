@@ -33,6 +33,7 @@ def dom_filter(**kwargs):
         - filter_target: Required, a queryselector string matching items which should be filtered.
 
         - class: Optional, a string with additional CSS classes.
+        - input_class: Optional, a string with additional CSS classes for the input.
         - label_placeholder: Optional, alternative label to show as placeholder.
         - name: Optional, The name of the input.
         - value Optional, The (default) value of the input.
@@ -46,6 +47,7 @@ def dom_filter(**kwargs):
 
     # kwargs
     kwargs["class"] = kwargs.get("class", None)
+    kwargs["input_class"] = ("filter__input " + kwargs.get("input_class", None)).strip()
     kwargs["filter_target"] = kwargs.get("filter_target", "")
     kwargs["name"] = kwargs.get("name", None)
     kwargs["value"] = kwargs.get("value", None)
@@ -213,6 +215,8 @@ def paginator(context, **kwargs):
         - class: Optional, a string with additional CSS classes.
         - form: Optional, if true (default), treat the paginator as form, only works if tag is set to 'form'.
         - is_paginated: Optional, if true (default), render the paginator.
+        - label_page: Optional, alternative label to show for "Pagina".
+        - label_from: Optional, alternative label to show for "van".
         - label_first: Optional, alternative label to show for first page.
         - label_previous: Optional, alternative label to show for previous page.
         - label_next: Optional, alternative label to show for next page.
@@ -253,10 +257,11 @@ def paginator(context, **kwargs):
         return kwargs.get("page_number", 0 if zero_index else 1)
 
     # i18n
-    kwargs["label_first"] = parse_kwarg(kwargs, "first", _("Eerste"))
-    kwargs["label_previous"] = parse_kwarg(kwargs, "first", _("Vorige"))
-    kwargs["label_next"] = parse_kwarg(kwargs, "first", _("Volgende"))
-    kwargs["label_last"] = parse_kwarg(kwargs, "first", _("Laatste"))
+    kwargs["label_page"] = parse_kwarg(kwargs, "label_page", _("Pagina"))
+    kwargs["label_from"] = parse_kwarg(kwargs, "label_from", _("van"))
+    kwargs["label_previous"] = parse_kwarg(kwargs, "label_previous", _("Vorige"))
+    kwargs["label_next"] = parse_kwarg(kwargs, "label_next", _("Volgende"))
+    kwargs["label_last"] = parse_kwarg(kwargs, "label_last", _("Laatste"))
 
     # kwargs
     kwargs["class"] = kwargs.get("class", None)

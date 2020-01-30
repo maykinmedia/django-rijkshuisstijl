@@ -1,7 +1,8 @@
-@import '../../settings/lib/ro-shade';
+@import "microscope/color";
+@import "microscope/grid";
 @import '../button/constants';
 
-$toolbar-spacing: 0.4em;
-$toolbar-color-background: shade(1);
+$toolbar-spacing: $grid-margin-3;
+$toolbar-color-background: $color-background;
 $toolbar-color-border: darken($toolbar-color-background, 10);
-$datagrid-filter-height: $button-height-small + 6px;
+$datagrid-filter-height: $grid-row-height;
