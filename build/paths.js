@@ -28,6 +28,9 @@ module.exports = {
     // Path to the (transpiled) css directory
     cssDir: staticRoot + 'css/',
 
+    // Path to the fonts directory
+    fontsDir: staticRoot + 'fonts/',
+
     // Path to the js entry point (source)
     jsEntry: sourcesRoot + 'js/index.js',
 

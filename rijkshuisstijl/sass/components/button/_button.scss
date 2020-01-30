@@ -53,6 +53,10 @@
     opacity: 0.2;
   }
 
+  &--big {
+    @include rows(1, min-height);
+  }
+
   &--icon:not(#{&}--icon-right) {
     padding-left: 0;
   }
@@ -113,7 +117,8 @@
     opacity: 1;
   }
 
-  &--secondary[disabled] &__label {
+  &--secondary[disabled] &__label,
+  &--secondary[disabled] &__icon {
     opacity: 0.2;
   }
 

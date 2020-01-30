@@ -7,15 +7,13 @@
 
 .toolbar {
   @include body;
-  @include rows(1);
+  @include rows(1, min-height);
   @include sticky(null, top, true);
   background-color: $toolbar-color-background;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  outline: 1px solid;
-  outline-color: $toolbar-color-border;
   z-index: 100;
 
   @media print {
@@ -45,6 +43,7 @@
   &__list,
   &__list-item {
     display: flex;
+    align-items: baseline;
     list-style: none;
     margin: 0;
     padding: 0;

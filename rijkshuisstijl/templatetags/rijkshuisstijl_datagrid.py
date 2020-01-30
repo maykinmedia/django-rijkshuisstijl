@@ -137,7 +137,7 @@ def datagrid(context, **kwargs):
     A form can be generated POSTing data to the url specified by the "form_action" option. When a form is active
     each row gets a checkbox input with a name specified by the "form_checkbox_name" option. Various actions can be
     defined by the "form_buttons" option which are placed either in the top, bottom or at both position based on the
-    value of the "toolbar_postion" option.
+    value of the "toolbar_position" option.
 
     - form: Optional, if True, adds a form to the datagrid, useful for allowing user manipulations on the dataset.
       Defaults to false, unless "form_action" or "form_buttons" is set.
@@ -149,7 +149,12 @@ def datagrid(context, **kwargs):
       specify the performed action.
       example: [{'name': 'delete', 'label': 'delete' 'class': 'button--danger'}]
 
-    - toolbar_position: Optional, can be set to one of "top", "bottom", or "both" indicating the position of the
+    - form_select: Optional, If set (dict, at least "name"), shows a select with actions (comparable to form_buttons).
+      Requires form_options to be set as well. The name attribute should be used to specify the performed action.
+
+    - form_buttons: Optional, a list_of_dict (label, value) defining which options to create within the select.
+
+    - toolbar_position: Optional, a list_of_dict (value, label) defining
       toolbar containing the buttons specified by form_buttons.
 
     - form_checkbox_name: Optional, specifies the name for each checkbox input for an object in the table. This
@@ -477,13 +482,27 @@ def datagrid(context, **kwargs):
         Gets the buttons to use for the form based on kwargs['form_buttons'].
         :return: A list_of_dict where each dict contains at least "name" and "label" keys.
         """
-        form_actions = parse_kwarg(kwargs, "form_buttons", {})
+        form_buttons = parse_kwarg(kwargs, "form_buttons", {})
 
         # Convert dict to list_of_dict
         try:
-            return [{"name": key, "label": value} for key, value in form_actions.items()]
+            return [{"name": key, "label": value} for key, value in form_buttons.items()]
         except AttributeError:
-            return form_actions
+            return form_buttons
+
+    def get_form_select():
+        """
+        Gets the select to use for the form based on kwargs['form_select'] and form_options.
+        :return: A dict with at least "name" and "options" keys, options is a list_of_dict.
+        """
+        form_select = parse_kwarg(kwargs, "form_select", None)
+
+        if form_select:
+            form_options = parse_kwarg(kwargs, "form_options", [])
+            form_select["choices"] = [tuple(d.values()) for d in form_options]
+            return form_select
+
+        return None
 
     def add_paginator(datagrid_context):
         """
@@ -580,8 +599,8 @@ def datagrid(context, **kwargs):
     datagrid_context = kwargs.copy()
 
     # i18n
-    datagrid_context["label_result_count"] = parse_kwarg(
-        kwargs, "label_result_count", _("resultaten")
+    datagrid_context["label_filter_placeholder"] = parse_kwarg(
+        kwargs, "label_filter_placeholder", _("Filter resultaten")
     )
     datagrid_context["label_no_results"] = parse_kwarg(
         kwargs, "label_no_results", _("Geen resultaten")
@@ -594,6 +613,7 @@ def datagrid(context, **kwargs):
     datagrid_context["filters"] = get_filter_dict()
     datagrid_context["form_action"] = parse_kwarg(kwargs, "form_action", "")
     datagrid_context["form_buttons"] = get_form_buttons()
+    datagrid_context["form_select"] = get_form_select()
     datagrid_context["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
     datagrid_context["form"] = (
         parse_kwarg(kwargs, "form", False)

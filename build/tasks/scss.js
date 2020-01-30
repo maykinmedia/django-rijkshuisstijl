@@ -16,6 +16,7 @@ var isProduction = argv.production ? true : false;
 var sourcemap = argv.sourcemap ? true : false;
 
 var eyeglass = new Eyeglass({
+    includePaths: ["node_modules/"],
     outputStyle: isProduction ? 'compressed' : 'expanded',
 });
 
@@ -50,7 +51,8 @@ let selectorLintConfig = {
 };
 
 
-var plugins = isProduction ? [cssnano(), autoprefixer()] : [autoprefixer(), selectorLint(selectorLintConfig)];
+// var plugins = isProduction ? [cssnano(), autoprefixer()] : [autoprefixer(), selectorLint(selectorLintConfig)];
+var plugins = isProduction ? [cssnano(), autoprefixer()] : [autoprefixer()];
 
 
 /**

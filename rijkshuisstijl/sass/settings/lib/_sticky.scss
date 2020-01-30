@@ -1,22 +1,22 @@
 @import 'microscope/responsive';
+@import '../../components/header/constants';
 @import '../../components/navigation-bar/constants';
 
 @mixin sticky($offset: null, $position: 'top', $clear: false) {
   position: sticky;
-  @if ($position == 'top') {
 
+  @if ($position == 'top') {
     @if ($offset) {
       top: calc(#{$offset});
-      @include responsive($position, calc(#{$datagrid-offset-caption-mobile} + #{$offset}), calc(#{$offset}));
     } @else {
-      @include responsive($position, $datagrid-offset-caption-mobile, 0);
+      top: 0;
     }
 
     .navigation-bar--sticky ~ * & {
       @if ($offset) {
-        @include responsive($position, calc(#{$datagrid-offset-caption-mobile} + #{$offset}), calc(#{$navigation-bar-min-height-tablet-stuck} + #{$offset}));
+        @include responsive($position, calc(#{$header-height-mobile} + (#{$offset})), calc(#{$navigation-bar-min-height-tablet-stuck} + (#{$offset})));
       } @else {
-        @include responsive($position, $datagrid-offset-caption-mobile, $navigation-bar-min-height-tablet-stuck);
+        @include responsive($position, $header-height-mobile, $navigation-bar-min-height-tablet-stuck);
       }
     }
 
@@ -26,7 +26,6 @@
         margin-right: 0!important;
       }
     }
-
   }
 
   @else {
