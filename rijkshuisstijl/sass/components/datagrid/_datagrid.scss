@@ -167,11 +167,11 @@ $datagrid-spacing-row-v: calc((#{$grid-row-height} - #{$typography-line-height-t
 
   &__filter {
     @include shade(1, background-color);
-    @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-mobile} + 4px');
+    @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-mobile}');
     padding: $datagrid-spacing-row-v $datagrid-spacing-row-h / 2;
 
     @include desktop {
-      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-desktop} + 4px');
+      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-desktop}');
     }
 
     &:first-child {
