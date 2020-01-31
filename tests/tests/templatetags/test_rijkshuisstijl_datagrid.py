@@ -221,6 +221,7 @@ class DatagridTestCase(TestCase):
         # queryset
         html = self.template_render(
             {
+                "id": "my-first-datagrid",
                 "columns": ("title", "publisher"),
                 "queryset": Book.objects.all(),
                 "paginate": True,
@@ -235,13 +236,14 @@ class DatagridTestCase(TestCase):
         self.assertIn(str(self.book_3), html)
         self.assertIn("paginator", html)
         self.assertInHTML(
-            '<input class="input input--contrast" name="p" value="2" type="number" min="1" max="2">',
+            '<input class="input input--contrast" form="datagrid-paginator-form-my-first-datagrid" name="p" value="2" type="number" min="1" max="2">',
             html,
         )
 
         # object_list
         html = self.template_render(
             {
+                "id": "my-first-datagrid",
                 "columns": ("title", "publisher"),
                 "object_list": [*Book.objects.all()],
                 "paginate": True,
@@ -257,7 +259,7 @@ class DatagridTestCase(TestCase):
         self.assertIn("paginator", html)
         self.assertIn("paginator", html)
         self.assertInHTML(
-            '<input class="input input--contrast" name="p" value="2" type="number" min="1" max="2">',
+            '<input class="input input--contrast" form="datagrid-paginator-form-my-first-datagrid" name="p" value="2" type="number" min="1" max="2">',
             html,
         )
 
@@ -271,6 +273,7 @@ class DatagridTestCase(TestCase):
 
         html = self.template_render(
             {
+                "id": "my-first-datagrid",
                 "columns": ("title", "publisher"),
                 "object_list": page_obj.object_list,
                 "paginate": False,
@@ -288,7 +291,7 @@ class DatagridTestCase(TestCase):
         self.assertIn("paginator", html)
         self.assertIn("paginator", html)
         self.assertInHTML(
-            '<input class="input input--contrast" name="p" value="2" type="number" min="1" max="2">',
+            '<input class="input input--contrast" form="datagrid-paginator-form-my-first-datagrid" name="p" value="2" type="number" min="1" max="2">',
             html,
         )
 
