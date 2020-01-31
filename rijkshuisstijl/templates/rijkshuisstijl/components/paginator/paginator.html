@@ -8,7 +8,7 @@
                 {% endif %}
             </span>
 
-            <span class="paginator__label">{{ label_page }}{% form_input class="input--contrast" type='number' name=page_key  min=page_min|unlocalize max=page_max|unlocalize value=page_number|unlocalize %}<span>{{ label_from }} {{ page_max|unlocalize }}</span></span>
+            <span class="paginator__label">{{ label_page }}{% form_input class="input--contrast" type='number' name=page_key min=page_min|unlocalize max=page_max|unlocalize value=page_number|unlocalize form_id=form_id %}<span>{{ label_from }} {{ page_max|unlocalize }}</span></span>
 
             <span class="paginator__label">
                 {% if page_obj.has_next %}

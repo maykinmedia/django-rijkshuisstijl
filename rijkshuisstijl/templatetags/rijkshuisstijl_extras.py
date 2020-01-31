@@ -213,7 +213,9 @@ def paginator(context, **kwargs):
         - page_obj: Required, The paginator page object, may be obtained from context.
 
         - class: Optional, a string with additional CSS classes.
-        - form: Optional, if true (default), treat the paginator as form, only works if tag is set to 'form'.
+        - form: Optional, if True (default), sets the paginator tag to "form" uses "div" if set to False. A str can be
+          passed  to set the value of the "form" attribute on the input in which case the paginator tag is set to "div",
+          this allows linking the input to a custom form.
         - is_paginated: Optional, if true (default), render the paginator.
         - label_page: Optional, alternative label to show for "Pagina".
         - label_from: Optional, alternative label to show for "van".
@@ -224,61 +226,87 @@ def paginator(context, **kwargs):
 
         - page_number: Optional, The current page number.
         - page_key: Optional, The GET parameter to use for the page, defaults to 'page'.
-        - tag: Optional, The outer tag used for the paginator, defaults to 'form'.
-        - zero_index: Optional, Use zero-based indexing for page numbers, not fully supported.
 
     :param context:
     :param kwargs:
     """
-    kwargs = merge_config(kwargs)
+    config = merge_config(kwargs)
+
+    def get_form():
+        return parse_kwarg(kwargs, "form", True)
+
+    def get_form_id():
+        """
+        Returns "form" as form_id if it's not parsed to a bool.
+        This allows a custom form to be linked using the "form" attribute on the input.
+        :return: str or None
+        """
+        form = get_form()
+        if not type(form) is bool:
+            return form
+        return None
+
+    def get_is_paginated():
+        return kwargs.get("is_paginated", context.get("is_paginated"))
+
+    def get_paginator():
+        return kwargs.get("paginator", context.get("paginator"))
 
     def get_page_min():
-        zero_index = kwargs.get("zero_index", False)
-
-        if zero_index:
-            return 0
         return 1
 
     def get_page_max():
-        paginator = kwargs.get("paginator")
-        zero_index = kwargs.get("zero_index", False)
-
-        if zero_index:
-            return paginator.num_pages - 1
+        paginator = get_paginator()
         return paginator.num_pages
 
     def get_page_number():
-        page_obj = kwargs.get("page_obj")
-        zero_index = kwargs.get("zero_index", False)
+        page_obj = get_page_obj()
 
         if page_obj:
             return page_obj.number
 
-        return kwargs.get("page_number", 0 if zero_index else 1)
+        return kwargs.get("page_number", 1)
+
+    def get_page_key():
+        return kwargs.get("page_key", "page")
+
+    def get_page_obj():
+        return kwargs.get("page_obj", context.get("page_obj"))
+
+    def get_tag():
+        """
+        Returns the tag to use for the paginator (defaults to "form"). Returns "div" is either form is set to False or a
+        str with a custom form id.
+        """
+        form = get_form()
+
+        if form is True:
+            return "form"
+        return "div"
 
     # i18n
-    kwargs["label_page"] = parse_kwarg(kwargs, "label_page", _("Pagina"))
-    kwargs["label_from"] = parse_kwarg(kwargs, "label_from", _("van"))
-    kwargs["label_previous"] = parse_kwarg(kwargs, "label_previous", _("Vorige"))
-    kwargs["label_next"] = parse_kwarg(kwargs, "label_next", _("Volgende"))
-    kwargs["label_last"] = parse_kwarg(kwargs, "label_last", _("Laatste"))
+    config["label_page"] = parse_kwarg(kwargs, "label_page", _("Pagina"))
+    config["label_from"] = parse_kwarg(kwargs, "label_from", _("van"))
+    config["label_previous"] = parse_kwarg(kwargs, "label_previous", _("Vorige"))
+    config["label_next"] = parse_kwarg(kwargs, "label_next", _("Volgende"))
+    config["label_last"] = parse_kwarg(kwargs, "label_last", _("Laatste"))
 
     # kwargs
-    kwargs["class"] = kwargs.get("class", None)
-    kwargs["form"] = parse_kwarg(kwargs, "form", True)
-    kwargs["is_paginated"] = kwargs.get("is_paginated", context.get("is_paginated"))
-    kwargs["paginator"] = kwargs.get("paginator", context.get("paginator"))
-    kwargs["page_min"] = get_page_min()
-    kwargs["page_max"] = get_page_max()
-    kwargs["page_number"] = get_page_number()
-    kwargs["page_key"] = kwargs.get("page_key", "page")
-    kwargs["page_obj"] = kwargs.get("page_obj", context.get("page_obj"))
-    kwargs["tag"] = "div" if not kwargs["form"] else "form"
-    kwargs["zero_index"] = kwargs.get("zero_index", False)
+    config["class"] = kwargs.get("class", None)
+    config["form"] = get_form()
+    config["form_id"] = get_form_id()
+    config["is_paginated"] = get_is_paginated()
+    config["paginator"] = get_paginator()
+    config["page_min"] = get_page_min()
+    config["page_max"] = get_page_max()
+    config["page_number"] = get_page_number()
+    config["page_key"] = get_page_key()
+    config["page_obj"] = get_page_obj()
+    config["tag"] = get_tag()
 
-    kwargs["request"] = context["request"]
-    kwargs["config"] = kwargs
-    return kwargs
+    config["request"] = context["request"]
+    config["config"] = kwargs
+    return config
 
 
 @register.inclusion_tag("rijkshuisstijl/components/stacked-list/stacked-list.html")

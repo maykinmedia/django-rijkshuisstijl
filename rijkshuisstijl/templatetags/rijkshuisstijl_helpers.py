@@ -142,14 +142,23 @@ def parse_arg(arg, default=None):
     if type(arg) != str and type(arg) != SafeText:
         return arg
 
+    if arg is "True":
+        return True
+    if arg is "False":
+        return False
+
     if "," in arg or ":" in arg:
+
+        # Parse JSON.
         try:
             return json.loads(arg)
         except JSONDecodeError:
             pass
 
+        # Parse list (comma separated).
         lst = [entry.strip() for entry in arg.strip().split(",") if entry]
 
+        # Parse flat dict (each item in lst, colon separated).
         if ":" in arg or isinstance(default, dict):
             dct = {}
             for value in lst:
@@ -159,8 +168,8 @@ def parse_arg(arg, default=None):
                     key = value
                     val = value
                 dct[key] = val or key
-            return dct
-        return lst
+            return dct  # Flat dict
+        return lst  # List
     return arg
 
 

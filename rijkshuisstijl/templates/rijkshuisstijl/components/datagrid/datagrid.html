@@ -14,6 +14,23 @@
             </form>
         {% endif %}
 
+        {# This (paginator) form is located outside the datagrid to avoid conflict with selection form. #}
+        {% if is_paginated %}
+            <form id="datagrid-paginator-form-{{ id }}" method="GET">
+                {% firstof ordering_key 'ordering' as ordering_key %}
+
+                {% if request.GET|get:ordering_key %}
+                    <input type="hidden" name="{{ ordering_key }}" value="{{ request.GET|get:ordering_key }}">
+                {% endif %}
+
+                {% for filter in filters %}
+                    {% form_input type='hidden' name=filter.key value=filter.value %}
+                {% endfor %}
+
+                <input class="input input--hidden" type="submit">
+            </form>
+        {% endif %}
+
         {% if form %}
             <form class="datagrid__form" method="post"{% if form_action %} action="{{ form_action }}"{% endif %}>
             {% csrf_token %}
@@ -124,7 +141,7 @@
                     {% endif %}
 
                     <ul class="toolbar__list">
-                        <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_key=page_key page_number=page_number page_obj=page_obj form=False zero_index=paginator_zero_index %}</li>
+                        <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_key=page_key page_number=page_number page_obj=page_obj form='datagrid-paginator-form-'|add:id %}</li>
                     </ul>
                 </div>
             </footer>

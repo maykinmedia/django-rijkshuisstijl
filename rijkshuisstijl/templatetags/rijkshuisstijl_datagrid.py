@@ -118,7 +118,6 @@ def datagrid(context, **kwargs):
     - page_obj: Optional, The paginator page object, may be obtained from context.
     - page_number: Optional, The current page number.
     - page_key: Optional, The GET parameter to use for the page, defaults to 'page'.
-    - paginator_zero_index: Optional, Use zero-based indexing for page numbers, not fully supported.
 
 
     Custom presentation (get_<field>_display)
@@ -541,7 +540,6 @@ def datagrid(context, **kwargs):
             Rely on view/context for pagination.
             """
             paginator_context["paginator"] = kwargs.get("paginator", context.get("paginator"))
-            paginator_context["paginator_zero_index"] = kwargs.get("paginator_zero_index")
             paginator_context["page_key"] = kwargs.get("page_key", "page")
             paginator_context["page_number"] = kwargs.get("page_number")
             paginator_context["page_obj"] = kwargs.get("page_obj", context.get("page_obj"))
@@ -596,41 +594,39 @@ def datagrid(context, **kwargs):
             pass
 
     kwargs = merge_config(kwargs)
-    datagrid_context = kwargs.copy()
+    config = kwargs.copy()
 
     # i18n
-    datagrid_context["label_filter_placeholder"] = parse_kwarg(
+    config["label_filter_placeholder"] = parse_kwarg(
         kwargs, "label_filter_placeholder", _("Filter resultaten")
     )
-    datagrid_context["label_no_results"] = parse_kwarg(
-        kwargs, "label_no_results", _("Geen resultaten")
-    )
+    config["label_no_results"] = parse_kwarg(kwargs, "label_no_results", _("Geen resultaten"))
 
     # kwargs
-    datagrid_context["class"] = kwargs.get("class", None)
-    datagrid_context["columns"] = get_columns()
-    datagrid_context["orderable_column_keys"] = get_orderable_column_keys()
-    datagrid_context["filters"] = get_filter_dict()
-    datagrid_context["form_action"] = parse_kwarg(kwargs, "form_action", "")
-    datagrid_context["form_buttons"] = get_form_buttons()
-    datagrid_context["form_select"] = get_form_select()
-    datagrid_context["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
-    datagrid_context["form"] = (
+    config["class"] = kwargs.get("class", None)
+    config["columns"] = get_columns()
+    config["orderable_column_keys"] = get_orderable_column_keys()
+    config["filters"] = get_filter_dict()
+    config["form_action"] = parse_kwarg(kwargs, "form_action", "")
+    config["form_buttons"] = get_form_buttons()
+    config["form_select"] = get_form_select()
+    config["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
+    config["form"] = (
         parse_kwarg(kwargs, "form", False)
         or bool(kwargs.get("form_action"))
         or bool(kwargs.get("form_buttons"))
     )
-    datagrid_context["id"] = get_id()
-    datagrid_context["modifier_column"] = get_modifier_column()
-    datagrid_context["object_list"] = get_object_list()
-    datagrid_context["ordering"] = get_ordering_dict()
-    datagrid_context["urlize"] = kwargs.get("urlize", True)
-    datagrid_context["title"] = kwargs.get("title", None)
-    datagrid_context["toolbar_position"] = kwargs.get("toolbar_position", "top")
-    datagrid_context["url_reverse"] = kwargs.get("url_reverse", "")
-    datagrid_context["request"] = context["request"]
-    datagrid_context = add_paginator(datagrid_context)
-    datagrid_context = add_object_attributes(datagrid_context)
+    config["id"] = get_id()
+    config["modifier_column"] = get_modifier_column()
+    config["object_list"] = get_object_list()
+    config["ordering"] = get_ordering_dict()
+    config["urlize"] = kwargs.get("urlize", True)
+    config["title"] = kwargs.get("title", None)
+    config["toolbar_position"] = kwargs.get("toolbar_position", "top")
+    config["url_reverse"] = kwargs.get("url_reverse", "")
+    config["request"] = context["request"]
+    config = add_paginator(config)
+    config = add_object_attributes(config)
 
-    datagrid_context["config"] = kwargs
-    return datagrid_context
+    config["config"] = kwargs
+    return config
