@@ -12,17 +12,33 @@
   }
 
   &[type*=date] {
-    background-image: url('../components/form/date.png') !important;
-    background-position: right;
-    background-repeat: no-repeat;
-    background-size: contain;
-    padding-right: $grid-row-height + $input-padding-h;
+    @include rows(1, padding-right);
+    background: $input-background-date, $input-background-button, $input-background-input;
   }
 
-  &[type=file] {
-    opacity: 0;
-    position: absolute;
-    height: 0;
+  &--light#{&}[type*=date] {
+    background: $input-background-date-gray, $input-background-input;
+  }
+
+  &[type=file],
+  &--light#{&}[type=file] + &__filepicker {
+    @include rows(1, padding-right);
+    background: $input-background-file, $input-background-button, $input-background-input;
+  }
+
+  &--light#{&}[type=file],
+  &--light#{&}[type=file] + &__filepicker {
+    background: $input-background-file-gray, $input-background-input;
+  }
+
+  &[type=search] {
+    @include rows(1, padding-right);
+    background: $input-background-search, $input-background-button, $input-background-input;
+  }
+
+  &--light#{&}[type=search] {
+    background: $input-background-search-gray,
+    $input-background-input;
   }
 
   &--hidden {
@@ -32,10 +48,13 @@
 
   &__filepicker {
     @include input;
-    background-image: url('../components/form/dropdown.png');
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: contain;
+    background: $input-background-file, $input-background-button, $input-background-input;
+    content: attr(value);
+  }
+
+  &__filepicker--light {
+    @include input;
+    background: $input-background-file-gray, $input-background-input;
     content: attr(value);
   }
 }

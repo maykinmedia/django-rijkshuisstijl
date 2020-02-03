@@ -97,7 +97,7 @@ class DatagridTestCase(TestCase):
             html,
         )
         self.assertInHTML(
-            '<input class="input" id="datagrid-filter-title-my-first-datagrid" form="datagrid-filter-form-my-first-datagrid" name="title" value="m" placeholder="title">',
+            '<input class="input input--light" id="datagrid-filter-title-my-first-datagrid" form="datagrid-filter-form-my-first-datagrid" name="title" value="m" placeholder="title" type="search">',
             html,
         )
         self.assertInHTML("Lorem", html)
@@ -350,8 +350,9 @@ class DatagridTestCase(TestCase):
             """,
             html,
         )
+
         self.assertInHTML(
-            '<input class="input select-all" type="checkbox" data-select-all="#my-first-datagrid .datagrid__cell--checkbox .input">',
+            '<input class="input select-all" type="checkbox" data-select-all="#my-first-datagrid .input[type=&quot;checkbox&quot;]">',
             html,
         )
         self.assertInHTML('<input class="input" type="checkbox" name="bar" value="3">', html)

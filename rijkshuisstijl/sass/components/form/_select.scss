@@ -1,4 +1,6 @@
+@import 'microscope/color';
 @import 'microscope/grid';
+@import 'constants';
 @import 'mixins';
 
 .select {
@@ -10,16 +12,32 @@
   }
 
   &:not([multiple]) {
-    background-image: url('../components/form/dropdown.png');
-    background-position: right;
-    background-repeat: no-repeat;
-    background-size: contain;
+    background:
+            $select-background-dropdown,
+            $input-background-button,
+            $input-background-input;
+  }
+
+  &--light#{&}:not([multiple]) {
+      background:
+            $select-background-dropdown-gray,
+            $input-background-input;
   }
 
   &[multiple],
   &--multiple {
     @include rows(3, min-height);
-    padding: 0!important;
+    padding: 0 !important;
+  }
+
+  &--big {
+    @include rows(1, line-height);
+  }
+
+  &--big-responsive {
+    @include laptop {
+      @include rows(1, line-height);
+    }
   }
 
   &__option {

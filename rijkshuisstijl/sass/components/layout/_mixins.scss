@@ -1,6 +1,4 @@
 @import 'microscope/grid';
-@import 'microscope/responsive';
-@import 'microscope/util';
 
 @mixin layout {
   @include container;
