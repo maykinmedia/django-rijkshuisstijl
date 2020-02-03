@@ -37,7 +37,6 @@
         {% endif %}
 
         <header class="datagrid__header">
-
             <div class="toolbar toolbar--pad{% if title or form_buttons and toolbar_position in 'top,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
                 {% if title %}<h4 class="datagrid__title">{{ title }}</h4>{% endif %}
                 {% if form_buttons and toolbar_position in 'top,both' %}
@@ -58,7 +57,9 @@
                 <tr class="datagrid__row datagrid__row--captions">
                     {% if form %}
                         <th class="datagrid__caption datagrid__caption--checkbox">
-                            {% form_checkbox select_all='#'|add:id|add:' .datagrid__cell--checkbox .input' %}
+                            {% if form_select_all_position in 'top,both' %}
+                                {% form_checkbox select_all='#'|add:id|add:' .input[type="checkbox"]' %}
+                            {% endif %}
                         </th>
                     {% endif %}
 
@@ -133,16 +134,22 @@
             </table>
         </div>
 
-        {% if is_paginated %}
+        {% if is_paginated or form and form_select_all_position in 'bottom,both' %}
             <footer class="datagrid__footer">
                 <div class="toolbar toolbar--pad{% if form_buttons and toolbar_position in 'bottom,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
+                    {% if form and form_select_all_position in 'bottom,both' %}
+                        {% form_checkbox select_all='#'|add:id|add:' .input[type="checkbox"]' %}
+                    {% endif %}
+
                     {% if form_buttons and toolbar_position in 'bottom,both' %}
                         {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
                     {% endif %}
 
+                    {% if is_paginated %}
                     <ul class="toolbar__list">
                         <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_key=page_key page_number=page_number page_obj=page_obj form='datagrid-paginator-form-'|add:id %}</li>
                     </ul>
+                    {% endif %}
                 </div>
             </footer>
         {% elif form_buttons and toolbar_position in 'bottom,both' %}

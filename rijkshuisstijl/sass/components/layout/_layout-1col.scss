@@ -7,7 +7,6 @@
 
   &--auto-columns &__section {
     @include tablet {
-      //@include responsive(column-gap, 0, $grid-gutter-tablet, $grid-gutter-laptop, $grid-gutter-desktop);
       column-count: 2;
       column-gap: 0;
     }

@@ -50,7 +50,7 @@
   }
 
   &__list:not(:last-child) {
-    margin-right: $toolbar-spacing * 4;
+    @include responsive(margin-right, $toolbar-spacing, $toolbar-spacing * 2, $toolbar-spacing * 4);
   }
 
   &__label

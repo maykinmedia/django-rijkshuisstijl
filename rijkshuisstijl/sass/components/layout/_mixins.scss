@@ -5,12 +5,6 @@
 @mixin layout {
   @include container;
 
-  @include mobile-only {
-    .datagrid {
-      @include breakout-padding(normal);
-    }
-  }
-
   &__section--flex {
     display: flex;
     flex-wrap: wrap;

@@ -1,4 +1,5 @@
 @import 'font-awesome/scss/font-awesome';
+@import 'microscope/responsive';
 @import 'microscope/typography';
 @import 'microscope/grid';
 
@@ -16,11 +17,15 @@ $paginator-spacing: $grid-margin-0;
     margin: 0 $paginator-spacing!important;
   }
 
-  &__label {
+  &__section {
     @include body;
     @include shade(3, color);
     display: flex;
     align-items: baseline;
+  }
+
+  &__label {
+    @include hide-on-mobile;
   }
 
   &__link {

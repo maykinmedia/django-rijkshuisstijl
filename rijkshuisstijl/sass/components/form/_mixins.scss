@@ -1,6 +1,7 @@
 @import '../../settings/lib/ro-shade';
 @import 'microscope/color';
 @import 'microscope/grid';
+@import 'microscope/responsive';
 @import 'microscope/typography';
 @import 'constants';
 
@@ -76,6 +77,14 @@
   &--big {
     @include rows(1, min-height);
     font-weight: bold!important;
+  }
+
+  &--big-responsive {
+    font-weight: bold!important;
+
+    @include laptop {
+      @include rows(1, min-height);
+    }
   }
 
   &--bordered {

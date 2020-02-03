@@ -151,14 +151,15 @@ def datagrid(context, **kwargs):
     - form_select: Optional, If set (dict, at least "name"), shows a select with actions (comparable to form_buttons).
       Requires form_options to be set as well. The name attribute should be used to specify the performed action.
 
-    - form_buttons: Optional, a list_of_dict (label, value) defining which options to create within the select.
-
-    - toolbar_position: Optional, a list_of_dict (value, label) defining
-      toolbar containing the buttons specified by form_buttons.
+    - form_options: Optional, a list_of_dict (label, value) defining which options to create within the select.
 
     - form_checkbox_name: Optional, specifies the name for each checkbox input for an object in the table. This
       should be used for determining which objects should be manipulated by the performed action.
 
+    - form_select_all_position, Specifies the position of the select all checkbox (if applicable).
+
+    - toolbar_position: Optional, a list_of_dict (value, label) defining
+      toolbar containing the buttons specified by form_buttons.
 
     Color coded rows
     ----------------
@@ -235,12 +236,12 @@ def datagrid(context, **kwargs):
 
     - class: Optional, a string with additional CSS classes.
     - id: Optional, a string specifying the datagrid id, defaults to a generated uuid4 string.
-    - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating
-      hyperlinks if applicable in every cell.
     - title: Optional, if set, a title will be shown above the datagrid.
     - url_reverse: Optional, A URL name to reverse using the object's 'pk' attribute as one and only attribute,
       creates hyperlinks in the first cell. If no url_reverse if passed get_absolute_url is tried in order to find
       a url.
+    - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating
+      hyperlinks if applicable in every cell.
 
     :param context:
     :param kwargs:
@@ -515,7 +516,7 @@ def datagrid(context, **kwargs):
             """
             Paginate object_list.
             """
-            request = paginator_context.get("request")
+            request = context["request"]
             paginate_by = paginator_context.get("paginate_by", 30)
             paginator = Paginator(paginator_context.get("object_list", []), paginate_by)
             page_key = paginator_context.get("page_key", "page")
@@ -602,31 +603,41 @@ def datagrid(context, **kwargs):
     )
     config["label_no_results"] = parse_kwarg(kwargs, "label_no_results", _("Geen resultaten"))
 
-    # kwargs
-    config["class"] = kwargs.get("class", None)
+    # Showing data/Filtering/Ordering
     config["columns"] = get_columns()
-    config["orderable_column_keys"] = get_orderable_column_keys()
+    config["object_list"] = get_object_list()
     config["filters"] = get_filter_dict()
-    config["form_action"] = parse_kwarg(kwargs, "form_action", "")
-    config["form_buttons"] = get_form_buttons()
-    config["form_select"] = get_form_select()
-    config["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
+    config["orderable_column_keys"] = get_orderable_column_keys()
+    config["ordering"] = get_ordering_dict()
+
+    # Pagination
+    config = add_paginator(config)
+
+    # Manipulating data (form)
     config["form"] = (
         parse_kwarg(kwargs, "form", False)
         or bool(kwargs.get("form_action"))
         or bool(kwargs.get("form_buttons"))
     )
-    config["id"] = get_id()
-    config["modifier_column"] = get_modifier_column()
-    config["object_list"] = get_object_list()
-    config["ordering"] = get_ordering_dict()
-    config["urlize"] = kwargs.get("urlize", True)
-    config["title"] = kwargs.get("title", None)
+    config["form_action"] = parse_kwarg(kwargs, "form_action", "")
+    config["form_buttons"] = get_form_buttons()
+    config["form_select"] = get_form_select()
+    config["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
+    config["form_select_all_position"] = kwargs.get("form_select_all_position", "top")
     config["toolbar_position"] = kwargs.get("toolbar_position", "top")
-    config["url_reverse"] = kwargs.get("url_reverse", "")
-    config["request"] = context["request"]
-    config = add_paginator(config)
-    config = add_object_attributes(config)
 
+    # Custom presentation (get_<field>_display)/Color coded rows
+    config = add_object_attributes(config)
+    config["modifier_column"] = get_modifier_column()
+
+    # Additional options
+    config["class"] = kwargs.get("class", None)
+    config["id"] = get_id()
+    config["title"] = kwargs.get("title", None)
+    config["url_reverse"] = kwargs.get("url_reverse", "")
+    config["urlize"] = kwargs.get("urlize", True)
+
+    # Context
+    config["request"] = context["request"]
     config["config"] = kwargs
     return config

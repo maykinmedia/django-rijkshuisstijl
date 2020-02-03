@@ -21,6 +21,7 @@ $datagrid-offset-filter-desktop: $typography-line-height-text-small-desktop * $t
 $datagrid-spacing: $grid-container-padding;
 $datagrid-spacing-row-h: $datagrid-spacing;
 $datagrid-spacing-row-v: calc((#{$grid-row-height} - #{$typography-line-height-text} * 1em) / 2);
+$datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-h;
 
 .datagrid {
   position: relative;
@@ -234,9 +235,8 @@ $datagrid-spacing-row-v: calc((#{$grid-row-height} - #{$typography-line-height-t
   }
 
   &__cell {
-    $spacing-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-h;
     @include border;
-    padding: $datagrid-spacing-row-v $spacing-h;
+    padding: $datagrid-spacing-row-v $datagrid-spacing-cell-h;
     position: relative;
 
     &:first-child {
@@ -264,6 +264,15 @@ $datagrid-spacing-row-v: calc((#{$grid-row-height} - #{$typography-line-height-t
 
   &__caption &__link {
     color: inherit;
+  }
+
+  .toolbar .checkbox {
+    margin-left: $datagrid-spacing-row-h;
+    position: absolute;
+  }
+
+  .toolbar .checkbox + * {
+    margin-left: $datagrid-spacing-row-h * 2 + $datagrid-spacing-cell-h + $checkbox-size;
   }
 
   .toolbar__list {

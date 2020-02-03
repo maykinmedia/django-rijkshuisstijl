@@ -1,5 +1,6 @@
 @import 'microscope/color';
 @import 'microscope/grid';
+@import 'microscope/responsive';
 @import 'microscope/transform';
 @import 'microscope/typography';
 @import 'constants';
@@ -55,6 +56,12 @@
 
   &--big {
     @include rows(1, min-height);
+  }
+
+  &--big-responsive {
+    @include laptop {
+      @include rows(1, min-height);
+    }
   }
 
   &--icon:not(#{&}--icon-right) {
