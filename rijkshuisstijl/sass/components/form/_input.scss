@@ -13,32 +13,37 @@
 
   &[type*=date] {
     @include rows(1, padding-right);
-    background: $input-background-date, $input-background-button, $input-background-input;
+    background: $input-background-date, $input-background-button;
+    @include color-background;
   }
 
   &--light#{&}[type*=date] {
-    background: $input-background-date-gray, $input-background-input;
+    background: $input-background-date-gray;
+    @include color-background;
   }
 
   &[type=file],
   &--light#{&}[type=file] + &__filepicker {
     @include rows(1, padding-right);
-    background: $input-background-file, $input-background-button, $input-background-input;
+    background: $input-background-file, $input-background-button;
+    @include color-background;
   }
 
   &--light#{&}[type=file],
   &--light#{&}[type=file] + &__filepicker {
-    background: $input-background-file-gray, $input-background-input;
+    background: $input-background-file-gray;
+    @include color-background;
   }
 
   &[type=search] {
     @include rows(1, padding-right);
-    background: $input-background-search, $input-background-button, $input-background-input;
+    background: $input-background-search, $input-background-button;
+    @include color-background;
   }
 
   &--light#{&}[type=search] {
-    background: $input-background-search-gray,
-    $input-background-input;
+    background: $input-background-search-gray;
+    @include color-background;
   }
 
   &--hidden {

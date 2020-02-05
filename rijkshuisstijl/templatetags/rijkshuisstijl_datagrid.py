@@ -602,6 +602,7 @@ def datagrid(context, **kwargs):
         kwargs, "label_filter_placeholder", _("Filter resultaten")
     )
     config["label_no_results"] = parse_kwarg(kwargs, "label_no_results", _("Geen resultaten"))
+    config["label_select_all"] = parse_kwarg(kwargs, "label_select_all", _("(De)selecteer alles"))
 
     # Showing data/Filtering/Ordering
     config["columns"] = get_columns()

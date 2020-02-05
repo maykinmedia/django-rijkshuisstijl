@@ -97,7 +97,7 @@
   }
 
   &--contrast {
-    @include shade(1, background-color);
+    @include shade(1, background-color, $force: true);
     @include shade(5, color);
   }
 

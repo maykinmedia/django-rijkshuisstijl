@@ -14,13 +14,18 @@
 }
 
 
-@mixin shade($shade: 1, $property: color) {
+@mixin shade($shade: 1, $property: color, $force: false) {
   #{$property}: shade($shade);
+  @if $force {
+    #{$property}: shade($shade) !important;
+  } @else {
+    #{$property}: shade($shade);
+  }
 }
 
 @mixin shade-color($scheme, $shade: null, $property: color, $force: false) {
   @if $force {
-    #{$property}: shade-color($scheme, $shade)!important;
+    #{$property}: shade-color($scheme, $shade) !important;
   } @else {
     #{$property}: shade-color($scheme, $shade);
   }

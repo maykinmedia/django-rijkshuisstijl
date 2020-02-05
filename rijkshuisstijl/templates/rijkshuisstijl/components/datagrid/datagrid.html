@@ -1,4 +1,4 @@
-{% spaceless %}{% load l10n rijkshuisstijl %}
+{% load l10n rijkshuisstijl %}{% singleline %}
     <div class="datagrid{% if class %} {{ class }}{% endif %}" id="{{ id }}" role="group">
 
         {# This (filter) form is located outside the datagrid to avoid conflict with selection form. #}
@@ -37,15 +37,34 @@
         {% endif %}
 
         <header class="datagrid__header">
-            <div class="toolbar toolbar--pad{% if title or form_buttons and toolbar_position in 'top,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
-                {% if title %}<h4 class="datagrid__title">{{ title }}</h4>{% endif %}
-                {% if form_buttons and toolbar_position in 'top,both' %}
-                    {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
-                {% endif %}
+            <div class="toolbar toolbar--justify toolbar--pad">
+                <ul class="toolbar__list">
+                    {% if title %}
+                        <li class="toolbar__list-item">
+                            <h4 class="datagrid__title">{{ title }}</h4>
+                        </li>
+                    {% endif %}
+
+                    {% if form %}
+                        <li class="toolbar__list-item">
+                            <th class="datagrid__caption datagrid__caption--checkbox">
+                                {% if form_select_all_position in 'top,both' %}
+                                    {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='top' label_select_all=label_select_all only %}
+                                {% endif %}
+                            </th>
+                        </li>
+                    {% endif %}
+
+                    {% if form_buttons and toolbar_position in 'top,both' %}
+                        <li class="toolbar__list-item">
+                            {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
+                        </li>
+                    {% endif %}
+                </ul>
 
                 <ul class="toolbar__list">
                     <li class="toolbar__list-item">
-                        {% dom_filter class='filter--class-only' input_class='input--contrast' filter_target='#'|add:id|add:' tbody tr' label_placeholder=label_filter_placeholder %}
+                        {% dom_filter class='filter--class-only' input_class='input--contrast input--light' filter_target='#'|add:id|add:' tbody tr' label_placeholder=label_filter_placeholder %}
                     </li>
                 </ul>
             </div>
@@ -55,25 +74,20 @@
             <table class="datagrid__table">
                 <thead class="datagrid__table-header">
                 <tr class="datagrid__row datagrid__row--captions">
-                    {% if form %}
-                        <th class="datagrid__caption datagrid__caption--checkbox">
-                            {% if form_select_all_position in 'top,both' %}
-                                {% form_checkbox select_all='#'|add:id|add:' .input[type="checkbox"]' %}
-                            {% endif %}
-                        </th>
-                    {% endif %}
-
                     {% for column in columns %}
                         {% if column.key in orderable_column_keys %}
 
                             {% with ordering|get:column.key as ordering %}
-                                <th class="datagrid__caption datagrid__caption--{{ column.key }} datagrid__caption--orderable{% if ordering.direction %} datagrid__caption--ordered-{{ ordering.direction }}{% endif %}"{% if column.width %} style="width: {{ column.width }};"{% endif %}>
+                                <th class="datagrid__caption datagrid__caption--{{ column.key }} datagrid__caption--orderable{% if ordering.direction %} datagrid__caption--ordered-{{ ordering.direction }}{% endif %}"
+                                        {% if form and forloop.counter is 1 %} colspan="2"{% endif %}
+                                        {% if column.width %} style="width: {{ column.width }};"{% endif %}>
                                     <a class="datagrid__link" href="{{ ordering.url }}">{{ column.label }}</a>
                                     <span class="datagrid__icon"></span>
                                 </th>
                             {% endwith %}
                         {% else %}
-                            <th class="datagrid__caption datagrid--{{ column.key }}"{% if column.width %} style="width: {{ column.width }};"{% endif %}>{{ column.label }}</th>
+                            <th class="datagrid__caption datagrid--{{ column.key }}"
+                                    {% if column.width %} style="width: {{ column.width }};"{% endif %}>{{ column.label }}</th>
                         {% endif %}
                     {% endfor %}
                 </tr>
@@ -81,7 +95,8 @@
                 {% if filters %}
                     <tr class="datagrid__row datagrid__row--filters">
                         {% for column in columns %}
-                            <th class="datagrid__filter datagrid__filter--{{ column.key }}"{% if form and forloop.counter is 1%} colspan="2"{% endif %}>
+                            <th class="datagrid__filter datagrid__filter--{{ column.key }}"
+                                    {% if form and forloop.counter is 1 %} colspan="2"{% endif %}>
                                 {% for filter in filters %}
                                     {% if filter.key == column.key %}
                                         {% if filter.type == 'DateField' or filter.type == 'DateTimeField' %}
@@ -89,7 +104,7 @@
                                         {% elif filter.choices %}
                                             {% form_select class='select--light' id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices form_id='datagrid-filter-form-'|add:id %}
                                         {% else %}
-                                            {% form_input  class='input--light' type="search" id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
+                                            {% form_input class='input--light' type="search" id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}
@@ -103,7 +118,8 @@
                 {% for object in object_list %}
                     {% url url_reverse object.pk|unlocalize as reversed_url %}
                     {% firstof reversed_url object.get_absolute_url as url %}
-                    <tr class="datagrid__row datagrid__row--cells{% if object.datagrid_modifier_class %} datagrid__row--{{ object.datagrid_modifier_class }}{% endif %}{% if url %} fake-link fake-link--double-click" data-href="{{ url }}"{% else %}"{% endif %}>
+                    <tr class="datagrid__row datagrid__row--cells{% if object.datagrid_modifier_class %} datagrid__row--{{ object.datagrid_modifier_class }}{% endif %}{% if url %} fake-link fake-link--double-click" data-href="{{ url }}"
+                    {% else %}"{% endif %}>
                     {% if form %}
                         <td class="datagrid__cell datagrid__cell--checkbox">
                             {% form_checkbox name=form_checkbox_name value=object.pk|unlocalize %}
@@ -112,22 +128,25 @@
 
                     {% for column in columns %}
                         {% firstof object|format_value:column.key '' as label %}
-                        <td class="datagrid__cell{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">{% spaceless %}
-                                {% if forloop.counter0 == 0 and url %}
-                                    <a class="datagrid__link" href="{{ url }}">{{ label }}</a>
-                                {% else %}
-                                    {% if urlize %}{{ label|urlize }}
-                                        {% elif urlizetrunc %}{{ label|urlizetrunc:urlizetrunc }}
-                                    {% else %}{{ label }}{% endif %}
-                                {% endif %}
-                            {% endspaceless %}</td>
+                        <td class="datagrid__cell{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">
+                            {% if forloop.counter0 == 0 and url %}
+                                <a class="datagrid__link" href="{{ url }}">{{ label }}</a>
+                            {% else %}
+                                {% if urlize %}{{ label|urlize }}
+                                    {% elif urlizetrunc %}{{ label|urlizetrunc:urlizetrunc }}
+                                {% else %}{{ label }}{% endif %}
+                            {% endif %}
+                        </td>
                     {% endfor %}
                     </tr>
                 {% endfor %}
 
                 {% if not object_list %}
                     <tr class="datagrid__row datagrid__row--placeholder">
-                        <td class="datagrid__cell" colspan="{% if form %}{{ columns|length|add:1 }}{% else %}{{ columns|length }}{% endif %}">{{ label_no_results }}</td>
+                        <td class="datagrid__cell" colspan="
+                                {% if form %}{{ columns|length|add:1 }}{% else %}{{ columns|length }}{% endif %}">
+                            {{ label_no_results }}
+                        </td>
                     </tr>
                 {% endif %}
                 </tbody>
@@ -136,20 +155,29 @@
 
         {% if is_paginated or form and form_select_all_position in 'bottom,both' %}
             <footer class="datagrid__footer">
-                <div class="toolbar toolbar--pad{% if form_buttons and toolbar_position in 'bottom,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
-                    {% if form and form_select_all_position in 'bottom,both' %}
-                        {% form_checkbox select_all='#'|add:id|add:' .input[type="checkbox"]' %}
-                    {% endif %}
-
-                    {% if form_buttons and toolbar_position in 'bottom,both' %}
-                        {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
-                    {% endif %}
-
-                    {% if is_paginated %}
+                <div class="toolbar toolbar--justify toolbar--pad">
                     <ul class="toolbar__list">
-                        <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_key=page_key page_number=page_number page_obj=page_obj form='datagrid-paginator-form-'|add:id %}</li>
+                        {% if form %}
+                            <li class="toolbar__list-item">
+                                <th class="datagrid__caption datagrid__caption--checkbox">
+                                    {% if form_select_all_position in 'bottom,both' %}
+                                        {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='bottom' label_select_all=label_select_all only %}
+                                    {% endif %}
+                                </th>
+                            </li>
+                        {% endif %}
+
+                        {% if form_buttons and toolbar_position in 'bottom,both' %}
+                            <li class="toolbar__list-item">
+                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
+                            </li>
+                        {% endif %}
                     </ul>
-                    {% endif %}
+                    <ul class="toolbar__list">
+                        {% if is_paginated %}
+                            <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_key=page_key page_number=page_number page_obj=page_obj form='datagrid-paginator-form-'|add:id %}</li>
+                        {% endif %}
+                    </ul>
                 </div>
             </footer>
         {% elif form_buttons and toolbar_position in 'bottom,both' %}
@@ -164,4 +192,4 @@
             </form>
         {% endif %}
     </div>
-{% endspaceless %}
+{% endsingleline %}

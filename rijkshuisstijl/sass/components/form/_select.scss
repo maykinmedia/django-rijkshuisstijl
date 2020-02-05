@@ -12,16 +12,13 @@
   }
 
   &:not([multiple]) {
-    background:
-            $select-background-dropdown,
-            $input-background-button,
-            $input-background-input;
+    background: $select-background-dropdown, $input-background-button;
+    @include color-background;
   }
 
   &--light#{&}:not([multiple]) {
-      background:
-            $select-background-dropdown-gray,
-            $input-background-input;
+    background: $select-background-dropdown-gray;
+    @include color-background;
   }
 
   &[multiple],

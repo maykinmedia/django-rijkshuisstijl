@@ -16,7 +16,7 @@
 
 
 $datagrid-offset-caption: $grid-row-height;
-$datagrid-offset-filter-mobile: $typography-line-height-text-small-mobile * $typography-font-size-text-small-mobile;
+$datagrid-offset-filter-tablet: $typography-line-height-text-small-tablet * $typography-font-size-text-small-tablet;
 $datagrid-offset-filter-desktop: $typography-line-height-text-small-desktop * $typography-font-size-text-small-desktop;
 $datagrid-spacing: $grid-container-padding;
 $datagrid-spacing-row-h: $datagrid-spacing;
@@ -32,6 +32,7 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     width: 100%;
   }
 
+  // FIXME
   &--scroll {
     max-height: 50vh;
   }
@@ -42,12 +43,17 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
   }
 
   &__header {
-    @include sticky;
     z-index: 10;
+
+    @include tablet {
+      @include sticky;
+    }
   }
 
   &__footer {
-    @include sticky(0, 'bottom');
+    @include tablet {
+      @include sticky(0, 'bottom');
+    }
   }
 
   .toolbar:empty {
@@ -74,20 +80,6 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
 
   &__title {
     @include h4;
-  }
-
-  &__count {
-    display: flex;
-    align-items: center;
-  }
-
-  &__number,
-  &__text {
-    @include ellipsis;
-    @include h4;
-    @include color-primary;
-    font-weight: normal;
-    margin-left: $datagrid-spacing;
   }
 
   &__table {
@@ -145,8 +137,11 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     @include body--small;
     @include color-background;
     @include shade(3, color);
-    @include sticky($datagrid-offset-caption);
     padding: 0 $datagrid-spacing-row-h / 2;
+
+    @include tablet {
+      @include sticky($datagrid-offset-caption);
+    }
 
     &:first-child {
       padding-left: $datagrid-spacing-row-h;
@@ -158,7 +153,7 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
   }
 
   &__caption#{&}__caption--checkbox {
-     padding-left: $datagrid-spacing-row-h * 2;
+    padding-left: $datagrid-spacing-row-h * 2;
   }
 
   &__caption--ordered-asc,
@@ -168,8 +163,11 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
 
   &__filter {
     @include shade(1, background-color);
-    @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-mobile}');
     padding: $datagrid-spacing-row-v $datagrid-spacing-row-h / 2;
+
+    @include tablet {
+      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-tablet}');
+    }
 
     @include desktop {
       @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-desktop}');
@@ -239,7 +237,7 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     padding: $datagrid-spacing-row-v $datagrid-spacing-cell-h;
     position: relative;
 
-    &:first-child {
+    &:first-child:not(#{&}--checkbox) {
       padding-left: $datagrid-spacing-row-h * 2;
     }
 
@@ -266,20 +264,20 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     color: inherit;
   }
 
+  &__label {
+    @include body;
+  }
+
   .toolbar .checkbox {
-    margin-left: $datagrid-spacing-row-h;
-    position: absolute;
-  }
-
-  .toolbar .checkbox + * {
-    margin-left: $datagrid-spacing-row-h * 2 + $datagrid-spacing-cell-h + $checkbox-size;
-  }
-
-  .toolbar__list {
-    margin: $datagrid-spacing-row-v 0;
+    margin-left: calc(#{$datagrid-spacing-cell-h} - #{$datagrid-spacing-row-h});
+    margin-right: $datagrid-spacing-row-h;
   }
 
   .toolbar__list-item:not(:last-child) {
     margin-right: $datagrid-spacing-row-h;
+  }
+
+  .toolbar .select {
+    @extend .select--bordered;
   }
 }

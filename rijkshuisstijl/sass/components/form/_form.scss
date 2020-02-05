@@ -33,6 +33,10 @@
     @include h2;
   }
 
+  .intro {
+    @include margin(true);
+  }
+
   &__caption {
     @include h2(auto, padding);
     @include shade-color('dark-blue');
@@ -60,7 +64,7 @@
     flex-direction: column;
     margin: 0;
     padding-top: 0;
-    padding-bottom: $form-control-margin-top;
+    padding-bottom: 0;
   }
 
   &__legend {
@@ -69,7 +73,8 @@
   }
 
   .form-control {
-    margin-top: $form-control-margin-top
+    margin-top: $form-control-margin-top;
+    margin-bottom: $form-control-margin-top;
   }
 
   &__actions {
