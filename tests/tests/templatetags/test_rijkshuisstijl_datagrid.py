@@ -352,7 +352,7 @@ class DatagridTestCase(TestCase):
         )
 
         self.assertInHTML(
-            '<input class="input select-all" type="checkbox" data-select-all="#my-first-datagrid .input[type=&quot;checkbox&quot;]">',
+            '<input class="input select-all" type="checkbox" id="my-first-datagrid-select-all-top" data-select-all="#my-first-datagrid .input[type=&quot;checkbox&quot;]">',
             html,
         )
         self.assertInHTML('<input class="input" type="checkbox" name="bar" value="3">', html)

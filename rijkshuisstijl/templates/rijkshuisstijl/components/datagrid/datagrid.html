@@ -76,7 +76,6 @@
                 <tr class="datagrid__row datagrid__row--captions">
                     {% for column in columns %}
                         {% if column.key in orderable_column_keys %}
-
                             {% with ordering|get:column.key as ordering %}
                                 <th class="datagrid__caption datagrid__caption--{{ column.key }} datagrid__caption--orderable{% if ordering.direction %} datagrid__caption--ordered-{{ ordering.direction }}{% endif %}"
                                         {% if form and forloop.counter is 1 %} colspan="2"{% endif %}

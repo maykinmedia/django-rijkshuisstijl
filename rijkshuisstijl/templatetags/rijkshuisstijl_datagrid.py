@@ -87,8 +87,12 @@ def datagrid(context, **kwargs):
         Example: {"author": "author__first_name"}
 
       - If a list is passed each value will map to a field (the key) in columns and will also be used to describe
-        a field lookup
+        a field lookup.
         Example: ['author', 'title']
+
+      - Additionally, a dict ("key", ["lookup"]) can be passed within a list.
+        a field lookup.
+        Example: ['{"key": "author", "lookup": "author__first_name"}', 'title']
 
     - ordering_key: Optional, describes which query parameter should be used in hyperlinks
     (set on the table captions) to indicate which order the view should provide, defaults to "ordering".
@@ -262,14 +266,22 @@ def datagrid(context, **kwargs):
         :return: A list_of_dict where each dict contains "key" and "label" keys.
         """
         columns = parse_kwarg(kwargs, "columns", [])
-        columns = create_list_of_dict(columns)
+        columns = create_list_of_dict(columns, "key", "fallback_label")
 
         # Get column label.
         for column in columns:
             context_queryset = context.get("queryset")
             queryset = kwargs.get("queryset", context_queryset)
 
-            column["label"] = get_field_label(queryset, column["label"])
+            if queryset and not column.get(
+                "label"
+            ):  # If queryset present, resolve label via model.
+                column["label"] = get_field_label(queryset, column["key"])
+            if not queryset and not column.get(
+                "label"
+            ):  # If queryset not present, fall back to fallback label.
+                column["label"] = get_field_label(None, column.get("fallback_label"))
+
         return columns
 
     def get_object_list():
@@ -423,11 +435,46 @@ def datagrid(context, **kwargs):
         Returns the keys of the fields which should be made orderable.
         :return: list_of_str
         """
+        return [c["key"] for c in get_orderable_columns()]
+
+    def get_orderable_columns():
+        """
+        Returns the the key and lookup field for every column which should be made ordrable..
+        :return: A list_of_dict where each dict contains at least "key" and "lookup" keys.
+        """
         orderable_columns = parse_kwarg(kwargs, "orderable_columns", {})
-        try:
-            return [key for key in orderable_columns.keys()]
-        except AttributeError:
-            return orderable_columns
+        orderable_columns_list_of_dict = []
+
+        """
+          - If a dict is passed each key will map to a field (the key) in columns, each value will be used to describe
+            a field lookup.
+            Example: {"author": "author__first_name"}
+        """
+        if type(orderable_columns) is dict:
+            orderable_columns_list_of_dict = [
+                {"key": item[0], "lookup": item[1]} for item in orderable_columns.items()
+            ]
+
+        """
+          - If a list is passed each value will map to a field (the key) in columns and will also be used to describe
+            a field lookup
+            Example: ['author', 'title']
+        """
+        if type(orderable_columns) is list or type(orderable_columns) is tuple:
+            for orderable_column in orderable_columns:
+                if type(orderable_column) is dict:
+                    """
+                    Edge case: A dict is found within the list, this is also supported.
+                    """
+                    key = orderable_column["key"]
+                    lookup = orderable_column.get("lookup", key)
+                    orderable_column_dict = {"key": key, "lookup": lookup}
+                else:
+                    orderable_column_dict = {"key": orderable_column, "lookup": orderable_column}
+
+                orderable_columns_list_of_dict.append(orderable_column_dict)
+
+        return orderable_columns_list_of_dict
 
     def get_ordering_dict():
         """
@@ -435,20 +482,18 @@ def datagrid(context, **kwargs):
         :return: dict
         """
         request = context["request"]
-        orderable_columns = parse_kwarg(kwargs, "orderable_columns", {})
         order_by_index = kwargs.get("order_by_index", False)
         ordering_dict = {}
 
-        # Convert list to list_of_dict.
-        if type(orderable_columns) is list or type(orderable_columns) is tuple:
-            orderable_columns = {column: column for column in orderable_columns}
-
         try:
             i = 1
-            for (orderable_column_key, orderable_column_field) in orderable_columns.items():
+            for orderable_column in get_orderable_columns():
+                orderable_column_key = orderable_column["key"]
+                orderable_column_lookup = orderable_column["lookup"]
+
                 querydict = QueryDict(request.GET.urlencode(), mutable=True)
                 ordering_key = get_ordering_key()
-                ordering_value = str(i) if order_by_index else orderable_column_field
+                ordering_value = str(i) if order_by_index else orderable_column_lookup
                 current_ordering = get_ordering()
 
                 directions = {
@@ -608,8 +653,9 @@ def datagrid(context, **kwargs):
     config["columns"] = get_columns()
     config["object_list"] = get_object_list()
     config["filters"] = get_filter_dict()
-    config["orderable_column_keys"] = get_orderable_column_keys()
     config["ordering"] = get_ordering_dict()
+    config["orderable_column_keys"] = get_orderable_column_keys()
+    # config["orderable_column_keys"] = config["ordering"].keys() #FIXME
 
     # Pagination
     config = add_paginator(config)

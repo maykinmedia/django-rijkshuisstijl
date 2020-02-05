@@ -11,7 +11,7 @@ except ImportError:
 
 def create_list_of_dict(obj, name_key="key", name_value="label"):
     """
-    Converts obj to a list of dict containing name_key and name_value for every dict.
+    Converts obj to a list_of_dict containing name_key and name_value for every dict.
     Obj can be dict, string or list.
 
     Output format (name_key="key", name_value="label"):
