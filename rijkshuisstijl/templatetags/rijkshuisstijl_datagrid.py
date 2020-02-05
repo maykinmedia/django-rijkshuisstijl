@@ -251,6 +251,9 @@ def datagrid(context, **kwargs):
     :param kwargs:
     """
 
+    # Keep a quick cache single use _cache dict to speed things up a bit, we might need to optimize this later.
+    _cache = {}
+
     def get_id():
         """
         Gets the id to put on the datagrid based on kwargs["id'}, if no id is provided a uuid4 is created and prefixed
@@ -265,6 +268,9 @@ def datagrid(context, **kwargs):
         based on the model or a simple replacement of dashes and underscores.
         :return: A list_of_dict where each dict contains "key" and "label" keys.
         """
+        if _cache.get("get_columns"):
+            return _cache.get("get_columns")
+
         columns = parse_kwarg(kwargs, "columns", [])
         columns = create_list_of_dict(columns, "key", "fallback_label")
 
@@ -282,6 +288,7 @@ def datagrid(context, **kwargs):
             ):  # If queryset not present, fall back to fallback label.
                 column["label"] = get_field_label(None, column.get("fallback_label"))
 
+        _cache["get_columns"] = columns
         return columns
 
     def get_object_list():
@@ -360,6 +367,9 @@ def datagrid(context, **kwargs):
 
         :return: list_of_dict.
         """
+        if _cache.get("get_filter_dict"):
+            return _cache.get("get_filter_dict")
+
         filterable_columns = parse_kwarg(kwargs, "filterable_columns", [])
         filterable_columns = create_list_of_dict(filterable_columns)
 
@@ -367,6 +377,7 @@ def datagrid(context, **kwargs):
         queryset = kwargs.get("queryset", context_queryset)
 
         if not queryset:  # Filtering is only supported on querysets.
+            _cache["get_filter_dict"] = {}
             return {}
 
         for filterable_column in filterable_columns:
@@ -406,6 +417,8 @@ def datagrid(context, **kwargs):
             request = context.get("request")
             filter_key = filterable_column["filter_key"]
             filterable_column["value"] = request.GET.get(filter_key)
+
+        _cache["get_filter_dict"] = filterable_columns
         return filterable_columns
 
     def get_ordering():
@@ -414,14 +427,19 @@ def datagrid(context, **kwargs):
         Only allows ordering by dict keys found in the orderable_columns option.
         :return: string or None
         """
+        if _cache.get("get_ordering"):
+            return _cache.get("get_ordering")
+
         request = context["request"]
         ordering_key = get_ordering_key()
         ordering = request.GET.get(ordering_key)
         orderable_columns_keys = get_orderable_column_keys()
 
+        result = None
         if ordering and ordering.replace("-", "") in orderable_columns_keys:
-            return ordering
-        return None
+            result = ordering
+        _cache["get_ordering"] = result
+        return result
 
     def get_ordering_key():
         """
@@ -435,13 +453,22 @@ def datagrid(context, **kwargs):
         Returns the keys of the fields which should be made orderable.
         :return: list_of_str
         """
-        return [c["key"] for c in get_orderable_columns()]
+        if _cache.get("get_orderable_column_keys"):
+            return _cache.get("get_orderable_column_keys")
+
+        orderable_column_keys = [c["key"] for c in get_orderable_columns()]
+
+        _cache["get_orderable_column_keys"] = orderable_column_keys
+        return orderable_column_keys
 
     def get_orderable_columns():
         """
         Returns the the key and lookup field for every column which should be made ordrable..
         :return: A list_of_dict where each dict contains at least "key" and "lookup" keys.
         """
+        if _cache.get("get_orderable_columns"):
+            return _cache.get("get_orderable_columns")
+
         orderable_columns = parse_kwarg(kwargs, "orderable_columns", {})
         orderable_columns_list_of_dict = []
 
@@ -474,6 +501,7 @@ def datagrid(context, **kwargs):
 
                 orderable_columns_list_of_dict.append(orderable_column_dict)
 
+        _cache["get_orderable_columns"] = orderable_columns_list_of_dict
         return orderable_columns_list_of_dict
 
     def get_ordering_dict():
