@@ -67,8 +67,13 @@ def format_value(obj, field):
         if related_manager:
             return ", ".join([str(instance) for instance in val.all()])
 
+    # Check for iterable.
     if isinstance(val, Iterable) and not isinstance(val, str):
         return ", ".join(val)
+
+    # Check for callable.
+    if callable(val):
+        return val()
 
     if val:
         try:
