@@ -1,5 +1,6 @@
 import json
 import re
+from uuid import uuid4
 
 from django.utils.safestring import SafeText
 
@@ -42,6 +43,15 @@ def create_list_of_dict(obj, name_key="key", name_value="label"):
                 else:
                     list_of_dict.append({name_key: column, name_value: column})
         return list_of_dict
+
+
+def get_id(config, prefix):
+    """
+    Gets the id to put on the component based on kwargs["id"], if no id is provided a uuid4 is created and prefixed
+    with "<prefix>-".
+    :return: A str which should be unique to this component.
+    """
+    return config.get("id", prefix + "-" + str(uuid4()))
 
 
 def get_field_label(obj, field):

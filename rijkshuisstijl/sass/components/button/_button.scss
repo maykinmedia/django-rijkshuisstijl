@@ -82,6 +82,10 @@
     @include button--small;
   }
 
+  &--small#{&}--no-text {
+    @include button--small(true);
+  }
+
   &--transparent {
     @include color-primary;
     @include border($position: all);

@@ -1,10 +1,8 @@
-from uuid import uuid4
-
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
-from .rijkshuisstijl_helpers import merge_config, parse_kwarg
+from .rijkshuisstijl_helpers import get_id, merge_config, parse_kwarg
 
 
 @register.inclusion_tag("rijkshuisstijl/components/button/button.html")
@@ -48,34 +46,31 @@ def button_link(**kwargs):
     "rijkshuisstijl/components/confirm-form/confirm-form.html", takes_context=True
 )
 def confirm_form(context, **kwargs):
-    def get_id():
-        return kwargs.get("id", "confirm-form-" + str(uuid4()))
-
     def get_object_list():
         context_object_list = context.get("object_list", [])
         context_queryset = context.get("queryset", context_object_list)
-        object_list = kwargs.get("object_list", context_queryset)
-        object_list = kwargs.get("queryset", object_list)
+        object_list = config.get("object_list", context_queryset)
+        object_list = config.get("queryset", object_list)
         return object_list
 
-    kwargs = merge_config(kwargs)
+    config = merge_config(kwargs)
 
     # i18n
-    kwargs["label_confirm"] = parse_kwarg(kwargs, "label_confirm", _("Bevestig"))
+    config["label_confirm"] = parse_kwarg(config, "label_confirm", _("Bevestig"))
 
     # kwargs
-    kwargs["id"] = get_id()
-    kwargs["class"] = kwargs.get("class", None)
-    kwargs["method"] = kwargs.get("method", "post")
-    kwargs["object_list"] = get_object_list()
-    kwargs["name_object"] = kwargs.get("name_object", "object")
-    kwargs["name_confirm"] = kwargs.get("name_confirm", "confirm")
-    kwargs["status"] = kwargs.get("status", "warning")
-    kwargs["title"] = kwargs.get("title", _("Actie bevestigen"))
-    kwargs["text"] = kwargs.get("text", _("Weet u zeker dat u deze actie wilt uitvoeren?"))
+    config["id"] = get_id(config, "confirm-form")
+    config["class"] = config.get("class", None)
+    config["method"] = config.get("method", "post")
+    config["object_list"] = get_object_list()
+    config["name_object"] = config.get("name_object", "object")
+    config["name_confirm"] = config.get("name_confirm", "confirm")
+    config["status"] = config.get("status", "warning")
+    config["title"] = config.get("title", _("Actie bevestigen"))
+    config["text"] = config.get("text", _("Weet u zeker dat u deze actie wilt uitvoeren?"))
 
-    kwargs["config"] = kwargs
-    return kwargs
+    config["config"] = config
+    return config
 
 
 @register.inclusion_tag("rijkshuisstijl/components/form/form.html", takes_context=True)

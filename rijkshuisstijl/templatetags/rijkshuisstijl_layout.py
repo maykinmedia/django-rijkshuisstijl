@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
-from .rijkshuisstijl_helpers import merge_config, parse_kwarg
+from .rijkshuisstijl_helpers import get_id, merge_config, parse_kwarg
 
 
 @register.inclusion_tag("rijkshuisstijl/components/footer/footer.html", takes_context=True)
@@ -402,23 +402,27 @@ def textbox(**kwargs):
     Available options:
 
         - class: Optional, a string with additional CSS classes.
+        - close: Optional, If true, adds a close button to the textbox.
+        - id: Optional, a string specifying the id, defaults to a generated uuid4 string.
         - status: Optional, A status string from the Django messages framework, styling the textbox accordingly.
         - title: Optional, Title to show.
         - text: Optional, Text to show.
         - wysiwyg: Optional, Raw HTML to be shown, styled automatically.
         - urlize: Optional, if True text is passed to "urlize" template filter, automatically creating hyperlinks.
 
-    :param kwargs:
+    :param config:
     """
-    kwargs = merge_config(kwargs)
+    config = merge_config(kwargs)
 
     # kwargs
-    kwargs["class"] = kwargs.get("class", None)
-    kwargs["status"] = kwargs.get("status", None)
-    kwargs["title"] = kwargs.get("title", None)
-    kwargs["text"] = kwargs.get("text", None)
-    kwargs["wysiwyg"] = kwargs.get("wysiwyg")
-    kwargs["urlize"] = kwargs.get("urlize", True)
+    config["class"] = config.get("class", None)
+    config["close"] = parse_kwarg(config, "close", False)
+    config["id"] = get_id(config, "textbox")
+    config["status"] = config.get("status", None)
+    config["title"] = config.get("title", None)
+    config["text"] = config.get("text", None)
+    config["wysiwyg"] = config.get("wysiwyg")
+    config["urlize"] = config.get("urlize", True)
 
-    kwargs["config"] = kwargs
-    return kwargs
+    config["config"] = config
+    return config

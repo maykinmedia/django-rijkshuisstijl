@@ -1,5 +1,4 @@
 import re
-from uuid import uuid4
 
 from django.core.paginator import Paginator
 from django.http import QueryDict
@@ -11,6 +10,7 @@ from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from .rijkshuisstijl_helpers import (
     create_list_of_dict,
     get_field_label,
+    get_id,
     merge_config,
     parse_kwarg,
 )
@@ -239,7 +239,7 @@ def datagrid(context, **kwargs):
     ------------------
 
     - class: Optional, a string with additional CSS classes.
-    - id: Optional, a string specifying the datagrid id, defaults to a generated uuid4 string.
+    - id: Optional, a string specifying the id, defaults to a generated uuid4 string.
     - title: Optional, if set, a title will be shown above the datagrid.
     - url_reverse: Optional, A URL name to reverse using the object's 'pk' attribute as one and only attribute,
       creates hyperlinks in the first cell. If no url_reverse if passed get_absolute_url is tried in order to find
@@ -253,14 +253,6 @@ def datagrid(context, **kwargs):
 
     # Keep a quick cache single use _cache dict to speed things up a bit, we might need to optimize this later.
     _cache = {}
-
-    def get_id():
-        """
-        Gets the id to put on the datagrid based on kwargs["id'}, if no id is provided a uuid4 is created and prefixed
-        with "datagrid-".
-        :return: A str which should be unique to this datagrid.
-        """
-        return kwargs.get("id", "datagrid-" + str(uuid4()))
 
     def get_columns():
         """
@@ -707,7 +699,7 @@ def datagrid(context, **kwargs):
 
     # Additional options
     config["class"] = kwargs.get("class", None)
-    config["id"] = get_id()
+    config["id"] = get_id(config, "datagrid")
     config["title"] = kwargs.get("title", None)
     config["url_reverse"] = kwargs.get("url_reverse", "")
     config["urlize"] = kwargs.get("urlize", True)

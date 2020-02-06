@@ -1,12 +1,16 @@
 @import 'microscope/typography';
 @import 'constants';
 
-@mixin button--small {
+@mixin button--small($square: false) {
   @include body--small;
   height: $button-height-small;
   line-height: $button-height-small;
 
+  @if $square {
+    width: $button-height-small;
+  }
+
   .icon:before {
-    @include scale(0.75);
+    @include scale(0.5);
   }
 }
