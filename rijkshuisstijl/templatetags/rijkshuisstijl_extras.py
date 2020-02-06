@@ -401,14 +401,14 @@ def title_header(title, **kwargs):
     :param title:
     :param kwargs:
     """
-    kwargs = merge_config(kwargs)
+    config = merge_config(kwargs)
 
     # kwargs
-    kwargs["class"] = title
-    kwargs["title"] = title
+    config["class"] = config.get("class")
+    config["title"] = title
 
-    kwargs["config"] = kwargs
-    return kwargs
+    config["config"] = config
+    return config
 
 
 @register.inclusion_tag("rijkshuisstijl/components/toolbar/toolbar.html")

@@ -2,6 +2,9 @@
     {% block content %}
         <div class="layout">
             {% block layout %}
+                {% if title %}
+                    {% title_header class='title-header--no-margin-bottom' title=title %}
+                {% endif %}
                 {% datagrid config=datagrid_config %}
             {% endblock %}
         </div>

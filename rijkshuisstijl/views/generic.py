@@ -110,11 +110,14 @@ class ListView(DjListView):
     modifier_mapping = None
     page_key = "page"
     urlize = True
+    title = None
+    subtitle = None
     template_name = "rijkshuisstijl/views/generic/list.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["datagrid_config"] = self.get_datagrid_config()
+        ctx["title"] = self.title
         return ctx
 
     def get_paginate_by(self, queryset):
@@ -130,6 +133,7 @@ class ListView(DjListView):
         datagrid_config["class"] = "datagrid--overflow-mobile"
         datagrid_config["columns"] = self.get_columns()
         datagrid_config["queryset"] = self.get_queryset()
+        datagrid_config["title"] = self.subtitle
 
         # Filter
         datagrid_config["filterable_columns"] = self.get_filterable_columns()
