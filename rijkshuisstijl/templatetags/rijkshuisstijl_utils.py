@@ -1,4 +1,5 @@
 import re
+from collections.abc import Iterable
 
 from django import template
 from django.core.exceptions import FieldDoesNotExist
@@ -65,6 +66,9 @@ def format_value(obj, field):
 
         if related_manager:
             return ", ".join([str(instance) for instance in val.all()])
+
+    if isinstance(val, Iterable) and not isinstance(val, str):
+        return ", ".join(val)
 
     if val:
         try:
