@@ -1,9 +1,16 @@
 import unittest
 
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 from django.urls import reverse_lazy
 
-from rijkshuisstijl.views.generic import TemplateView, CreateView, DetailView, ListView, UpdateView
+from rijkshuisstijl.views.generic import (
+    CreateView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
+
 from ...models import Author, Award, Book, Publisher
 
 
@@ -32,11 +39,11 @@ class ViewTestCaseMixin:
 
     def test_script(self):
         response = self.client_get()
-        self.assertContains(response, "rijkshuisstijl.js")
+        self.assertContains(response, "rh-js.js")
 
     def test_css(self):
         response = self.client_get()
-        self.assertContains(response, "screen.css")
+        self.assertContains(response, "rh-css.css")
 
 
 class FormTestCaseMixin:
@@ -352,16 +359,18 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertContains(response, expected_award_label)
 
     def test_many_to_many(self):
-        Author.objects.bulk_create([
-            Author(first_name="James", last_name="Bond"),
-            Author(first_name="John", last_name="Doe"),
-        ])
+        Author.objects.bulk_create(
+            [
+                Author(first_name="James", last_name="Bond"),
+                Author(first_name="John", last_name="Doe"),
+            ]
+        )
 
         authors = Author.objects.all()
 
-        expected_authors_value = ", ".join([
-            f"{author.first_name} {author.last_name}" for author in authors
-        ])
+        expected_authors_value = ", ".join(
+            [f"{author.first_name} {author.last_name}" for author in authors]
+        )
 
         self.object.authors.set(authors)
 
@@ -426,7 +435,7 @@ class ListViewTestCase(ViewTestCaseMixin, TestCase):
 
         self.assertEqual(
             context.get("columns"),
-            ("title", "authors", "publisher", "date_published", "stock", "random_set")
+            ("title", "authors", "publisher", "date_published", "stock", "random_set"),
         )
         self.assertEqual(context.get("queryset")[0], self.book_1)
         self.assertEqual(context.get("queryset")[1], self.book_2)

@@ -1,10 +1,10 @@
-@import "font-awesome/scss/font-awesome";
-@import 'microscope/color';
-@import 'microscope/grid';
-@import 'microscope/responsive';
-@import 'microscope/transform';
-@import 'microscope/typography';
-@import 'microscope/util';
+@import "~font-awesome/scss/font-awesome";
+@import '~microscope-sass/lib/color';
+@import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/transform';
+@import '~microscope-sass/lib/typography';
+@import '~microscope-sass/lib/util';
 @import '../../settings/color';
 @import '../../settings/lib/ro-shade';
 @import '../../settings/lib/sticky';

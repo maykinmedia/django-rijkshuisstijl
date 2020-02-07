@@ -1,7 +1,7 @@
-@import 'font-awesome/scss/font-awesome';
-@import 'microscope/responsive';
-@import 'microscope/typography';
-@import 'microscope/grid';
+@import '~font-awesome/scss/font-awesome';
+@import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/typography';
+@import '~microscope-sass/lib/grid';
 
 $paginator-spacing: $grid-margin-0;
 

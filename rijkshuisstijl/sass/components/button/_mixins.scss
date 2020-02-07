@@ -1,4 +1,4 @@
-@import 'microscope/typography';
+@import '~microscope-sass/lib/typography';
 @import 'constants';
 
 @mixin button--small($square: false) {

@@ -37,8 +37,8 @@ export class Compat {
      */
     addCompat() {
         let script = document.createElement('script');
-        let publicPath = __webpack_public_path__ || '/static/js/';  // jshint ignore:line
-        script.src = publicPath + 'compat.js';
+        let publicPath = __webpack_public_path__ || '/static/bundles/';  // jshint ignore:line
+        script.src = publicPath + 'rh-compat.js';
         document.body.appendChild(script);
     }
 }

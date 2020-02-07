@@ -19,6 +19,9 @@ module.exports = {
     // Parsed package.json
     package: pkg,
 
+    // Path to the sass entry point
+    sassEntry: sourcesRoot + 'sass/rijkshuisstijl.scss',
+
     // Path to the sass (sources) directory
     sassSrcDir: sourcesRoot + 'sass/',
 
@@ -37,6 +40,12 @@ module.exports = {
     // Path to the compatibility js entry point (source)
     compatEntry: sourcesRoot + 'js/compat.js',
 
+    // Path to css (sources)
+    cssSrc: sourcesRoot + 'css/**/*.css',
+
+    // Path to the css (sources) directory
+    cssSrcDir: sourcesRoot + 'css/',
+
     // Path to js (sources)
     jsSrc: sourcesRoot + 'js/**/*.js',
 
@@ -44,7 +53,7 @@ module.exports = {
     jsSrcDir: sourcesRoot + 'js/',
 
     // Path to the (transpiled) js directory
-    jsDir: staticRoot + 'js/',
+    jsDir: staticRoot + 'bundles/',
 
     // Path to js spec (test) files
     jsSpec: sourcesRoot + 'jstests/**/*.spec.js',
