@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./rijkshuisstijl/sass/components/skiplink/_all.scss"],"names":[],"mappings":"AAAA,UAAU,kBAAkB,WAAW,Y","file":"skiplink-sass.css","sourcesContent":[".skiplink{position:absolute;top:-100vh;left:-100vh}"],"sourceRoot":""}

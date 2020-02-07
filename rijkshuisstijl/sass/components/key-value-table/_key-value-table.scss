@@ -1,7 +1,9 @@
-@import 'microscope/grid';
-@import 'microscope/typography';
+@import '../../settings/all';
 @import '../../settings/lib/ro-shade';
+@import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/typography';
 @import '../form/constants';
+@import '../form/input';
 
 .key-value-table {
   border-spacing: 0;

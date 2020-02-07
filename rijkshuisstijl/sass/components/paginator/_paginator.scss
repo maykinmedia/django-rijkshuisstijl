@@ -1,7 +1,9 @@
-@import 'font-awesome/scss/font-awesome';
-@import 'microscope/responsive';
-@import 'microscope/typography';
-@import 'microscope/grid';
+@import '../../settings/all';
+@import '../../settings/lib/ro-shade';
+@import "~font-awesome/scss/font-awesome";
+@import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/typography';
+@import '~microscope-sass/lib/grid';
 
 $paginator-spacing: $grid-margin-0;
 
@@ -14,7 +16,7 @@ $paginator-spacing: $grid-margin-0;
   &__label,
   &__link,
   .input {
-    margin: 0 $paginator-spacing!important;
+    margin: 0 $paginator-spacing !important;
   }
 
   &__section {

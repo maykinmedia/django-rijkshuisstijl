@@ -1,5 +1,7 @@
-@import 'microscope/color';
-@import 'microscope/grid';
+@import '../../settings/all';
+@import '~microscope-sass/lib/color';
+@import '~microscope-sass/lib/grid';
+@import '../../settings/color';
 
 $button-color-danger: $color-danger-dark;
 $button-color-info: $color-info-dark;

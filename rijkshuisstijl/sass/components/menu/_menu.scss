@@ -1,8 +1,10 @@
+@import '../../settings/all';
 @import '../../settings/lib/ro-shade';
-@import 'microscope/color';
-@import 'microscope/grid';
-@import 'microscope/typography';
-@import 'microscope/responsive';
+@import '~microscope-sass/lib/color';
+@import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/transform';
+@import '~microscope-sass/lib/typography';
 
 .menu {
   @include clearfix;

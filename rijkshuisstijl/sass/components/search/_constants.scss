@@ -1,5 +1,6 @@
-@import 'microscope/color';
-@import 'microscope/grid';
+@import '../../settings/all';
+@import '~microscope-sass/lib/color';
+@import '~microscope-sass/lib/grid';
 
 $search-color-button-active: $color-black;
 $search-height: $grid-row-height + $grid-margin-0;

@@ -1,8 +1,9 @@
-@import 'microscope/color';
-@import 'microscope/grid';
-@import 'microscope/responsive';
-@import 'microscope/transform';
-@import 'microscope/typography';
+@import '../../settings/all';
+@import '~microscope-sass/lib/color';
+@import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/transform';
+@import '~microscope-sass/lib/typography';
 @import 'constants';
 @import 'mixins';
 

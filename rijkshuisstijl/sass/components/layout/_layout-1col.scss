@@ -1,5 +1,6 @@
-@import 'microscope/grid';
+@import '../../settings/all';
 @import '../../settings/lib/sticky';
+@import '~microscope-sass/lib/grid';
 @import 'mixins';
 
 .layout {

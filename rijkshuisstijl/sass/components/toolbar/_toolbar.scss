@@ -1,8 +1,9 @@
-@import 'microscope/grid';
-@import 'microscope/responsive';
-@import 'microscope/transform';
-@import 'microscope/typography';
+@import '../../settings/all';
 @import '../../settings/lib/sticky';
+@import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/transform';
+@import '~microscope-sass/lib/typography';
 @import 'constants';
 
 .toolbar {

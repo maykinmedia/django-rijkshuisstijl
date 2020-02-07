@@ -1,7 +1,9 @@
-@import 'microscope/grid';
-@import 'microscope/typography';
+@import '../../settings/all';
 @import '../../settings/lib/ro-shade';
 @import '../../settings/lib/sticky';
+@import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/transform';
+@import '~microscope-sass/lib/typography';
 
 $texbox-padding-v-compact-mobile: calc((#{$grid-row-height} - #{$typography-line-height-h4-mobile} * #{$typography-font-size-h4-mobile}) / 2);
 $texbox-padding-v-compact-tablet: calc((#{$grid-row-height} - #{$typography-line-height-h4-tablet} * #{$typography-font-size-h4-tablet}) / 2);

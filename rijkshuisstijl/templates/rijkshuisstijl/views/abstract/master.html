@@ -4,13 +4,20 @@
 <head>
     <meta charset="utf-8">
     <title>{% block title %}{{ _('Werkbezoek') }}{% endblock %}</title>
-    {% meta_css %}
     <link href="{% static 'css/screen.css' %}" media="all" rel="stylesheet"/>
-    {% block extra_css %}{% endblock %}
-    {% meta_icons %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% meta_js %}
-    {% block extra_js %}{% endblock %}
+
+    {% meta_icons %}
+
+    {% block css %}
+        {% meta_css %}
+        {% block extra_css %}{% endblock %}
+    {% endblock %}
+
+    {% block js %}
+        {% meta_js %}
+        {% block extra_js %}{% endblock %}
+    {% endblock %}
 </head>
 
 <body class="view__body">

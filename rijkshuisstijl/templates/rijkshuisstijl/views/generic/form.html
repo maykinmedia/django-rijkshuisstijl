@@ -1,4 +1,11 @@
-{% extends template_base|default:'rijkshuisstijl/views/abstract/base.html' %}{% spaceless %}{% load rijkshuisstijl %}
+{% extends template_base|default:'rijkshuisstijl/views/abstract/base.html' %}{% spaceless %}{% load static rijkshuisstijl %}
+    {% block css %}
+        {{ block.super }}
+        <link rel="stylesheet" href="{% static 'rijkshuisstijl/bundles/form-css.css' %}">
+        <link rel="stylesheet" href="{% static 'rijkshuisstijl/bundles/intro-css.css' %}">
+        <link rel="stylesheet" href="{% static 'rijkshuisstijl/bundles/textbox-css.css' %}">
+    {% endblock %}
+
     {% block navigation %}
         {% navigation_bar class='navigation-bar--compact navigation-bar--dropdown' %}
     {% endblock %}

@@ -1,5 +1,6 @@
-@import 'microscope/responsive';
-@import 'microscope/grid';
+@import '../../settings/all';
+@import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/grid';
 @import 'constants';
 
 .view {

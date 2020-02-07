@@ -1,0 +1,295 @@
+/**
+Online kleuren
+
+Voor online toepassingen kun je uit de 17 communicatiekleuren van het Rijkshuisstijl palet kiezen met een extra palet
+van 7 grijstinten. Verder worden kleurrichtlijnen gegeven voor achtergrondkaders, een linkkleur, functionele kleuren bij
+meldingen en een focuskleur. Bij kleurcombinaties met tekst moet altijd aan de contrasteisen worden voldaan voor een
+goede leesbaarheid.
+ */
+/**
+17 communicatiekleuren online
+
+Je kiest 1 basiskleur met eventueel 1 of 2 lichte tinten ter ondersteuning voor de website, magazine of applicatie.
+Aanvullend kunnen voor achtergrondkaders, grafieken en tabellen ook tinten van een kleur worden toegepast in gradaties
+van 20%. De online kleuren van de Rijkshuisstijl zijn ook als kleurstalen bibliotheek beschikbaar. De onderstaande hex-
+en rgb-kleurwaarden zijn opgenomen in een '.ase'-bestand dat je in Photoshop, Illustrator of Indesign kunt importeren.
+ */
+/**
+Tinten voor achtergrondkaders, grafieken en tabellen
+
+Voor achtergrondkaders, grafieken en tabellen kunnen 7 neutrale grijstinten of tinten van een communicatiekleur in
+stappen van 20% worden toegepast. Voor tekstachtergrond wordt grijstint1 of communicatiekleur tint2 aanbevolen om aan de
+contrasteisen voor een goede leesbaarheid te voldoen.
+ */
+/**
+Een tekstlink is herkenbaar als onderstreepte tekst. Wanneer geen onderstreping aanwezig is moet de link aan 2
+contrasteisen voldoen, ten opzichte van de gewone tekstkleur maar ook ten opzichte van de achtergrondkleur. Gebruik de
+link contrast checker om 1 geschikte linkkleur te vinden voor de hele website, magazine of applicatie.
+
+- Een linkkleur in het rood wordt vermeden om verwarring met foutmeldingen te voorkomen.
+- Hou ook rekening met contrasteisen bij tinten van achtergrondkaders, tabellen, grafieken, etc.
+ */
+/**
+Met name bij formulieren is soms feedback in de vorm van meldingen nodig om de gebruiker te helpen bij het invullen. Een
+melding bestaat uit een icoon in een functionele kleur met bijpassende achtergrondtint en een helptekst. Voor de
+meldingen zijn rijkshuisstijliconen beschikbaar. Deze zijn niet alleen qua kleur functioneel maar ook in vorm
+onderscheidend. Door toenemend mobiel gebruik is het aan te bevelen de melding niet op een verzamelplek maar bij het
+desbetreffende invulveld te laten zien om onnodig heen en weer scrollen te voorkomen.
+ */
+/**
+Webfonts
+
+De webfonts zijn versies van de rijkshuisstijl lettertypen, die speciaal gemaakt zijn voor een optimale weergave op het
+beeldscherm. Zowel de Rijksoverheid Sans als de Serif zijn als webfont beschikbaar.
+ */
+/**
+Sans Web of Sans Serif?
+
+Sans Web wordt toegepast voor langere (lees-)teksten. De Serif Web is vooral interessant voor de afwisseling in
+bijvoorbeeld digitale magazines, in combinatie met de Sans Web. De webfont versies kunnen als regular, italic of bold
+versie toegpast worden.
+
+- De Rijksoverheidswebfonts mogen, net als het rijkslogo, uitsluitend voor Rijksoverheidspublicaties ingezet worden.
+- Het is aan te bevelen ook een fall-back systeemfont te bepalen voor het geval het webfont niet getoond kan worden.
+ */
+@font-face {
+  font-family: 'RO Sans';
+  src: url("/static/rijkshuisstijl/fonts/RO-SansWebText-Regular.eot");
+  src: url("/static/rijkshuisstijl/fonts/RO-SansWebText-Regular.eot?#iefix") format("eot"), url("/static/rijkshuisstijl/fonts/RO-SansWebText-Regular.ttf") format("truetype"), url("/static/rijkshuisstijl/fonts/RO-SansWebText-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'RO Sans';
+  src: url("/static/rijkshuisstijl/fonts/RO-SansWebText-Bold.eot");
+  src: url("/static/rijkshuisstijl/fonts/RO-SansWebText-Bold.eot?#iefix") format("eot"), url("/static/rijkshuisstijl/fonts/RO-SansWebText-Bold.ttf") format("truetype"), url("/static/rijkshuisstijl/fonts/RO-SansWebText-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'RO Sans';
+  src: url("/static/rijkshuisstijl/fonts/RO-SansWebText-Italic.eot");
+  src: url("/static/rijkshuisstijl/fonts/RO-SansWebText-Italic.eot?#iefix") format("eot"), url("/static/rijkshuisstijl/fonts/RO-SansWebText-Italic.ttf") format("truetype"), url("/static/rijkshuisstijl/fonts/RO-SansWebText-Italic.woff") format("woff");
+  font-weight: normal;
+  font-style: italic; }
+
+@font-face {
+  font-family: 'RO Serif';
+  src: url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Regular.eot");
+  src: url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Regular.eot?#iefix") format("eot"), url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Regular.ttf") format("truetype"), url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'RO Serif';
+  src: url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Bold.eot");
+  src: url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Bold.eot?#iefix") format("eot"), url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Bold.ttf") format("truetype"), url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'RO Serif';
+  src: url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Italic.eot");
+  src: url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Italic.eot?#iefix") format("eot"), url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Italic.ttf") format("truetype"), url("/static/rijkshuisstijl/fonts/RO-SerifWeb-Italic.woff") format("woff");
+  font-weight: normal;
+  font-style: italic; }
+
+@font-face {
+  font-family: "RO Icons";
+  font-style: normal;
+  font-weight: bold;
+  src: url("/static/rijkshuisstijl/fonts/ro-icons-1.11.woff") format("opentype"), url("/static/rijkshuisstijl/fonts/ro-icons-1.11.ttf") format("truetype"); }
+
+.wysiwyg h1:not(.button) {
+  color: black;
+  font-family: "RO Sans", Calibri, sans-serif;
+  margin: 0;
+  font-size: 1.625rem;
+  line-height: 1.15385;
+  letter-spacing: normal;
+  font-weight: 700; }
+  .wysiwyg h1:not(.button):not(:last-child) {
+    margin: 0px 0px 0.7692em; }
+    @media all and (min-width: 992px) {
+      .wysiwyg h1:not(.button):not(:last-child) {
+        margin: 0px 0px 1em; } }
+  @media all and (min-width: 768px) {
+    .wysiwyg h1:not(.button) {
+      font-size: 1.75rem; } }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h1:not(.button) {
+      font-size: 2rem; } }
+  @media all and (min-width: 768px) {
+    .wysiwyg h1:not(.button) {
+      line-height: 1.14286; } }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h1:not(.button) {
+      line-height: 1.125; } }
+
+.wysiwyg h2:not(.button) {
+  color: black;
+  font-family: "RO Sans", Calibri, sans-serif;
+  margin: 0;
+  font-size: 1.3125rem;
+  line-height: 1.2381;
+  letter-spacing: normal;
+  font-weight: 700; }
+  .wysiwyg h2:not(.button):not(:last-child) {
+    margin: 0.952em 0 0.2em; }
+    @media all and (min-width: 992px) {
+      .wysiwyg h2:not(.button):not(:last-child) {
+        margin: 2em 0 0.2em; } }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h2:not(.button) {
+      font-size: 1.5rem; } }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h2:not(.button) {
+      line-height: 1.20833; } }
+
+.wysiwyg h3:not(.button) {
+  color: black;
+  font-family: "RO Sans", Calibri, sans-serif;
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.44444;
+  letter-spacing: normal;
+  font-weight: 700; }
+  .wysiwyg h3:not(.button):not(:last-child) {
+    margin: 0px 0px 0px; }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h3:not(.button) {
+      font-size: 1.25rem; } }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h3:not(.button) {
+      line-height: 1.45; } }
+
+.wysiwyg h4:not(.button) {
+  color: black;
+  font-family: "RO Sans", Calibri, sans-serif;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.625;
+  letter-spacing: normal;
+  font-weight: 700; }
+  .wysiwyg h4:not(.button):not(:last-child) {
+    margin: 0px 0px 60px; }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h4:not(.button) {
+      font-size: 1.125rem; } }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h4:not(.button) {
+      line-height: 1.61111; } }
+
+.wysiwyg h5:not(.button) {
+  color: black;
+  font-family: "RO Sans", Calibri, sans-serif;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+  letter-spacing: normal;
+  font-weight: 700; }
+  .wysiwyg h5:not(.button):not(:last-child) {
+    margin: 0; }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h5:not(.button) {
+      font-size: 1.125rem; } }
+
+.wysiwyg h6:not(.button) {
+  color: black;
+  font-family: "RO Sans", Calibri, sans-serif;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+  letter-spacing: normal;
+  font-weight: 700; }
+  .wysiwyg h6:not(.button):not(:last-child) {
+    margin: 0; }
+  @media all and (min-width: 1200px) {
+    .wysiwyg h6:not(.button) {
+      font-size: 1.125rem; } }
+
+.wysiwyg p:not(.button) {
+  color: black;
+  font-family: "RO Sans", Calibri, sans-serif;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.375;
+  letter-spacing: normal;
+  font-weight: 400; }
+  .wysiwyg p:not(.button):not(:last-child) {
+    margin-bottom: 0.8125rem; }
+  @media all and (min-width: 1200px) {
+    .wysiwyg p:not(.button) {
+      font-size: 1.125rem; } }
+  @media all and (min-width: 992px) {
+    .wysiwyg p:not(.button) {
+      line-height: 1.625; } }
+  @media all and (min-width: 1200px) {
+    .wysiwyg p:not(.button) {
+      line-height: 1.52632; } }
+
+.wysiwyg a:not(.button) {
+  color: #01689b;
+  cursor: pointer;
+  text-decoration: underline; }
+  .wysiwyg a:not(.button):hover {
+    color: #01689b;
+    text-decoration: none !important; }
+
+.wysiwyg ul:not(.button), .wysiwyg ol:not(.button) {
+  color: black;
+  font-family: "RO Sans", Calibri, sans-serif;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.375;
+  letter-spacing: normal;
+  font-weight: 400; }
+  @media all and (min-width: 1200px) {
+    .wysiwyg ul:not(.button), .wysiwyg ol:not(.button) {
+      font-size: 1.125rem; } }
+  @media all and (min-width: 992px) {
+    .wysiwyg ul:not(.button), .wysiwyg ol:not(.button) {
+      line-height: 1.625; } }
+  @media all and (min-width: 1200px) {
+    .wysiwyg ul:not(.button), .wysiwyg ol:not(.button) {
+      line-height: 1.52632; } }
+  .wysiwyg ul:not(.button):not(:last-child), .wysiwyg ol:not(.button):not(:last-child) {
+    margin-bottom: 0.8125rem; }
+
+.wysiwyg hr:not(.button) {
+  box-sizing: border-box;
+  border-top: 2px solid #d9ebf7;
+  margin: 0; }
+  .wysiwyg hr:not(.button):not(:last-child) {
+    margin-bottom: 0.8125rem; }
+
+.wysiwyg table:not(.button) {
+  color: black;
+  font-family: "RO Sans", Calibri, sans-serif;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.375;
+  letter-spacing: normal;
+  font-weight: 400;
+  border-collapse: collapse;
+  text-align: left; }
+  @media all and (min-width: 1200px) {
+    .wysiwyg table:not(.button) {
+      font-size: 1.125rem; } }
+  @media all and (min-width: 992px) {
+    .wysiwyg table:not(.button) {
+      line-height: 1.625; } }
+  @media all and (min-width: 1200px) {
+    .wysiwyg table:not(.button) {
+      line-height: 1.52632; } }
+  .wysiwyg table:not(.button):not(:last-child) {
+    margin: 0.8125rem 0; }
+  .wysiwyg table:not(.button) tr {
+    box-sizing: border-box;
+    border-top: 2px solid #d9ebf7; }
+    .wysiwyg table:not(.button) tr:last-child {
+      box-sizing: border-box;
+      border-bottom: 2px solid #d9ebf7; }
+  .wysiwyg table:not(.button) th, .wysiwyg table:not(.button) td {
+    padding: 0; }
+

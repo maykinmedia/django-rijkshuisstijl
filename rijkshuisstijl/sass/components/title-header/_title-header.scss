@@ -1,4 +1,5 @@
-@import 'microscope/typography';
+@import '../../settings/all';
+@import '~microscope-sass/lib/typography';
 
 .title-header {
   @include container-padding(normal, (padding-top, padding-bottom));

@@ -1,7 +1,9 @@
-@import 'microscope/animation';
-@import 'microscope/responsive';
-@import 'microscope/grid';
-@import 'microscope/typography';
+@import '../../settings/all';
+@import '~microscope-sass/lib/animation';
+@import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/transform';
+@import '~microscope-sass/lib/typography';
 @import 'constants';
 
 
