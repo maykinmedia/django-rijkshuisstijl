@@ -1,6 +1,5 @@
 import re
 
-from django.conf import settings
 from django.core.paginator import Paginator
 from django.http import QueryDict
 from django.utils.dateparse import parse_date
@@ -706,11 +705,6 @@ def datagrid(context, **kwargs):
     config["urlize"] = kwargs.get("urlize", True)
 
     # Context
-    config["config"] = config
     config["request"] = context["request"]
-
-    # Cache (experimental)
-    if getattr(settings, "RH_CACHE_ENABLED", False):
-        config["cache_key"] = {**kwargs, **context["request"].GET}
-
+    config["config"] = kwargs
     return config
