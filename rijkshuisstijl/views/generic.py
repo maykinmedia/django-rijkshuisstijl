@@ -104,7 +104,7 @@ class ListView(DjListView):
     orderable_columns = None
     ordering_key = "ordering"
     paginate = True
-    paginate_by = 30
+    paginate_by = 100
     modifier_key = None
     modifier_column = None
     modifier_mapping = None

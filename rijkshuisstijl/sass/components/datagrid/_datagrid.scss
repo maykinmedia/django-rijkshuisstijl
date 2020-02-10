@@ -139,16 +139,18 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     @include shade(3, color);
     padding: 0 $datagrid-spacing-row-h / 2;
 
-    @include tablet {
-      @include sticky($datagrid-offset-caption);
-    }
-
     &:first-child {
       padding-left: $datagrid-spacing-row-h;
     }
 
     &:last-child {
       padding-right: $datagrid-spacing-row-h;
+    }
+  }
+
+  &__header + &__body &__caption {
+    @include tablet {
+      @include sticky($datagrid-offset-caption);
     }
   }
 
@@ -166,11 +168,11 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     padding: $datagrid-spacing-row-v $datagrid-spacing-row-h / 2;
 
     @include tablet {
-      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-tablet}');
+      @include sticky;
     }
 
     @include desktop {
-      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-desktop}');
+      @include sticky;
     }
 
     &:first-child {
@@ -191,6 +193,16 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
       &[value] {
         @include color-info(background-color);
       }
+    }
+  }
+
+  &__header + &__body &__filter {
+    @include tablet {
+      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-tablet}');
+    }
+
+    @include desktop {
+      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-desktop}');
     }
   }
 
@@ -281,5 +293,11 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
 
   .toolbar .select {
     @extend .select--bordered;
+  }
+
+  .toolbar &__result-count {
+    @include body;
+    @include hide-on-mobile;
+    @include shade(3, color);
   }
 }

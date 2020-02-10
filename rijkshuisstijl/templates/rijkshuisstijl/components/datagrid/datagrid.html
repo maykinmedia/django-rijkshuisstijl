@@ -36,39 +36,43 @@
             {% csrf_token %}
         {% endif %}
 
-        <header class="datagrid__header">
-            <div class="toolbar toolbar--justify toolbar--pad">
-                <ul class="toolbar__list">
-                    {% if title %}
-                        <li class="toolbar__list-item">
-                            <h4 class="datagrid__title">{{ title }}</h4>
-                        </li>
-                    {% endif %}
+        {% if title or form and form_select_all_position in 'top,both' or form_buttons and toolbar_position in 'top,both' or dom_filter %}
+            <header class="datagrid__header">
+                <div class="toolbar toolbar--justify toolbar--pad">
+                    <ul class="toolbar__list">
+                        {% if title %}
+                            <li class="toolbar__list-item">
+                                <h4 class="datagrid__title">{{ title }}</h4>
+                            </li>
+                        {% endif %}
 
-                    {% if form %}
-                        <li class="toolbar__list-item">
-                            <th class="datagrid__caption datagrid__caption--checkbox">
-                                {% if form_select_all_position in 'top,both' %}
-                                    {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='top' label_select_all=label_select_all only %}
-                                {% endif %}
-                            </th>
-                        </li>
-                    {% endif %}
+                        {% if form %}
+                            <li class="toolbar__list-item">
+                                <th class="datagrid__caption datagrid__caption--checkbox">
+                                    {% if form_select_all_position in 'top,both' %}
+                                        {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='top' label_select_all=label_select_all only %}
+                                    {% endif %}
+                                </th>
+                            </li>
+                        {% endif %}
 
-                    {% if form_buttons and toolbar_position in 'top,both' %}
-                        <li class="toolbar__list-item">
-                            {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
-                        </li>
-                    {% endif %}
-                </ul>
+                        {% if form_buttons and toolbar_position in 'top,both' %}
+                            <li class="toolbar__list-item">
+                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
+                            </li>
+                        {% endif %}
+                    </ul>
 
-                <ul class="toolbar__list">
-                    <li class="toolbar__list-item">
-                        {% dom_filter class='filter--class-only' input_class='input--contrast input--light' filter_target='#'|add:id|add:' tbody tr' label_placeholder=label_filter_placeholder %}
-                    </li>
-                </ul>
-            </div>
-        </header>
+                    <ul class="toolbar__list">
+                        {% if dom_filter %}
+                            <li class="toolbar__list-item">
+                                {% dom_filter class='filter--class-only' input_class='input--contrast input--light' filter_target='#'|add:id|add:' tbody tr' label_placeholder=label_filter_placeholder %}
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </header>
+        {% endif %}
 
         <div class="datagrid__body">
             <table class="datagrid__table">
@@ -174,6 +178,7 @@
                     </ul>
                     <ul class="toolbar__list">
                         {% if is_paginated %}
+                            <li class="toolbar__list-item datagrid__result-count">{{ paginator.count }} {{ label_result_count }}</li>
                             <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_key=page_key page_number=page_number page_obj=page_obj form='datagrid-paginator-form-'|add:id %}</li>
                         {% endif %}
                     </ul>

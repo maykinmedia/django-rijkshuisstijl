@@ -66,9 +66,17 @@ def datagrid(context, **kwargs):
 
     If an (unpaginated) queryset is passed or obtained from the context, it can be filtered using controls.
     Pagination provided by the datagrid itself can be used in combination with filtering. The queryset's model is
-    inspected to determince the type of the filters and optionally the choices.
+    inspected to determine the type of the filters and optionally the choices.
 
     - filterable_columns: Optional, a list defining which columns should be filterable.
+
+    DOM filter
+    ----------
+
+    Next to queryset filters, a DOM filter can be added to the top header allowing real time searching within the page.
+    See: rijkshuisstijl.templatetags.rijkshuisstijl_extras.dom_filter.
+
+    - dom_filter: Optional, if True, adds a DOM filter to the top header.
 
 
     Ordering
@@ -108,7 +116,7 @@ def datagrid(context, **kwargs):
     ---------------------------------
 
     - paginate: Optional, if True, paginate object_list (or queryset).
-    - paginate_by: Optional, amount of results per page, defaults to 30.
+    - paginate_by: Optional, amount of results per page, defaults to 100.
     - page_key: Optional, The GET parameter to use for the page, defaults to 'page'.
 
     Use existing paginator
@@ -582,7 +590,7 @@ def datagrid(context, **kwargs):
             Paginate object_list.
             """
             request = context["request"]
-            paginate_by = paginator_context.get("paginate_by", 30)
+            paginate_by = paginator_context.get("paginate_by", 100)
             paginator = Paginator(paginator_context.get("object_list", []), paginate_by)
             page_key = paginator_context.get("page_key", "page")
             page_number = request.GET.get(page_key, 1)
@@ -667,15 +675,16 @@ def datagrid(context, **kwargs):
         kwargs, "label_filter_placeholder", _("Filter resultaten")
     )
     config["label_no_results"] = parse_kwarg(kwargs, "label_no_results", _("Geen resultaten"))
+    config["label_result_count"] = parse_kwarg(kwargs, "label_result_count", _("resultaten"))
     config["label_select_all"] = parse_kwarg(kwargs, "label_select_all", _("(De)selecteer alles"))
 
     # Showing data/Filtering/Ordering
     config["columns"] = get_columns()
     config["object_list"] = get_object_list()
     config["filters"] = get_filter_dict()
+    config["dom_filter"] = parse_kwarg(kwargs, "dom_filter", False)
     config["ordering"] = get_ordering_dict()
     config["orderable_column_keys"] = get_orderable_column_keys()
-    # config["orderable_column_keys"] = config["ordering"].keys() #FIXME
 
     # Pagination
     config = add_paginator(config)
