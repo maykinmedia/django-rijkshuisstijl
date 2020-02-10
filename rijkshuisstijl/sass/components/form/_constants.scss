@@ -19,7 +19,7 @@ $form-control-spacing: 30px;
 $help-text-padding-v: $grid-margin-1;
 
 $input-size-icon: 16px;
-$input-background-button: linear-gradient($color-primary) no-repeat right / $grid-row-height $grid-row-height;
+$input-background-button: linear-gradient($color-primary, $color-primary) no-repeat right / $grid-row-height $grid-row-height;
 $input-background-date: url('../components/form/date.svg') no-repeat center right #{($grid-row-height - $input-size-icon) / 2} / $input-size-icon;
 $input-background-date-gray: url('../components/form/date-gray.svg') no-repeat center right #{($grid-row-height - $input-size-icon) / 2} / $input-size-icon;
 $input-background-file: url('../components/form/file.svg') no-repeat center right #{($grid-row-height - $input-size-icon) / 2} / $input-size-icon;

@@ -1,35 +1,38 @@
 {% spaceless %}{% load sniplates rijkshuisstijl %}
-    {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
-    {% if form %}
-        <form class="key-value-table__form"{% if form_action %} action="{{ form_action }}"{% endif %} method="{{ form_method }}" enctype="{{ form_enctype }}" onchange="this.submit()">
-        {% csrf_token %}
-    {% endif %}
+    <aside class="key-value-table{% if class %} {{ class }}{% endif %}">
+        {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
+        {% if form %}
+            <form class="key-value-table__form"
+                    {% if form_action %} action="{{ form_action }}"{% endif %} method="{{ form_method }}" enctype="{{ form_enctype }}" onchange="this.submit()">
+            {% csrf_token %}
+        {% endif %}
 
-    {% for title, fields in data %}
-        <table class="key-value-table{% if class %} {{ class }}{% endif %}">
-            {% if title %}
-                <thead class="key-value-table__header">
-                <tr class="key-value-table__row">
-                    <th class="key-value-table__caption" colspan="2">{{ title }}</th>
-                </tr>
-                </thead>
-            {% endif %}
-            <tbody class="key-value-table__body">
-            {% for field in fields %}
-                <tr class="key-value-table__row">
-                    <th class="key-value-table__key">{% firstof field.label field %}</th>
-                    {% if field.form_field %}
-                        <td class="key-value-table__value">{% form_field field.form_field compact=True label=None %}</td>
-                    {% else %}
-                        <td class="key-value-table__value">{{ object|format_value:field.key }}</td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+        {% for title, fields in data %}
+            <table class="key-value-table__table">
+                {% if title %}
+                    <thead class="key-value-table__header">
+                    <tr class="key-value-table__row">
+                        <th class="key-value-table__caption" colspan="2">{{ title }}</th>
+                    </tr>
+                    </thead>
+                {% endif %}
+                <tbody class="key-value-table__body">
+                {% for field in fields %}
+                    <tr class="key-value-table__row">
+                        <th class="key-value-table__key">{% firstof field.label field %}</th>
+                        {% if field.form_field %}
+                            <td class="key-value-table__value">{% form_field field.form_field compact=True label=None %}</td>
+                        {% else %}
+                            <td class="key-value-table__value">{{ object|format_value:field.key }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
 
-    {% if form %}
-        </form>
-    {% endif %}
+        {% if form %}
+            </form>
+        {% endif %}
+    </aside>
 {% endspaceless %}

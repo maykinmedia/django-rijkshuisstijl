@@ -4,8 +4,10 @@
 @import '../form/constants';
 
 .key-value-table {
-  border-spacing: 0;
-  width: 100%;
+  &__table {
+    border-spacing: 0;
+    width: 100%;
+  }
 
   &__caption {
     @include h2(true, padding);
