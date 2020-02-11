@@ -26,6 +26,7 @@
     width: $checkbox-size;
     height: $checkbox-size;
     background-size: contain;
+    flex-shrink: 0;
   }
 
   .input:checked + &__checkmark {
