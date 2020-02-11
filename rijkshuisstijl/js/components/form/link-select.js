@@ -19,9 +19,21 @@ export class LinkSelect {
      * Binds events to callbacks.
      */
     bindEvents() {
-        this.node.addEventListener('change', () => {
-            location.href = this.node.value || this.node.dataset.value;
-        });
+        this.node.addEventListener('change', this.navigate.bind(this));
+    }
+
+    /**
+     * Navigates to the selected link, opens new window if this.node.dataset.target equals "_blank".
+     */
+    navigate() {
+        const target = this.node.dataset.target;
+        const href = this.node.value || this.node.dataset.value;
+
+        if (target === '_blank') {
+            window.open(href);
+            return;
+        }
+        location.href = href;
     }
 }
 
