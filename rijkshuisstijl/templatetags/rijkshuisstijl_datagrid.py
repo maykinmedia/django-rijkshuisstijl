@@ -433,11 +433,13 @@ def datagrid(context, **kwargs):
         request = context["request"]
         ordering_key = get_ordering_key()
         ordering = request.GET.get(ordering_key)
-        orderable_columns_keys = get_orderable_column_keys()
+        orderable_columns = get_orderable_columns()
 
         result = None
-        if ordering and ordering.replace("-", "") in orderable_columns_keys:
+        if ordering and ordering.replace("-", "") in [c["lookup"] for c in orderable_columns]:
             result = ordering
+        elif ordering:
+            print(ordering, "is invalid, allowe columns are", orderable_columns)
         _cache["get_ordering"] = result
         return result
 
@@ -447,19 +449,6 @@ def datagrid(context, **kwargs):
         :return: string
         """
         return parse_kwarg(kwargs, "ordering_key", "ordering")
-
-    def get_orderable_column_keys():
-        """
-        Returns the keys of the fields which should be made orderable.
-        :return: list_of_str
-        """
-        if _cache.get("get_orderable_column_keys"):
-            return _cache.get("get_orderable_column_keys")
-
-        orderable_column_keys = [c["key"] for c in get_orderable_columns()]
-
-        _cache["get_orderable_column_keys"] = orderable_column_keys
-        return orderable_column_keys
 
     def get_orderable_columns():
         """
@@ -684,7 +673,6 @@ def datagrid(context, **kwargs):
     config["filters"] = get_filter_dict()
     config["dom_filter"] = parse_kwarg(kwargs, "dom_filter", False)
     config["ordering"] = get_ordering_dict()
-    config["orderable_column_keys"] = get_orderable_column_keys()
 
     # Pagination
     config = add_paginator(config)
