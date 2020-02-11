@@ -13,10 +13,10 @@
         {% endif %}
 
 
-        {% if label %}
+{#        {% if label %}#}
             {# Form control body #}
             <div class="form-control__body">
-        {% endif %}
+{#        {% endif %}#}
 
         {% firstof help_text_position field.help_text_position as help_text_position %}
         {% if help_text and help_text_position|default:'bottom' == 'top' %}
@@ -48,18 +48,18 @@
 
                     {# CheckboxInput #}
                     {% if form_field.value or checked %}
-                        {% include 'rijkshuisstijl/components/form/checkbox.html' with checked=True label=display value=foo %}
+                        {% include 'rijkshuisstijl/components/form/checkbox.html' with checked=True label=display value=foo form_id=form_id %}
                     {% else %}
-                        {% include 'rijkshuisstijl/components/form/checkbox.html' with checked=False label=display value=foo %}
+                        {% include 'rijkshuisstijl/components/form/checkbox.html' with checked=False label=display value=foo form_id=form_id %}
                     {% endif %}
 
                 {% else %}
 
                     {# Custom #}
                     {% if form_field.value or checked %}
-                        {% include 'rijkshuisstijl/components/form/checkbox.html' with checked=True label=display %}
+                        {% include 'rijkshuisstijl/components/form/checkbox.html' with checked=True label=display form_id=form_id %}
                     {% else %}
-                        {% include 'rijkshuisstijl/components/form/checkbox.html' with checked=False label=display %}
+                        {% include 'rijkshuisstijl/components/form/checkbox.html' with checked=False label=display form_id=form_id %}
                     {% endif %}
 
                 {% endif %}
@@ -71,9 +71,9 @@
             <div class="form-control__choices">
                 {% for val, display in choices %}
                     {% if val == value|default:"" or checked %}
-                        {% include 'rijkshuisstijl/components/form/radio.html' with checked=True id=id|add:'_'|add:forloop.counter0 label=display value=val %}
+                        {% include 'rijkshuisstijl/components/form/radio.html' with checked=True id=id|add:'_'|add:forloop.counter0 label=display value=val form_id=form_id %}
                     {% else %}
-                        {% include 'rijkshuisstijl/components/form/radio.html' with checked=False id=id|add:'_'|add:forloop.counter0 label=display value=val %}
+                        {% include 'rijkshuisstijl/components/form/radio.html' with checked=False id=id|add:'_'|add:forloop.counter0 label=display value=val form_id=form_id %}
                     {% endif %}
                 {% endfor %}
             </div>
@@ -81,38 +81,38 @@
 
         {% elif type == 'select' %}
             {# (Mutliple) select #}
-            {% include 'rijkshuisstijl/components/form/select.html' with label=display %}
+            {% include 'rijkshuisstijl/components/form/select.html' with label=display form_id=form_id %}
 
 
         {% elif type == 'textarea' %}
             {# Textarea #}
             {% if form_field %}
                 {# Form field #}
-                {% include 'rijkshuisstijl/components/form/textarea.html' with value=form_field.value %}
+                {% include 'rijkshuisstijl/components/form/textarea.html' with value=form_field.value form_id=form_id %}
             {% else %}
                 {# Custom #}
-                {% include 'rijkshuisstijl/components/form/textarea.html' with value=value %}
+                {% include 'rijkshuisstijl/components/form/textarea.html' with value=value form_id=form_id %}
             {% endif %}
 
 
         {% elif type == 'date' %}
             {% if form_field %}
                 {# Form field #}
-                {% include 'rijkshuisstijl/components/form/input.html' with value=form_field.value|date:'Y-m-d' %}
+                {% include 'rijkshuisstijl/components/form/input.html' with value=form_field.value|date:'Y-m-d' form_id=form_id %}
             {% else %}
                 {# Custom #}
-                {% include 'rijkshuisstijl/components/form/input.html' with value=value %}
+                {% include 'rijkshuisstijl/components/form/input.html' with value=value form_id=form_id %}
             {% endif %}
 
         {% elif type == 'datetime' %}
             {# Datetime inputs #}
             {% with date_name=name|add:'_0' time_name=name|add:'_1' %}
                 {% with date_value=raw_value|input_date_format time_value=raw_value|input_time_format %}
-                    {% include 'rijkshuisstijl/components/form/input.html' with id=id|add:'_date' name=date_name type='date' value=date_value %}
+                    {% include 'rijkshuisstijl/components/form/input.html' with id=id|add:'_date' name=date_name type='date' value=date_value form_id=form_id %}
                     {% if html5 %}
-                        {% include 'rijkshuisstijl/components/form/input.html' with id=id|add:'_time' name=time_name type='time' value=time_value %}
+                        {% include 'rijkshuisstijl/components/form/input.html' with id=id|add:'_time' name=time_name type='time' value=time_value form_id=form_id %}
                     {% else %}
-                        {% include 'rijkshuisstijl/components/form/time.html' with id=id|add:'_time' name=time_name value=time_value %}
+                        {% include 'rijkshuisstijl/components/form/time.html' with id=id|add:'_time' name=time_name value=time_value form_id=form_id %}
                     {% endif %}
                 {% endwith %}
             {% endwith %}
@@ -164,10 +164,10 @@
         {% endif %}
 
 
-        {% if label %}
+{#        {% if label %}#}
             {# Form control body #}
             </div>
-        {% endif %}
+{#        {% endif %}#}
 
     </div>
 {% endspaceless %}

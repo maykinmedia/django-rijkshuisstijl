@@ -1,11 +1,14 @@
-{% spaceless %}{% load sniplates rijkshuisstijl %}
-    <aside class="key-value-table{% if class %} {{ class }}{% endif %}">
+{% load sniplates rijkshuisstijl %}{% singleline %}
+    <aside class="key-value-table{% if class %} {{ class }}{% endif %}" id="{{ id }}">
         {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
-        {% if form %}
-            <form class="key-value-table__form"
-                    {% if form_action %} action="{{ form_action }}"{% endif %} method="{{ form_method }}" enctype="{{ form_enctype }}" onchange="this.submit()">
+        {% if form and not form_id %}
+            <form class="form" {% if form_action %} action="{{ form_action }}"{% endif %} method="{{ form_method }}" enctype="{{ form_enctype }}">
             {% csrf_token %}
         {% endif %}
+
+        {% for error in form.non_field_errors %}
+            {% include 'rijkshuisstijl/components/form/errors.html' with class='errors--non-field' errors=error only %}
+        {% endfor %}
 
         {% for title, fields in data %}
             <table class="key-value-table__table">
@@ -18,21 +21,39 @@
                 {% endif %}
                 <tbody class="key-value-table__body">
                 {% for field in fields %}
-                    <tr class="key-value-table__row">
-                        <th class="key-value-table__key">{% firstof field.label field %}</th>
-                        {% if field.form_field %}
-                            <td class="key-value-table__value">{% form_field field.form_field compact=True label=None %}</td>
-                        {% else %}
-                            <td class="key-value-table__value">{{ object|format_value:field.key }}</td>
-                        {% endif %}
+                    {% firstof id|add:'-'|add:field.key as id %}
+                    <tr class="key-value-table__row{% if field.form_field and not field_toggle_edit or field.key in form.errors %} key-value-table__row--edit{% endif %}" id="{{ id }}">
+                        <th class="key-value-table__key{% if field.form_field and field_toggle_edit %} toggle{% endif %}"
+                                {% if field.form_field and field_toggle_edit %} data-toggle-target="#{{ id }}" data-toggle-modifier="edit"{% endif %}>{% firstof field.label field %}</th>
+                        <td class="key-value-table__value">
+                            {% if field.form_field and not field_toggle_edit %}
+                                {% form_field field.form_field compact=True label=None form_id=form_id %}
+
+                            {% elif field.form_field and field_toggle_edit %}
+
+                                {% form_field field.form_field compact=True label=None form_id=form_id %}
+                                <span class="toggle" data-toggle-target="#{{ id }}" data-toggle-modifier="edit">{{ object|format_value:field.key }}</span>
+
+                            {% else %}
+                                {{ object|format_value:field.key }}
+                            {% endif %}
+                        </td>
                     </tr>
+                    {% if forloop.last and form %}
+                        <tr class="key-value-table__row key-value-table__row--actions">
+                            <td class="key-value-table__key"></td>
+                            <td class="key-value-table__value">
+                                {% button class='button--small button--primary' type="submit" label=_('Opslaan') %}
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
         {% endfor %}
 
-        {% if form %}
+        {% if form and not form_id %}
             </form>
         {% endif %}
     </aside>
-{% endspaceless %}
+{% endsingleline %}

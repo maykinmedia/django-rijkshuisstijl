@@ -13,7 +13,6 @@
     @include h2(true, padding);
     @include shade-color('dark-blue');
     font-weight: normal;
-    //padding: $key-value-table-padding-caption;
     text-align: left;
   }
 
@@ -49,6 +48,22 @@
 
   &__value {
     @include h4;
+  }
+
+  &__row:not(#{&}__row--edit) &__value .form-control,
+  &__row:not(#{&}__row--edit) ~ &__row--actions {
+    display: none;
+    visibility: hidden;
+  }
+
+  &__row--edit ~ &__row#{&}__row--actions {
+    display: table-row;
+    visibility: visible;
+  }
+
+  &__row--edit &__value > *:not(.form-control) {
+    display: none;
+    visibility: hidden;
   }
 
   .input,

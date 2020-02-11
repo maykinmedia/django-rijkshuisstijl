@@ -68,7 +68,6 @@
 
   &--full-width .layout > .form,
   &--full-width .layout > .key-value-table,
-  &--full-width .layout > .tabs .tabs__tab,
   &--full-width .layout > .title-header {
     @include container-padding;
   }

@@ -4,6 +4,7 @@ from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_filters import get_attr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import (
     get_field_label,
+    get_id,
     get_recursed_field_value,
     merge_config,
     parse_arg,
@@ -110,19 +111,22 @@ def key_value_table(**kwargs):
         - fields: Required, A dict (key, label) or a list defining which attributes of object to show.
         - object: Required, An object containing the keys defined fields.
         - form: Optional, A (Django) form instance which fields become editable in the key/value table if provided.
+        - form_id: Optional, Optional, if set, value will be set on the "form" attribute of generated inputs. No <form>
+          tag will be created. This makes the input part of the referenced form.
+        - field_toggle_edit: Optional, If true (and form is set) allows toggle between value and input for each value.
 
         - class: Optional, a string with additional CSS classes.
 
     :param kwargs:
     """
-    kwargs = merge_config(kwargs)
+    config = merge_config(kwargs)
 
     def get_fields():
         """
         :return: list of dicts
         """
-        obj = kwargs.get("object")
-        fields = parse_kwarg(kwargs, "fields", {})
+        obj = config.get("object")
+        fields = parse_kwarg(config, "fields", {})
 
         try:
             fields = [
@@ -140,13 +144,12 @@ def key_value_table(**kwargs):
                 field["label"] = get_field_label(obj, field["label"])
 
         # Add form field (if any).
-        form = kwargs.get("form")
+        form = config.get("form")
         if form:
             for field in fields:
                 key = field.get("key")
                 if key in form.fields:
                     field["form_field"] = form[key]
-
         return fields
 
     def get_fieldset_fields(fields):
@@ -165,8 +168,8 @@ def key_value_table(**kwargs):
         :return:
         """
 
-        # Normalize kwargs["fields"] to tuple.
-        fields = parse_kwarg(kwargs, "fields", [])
+        # Normalize config["fields"] to tuple.
+        fields = parse_kwarg(config, "fields", [])
         try:
             fields = fields.keys()
         except AttributeError:
@@ -174,7 +177,7 @@ def key_value_table(**kwargs):
         fields = tuple(fields)
 
         # Get fieldsets or default fieldsets.
-        fieldsets = parse_kwarg(kwargs, "fieldsets", [(None, {"fields": tuple(fields)})])
+        fieldsets = parse_kwarg(config, "fieldsets", [(None, {"fields": tuple(fields)})])
 
         data = []
         for fieldset in fieldsets:
@@ -185,16 +188,18 @@ def key_value_table(**kwargs):
 
         return data
 
-    # kwargs
-    kwargs["class"] = kwargs.get("class", None)
-    kwargs["data"] = get_data()
-    kwargs["form"] = kwargs.get("form", None)
-    kwargs["form_action"] = kwargs.get("form_action", None)
-    kwargs["form_method"] = kwargs.get("form_method", "post")
-    kwargs["form_enctype"] = kwargs.get("form_enctype", "multipart/form-data")
+    # config
+    config["class"] = config.get("class", None)
+    config["id"] = get_id(config, "key-value-table")
+    config["data"] = get_data()
+    config["form"] = config.get("form", None)
+    config["form_action"] = config.get("form_action", None)
+    config["form_method"] = config.get("form_method", "post")
+    config["form_enctype"] = config.get("form_enctype", "multipart/form-data")
+    config["field_toggle_edit"] = parse_kwarg(config, "field_toggle_edit", False)
 
-    kwargs["config"] = kwargs
-    return kwargs
+    config["config"] = config
+    return config
 
 
 @register.inclusion_tag("rijkshuisstijl/components/paginator/paginator.html", takes_context=True)
@@ -214,7 +219,7 @@ def paginator(context, **kwargs):
 
         - class: Optional, a string with additional CSS classes.
         - form: Optional, if True (default), sets the paginator tag to "form" uses "div" if set to False. A str can be
-          passed  to set the value of the "form" attribute on the input in which case the paginator tag is set to "div",
+          passed to set the value of the "form" attribute on the input in which case the paginator tag is set to "div",
           this allows linking the input to a custom form.
         - is_paginated: Optional, if true (default), render the paginator.
         - label_page: Optional, alternative label to show for "Pagina".

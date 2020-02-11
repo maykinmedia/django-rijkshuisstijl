@@ -42,9 +42,8 @@
     margin-bottom: $form-control-margin-top;
   }
 
-  &:not(#{&}--stacked) &__body {
+  &:not(#{&}--stacked) &__header + &__body {
     @include tablet {
-      //@include body;
       margin-left: $form-control-spacing !important;
       width: calc(100% - #{$label-width} - #{$form-control-spacing});
     }

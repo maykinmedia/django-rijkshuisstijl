@@ -76,7 +76,13 @@ class Tabs {
 
         const node = document.getElementById(id);
         if (node && node.classList.contains(BEM.getBEMClassName(BLOCK_TABS, ELEMENT_TAB))) {
+            const listener = () => {
+                window.scrollTo(0, 0);
+                window.removeEventListener('scroll', listener);
+            };
+            window.addEventListener('scroll', listener);
             this.activateTab(id);
+
             return true;
         }
     }

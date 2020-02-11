@@ -86,6 +86,10 @@
     @include button--small(true);
   }
 
+  &--small &__label {
+    @include body--small;
+  }
+
   &--transparent {
     @include color-primary;
     @include border($position: all);

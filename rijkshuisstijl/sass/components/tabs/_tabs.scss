@@ -11,10 +11,6 @@
 $tabs-scheme: $scheme;
 
 .tabs {
-  &--light &__link {
-    @include color-background;
-  }
-
   &--sticky &__navigation {
     @include laptop {
       @include sticky();
@@ -32,7 +28,6 @@ $tabs-scheme: $scheme;
   }
 
   &__list-item {
-    //@include animate();
     @include color-primary;
     outline: 2px solid transparent;
     position: relative;
@@ -57,6 +52,10 @@ $tabs-scheme: $scheme;
     align-items: center;
   }
 
+  &--light &__link {
+    @include color-background;
+  }
+
   &:not(#{&}--stuck) &__link {
     @include laptop {
       height: 60px;
@@ -68,6 +67,7 @@ $tabs-scheme: $scheme;
   }
 
   &__tab {
+    @include container-padding;
     display: none;
     width: 100%;
     vertical-align: top;
