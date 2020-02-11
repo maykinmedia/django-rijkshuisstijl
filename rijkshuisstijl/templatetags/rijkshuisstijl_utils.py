@@ -13,7 +13,8 @@ from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_recursed_fiel
 @register.filter
 def format_value(obj, field):
     """
-    Formats field in obj, supporting get_<column_key>_display() and and date_format().
+    Formats field in obj. If obj is a model instance it supports
+    get_<column_key>_display() and and date_format()
     :param obj: (Model) Object containing key column_key.
     :param field key of field to get label for.
     :return: Formatted string.
@@ -36,7 +37,7 @@ def format_value(obj, field):
         return str(obj)
 
     # Check for list.
-    if type(obj) is list:
+    if type(obj) in (list, dict,):
         return obj.get(field)
 
     # Check for (related) value.
