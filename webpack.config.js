@@ -1,6 +1,6 @@
-var paths = require('./build/paths');
-var argv = require('yargs').argv;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const argv = require('yargs').argv;
+const paths = require('./build/paths');
 
 
 var isProduction = process.env.NODE_ENV === 'production';
@@ -31,7 +31,7 @@ module.exports = {
     // Use --production to optimize output.
     mode: isProduction ? 'production' : 'development',
 
-    // Add babel (see .babelrc for settings)
+    // Add plugins and loaders (see .babelrc for babel settings).
     plugins: [
         new MiniCssExtractPlugin(),
     ],

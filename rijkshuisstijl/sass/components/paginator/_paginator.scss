@@ -1,4 +1,5 @@
-@import '~font-awesome/scss/font-awesome';
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
 @import '~microscope-sass/lib/responsive';
 @import '~microscope-sass/lib/typography';
 @import '~microscope-sass/lib/grid';
@@ -52,7 +53,7 @@ $paginator-spacing: $grid-margin-0;
   }
 
   &__link--last {
-    @extend .fa;
+    @extend .fas;
     @extend .fa-angle-double-right;
   }
 

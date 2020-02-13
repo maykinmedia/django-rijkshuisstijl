@@ -1,4 +1,7 @@
 {% spaceless %}
+    {% for item in sitetree_items %}
+        {% if item.is_current and item.parent%}{% endif %}
+    {% endfor %}
     <ul class="menu">
         {% for item in sitetree_items %}
             {% include 'rijkshuisstijl/components/navigation-bar/menu-item.html' with item=item  only %}

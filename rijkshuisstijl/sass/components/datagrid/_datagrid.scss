@@ -1,4 +1,5 @@
-@import "~font-awesome/scss/font-awesome";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
 @import '~microscope-sass/lib/color';
 @import '~microscope-sass/lib/grid';
 @import '~microscope-sass/lib/responsive';
@@ -45,9 +46,9 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
   &__header {
     z-index: 10;
 
-    @include tablet {
-      @include sticky;
-    }
+    //@include tablet {
+    //  @include sticky;
+    //}
   }
 
   &__footer {
@@ -148,11 +149,11 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     }
   }
 
-  &__header + &__body &__caption {
-    @include tablet {
-      @include sticky($datagrid-offset-caption);
-    }
-  }
+  //&__header + &__body &__caption {
+  //  @include tablet {
+  //    @include sticky($datagrid-offset-caption);
+  //  }
+  //}
 
   &__caption#{&}__caption--checkbox {
     padding-left: $datagrid-spacing-row-h * 2;
@@ -196,15 +197,15 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     }
   }
 
-  &__header + &__body &__filter {
-    @include tablet {
-      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-tablet}');
-    }
-
-    @include desktop {
-      @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-desktop}');
-    }
-  }
+  //&__header + &__body &__filter {
+  //  @include tablet {
+  //    @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-tablet}');
+  //  }
+  //
+  //  @include desktop {
+  //    @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-desktop}');
+  //  }
+  //}
 
   &--overflow-mobile &__filter {
     @include mobile-only {
@@ -213,17 +214,21 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
   }
 
   &__caption--orderable &__icon {
-    @extend .fa;
+    @extend .fas;
     @extend .fa-sort;
     @include center-v;
     right: $datagrid-spacing-row-h;
+
+    //&:before {
+    //  content: fa-content($fa-var-sort)
+    //}
   }
 
   &__caption--ordered-asc &__icon {
     @extend .fa-sort-up;
   }
 
-  &__caption--ordered-desc &__icon {
+  &__caption--ordered-desc &__icon:before {
     @extend .fa-sort-down;
   }
 

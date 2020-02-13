@@ -1,4 +1,5 @@
 @import '~microscope-sass/lib/responsive';
+@import '../../components/breadcrumbs/constants';
 @import '../../components/header/constants';
 @import '../../components/navigation-bar/constants';
 
@@ -12,6 +13,7 @@
       top: 0;
     }
 
+    .navigation-bar--sticky ~ &,
     .navigation-bar--sticky ~ * & {
       @if ($offset) {
         @include responsive($position, calc(#{$header-height-mobile} + (#{$offset})), calc(#{$navigation-bar-min-height-tablet-stuck} + (#{$offset})));
@@ -20,7 +22,19 @@
       }
     }
 
+    .navigation-bar--sticky + .breadcrumbs ~ &,
+    .navigation-bar--sticky + .breadcrumbs ~ * & {
+      @include tablet {
+        @if ($offset) {
+          #{$position}: calc(#{$navigation-bar-min-height-tablet-stuck} + (#{$offset}) + #{$breadcrumbs-min-height});
+        } @else {
+          #{$position}: $navigation-bar-min-height-tablet-stuck + $breadcrumbs-min-height;
+        }
+      }
+    }
+
     @if $clear {
+      .navigation-bar--stuck ~ &,
       .navigation-bar--stuck ~ * & {
         margin-left: 0!important;
         margin-right: 0!important;

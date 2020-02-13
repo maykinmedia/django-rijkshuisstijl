@@ -3,7 +3,12 @@
 {% if src %}
     <img class="icon icon--image" alt="{{ label }}" src="{{ src }}">
 {% else %}
-    <span class="icon icon--{{ icon }}{% if class %} {{ class }}{% endif %}"{% if label %}title="{{ label }}"{% endif %}>{% firstof label icon %}</span>
+    {% firstof icon.0|add:icon.1 as prefix %}
+    {% if prefix == 'fa' %}
+        <span class="fas {{ icon }}"></span>
+    {% else %}
+        <span class="icon icon--{{ icon }}{% if class %} {{ class }}{% endif %}"{% if label %}title="{{ label }}"{% endif %}>{% firstof label icon %}</span>
+    {% endif %}
 {% endif %}
 {% if href %}</a>{% endif %}
 {% endspaceless %}

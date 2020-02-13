@@ -324,6 +324,7 @@ def search(context, **kwargs):
 
     kwargs["request"] = context["request"]
     kwargs["config"] = kwargs
+
     return kwargs
 
 

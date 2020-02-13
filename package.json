@@ -22,11 +22,11 @@
   },
   "homepage": "https://github.com/maykinmedia/django-rijkshuisstijl#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.12.1",
     "bem.js": "^1.0.10",
     "better-dateinput-polyfill": "^3.2.7",
     "better-dom": "^4.0.0",
     "debounce": "^1.2.0",
-    "font-awesome": "^4.7.0",
     "microscope-sass": "^0.3.2",
     "urijs": "^1.19.1"
   },

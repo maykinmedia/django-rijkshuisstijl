@@ -22,7 +22,6 @@
       visibility: hidden;
 
       &:before {
-        @include shade-color($scheme, 1, background-color);
         @include rows(1);
         content: '';
         position: absolute;
@@ -57,16 +56,28 @@
   }
 
   &__list-item {
+    @include responsive(flex-wrap, wrap, nowrap);
     display: flex;
-    align-items: stretch;
+    align-items: center;
     flex-shrink: 0;
-    flex-wrap: wrap;
     float: left;
     padding: 0;
   }
 
-  &__list-item--active > &__link {
+  &__list-item--active {
     @include color-secondary(background-color);
+  }
+
+  & & &__list-item--active {
+    background-color: transparent;
+  }
+
+  .fas {
+    @include gutter(padding-left);
+  }
+
+  &__list-item--active .fas {
+    color: $typography-color-link;
   }
 
   &__link,
@@ -80,18 +91,26 @@
     @include anchor(true);
     @include gutter(padding-left);
     @include gutter(padding-right);
+    width: 100%;
     display: flex;
     align-items: center;
-    width: 100%;
     height: 100%;
   }
 
+  .fas + &__link {
+    width: 75%;
+  }
+
+  &__list-item:not(&__list-item--active) .fas,
   &__list-item:not(&__list-item--active) &__link {
     @include color-background(color);
   }
 
   &__label {
     @include color-background(color);
+  }
+
+  &__label {
     font-weight: bold;
   }
 }

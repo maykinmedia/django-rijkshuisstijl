@@ -9,7 +9,7 @@ var paths = require('../paths');
  * Moves Font Awesome font files to paths.fontDir
  */
 function fontAwesome() {
-    return gulp.src('node_modules/font-awesome/fonts/*')
+    return gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*')
         .pipe(gulp.dest(paths.fontsDir));
 };
 
