@@ -3,8 +3,9 @@ from collections.abc import Iterable
 
 from django import template
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import Field, QuerySet
+from django.db.models import Field
 from django.utils import formats
+from django.utils.functional import Promise
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_recursed_field_value
@@ -68,8 +69,8 @@ def format_value(obj, field):
         if related_manager:
             return ", ".join([str(instance) for instance in val.all()])
 
-    # Check for iterables.
-    if isinstance(val, (list, dict, QuerySet,)):
+    # Check for iterable.
+    if isinstance(val, Iterable) and not isinstance(val, (str, Promise,)):
         return ", ".join(val)
 
     # Check for callable.
