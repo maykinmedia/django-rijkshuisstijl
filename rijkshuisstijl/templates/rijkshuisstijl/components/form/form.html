@@ -25,7 +25,7 @@
                     {# First fieldset gets actions appended to it if actions_postion equals top or both. #}
                     {% if forloop.first and actions_position in 'top,both' %}
                         <div class="form__body form__body--transparent">
-                            {% include 'rijkshuisstijl/components/form/actions.html' with align=actions_align button_class=button_class label=label %}
+                            {% include 'rijkshuisstijl/components/form/actions.html' with align=actions_align button_class=button_class label=label form=id %}
                         </div>
                         <br>
                     {% endif %}
@@ -44,7 +44,7 @@
 
                         {# Last fieldset gets actions appended to it if actions_postion equals bottom. #}
                         {% if forloop.last and actions_position == 'auto' %}
-                            {% include 'rijkshuisstijl/components/form/actions.html' with align=actions_align button_class=button_class label=label %}
+                            {% include 'rijkshuisstijl/components/form/actions.html' with align=actions_align button_class=button_class label=label form=id %}
                         {% endif %}
                     </fieldset>
 
@@ -52,7 +52,7 @@
                     {% if forloop.last and actions_position in 'bottom,both' %}
                         <br>
                         <div class="form__body">
-                            {% include 'rijkshuisstijl/components/form/actions.html' with align=actions_align button_class=button_class label=label %}
+                            {% include 'rijkshuisstijl/components/form/actions.html' with align=actions_align button_class=button_class label=label form=id %}
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -63,7 +63,7 @@
                         {% form_field field %}
                     {% endfor %}
 
-                    {% include 'rijkshuisstijl/components/form/actions.html' with align=actions_align button_class=button_class label=label %}
+                    {% include 'rijkshuisstijl/components/form/actions.html' with align=actions_align button_class=button_class label=label form=id %}
                 </fieldset>
             {% endif %}
         </div>

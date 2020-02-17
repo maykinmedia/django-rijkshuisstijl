@@ -27,7 +27,8 @@
             {% if disabled %} disabled{% endif %}
             {% if focus_target %} data-focus-target="{{ focus_target }}"{% endif %}
             {% if toggle_target %} data-toggle-target="{{ toggle_target }}" data-toggle-modifier="{{ toggle_modifier }}"{% endif %}
-            {% if toggle_mobile_state %}data-toggle-mobile-state="{{ toggle_mobile_state }}"{% endif %}>
+            {% if toggle_mobile_state %}data-toggle-mobile-state="{{ toggle_mobile_state }}"{% endif %}
+            {% if form %}form="{{ form }}"{% endif %}>
 
         {% include 'rijkshuisstijl/components/button/label.html' with class=class label=label icon=icon icon_src=icon_src only %}
     </button>
