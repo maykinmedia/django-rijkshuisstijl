@@ -1,5 +1,4 @@
 import json
-import re
 from uuid import uuid4
 
 from django.utils.safestring import SafeText
@@ -52,41 +51,6 @@ def get_id(config, prefix):
     :return: A str which should be unique to this component.
     """
     return config.get("id", prefix + "-" + str(uuid4()))
-
-
-def get_field_label(obj, field):
-    """
-    Returns the label for a field based preferably based on obj's model.
-    Falls back to replacing dashes and underscores with " ".
-    :param obj: A model instance or a QuerySet.
-    :param field: A string indicating the field to get the label for.
-    :return:
-    """
-    try:
-        model = get_model(obj)
-        field = str(getattr(field, "name", field))
-
-        # If column key is "__str__", use model name as label.
-        if field == "__str__":
-            return model.__name__
-
-        # If model field can be found, use it's verbose name as label.
-        else:
-            model_field = model._meta.get_field(field)
-
-            if hasattr(model_field, "verbose_name"):
-                return model_field.verbose_name
-            elif model_field.one_to_many:
-                plural_name = model_field.related_model._meta.verbose_name_plural
-                verbose_name = model_field.related_model._meta.verbose_name
-                return plural_name if plural_name else verbose_name
-
-    # If label cannot be found, fall back to replacing dashes and underscores with " ".
-    except:
-        pass
-
-    regex = re.compile("[_-]+")
-    return re.sub(regex, " ", field)
 
 
 def get_model(obj):

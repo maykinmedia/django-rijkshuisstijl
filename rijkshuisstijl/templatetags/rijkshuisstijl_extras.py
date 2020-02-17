@@ -3,13 +3,13 @@ from django.utils.translation import gettext_lazy as _
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_filters import get_attr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import (
-    get_field_label,
     get_id,
     get_recursed_field_value,
     merge_config,
     parse_arg,
     parse_kwarg,
 )
+from rijkshuisstijl.templatetags.rijkshuisstijl_utils import get_field_label
 
 try:
     from django.urls import reverse_lazy

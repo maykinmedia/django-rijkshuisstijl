@@ -6,10 +6,10 @@ from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
+from rijkshuisstijl.templatetags.rijkshuisstijl_utils import get_field_label
 
 from .rijkshuisstijl_helpers import (
     create_list_of_dict,
-    get_field_label,
     get_id,
     merge_config,
     parse_kwarg,
