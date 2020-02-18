@@ -1,5 +1,5 @@
 {% load rijkshuisstijl %}{% spaceless %}
     <div class="form__actions{% if align %} form__actions--{{ align }}{% endif %}">
-        {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') type='submit' form=form %}
+        {% button class=button_class|default:'button--primary' label=label|default:_('Verzenden') type='submit' form=form_id %}
     </div>
 {% endspaceless %}
