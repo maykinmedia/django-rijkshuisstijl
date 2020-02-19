@@ -54,6 +54,7 @@
   &__filepicker {
     @include input;
     background: $input-background-file, $input-background-button, $input-background-input;
+    @include color-background;
     content: attr(value);
   }
 
