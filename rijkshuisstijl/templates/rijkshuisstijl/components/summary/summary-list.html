@@ -14,8 +14,15 @@
         <div class="summary-list__body">
             {% for object in object_list %}
                 {% firstof forloop.counter0|capfirst as index %}
-                {% firstof id|add:'-summary-'|add:index as summary_id %}
+                {% firstof id|add:'-object-summary-'|add:index as summary_id %}
                 {% summary config=config id=summary_id object=object %}
+                {% firstof '' as summary_id %}
+            {% endfor %}
+
+            {% for form in form_list %}
+                {% firstof forloop.counter0|capfirst as index %}
+                {% firstof id|add:'-form-summary-'|add:index as summary_id %}
+                {% summary config=config id=summary_id object=form.instance %}
                 {% firstof '' as summary_id %}
             {% endfor %}
         </div>

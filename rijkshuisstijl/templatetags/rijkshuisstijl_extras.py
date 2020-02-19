@@ -145,11 +145,14 @@ def key_value_table(**kwargs):
 def summary_list(**kwargs):
     """
     Shows multiple "summary" components for every object in "object_list" option.
-    Shares the interface with summary (see: key_value_table) with the exception of using object_list instead of object.
+    Shares the interface with summary (see: key_value_table) with the exception of using object_list instead of object
+    and form_list instead of form. If form_list is passed (required forms to have instance set) each form instance is
+    used as object.
     """
     config = merge_config(kwargs)
     config["id"] = get_id(config, "summary-list")
     config["object_list"] = parse_kwarg(config, "object_list", [])
+    config["form_list"] = parse_kwarg(config, "form_list", [])
     config["config"] = config
     return config
 
