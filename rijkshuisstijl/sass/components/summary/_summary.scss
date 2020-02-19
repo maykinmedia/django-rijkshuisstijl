@@ -1,0 +1,129 @@
+@import '../../settings/lib/_ro-shade.scss';
+@import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/transform';
+@import '~microscope-sass/lib/typography';
+@import '../form/_input.scss';
+
+.summary {
+  @include border($size: 2px);
+  position: relative;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__title {
+    @include h2(true, padding);
+    @include shade-color('dark-blue');
+    font-weight: normal;
+  }
+
+  .toggle:focus {
+    @include shade-color(heaven-blue, 1, outline-color, $force: true);
+    outline: 2px solid;
+  }
+
+  &__summary > .toggle {
+    @include gutter(top);
+    position: absolute;
+    right: 0;
+  }
+
+  &__summary > &__title + .toggle {
+    @include h2(true, margin);
+  }
+
+  &__arrow {
+    @include animate(transform);
+  }
+
+  &--open &__summary > .toggle &__arrow {
+    @include rotate(180);
+  }
+
+
+  &__summary &__list,
+  &__details &__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__summary &__list {
+    @include gutter(padding-top);
+  }
+
+  &__details {
+    height: 0;
+    overflow: hidden;
+  }
+
+  &--open &__details,
+  &__list-item--open &__details {
+    height: auto;
+  }
+
+  &__key-value {
+    @include columns-responsive(4, 4.5, 6, 6);
+    @include gutter(margin-bottom);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__key-value:not(#{&}__key-value--full-width) + &__key-value:not(#{&}__key-value--full-width) {
+    @include omega;
+  }
+
+  &__key-value--full-width {
+    width: 100%;
+    @include omega;
+  }
+
+  &__key,
+  &__value {
+    @include body;
+
+    &:first-letter {
+      text-transform: capitalize;
+    }
+  }
+
+  &__key {
+    @include ellipsis;
+    @include body--small;
+    @include shade(4, color);
+  }
+
+  &__link {
+    @include anchor(true);
+  }
+
+  &__value br:last-child {
+    display: none;
+  }
+
+  &__key-value:not(#{&}__key-value--edit) &__value .form-control,
+  &__key-value:not(#{&}__key-value--edit) ~ &__key-value--actions {
+    display: none;
+    visibility: hidden;
+  }
+
+  &__key-value--edit ~ &__key-value#{&}__key-value--actions {
+    display: table-row;
+    visibility: visible;
+  }
+
+  &__key-value--edit &__value > *:not(.form-control) {
+    display: none;
+    visibility: hidden;
+  }
+
+  .input,
+  .select {
+    @extend .input--bordered;
+  }
+}

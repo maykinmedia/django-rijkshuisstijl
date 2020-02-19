@@ -1,0 +1,41 @@
+{% spaceless %}{% load sniplates rijkshuisstijl %}
+    {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
+
+    {% if field.edit %}
+        <li class="summary__key-value summary__key-value--edit{% if field.full_width_field %} summary__key-value--full-width{% endif %}" id="{{ field.id }}">
+    {% else %}
+        <li class="summary__key-value{% if field.full_width_field %} summary__key-value--full-width{% endif %}" id="{{ field.id }}">
+    {% endif %}
+
+    {% if field.toggle %}
+        <span class="summary__key toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">
+            {{ field.label }}
+        </span>
+    {% else %}
+        <span class="summary__key">{{ field.label }}</span>
+    {% endif %}
+
+    <span class="summary__value">
+        {% if field.form_field and not field.toggle %}
+            {% form_field field.form_field compact=True label=None form_id=form_id %}
+        {% elif field.toggle %}
+            {% form_field field.form_field compact=True label=None form_id=form_id %}
+            <span class="toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">{{ field.value|linebreaksbr }}</span>
+        {% else %}
+            {% if forloop.first and href_field %}
+                <a class="summary__link" href="{{ object|format_value:href_field }}">{{ field.value|linebreaksbr }}</a>
+            {% else %}
+                {{ field.value|linebreaksbr }}
+            {% endif %}
+        {% endif %}
+    </span>
+</li>
+
+{% if forloop.last %}
+    <li class="summary__key-value summary__key-value--full-width summary__key-value--actions">
+        <span class="summary__value">
+            {% button class='button--small button--primary' type="submit" label=_('Opslaan') %}
+        </span>
+    </li>
+{% endif %}
+{% endspaceless %}

@@ -16,7 +16,7 @@
 
   @include tablet {
     @include sticky();
-    z-index: 20;
+    z-index: 1000;
   }
 
   &__list-item {

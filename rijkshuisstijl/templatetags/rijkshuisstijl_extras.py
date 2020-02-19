@@ -4,12 +4,14 @@ from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_filters import get_attr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import (
     get_id,
-    get_recursed_field_value,
     merge_config,
     parse_arg,
     parse_kwarg,
 )
-from rijkshuisstijl.templatetags.rijkshuisstijl_utils import get_field_label
+from rijkshuisstijl.templatetags.rijkshuisstijl_utils import (
+    format_value,
+    get_field_label,
+)
 
 try:
     from django.urls import reverse_lazy
@@ -108,95 +110,183 @@ def key_value_table(**kwargs):
 
     Available options:
 
-        - fields: Required, A dict (key, label) or a list defining which attributes of object to show.
+        - fields: Required, A dict (key, label) or a list defining which attributes of object to show and what labels to
+          use.
+
+          - If a dict is passed, each key will represent a field in an object to obtain the data from and each value
+            will represent the label to use for the column heading.
+            Example: {'author': 'Written by', 'title': 'Title'}
+
+          - If a list is passed, each item will represent a field in an object to obtain the data from and will also
+            represent the label to use for the column heading.
+            Example: ['author', 'title']
+
+            - Within a list, a dict may be passed.
+              Example: ['author': {'key': 'author', 'label': 'Written by'}, 'title']
+
+          - A label can be a callable in which case it will receive the object as argument and the returned value is
+            used as label.
+            Example: ['author': {'key': 'author', 'label': lambda x: str(x) +' is written by'}, 'title']
+
         - object: Required, An object containing the keys defined fields.
+        - field_toggle_edit: Optional, If true (and form is set) allows toggle between value and input for each value.
         - form: Optional, A (Django) form instance which fields become editable in the key/value table if provided.
         - form_id: Optional, Optional, if set, value will be set on the "form" attribute of generated inputs. No <form>
           tag will be created. This makes the input part of the referenced form.
-        - field_toggle_edit: Optional, If true (and form is set) allows toggle between value and input for each value.
-
+        - full_width_fields: Optional, a list of keys of fields that should take the full width of the component.
         - class: Optional, a string with additional CSS classes.
 
     :param kwargs:
     """
+    return key_value(**kwargs)
+
+
+@register.inclusion_tag("rijkshuisstijl/components/summary/summary-list.html")
+def summary_list(**kwargs):
+    """
+    Shows multiple "summary" components for every object in "object_list" option.
+    Shares the interface with summary (see: key_value_table) with the exception of using object_list instead of object.
+    """
     config = merge_config(kwargs)
+    config["id"] = get_id(config, "summary-list")
+    config["object_list"] = parse_kwarg(config, "object_list", [])
+    config["config"] = config
+    return config
 
-    def get_fields():
-        """
-        :return: list of dicts
-        """
-        obj = config.get("object")
-        fields = parse_kwarg(config, "fields", {})
 
-        try:
-            fields = [
-                {"key": key, "label": value, "value": get_recursed_field_value(obj, key)}
-                for key, value in fields.items()
-            ]
-        except AttributeError:
-            fields = [
-                {"key": field, "label": field, "value": get_recursed_field_value(obj, field)}
-                for field in fields
-            ]
+@register.inclusion_tag("rijkshuisstijl/components/summary/summary.html")
+def summary(**kwargs):
+    """
+    An alternative representation of "key_value_table" with the same interface (see: key_value_table).
+    In addition to key_value_table options: "detail_fields" can be specified (same syntax as "fields". Setting this will
+    result in a collapsible section in the summary.
+    """
+    config = key_value(**kwargs)
+    return config
 
-        if obj:
-            for field in fields:
-                field["label"] = get_field_label(obj, field["label"])
 
-        # Add form field (if any).
-        form = config.get("form")
-        if form:
-            for field in fields:
-                key = field.get("key")
-                if key in form.fields:
-                    field["form_field"] = form[key]
-        return fields
+def key_value(**kwargs):
+    """
+    Shared between key_value table and summary.
+    """
+    config = merge_config(kwargs)
+    _cache = {}
 
-    def get_fieldset_fields(fields):
-        """
-        Creates dict (label, value) for every field in fields.
-        :param fields: a tuple of strings matching fields to create tuple for.
-        :return: list of dicts
-        """
-        fieldset_fields = get_fields()
-        return [field for field in fieldset_fields if field.get("key") in fields]
-
-    def get_data():
+    def get_data(fields_key):
         """
         Return a list of tuples for every fieldset, creates a default fieldset is none provided.
         Every fieldset tuple contains a title and a list of dict (label, value) for every field in object.
+        :param fields_key: A str containing the key to obtain fields from.
         :return:
         """
 
         # Normalize config["fields"] to tuple.
-        fields = parse_kwarg(config, "fields", [])
-        try:
-            fields = fields.keys()
-        except AttributeError:
-            pass
-        fields = tuple(fields)
+        fields = parse_kwarg(config, fields_key, [])
+        fields_list = get_fields(fields)
 
-        # Get fieldsets or default fieldsets.
-        fieldsets = parse_kwarg(config, "fieldsets", [(None, {"fields": tuple(fields)})])
+        # Get fieldsets or default fieldset.
+        fieldsets = parse_kwarg(config, "fieldsets", [(None, {"fields": fields_list})])
 
+        # Always build fieldset structure (with at least one fieldset).
         data = []
         for fieldset in fieldsets:
             fieldset_title = fieldset[0]
-            fieldset_fields = fieldset[1].get("fields", ())
-            field_dict = get_fieldset_fields(fieldset_fields)
-            data.append((fieldset_title, field_dict))
+            fieldset_keys = fieldset[1].get("fields", ())
+            fieldset_fields = [fk for fk in fieldset_keys]
+
+            # Only show fieldsets with fields specified in "fields" option.
+            if len(fieldset_fields):
+                field_dict = get_fields(fieldset_fields)
+                data.append((fieldset_title, field_dict))
 
         return data
 
+    def get_fields(fields):
+        """
+        Converts fields to a dict with additional context for each field.
+        :param fields: A dict (key, label) or a list defining which attributes of object to show and what labels to use.
+        :return: A list_of_dict (id, edit, form_field, toggle, full_width_field, key, label, value) for every field in in fields.
+        """
+        form = config.get("form")
+        key_value_id = get_key_value_id()
+        obj = config.get("object")
+
+        fields = [
+            {
+                "id": f"{key_value_id}-{get_key_value_key(field)}",
+                "full_width_field": get_key_value_key(field) in get_full_width_fields(),
+                "key": get_key_value_key(field),
+                "label": get_field_label(obj, get_key_value_label(fields, field)),
+                "value": format_value(obj, get_key_value_key(field)),
+            }
+            for field in fields
+        ]
+
+        if form:
+            for field in fields:
+                key = get_key_value_key(field)
+
+                if key in form.fields:
+                    field["form_field"] = form[key]
+                    field["edit"] = not get_field_toggle_edit() or key in form.errors
+                    field["toggle"] = get_field_toggle_edit()
+
+        return fields
+
+    def get_key_value_id():
+        if _cache.get("get_key_value_id"):
+            return _cache.get("get_key_value_id")
+
+        id = get_id(config, "key-value")
+
+        _cache["get_key_value_id"] = id
+        return id
+
+    def get_full_width_fields():
+        if _cache.get("get_full_width_fields"):
+            return _cache.get("get_full_width_fields")
+
+        full_width_fields = parse_kwarg(config, "full_width_fields", [])
+
+        _cache["get_full_width_fields"] = full_width_fields
+        return full_width_fields
+
+    def get_key_value_key(field):
+        return get_field_item_by_key(field, "key")
+
+    def get_key_value_label(fields, field):
+        try:
+            return fields.get(field)
+        except AttributeError:
+            return get_field_item_by_key(field, "label")
+
+    def get_field_item_by_key(field, key):
+        try:
+            return field[key]
+        except (AttributeError, TypeError):
+            return field
+
+    def get_field_toggle_edit():
+        if _cache.get("get_field_toggle_edit"):
+            return _cache.get("get_field_toggle_edit")
+
+        field_toggle_edit = parse_kwarg(config, "field_toggle_edit", False)
+
+        _cache["get_field_toggle_edit"] = field_toggle_edit
+        return field_toggle_edit
+
     # config
     config["class"] = config.get("class", None)
-    config["id"] = get_id(config, "key-value-table")
-    config["data"] = get_data()
+    config["id"] = get_key_value_id()
+    config["data"] = get_data("fields")
+    config["detail_data"] = get_data("detail_fields")
+    config["field_toggle_edit"] = get_field_toggle_edit()
     config["form"] = config.get("form", None)
     config["form_action"] = config.get("form_action", None)
     config["form_method"] = config.get("form_method", "post")
     config["form_enctype"] = config.get("form_enctype", "multipart/form-data")
-    config["field_toggle_edit"] = parse_kwarg(config, "field_toggle_edit", False)
+    config["full_width_fields"] = get_full_width_fields()
+    config["object"] = config.get("object", None)
 
     config["config"] = config
     return config

@@ -1,8 +1,9 @@
 {% load sniplates rijkshuisstijl %}{% singleline %}
-    <aside class="key-value-table{% if class %} {{ class }}{% endif %}" id="{{ id }}">
+    <aside class="key-value-table{% if class %} {{ class }}{% endif %}" id="{{ id|slugify }}">
         {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
         {% if form and not form_id %}
-            <form class="form" {% if form_action %} action="{{ form_action }}"{% endif %} method="{{ form_method }}" enctype="{{ form_enctype }}">
+            <form class="form"
+                    {% if form_action %} action="{{ form_action }}"{% endif %} method="{{ form_method }}" enctype="{{ form_enctype }}">
             {% csrf_token %}
         {% endif %}
 
@@ -12,6 +13,7 @@
 
         {% for title, fields in data %}
             <table class="key-value-table__table">
+
                 {% if title %}
                     <thead class="key-value-table__header">
                     <tr class="key-value-table__row">
@@ -19,36 +21,43 @@
                     </tr>
                     </thead>
                 {% endif %}
+
                 <tbody class="key-value-table__body">
                 {% for field in fields %}
-                    {% firstof id|add:'-'|add:field.key as id %}
-                    <tr class="key-value-table__row{% if field.form_field and not field_toggle_edit or field.key in form.errors %} key-value-table__row--edit{% endif %}" id="{{ id }}">
-                        <th class="key-value-table__key{% if field.form_field and field_toggle_edit %} toggle{% endif %}"
-                                {% if field.form_field and field_toggle_edit %} data-toggle-target="#{{ id }}" data-toggle-modifier="edit"{% endif %}>{% firstof field.label field %}</th>
-                        <td class="key-value-table__value">
-                            {% if field.form_field and not field_toggle_edit %}
+                    <tr class="key-value-table__row{% if field.edit and not field.full_width_field %} key-value-table__row--edit{% endif %}" {% if not field.full_width_field %} id="{{ field.id }}"{% endif %}>
+
+                        <th class="key-value-table__key{% if field.toggle %} toggle{% endif %}"{% if field.toggle %} data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit"{% endif %}{% if field.full_width_field %} colspan="2"{% endif %}>
+                            {{ field.label }}
+                        </th>
+
+                        {% if field.full_width_field %}
+                            </tr>
+                            <tr class="key-value-table__row{% if field.edit %} key-value-table__row--edit{% endif %}" id="{{ field.id }}">
+                        {% endif %}
+
+                        <td class="key-value-table__value"{% if field.full_width_field %} colspan="2"{% endif %}>{% spaceless %}
+                            {% if field.form_field and not field.toggle %}
                                 {% form_field field.form_field compact=True label=None form_id=form_id %}
 
-                            {% elif field.form_field and field_toggle_edit %}
-
+                            {% elif field.toggle %}
                                 {% form_field field.form_field compact=True label=None form_id=form_id %}
-                                <span class="toggle" data-toggle-target="#{{ id }}" data-toggle-modifier="edit">{{ object|format_value:field.key }}</span>
+                                <span class="toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">{{ field.value|linebreaksbr }}</span>
+                            {% else %}{{ field.value|linebreaksbr }}{% endif %}
+                        {% endspaceless %}</td>
 
-                            {% else %}
-                                {{ object|format_value:field.key }}
-                            {% endif %}
-                        </td>
                     </tr>
+
                     {% if forloop.last and form %}
                         <tr class="key-value-table__row key-value-table__row--actions">
-                            <td class="key-value-table__key"></td>
-                            <td class="key-value-table__value">
+                            <td class="key-value-table__value" colspan="2">
                                 {% button class='button--small button--primary' type="submit" label=_('Opslaan') form=form_id %}
                             </td>
                         </tr>
                     {% endif %}
+
                 {% endfor %}
                 </tbody>
+
             </table>
         {% endfor %}
 
