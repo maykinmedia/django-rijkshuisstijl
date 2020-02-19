@@ -138,7 +138,7 @@ def key_value_table(**kwargs):
 
     :param kwargs:
     """
-    return key_value(**kwargs)
+    return key_value("key-value-table", **kwargs)
 
 
 @register.inclusion_tag("rijkshuisstijl/components/summary/summary-list.html")
@@ -161,11 +161,10 @@ def summary(**kwargs):
     In addition to key_value_table options: "detail_fields" can be specified (same syntax as "fields". Setting this will
     result in a collapsible section in the summary.
     """
-    config = key_value(**kwargs)
-    return config
+    return key_value("summary", **kwargs)
 
 
-def key_value(**kwargs):
+def key_value(component, **kwargs):
     """
     Shared between key_value table and summary.
     """
@@ -183,20 +182,25 @@ def key_value(**kwargs):
         # Normalize config["fields"] to tuple.
         fields = parse_kwarg(config, fields_key, [])
         fields_list = get_fields(fields)
+        field_keys = [f.get("key") for f in fields_list]
 
         # Get fieldsets or default fieldset.
-        fieldsets = parse_kwarg(config, "fieldsets", [(None, {"fields": fields_list})])
+        fieldsets = parse_kwarg(config, "fieldsets", [(None, {"fields": field_keys})])
 
         # Always build fieldset structure (with at least one fieldset).
         data = []
         for fieldset in fieldsets:
             fieldset_title = fieldset[0]
             fieldset_keys = fieldset[1].get("fields", ())
-            fieldset_fields = [fk for fk in fieldset_keys]
 
-            # Only show fieldsets with fields specified in "fields" option.
-            if len(fieldset_fields):
-                field_dict = get_fields(fieldset_fields)
+            if component is "summary":
+                fieldset_field_keys = [fk for fk in fieldset_keys if fk in field_keys]
+            else:
+                fieldset_field_keys = [fk for fk in fieldset_keys]
+
+            # Only show populated fieldsets.
+            if len(fieldset_field_keys):
+                field_dict = [f for f in fields_list if f.get("key") in fieldset_field_keys]
                 data.append((fieldset_title, field_dict))
 
         return data
@@ -237,7 +241,7 @@ def key_value(**kwargs):
         if _cache.get("get_key_value_id"):
             return _cache.get("get_key_value_id")
 
-        id = get_id(config, "key-value")
+        id = get_id(config, component)
 
         _cache["get_key_value_id"] = id
         return id

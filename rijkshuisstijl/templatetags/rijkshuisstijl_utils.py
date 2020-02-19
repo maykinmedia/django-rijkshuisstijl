@@ -71,22 +71,22 @@ def format_value(obj, field, empty_label="-"):
     # Check for rh_display_<column> on object.
     datagrid_display = "rh_display_{}".format(field)
     if hasattr(obj, datagrid_display):
-        return getattr(obj, datagrid_display)
+        return getattr(obj, datagrid_display, empty_label)
 
     # Check for get_<column>_display on object.
     model_display = "get_{}_display".format(field)
     if hasattr(obj, model_display):
         display = getattr(obj, model_display)
         if callable(display):
-            return display()
+            return display() or empty_label
 
     # Check for __str__.
     if field is "__str__":
-        return str(obj)
+        return str(obj) or empty_label
 
     # Check for list.
     if type(obj) in (list, dict,):
-        return obj.get(field)
+        return obj.get(field, empty_label)
 
     # Check for (related) value.
     val = get_recursed_field_value(obj, field)
@@ -116,7 +116,7 @@ def format_value(obj, field, empty_label="-"):
     if model_field and model_field.is_relation:
         if hasattr(val, "all"):
             return ", ".join([str(instance) for instance in val.all()])
-        return str(val)
+        return str(val) or empty_label
 
     if field.endswith("_set"):
         possible_related_field = field.replace("_set", "")
@@ -135,14 +135,14 @@ def format_value(obj, field, empty_label="-"):
 
     # Check for callable.
     if callable(val):
-        return val()
+        return val() or empty_label
 
     if val:
         try:
             # Try to apply date formatting.
             return formats.date_format(val)
         except AttributeError:
-            return val
+            return val or empty_label
 
     # Return empty string
     return empty_label

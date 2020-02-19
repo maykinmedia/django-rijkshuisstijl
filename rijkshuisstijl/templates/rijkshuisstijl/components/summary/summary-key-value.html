@@ -1,4 +1,4 @@
-{% spaceless %}{% load sniplates rijkshuisstijl %}
+{% load sniplates rijkshuisstijl %}{% singleline %}
     {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
 
     {% if field.edit %}
@@ -34,8 +34,8 @@
 {% if forloop.last %}
     <li class="summary__key-value summary__key-value--full-width summary__key-value--actions">
         <span class="summary__value">
-            {% button class='button--small button--primary' type="submit" label=_('Opslaan') %}
+            {% button class='button--small button--primary' type="submit" label=_('Opslaan') form=form_id %}
         </span>
     </li>
 {% endif %}
-{% endspaceless %}
+{% endsingleline %}

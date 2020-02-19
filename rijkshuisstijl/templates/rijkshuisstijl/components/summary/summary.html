@@ -1,8 +1,7 @@
 {% spaceless %}{% load i18n static rijkshuisstijl %}
     <div class="summary" id="{{ id|slugify }}">
         {% if form and not form_id %}
-            <form class="form"
-                    {% if form_action %} action="{{ form_action }}"{% endif %} method="{{ form_method }}" enctype="{{ form_enctype }}">
+            <form class="form"{% if form_action %} action="{{ form_action }}"{% endif %} method="{{ form_method }}" enctype="{{ form_enctype }}">
             {% csrf_token %}
         {% endif %}
 
@@ -25,7 +24,7 @@
 
                 <ul class="summary__list">
                     {% for field in fields %}
-                        {% include './summary-key-value.html' with field=field href_field=href_field form=form form_id=form_id object=object forloop=forloop only %}
+                        {% include './summary-key-value.html' with id=id field=field href_field=href_field field_toggle_edit=field_toggle_edit form=form form_id=form_id object=object forloop=forloop only %}
                     {% endfor %}
                 </ul>
             {% endfor %}
@@ -40,7 +39,7 @@
 
                     <ul class="summary__list">
                         {% for field in fields %}
-                            {% include './summary-key-value.html' with id=id field=field href_field=href_field field_toggle_edit=field_toggle_edit form=form object=object forloop=forloop only %}
+                            {% include './summary-key-value.html' with id=id field=field href_field=href_field field_toggle_edit=field_toggle_edit form=form form_id=form_id object=object forloop=forloop only %}
                         {% endfor %}
                     </ul>
                 {% endfor %}
