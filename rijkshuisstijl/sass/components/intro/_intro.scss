@@ -1,7 +1,26 @@
+@import '~microscope-sass/lib/color';
 @import '~microscope-sass/lib/typography';
 
 .intro {
   box-sizing: border-box;
+
+  &--error,
+  &--danger {
+    @include color-danger(background-color);
+  }
+
+  &--debug,
+  &--info {
+    @include color-info(background-color);
+  }
+
+  &--success {
+    @include color-success(background-color);
+  }
+
+  &--warning {
+    @include color-warning(background-color);
+  }
 
   &__title {
     @include h2;

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import resolve_url
 from django.templatetags.static import static
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
@@ -117,6 +118,7 @@ def intro(**kwargs):
     Available options:
 
         - class: Optional, a string with additional CSS classes.
+        - status: Optional, A status string from the Django messages framework, styling the textbox accordingly.
         - title: Optional, Title to show.
         - text: Optional, Text to show.
         - wysiwyg: Optional, Raw HTML to be shown, styled automatically.
@@ -125,17 +127,21 @@ def intro(**kwargs):
 
     :param kwargs:
     """
-    kwargs = merge_config(kwargs)
+    config = merge_config(kwargs)
+
+    def get_wysiwyg():
+        return mark_safe(config.get("wysiwyg"))
 
     # kwargs
-    kwargs["class"] = kwargs.get("class", None)
-    kwargs["title"] = kwargs.get("title", None)
-    kwargs["text"] = kwargs.get("text", None)
-    kwargs["wysiwyg"] = kwargs.get("wysiwyg")
-    kwargs["urlize"] = kwargs.get("urlize", True)
+    config["class"] = config.get("class", None)
+    config["title"] = config.get("title", None)
+    config["status"] = config.get("status", None)
+    config["text"] = config.get("text", None)
+    config["wysiwyg"] = get_wysiwyg()
+    config["urlize"] = config.get("urlize", True)
 
-    kwargs["config"] = kwargs
-    return kwargs
+    config["config"] = config
+    return config
 
 
 @register.inclusion_tag("rijkshuisstijl/components/login-bar/login-bar.html", takes_context=True)
@@ -415,6 +421,9 @@ def textbox(**kwargs):
     """
     config = merge_config(kwargs)
 
+    def get_wysiwyg():
+        return mark_safe(config.get("wysiwyg"))
+
     # kwargs
     config["class"] = config.get("class", None)
     config["close"] = parse_kwarg(config, "close", False)
@@ -422,7 +431,7 @@ def textbox(**kwargs):
     config["status"] = config.get("status", None)
     config["title"] = config.get("title", None)
     config["text"] = config.get("text", None)
-    config["wysiwyg"] = config.get("wysiwyg")
+    config["wysiwyg"] = get_wysiwyg()
     config["urlize"] = config.get("urlize", True)
 
     config["config"] = config

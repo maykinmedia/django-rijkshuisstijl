@@ -131,6 +131,9 @@ def key_value_table(**kwargs):
         - object: Required, An object containing the keys defined fields.
         - field_toggle_edit: Optional, If true (and form is set) allows toggle between value and input for each value.
         - form: Optional, A (Django) form instance which fields become editable in the key/value table if provided.
+        - form_action: Optional,
+        - form_enctype: Optional,
+        - form_method: Optional,
         - form_id: Optional, Optional, if set, value will be set on the "form" attribute of generated inputs. No <form>
           tag will be created. This makes the input part of the referenced form.
         - full_width_fields: Optional, a list of keys of fields that should take the full width of the component.

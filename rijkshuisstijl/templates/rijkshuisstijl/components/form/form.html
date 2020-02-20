@@ -5,7 +5,7 @@
         {% if title or subtitle or intro or wysiwyg or text %}
             <header class="form__header">
                 {% if title %}<h1 class="form__title">{{ title }}</h1>{% endif %}
-                {% if subtitle %}<h1 class="form__subtitle">{{ subtitle }}</h1>{% endif %}
+                {% if subtitle %}<h2 class="form__subtitle">{{ subtitle }}</h2>{% endif %}
                 {% if intro or wysiwyg %}{% intro text=intro urlize=urlize wysiwyg=wysiwyg status=status %}{% endif %}
                 {% if text %}{% textbox text=text urlize=urlize status=status %}{% endif %}
             </header>
