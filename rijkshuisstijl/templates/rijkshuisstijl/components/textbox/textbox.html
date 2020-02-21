@@ -3,6 +3,6 @@
     {% if close %}{% button class='button--no-text button--primary button--small' toggle_target='#'|add:id toggle_modifier='closed' icon='close' %}{% endif %}
     {% if title %}<h4 class="textbox__title">{{ title }}</h4>{% endif %}
     {% if text %}<p class="textbox__text">{% if urlize %}{{ text|urlize }}{% else %}{{ text }}{% endif %}</p>{% endif %}
-    {% if wysiwyg %}<div class="wysiwyg">{{ wysiwyg|safe }}</div>{% endif %}
+    {% if wysiwyg %}<div class="wysiwyg">{{ wysiwyg }}</div>{% endif %}
 </div>
 {% endspaceless %}

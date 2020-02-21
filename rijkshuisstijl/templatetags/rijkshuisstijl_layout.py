@@ -130,7 +130,9 @@ def intro(**kwargs):
     config = merge_config(kwargs)
 
     def get_wysiwyg():
-        return mark_safe(config.get("wysiwyg"))
+        wysiwyg = config.get("wysiwyg")
+        if wysiwyg:
+            return mark_safe(wysiwyg)
 
     # kwargs
     config["class"] = config.get("class", None)
@@ -422,7 +424,9 @@ def textbox(**kwargs):
     config = merge_config(kwargs)
 
     def get_wysiwyg():
-        return mark_safe(config.get("wysiwyg"))
+        wysiwyg = config.get("wysiwyg")
+        if wysiwyg:
+            return mark_safe(wysiwyg)
 
     # kwargs
     config["class"] = config.get("class", None)
