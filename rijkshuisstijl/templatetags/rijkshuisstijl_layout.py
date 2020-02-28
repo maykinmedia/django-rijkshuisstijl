@@ -57,6 +57,8 @@ def header(**kwargs):
 
     # kwargs
     kwargs["class"] = kwargs.get("class", None)
+    kwargs["logo_src"] = kwargs.get("logo_src", static("rijkshuisstijl/components/logo/ienw-logo-tablet.svg"))
+    kwargs["logo_mobile_src"] = kwargs.get("logo_mobile_src", static("rijkshuisstijl/components/logo/ienw-logo-mobile.svg"))
 
     kwargs["config"] = kwargs
     return kwargs
@@ -223,9 +225,9 @@ def logo(**kwargs):
 
     # kwargs
     kwargs["alt"] = kwargs.get("alt", _("Logo Rijksoverheid"))
-    kwargs["src"] = kwargs.get("src", static("rijkshuisstijl/components/logo/logo-tablet.svg"))
+    kwargs["src"] = kwargs.get("src", static("rijkshuisstijl/components/logo/ienw-logo-tablet.svg"))
     kwargs["mobile_src"] = kwargs.get(
-        "mobile_src", static("rijkshuisstijl/components/logo/logo-mobile.svg")
+        "mobile_src", static("rijkshuisstijl/components/logo/ienw-logo-mobile.svg")
     )
 
     kwargs["config"] = kwargs
