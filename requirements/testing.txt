@@ -1,0 +1,4 @@
+django-webtest
+beautifulsoup4
+lxml
+

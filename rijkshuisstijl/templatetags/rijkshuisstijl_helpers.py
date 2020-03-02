@@ -27,13 +27,14 @@ def create_list_of_dict(obj, name_key="key", name_value="label"):
         # Convert dict to list_of_dict.
         return [{name_key: key, name_value: value} for key, value in obj.items()]
     except AttributeError:
+        list_of_dict = []
+
         # Convert string to list_of_dict.
         if type(obj) == str or type(obj) == SafeText:
             return [{name_key: obj, name_value: obj}]
 
         # Convert list to list_of_dict.
         elif type(obj) is list or type(obj) is tuple:
-            list_of_dict = []
             for column in obj:
                 # Already dict
                 if type(column) == dict:
@@ -159,17 +160,3 @@ def parse_kwarg(kwargs, name, default=None):
     """
     value = kwargs.get(name, default)
     return parse_arg(value, default)
-
-
-def get_recursed_field_value(obj, field):
-    """
-    Finds a field value in an object by recursing through related fields.
-    :param obj: A model instance.
-    :param field: A field, possibly on a related instance. Example: "author__first_name".
-    :return: The value of the final field.
-    """
-    fields = field.split("__")
-    while len(fields) > 1:
-        field = fields.pop(0)
-        obj = getattr(obj, field)
-    return getattr(obj, fields[0])

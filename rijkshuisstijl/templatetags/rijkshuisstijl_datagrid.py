@@ -6,7 +6,10 @@ from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
-from rijkshuisstijl.templatetags.rijkshuisstijl_utils import get_field_label
+from rijkshuisstijl.templatetags.rijkshuisstijl_utils import (
+    get_field_label,
+    get_recursed_field_value,
+)
 
 from .rijkshuisstijl_helpers import (
     create_list_of_dict,
@@ -305,6 +308,8 @@ def datagrid(context, **kwargs):
         add_display() and add_modifier_class() are called for every object in the found object_list.
         :return: A list of objects to show data for.
         """
+        if _cache.get("get_object_list"):
+            return _cache.get("get_object_list")
 
         # Get object list.
         context_object_list = context.get("object_list", [])
@@ -346,6 +351,11 @@ def datagrid(context, **kwargs):
 
             if order_by:
                 object_list = object_list.order_by(order_by)
+
+        # Pagination
+        object_list = add_paginator(object_list)
+
+        _cache["get_object_list"] = object_list
         return object_list
 
     def get_modifier_column():
@@ -421,6 +431,41 @@ def datagrid(context, **kwargs):
         _cache["get_filter_dict"] = filterable_columns
         return filterable_columns
 
+    def get_groups():
+        groups = parse_kwarg(kwargs, "groups")
+        object_list = get_object_list()
+
+        if not groups:
+            return [
+                {
+                    "default": True,
+                    "key": None,
+                    "value": None,
+                    "label": None,
+                    "object_list": object_list,
+                }
+            ]
+
+        key = groups.get("key")
+        group_defs = groups.get("values")
+        group_defs = create_list_of_dict(group_defs, "value", "label")
+
+        groups = [
+            {
+                "default": False,
+                "key": key,
+                "value": group_def.get("value"),
+                "label": group_def.get("label"),
+                "object_list": [
+                    object
+                    for object in object_list
+                    if get_recursed_field_value(object, key) == group_def.get("value")
+                ],
+            }
+            for group_def in group_defs
+        ]
+        return groups
+
     def get_ordering():
         """
         Return the field to use for ordering the queryset.
@@ -439,7 +484,7 @@ def datagrid(context, **kwargs):
         if ordering and ordering.replace("-", "") in [c["lookup"] for c in orderable_columns]:
             result = ordering
         elif ordering:
-            print(ordering, "is invalid, allowe columns are", orderable_columns)
+            print(ordering, "is invalid, allowed columns are", orderable_columns)
         _cache["get_ordering"] = result
         return result
 
@@ -566,22 +611,21 @@ def datagrid(context, **kwargs):
 
         return None
 
-    def add_paginator(datagrid_context):
+    def add_paginator(object_list):
         """
         Return datagrid_context with added paginator configuration.
-        :param datagrid_context: A processed clone of kwargs.
+        :param object_list:
         """
-        paginator_context = datagrid_context.copy()
-        paginator_context["is_paginated"] = kwargs.get("is_paginated", context.get("is_paginated"))
+        config["is_paginated"] = config.get("is_paginated", context.get("is_paginated"))
 
-        if paginator_context.get("paginate"):
+        if config.get("paginate"):
             """
             Paginate object_list.
             """
             request = context["request"]
-            paginate_by = paginator_context.get("paginate_by", 100)
-            paginator = Paginator(paginator_context.get("object_list", []), paginate_by)
-            page_key = paginator_context.get("page_key", "page")
+            paginate_by = config.get("paginate_by", 100)
+            paginator = Paginator(object_list, paginate_by)
+            page_key = config.get("page_key", "page")
             page_number = request.GET.get(page_key, 1)
 
             if str(page_number).upper() == "LAST":
@@ -590,24 +634,23 @@ def datagrid(context, **kwargs):
             page_obj = paginator.get_page(page_number)
             object_list = page_obj.object_list
 
-            paginator_context["is_paginated"] = True
-            paginator_context["paginator"] = paginator
-            paginator_context["page_key"] = page_key
-            paginator_context["page_number"] = page_number
-            paginator_context["page_obj"] = page_obj
-            paginator_context["object_list"] = object_list
-            return paginator_context
+            config["is_paginated"] = True
+            config["paginator"] = paginator
+            config["page_key"] = page_key
+            config["page_number"] = page_number
+            config["page_obj"] = page_obj
+            config["object_list"] = object_list
 
-        if paginator_context["is_paginated"]:
+        if config.get("is_paginated"):
             """
             Rely on view/context for pagination.
             """
-            paginator_context["paginator"] = kwargs.get("paginator", context.get("paginator"))
-            paginator_context["page_key"] = kwargs.get("page_key", "page")
-            paginator_context["page_number"] = kwargs.get("page_number")
-            paginator_context["page_obj"] = kwargs.get("page_obj", context.get("page_obj"))
-            return paginator_context
-        return paginator_context
+            config["paginator"] = config.get("paginator", context.get("paginator"))
+            config["page_key"] = config.get("page_key", "page")
+            config["page_number"] = config.get("page_number")
+            config["page_obj"] = config.get("page_obj", context.get("page_obj"))
+
+        return object_list
 
     def add_object_attributes(datagrid_context):
         """
@@ -667,15 +710,13 @@ def datagrid(context, **kwargs):
     config["label_result_count"] = parse_kwarg(kwargs, "label_result_count", _("resultaten"))
     config["label_select_all"] = parse_kwarg(kwargs, "label_select_all", _("(De)selecteer alles"))
 
-    # Showing data/Filtering/Ordering
+    # Showing Data/Filtering/Grouping/Ordering
     config["columns"] = get_columns()
     config["object_list"] = get_object_list()
     config["filters"] = get_filter_dict()
+    config["groups"] = get_groups()
     config["dom_filter"] = parse_kwarg(kwargs, "dom_filter", False)
     config["ordering"] = get_ordering_dict()
-
-    # Pagination
-    config = add_paginator(config)
 
     # Manipulating data (form)
     config["form"] = (

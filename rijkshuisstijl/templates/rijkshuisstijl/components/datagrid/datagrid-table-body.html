@@ -1,0 +1,48 @@
+{% load l10n rijkshuisstijl %}{% singleline %}
+    {% if group.object_list and group.label %}
+        <thead class="datagrid__table-head datagrid__table-head--group">
+            <tr class="datagrid__row">
+                <th class="datagrid__caption datagrid__caption--group" colspan="{% if form %}{{ columns|length|add:1 }}{% else %}{{ columns|length }}{% endif %}">
+                    <h4 class="datagrid__subtitle">{{ group.label }}</h4>
+                </th>
+            </tr>
+        </thead>
+    {% endif %}
+
+    <tbody class="datagrid__table-body">
+    {% for object in group.object_list %}
+        {% url url_reverse object.pk|unlocalize as reversed_url %}
+        {% firstof reversed_url object.get_absolute_url as url %}
+
+        <tr class="datagrid__row datagrid__row--cells{% if object.datagrid_modifier_class %} datagrid__row--{{ object.datagrid_modifier_class }}{% endif %}{% if url %} fake-link fake-link--double-click" data-href="{{ url }}"
+        {% else %}"{% endif %}>
+        {% if form %}
+            <td class="datagrid__cell datagrid__cell--checkbox">
+                {% form_checkbox name=form_checkbox_name value=object.pk|unlocalize %}
+            </td>
+        {% endif %}
+
+        {% for column in columns %}
+            {% firstof object|format_value:column.key '' as label %}
+            <td class="datagrid__cell{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">
+                {% if forloop.counter0 == 0 and url %}
+                    <a class="datagrid__link" href="{{ url }}">{{ label }}</a>
+                {% else %}
+                    {% if urlize %}{{ label|urlize }}
+                        {% elif urlizetrunc %}{{ label|urlizetrunc:urlizetrunc }}
+                    {% else %}{{ label }}{% endif %}
+                {% endif %}
+            </td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+
+    {% if not group.object_list and group.default %}
+        <tr class="datagrid__row datagrid__row--placeholder">
+            <td class="datagrid__cell" colspan="{% if form %}{{ columns|length|add:1 }}{% else %}{{ columns|length }}{% endif %}">
+                {{ label_no_results }}
+            </td>
+        </tr>
+    {% endif %}
+    </tbody>
+{% endsingleline %}

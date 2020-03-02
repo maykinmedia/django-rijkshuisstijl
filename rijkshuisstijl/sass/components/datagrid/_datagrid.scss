@@ -45,10 +45,6 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
 
   &__header {
     z-index: 10;
-
-    //@include tablet {
-    //  @include sticky;
-    //}
   }
 
   &__footer {
@@ -149,12 +145,6 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     }
   }
 
-  //&__header + &__body &__caption {
-  //  @include tablet {
-  //    @include sticky($datagrid-offset-caption);
-  //  }
-  //}
-
   &__caption#{&}__caption--checkbox {
     padding-left: $datagrid-spacing-row-h * 2;
   }
@@ -197,16 +187,6 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     }
   }
 
-  //&__header + &__body &__filter {
-  //  @include tablet {
-  //    @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-tablet}');
-  //  }
-  //
-  //  @include desktop {
-  //    @include sticky('#{$datagrid-offset-caption} + #{$datagrid-offset-filter-desktop}');
-  //  }
-  //}
-
   &--overflow-mobile &__filter {
     @include mobile-only {
       position: static;
@@ -218,10 +198,6 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     @extend .fa-sort;
     @include center-v;
     right: $datagrid-spacing-row-h;
-
-    //&:before {
-    //  content: fa-content($fa-var-sort)
-    //}
   }
 
   &__caption--ordered-asc &__icon {
@@ -249,6 +225,11 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     }
   }
 
+  &__subtitle {
+    @include h2($datagrid-spacing);
+    @include rows(1, margin-top);
+  }
+
   &__cell {
     @include border;
     padding: $datagrid-spacing-row-v $datagrid-spacing-cell-h;
@@ -261,6 +242,10 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     &:last-child {
       padding-right: $datagrid-spacing-row-h * 2;
     }
+  }
+
+  &__table-head--group + &__table-body &__row:first-child &__cell {
+    @include border(top);
   }
 
   &__row--nomatch:not(&__row--placeholder) &__cell {

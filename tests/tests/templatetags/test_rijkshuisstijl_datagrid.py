@@ -2,11 +2,15 @@ from django.core.paginator import Paginator
 from django.template import Context, Template
 from django.test import RequestFactory, TestCase
 
+from tests.tests.templatetags.utils import InclusionTagWebTest
+
 from ...models import Author, Book, Publisher
 
 
-class DatagridTestCase(TestCase):
+class DatagridTestCase(InclusionTagWebTest):
     def setUp(self):
+        self.tag = "datagrid"
+
         self.publisher_1 = Publisher.objects.create(name="Foo")
         self.publisher_2 = Publisher.objects.create(name="Bar")
 
@@ -483,3 +487,53 @@ class DatagridTestCase(TestCase):
         self.assertIn(foo_html, html)
         self.assertIn(bar_html, html)
         self.assertIn(baz_html, html)
+
+    def test_groups(self):
+        config = {
+            "columns": ["title"],
+            "queryset": Book.objects.all(),
+            "groups": {
+                "key": "publisher__name",
+                "values": [
+                    {"value": self.publisher_1.name, "label": "Publisher 1"},
+                    {"value": self.publisher_2.name, "label": "Publisher 2"},
+                ],
+            },
+        }
+
+        captions = self.select(".datagrid__subtitle", config)
+
+        self.assertEqual(captions[0].text, "Publisher 1")
+        self.assertEqual(captions[1].text, "Publisher 2")
+
+        groups = self.select(".datagrid__table-body", config)
+        group_1_cells = groups[0].select(".datagrid__cell")
+        group_2_cells = groups[1].select(".datagrid__cell")
+
+        self.assertEqual(len(group_1_cells), 2)
+        self.assertEqual(group_1_cells[0].text.strip(), "Lorem")
+        self.assertEqual(group_1_cells[1].text.strip(), "Dolor")
+
+        self.assertEqual(len(group_2_cells), 1)
+        self.assertEqual(group_2_cells[0].text.strip(), "Ipsum")
+
+    def test_groups_paginated(self):
+        config = {
+            "columns": ["title"],
+            "queryset": Book.objects.all(),
+            "groups": {
+                "key": "publisher__name",
+                "values": [
+                    {"value": self.publisher_1.name, "label": "Publisher 1"},
+                    {"value": self.publisher_2.name, "label": "Publisher 2"},
+                ],
+            },
+            "paginate": True,
+            "paginate_by": 2,
+        }
+
+        cells = self.select(".datagrid__cell", config)
+        self.assertEqual(len(cells), 2)
+
+        result_count = self.select_one(".datagrid__result-count", config)
+        self.assertEqual(result_count.text, "3 resultaten")

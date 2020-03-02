@@ -10,10 +10,7 @@ from django.utils.functional import Promise
 from django.utils.safestring import mark_safe
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
-from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import (
-    get_model,
-    get_recursed_field_value,
-)
+from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_model
 
 
 @register.filter
@@ -55,6 +52,26 @@ def get_field_label(obj, field):
 
     regex = re.compile("[_-]+")
     return re.sub(regex, " ", field)
+
+
+@register.filter
+def get_recursed_field_value(obj, field):
+    """
+    Finds a field value in an object by recursing through related fields.
+    :param obj: A model instance.
+    :param field: A field, possibly on a related instance. Example: "author__first_name".
+    :return: The value of the final field.
+    """
+    fields = field.split("__")
+
+    if len(fields) is 1:
+        return getattr(obj, field)
+
+    while len(fields) > 1:
+        field = fields.pop(0)
+        obj = getattr(obj, field)
+
+    return getattr(obj, fields[0])
 
 
 @register.filter
