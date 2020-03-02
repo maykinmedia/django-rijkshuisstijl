@@ -55,7 +55,12 @@
     @include responsive(margin-right, $toolbar-spacing, $toolbar-spacing * 2, $toolbar-spacing * 4);
   }
 
-  &__label
+  &--spaced &__list-item:not(:last-child) {
+    margin-right: $toolbar-spacing;
+  }
+
+
+  &__label,
   + .datagrid {
     border-top: none;
   }
