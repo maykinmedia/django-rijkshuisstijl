@@ -493,8 +493,8 @@ class DatagridTestCase(InclusionTagWebTest):
             "columns": ["title"],
             "queryset": Book.objects.all(),
             "groups": {
-                "key": "publisher__name",
-                "values": [
+                "lookup": "publisher__name",
+                "groups": [
                     {"value": self.publisher_1.name, "label": "Publisher 1"},
                     {"value": self.publisher_2.name, "label": "Publisher 2"},
                 ],
@@ -522,8 +522,8 @@ class DatagridTestCase(InclusionTagWebTest):
             "columns": ["title"],
             "queryset": Book.objects.all(),
             "groups": {
-                "key": "publisher__name",
-                "values": [
+                "lookup": "publisher__name",
+                "groups": [
                     {"value": self.publisher_1.name, "label": "Publisher 1"},
                     {"value": self.publisher_2.name, "label": "Publisher 2"},
                 ],
