@@ -82,6 +82,18 @@ def datagrid(context, **kwargs):
     - dom_filter: Optional, if True, adds a DOM filter to the top header.
 
 
+    Grouping
+    --------
+
+    Objects can be grouped together within the datagrid by specifying the "groups" options. This resolves the value of
+    "lookup" for each shown object and tests it against each "value" in a dict in "groups", a subtitle for each group is
+    rendered showing the value of "label" within that same dict.
+
+    - groups: Optional, a dict ("lookup", "values"). Lookup should be a string pointing to a (related) field. Groups
+      should be a list_of_dict ("value", "label"). The result the lookup for each object is compared to the value of
+      each group.
+
+
     Ordering
     --------
 
@@ -320,7 +332,7 @@ def datagrid(context, **kwargs):
         object_list = kwargs.get("queryset", object_list)
 
         # Filtering
-        filters = get_filter_dict()
+        filters = get_filters()
         if filters and hasattr(object_list, "filter") and callable(object_list.filter):
             try:
                 active_filters = [
@@ -368,7 +380,7 @@ def datagrid(context, **kwargs):
         """
         return kwargs.get("modifier_column", kwargs.get("modifier_key", False))
 
-    def get_filter_dict():
+    def get_filters():
         """
         Returns a list_of_dict for filter configuration, each dict (if present) contains:
 
@@ -379,8 +391,8 @@ def datagrid(context, **kwargs):
 
         :return: list_of_dict.
         """
-        if _cache.get("get_filter_dict"):
-            return _cache.get("get_filter_dict")
+        if _cache.get("get_filters"):
+            return _cache.get("get_filters")
 
         filterable_columns = parse_kwarg(kwargs, "filterable_columns", [])
         filterable_columns = create_list_of_dict(filterable_columns)
@@ -389,7 +401,7 @@ def datagrid(context, **kwargs):
         queryset = kwargs.get("queryset", context_queryset)
 
         if not queryset:  # Filtering is only supported on querysets.
-            _cache["get_filter_dict"] = {}
+            _cache["get_filters"] = {}
             return {}
 
         for filterable_column in filterable_columns:
@@ -430,10 +442,21 @@ def datagrid(context, **kwargs):
             filter_key = filterable_column["filter_key"]
             filterable_column["value"] = request.GET.get(filter_key)
 
-        _cache["get_filter_dict"] = filterable_columns
+        _cache["get_filters"] = filterable_columns
         return filterable_columns
 
     def get_groups():
+        """
+        Splits object_list into one or more groups, returns a dict for each group containing:
+
+        - default: whether the group is the default groups (no groups were set).
+        - label: the string represenation of a group, (rendered as subtitle).
+        - lookup: the field on each object to lookup.
+        - value: the resulting value of lookup required to match object to this group.
+        - object_list: the objects matching this group.
+
+        :return: list_of_dict.
+        """
         groups = parse_kwarg(kwargs, "groups")
         object_list = get_object_list()
 
@@ -441,27 +464,27 @@ def datagrid(context, **kwargs):
             return [
                 {
                     "default": True,
-                    "key": None,
-                    "value": None,
                     "label": None,
+                    "lookup": None,
+                    "value": None,
                     "object_list": object_list,
                 }
             ]
 
-        key = groups.get("key")
-        group_defs = groups.get("values")
+        lookup = groups.get("lookup")
+        group_defs = groups.get("groups")
         group_defs = create_list_of_dict(group_defs, "value", "label")
 
         groups = [
             {
                 "default": False,
-                "key": key,
-                "value": group_def.get("value"),
                 "label": group_def.get("label"),
+                "lookup": lookup,
+                "value": group_def.get("value"),
                 "object_list": [
                     object
                     for object in object_list
-                    if get_recursed_field_value(object, key) == group_def.get("value")
+                    if get_recursed_field_value(object, lookup) == group_def.get("value")
                 ],
             }
             for group_def in group_defs
@@ -714,7 +737,7 @@ def datagrid(context, **kwargs):
     # Showing Data/Filtering/Grouping/Ordering
     config["columns"] = get_columns()
     config["object_list"] = get_object_list()
-    config["filters"] = get_filter_dict()
+    config["filters"] = get_filters()
     config["groups"] = get_groups()
     config["dom_filter"] = parse_kwarg(kwargs, "dom_filter", False)
     config["ordering"] = get_ordering_dict()
