@@ -32,8 +32,11 @@
         {% endif %}
 
         {% if form %}
-            <form class="datagrid__form" method="post"{% if form_action %} action="{{ form_action }}"{% endif %}>
-            {% csrf_token %}
+          <form class="datagrid__form" method="{{ form_method }}"{% if form_action %} action="{{ form_action }}"{% endif %}>
+
+            {% if form_method|upper != "GET" %}
+              {% csrf_token %}
+            {% endif %}
         {% endif %}
 
         {% if title or form and form_select_all_position in 'top,both' or form_buttons and toolbar_position in 'top,both' or dom_filter %}
