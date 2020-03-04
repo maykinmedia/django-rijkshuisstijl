@@ -27,14 +27,7 @@
         {% firstof input_template field.input_template as input_template %}
         {% if input_template %}
             {# Custom input template #}
-
-            {% if form_field %}
-                {# Form field #}
-                {% include input_template with value=form_field.value form_id=form_id %}
-            {% else %}
-                {# Custom #}
-                {% include input_template with value=value form_id=form_id %}
-            {% endif %}
+            {% include input_template %}
 
         {% elif type == 'checkbox' %}
             {# (Mutliple) checkbox inputs  #}
