@@ -163,6 +163,8 @@ def datagrid(context, **kwargs):
       specify the performed action.
       example: [{'name': 'delete', 'label': 'delete' 'class': 'button--danger'}]
 
+    - form_method: Optional, method to use for the form, defaults to "POST".
+
     - form_select: Optional, If set (dict, at least "name"), shows a select with actions (comparable to form_buttons).
       Requires form_options to be set as well. The name attribute should be used to specify the performed action.
 
@@ -603,7 +605,6 @@ def datagrid(context, **kwargs):
         :return: A dict with at least "name" and "options" keys, options is a list_of_dict.
         """
         form_select = parse_kwarg(kwargs, "form_select", None)
-
         if form_select:
             form_options = parse_kwarg(kwargs, "form_options", [])
             form_select["choices"] = [tuple(d.values()) for d in form_options]
@@ -726,6 +727,7 @@ def datagrid(context, **kwargs):
     )
     config["form_action"] = parse_kwarg(kwargs, "form_action", "")
     config["form_buttons"] = get_form_buttons()
+    config["form_method"] = parse_kwarg(kwargs, "form_method", "POST")
     config["form_select"] = get_form_select()
     config["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
     config["form_select_all_position"] = kwargs.get("form_select_all_position", "top")

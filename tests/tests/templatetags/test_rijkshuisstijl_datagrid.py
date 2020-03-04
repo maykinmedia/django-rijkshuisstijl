@@ -335,7 +335,7 @@ class DatagridTestCase(InclusionTagWebTest):
         )
 
         self.assertIn('id="my-first-datagrid"', html)
-        self.assertIn('<form class="datagrid__form" method="post" action="/foo">', html)
+        self.assertIn('<form class="datagrid__form" method="POST" action="/foo">', html)
         self.assertInHTML(
             """
             <button class="button button--icon button--small button--transparent" name="Lorem" title="Foo" >
