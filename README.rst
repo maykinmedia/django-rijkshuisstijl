@@ -42,7 +42,7 @@ Install from PyPI with pip:
     pip install django-rijkshuisstijl
 
 
-Then add "sitetree" and "rijkshuisstijl" to INSTALLED_APPS
+Then add "rijkshuisstijl" and "sitetree" to INSTALLED_APPS.
 
 Usage
 =====

@@ -1,5 +1,4 @@
-{% load sniplates rijkshuisstijl %}{% singleline %}
-    {% load_widgets form=sniplates|default:'rijkshuisstijl/components/form/sniplates.html' %}
+{% load rijkshuisstijl %}{% singleline %}
 
     {% if field.edit %}
         <li class="summary__key-value summary__key-value--edit{% if field.full_width_field %} summary__key-value--full-width{% endif %}" id="{{ field.id }}">
@@ -17,16 +16,36 @@
 
     <span class="summary__value">
         {% if field.form_field and not field.toggle %}
-            {% form_field field.form_field compact=True label=None form_id=form_id %}
+
+
+            {% if form_id %}
+                {% form_field form field.form_field.name attrs='form:'|add:form_id %}
+            {% else %}
+                {% form_field form field.form_field.name %}
+            {% endif %}
+
+
         {% elif field.toggle %}
-            {% form_field field.form_field compact=True label=None form_id=form_id %}
+
+
+            {% if form_id %}
+                {% form_field form field.form_field.name attrs='form:'|add:form_id %}
+            {% else %}
+                {% form_field form field.form_field.name %}
+            {% endif %}
             <span class="toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">{{ field.value|linebreaksbr }}</span>
+
+
         {% else %}
+
+
             {% if forloop.first and href_field %}
                 <a class="summary__link" href="{{ object|format_value:href_field }}">{{ field.value|linebreaksbr }}</a>
             {% else %}
                 {{ field.value|linebreaksbr }}
             {% endif %}
+
+
         {% endif %}
     </span>
 </li>

@@ -12,7 +12,7 @@ Installation
     pip install django-rijkshuisstijl
 
 
-- Add "rijkshuisstijl", "sitetree" and "sniplates" to INSTALLED_APPS.
+- Add "rijkshuisstijl" and "sitetree" to INSTALLED_APPS.
 - Make sure that "django.template.context_processors.request" is added as a context processor.
 
 Settings

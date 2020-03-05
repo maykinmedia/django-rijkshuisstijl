@@ -8,8 +8,9 @@ import {TOGGLES} from './constants';
  * Toggle should have BLOCK_TOGGLE present in classList for detection.
  * Toggle should have data-toggle-target set to query selector for target.
  * Toggle should have data-toggle-modifier set to modifier to toggle.
- * Toggle may have data-focus-target set to query selector for node to focus on click.
- * Toggle may have data-link-mode set to either "normal", "positive", "negative" or "prevent", see this.onClick().
+ * Toggle could have data-focus-target set to query selector for node to focus on click.
+ * Toggle could have data-link-mode set to either "normal", "positive", "negative" or "prevent", see this.onClick().
+ * Toggle could have data-operation set to either "add" or "remove", see this.toggle().
  * @class
  */
 export class Toggle {
@@ -42,7 +43,7 @@ export class Toggle {
      * Callback for this.node click.
      *
      * Prevents default action (e.preventDefault()) based on target and this.node.dataset.toggleLinkMode value:
-     * - "normal": (default) Prevent default on regular elements and links towards "#", pass all other links.
+     * - "normal" (default): Prevent default on regular elements and links towards "#", pass all other links.
      * - "positive": Prevent default on regular elements, dont prevent links if this.getState() returns true.
      * - "negative": Prevent default on regular elements, dont prevent links if this.getState() returns false.
      * - "prevent": Always prevent default.
@@ -51,6 +52,7 @@ export class Toggle {
      */
     onClick(e) {
         let toggleLinkMode = this.node.dataset.toggleLinkMode || 'normal';
+
         if (toggleLinkMode === 'normal') {
             if (!e.target.getAttribute('href') || e.target.getAttribute('href') === '#') {
                 e.preventDefault();
@@ -92,17 +94,39 @@ export class Toggle {
 
     /**
      * Performs toggle.
+     * Toggle behaviour can optionally controlled by this.node.dataset.toggleOperation value.
+     * - undefined (default): Toggles add/remove based on exp or presence of this.toggleModifier
+     * - "add": Always add this.toggleModifier to targets.
+     * - "remove": Always removes this.toggleModifier from targets.
+     *
      * @param {boolean} [exp] If passed, add/removes this.toggleModifier based on exp.
      */
     toggle(exp = undefined) {
+        if (this.node.dataset.toggleOperation === 'add') {
+            exp = true;
+        } else if (this.node.dataset.toggleOperation === 'remove') {
+            exp = false;
+        }
+
         let targets = this.getTargets();
         targets.forEach(target => {
             BEM.toggleModifier(target, this.toggleModifier, exp);
+            this.dispatchEvent(target);
         });
 
         this.getExclusive()
             .filter(exclusive => targets.indexOf(exclusive) === -1)
             .forEach(exclusive => BEM.removeModifier(exclusive, this.toggleModifier));
+    }
+
+    /**
+     * Dispatches "rh-toggle" event on target.
+     * @param {HTMLElement} target
+     */
+    dispatchEvent(target) {
+        const event = document.createEvent('Event');
+        event.initEvent("rh-toggle", true, true)
+        target.dispatchEvent(event)
     }
 
     /**

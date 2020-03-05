@@ -21,6 +21,10 @@ class InclusionTagWebTest(WebTest):
         self.assertTrue(node)
         return node
 
+    def assertTextContent(self, selector, text, config={}, data={}):
+        node = self.select_one(selector, config, data)
+        self.assertEqual(str(text).strip(), node.text.strip())
+
     def render(self, config={}, data={}):
         config = config or {}
         context = Context({"config": config, "request": RequestFactory().get("/foo", data)})
