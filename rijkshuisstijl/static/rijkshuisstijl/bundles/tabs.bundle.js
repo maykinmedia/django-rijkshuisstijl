@@ -1,2 +1,48 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[13],{320:function(t,e,n){"use strict";n.r(e);var i=n(5),a=n.n(i),r=n(125);function s(t){return function(t){if(Array.isArray(t)){for(var e=0,n=new Array(t.length);e<t.length;e++)n[e]=t[e];return n}}(t)||function(t){if(Symbol.iterator in Object(t)||"[object Arguments]"===Object.prototype.toString.call(t))return Array.from(t)}(t)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance")}()}function o(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var c=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=e,this.listItems=a.a.getChildBEMNodes(this.node,r.a,r.c),this.links=a.a.getChildBEMNodes(this.node,r.a,r.b),this.track=a.a.getChildBEMNode(this.node,r.a,r.e),this.tabs=a.a.getChildBEMNodes(this.node,r.a,r.d),this.bindEvents(),this.activateHashLinkTab()||this.activateCurrentTab()}var e,n,i;return e=t,(n=[{key:"bindEvents",value:function(){var t=this;s(this.links).forEach((function(e){return t.bindLink(e)})),window.addEventListener("popstate",this.activateHashLinkTab.bind(this)),window.addEventListener("resize",this.activateCurrentTab.bind(this))}},{key:"bindLink",value:function(t){t.addEventListener("click",this.onClick.bind(this))}},{key:"activateCurrentTab",value:function(){var t=this.getActiveTabId();t&&this.activateTab(t)}},{key:"activateHashLinkTab",value:function(){var t=window.location.hash.replace("#",""),e=document.getElementById(t);if(e&&e.classList.contains(a.a.getBEMClassName(r.a,r.d)))return window.addEventListener("scroll",(function t(){window.scrollTo(0,0),window.removeEventListener("scroll",t)})),this.activateTab(t),!0}},{key:"getActiveTabId",value:function(){var t=this.node.dataset.tabId;if(t)return t;try{return this.tabs[0].id}catch(t){}}},{key:"onClick",value:function(t){t.preventDefault();var e=t.target,n=e.attributes.href.value.replace("#","");history.pushState({},document.title,e),this.activateTab(n)}},{key:"activateTab",value:function(t){var e=s(this.links).find((function(e){return e.attributes.href.value==="#"+t})),n=this.getListItemByLink(e),i=s(this.tabs).findIndex((function(e){return e.id===t})),o=this.tabs[i];[].concat(s(this.listItems),s(this.tabs)).forEach((function(t){return a.a.removeModifier(t,r.f)})),[n,o].forEach((function(t){return a.a.addModifier(t,r.f)})),this.node.dataset.tabId=t}},{key:"getListItemByLink",value:function(t){for(var e=a.a.getBEMClassName(r.a,r.c);!t.classList.contains(e);)t=t.parentElement;return t}}])&&o(e.prototype,n),i&&o(e,i),t}();s(r.g).forEach((function(t){return new c(t)}))}}]);
-//# sourceMappingURL=tabs.bundle.js.map
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["tabs"],{
+
+/***/ "./rijkshuisstijl/js/components/tabs/tabs.js":
+/*!***************************************************!*\
+  !*** ./rijkshuisstijl/js/components/tabs/tabs.js ***!
+  \***************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/tabs/constants.js");
+function _toConsumableArray(arr){return _arrayWithoutHoles(arr)||_iterableToArray(arr)||_nonIterableSpread();}function _nonIterableSpread(){throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter){if(Symbol.iterator in Object(iter)||Object.prototype.toString.call(iter)==="[object Arguments]")return Array.from(iter);}function _arrayWithoutHoles(arr){if(Array.isArray(arr)){for(var i=0,arr2=new Array(arr.length);i<arr.length;i++){arr2[i]=arr[i];}return arr2;}}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}function _createClass(Constructor,protoProps,staticProps){if(protoProps)_defineProperties(Constructor.prototype,protoProps);if(staticProps)_defineProperties(Constructor,staticProps);return Constructor;}/**
+ * Contains logic for tabs.
+ * @class
+ */var Tabs=/*#__PURE__*/function(){/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */function Tabs(node){_classCallCheck(this,Tabs);/** @type {HTMLElement} */this.node=node;/** @type {NodeList} */this.listItems=bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getChildBEMNodes(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__["BLOCK_TABS"],_constants__WEBPACK_IMPORTED_MODULE_1__["ELEMENT_LIST_ITEM"]);/** @type {NodeList} */this.links=bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getChildBEMNodes(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__["BLOCK_TABS"],_constants__WEBPACK_IMPORTED_MODULE_1__["ELEMENT_LINK"]);/** @type {NodeList} */this.track=bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getChildBEMNode(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__["BLOCK_TABS"],_constants__WEBPACK_IMPORTED_MODULE_1__["ELEMENT_TRACK"]);/** @type {NodeList} */this.tabs=bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getChildBEMNodes(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__["BLOCK_TABS"],_constants__WEBPACK_IMPORTED_MODULE_1__["ELEMENT_TAB"]);this.bindEvents();if(!this.activateHashLinkTab()){this.activateCurrentTab();}}/**
+     * Binds events to callbacks.
+     */_createClass(Tabs,[{key:"bindEvents",value:function bindEvents(){var _this=this;_toConsumableArray(this.links).forEach(function(link){return _this.bindLink(link);});window.addEventListener('popstate',this.activateHashLinkTab.bind(this));window.addEventListener('resize',this.activateCurrentTab.bind(this));}/**
+     * Binds link click to callback.
+     * @param {HTMLAnchorElement} link
+     */},{key:"bindLink",value:function bindLink(link){link.addEventListener('click',this.onClick.bind(this));}/**
+     * (Re)activates the active tab, or the first tab.
+     */},{key:"activateCurrentTab",value:function activateCurrentTab(){var id=this.getActiveTabId();if(id){this.activateTab(id);}}/**
+     * (Re)activates the active tab, or the first tab.
+     */},{key:"activateHashLinkTab",value:function activateHashLinkTab(){var id=window.location.hash.replace('#','');var node=document.getElementById(id);if(node&&node.classList.contains(bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getBEMClassName(_constants__WEBPACK_IMPORTED_MODULE_1__["BLOCK_TABS"],_constants__WEBPACK_IMPORTED_MODULE_1__["ELEMENT_TAB"]))){var listener=function listener(){window.scrollTo(0,0);window.removeEventListener('scroll',listener);};window.addEventListener('scroll',listener);this.activateTab(id);return true;}}/**
+     * Returns the active tab id (this.node.dataset.tabId) or the first tab's id.
+     * @returns {(string|void)}
+     */},{key:"getActiveTabId",value:function getActiveTabId(){var tabId=this.node.dataset.tabId;if(tabId){return tabId;}else{try{return this.tabs[0].id;}catch(e){}}}/**
+     * Handles link click event.
+     * @param {MouseEvent} e
+     */},{key:"onClick",value:function onClick(e){e.preventDefault();var link=e.target;var id=link.attributes.href.value.replace('#','');history.pushState({},document.title,link);this.activateTab(id);}/**
+     * Activates tab with id.
+     * @param {string} id The id of the tab.
+     * @return {HTMLElement}
+     */},{key:"activateTab",value:function activateTab(id){var link=_toConsumableArray(this.links).find(function(link){return link.attributes.href.value==='#'+id;});var listItem=this.getListItemByLink(link);var tabIndex=_toConsumableArray(this.tabs).findIndex(function(tab){return tab.id===id;});var tab=this.tabs[tabIndex];[].concat(_toConsumableArray(this.listItems),_toConsumableArray(this.tabs)).forEach(function(node){return bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.removeModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__["MODIFIER_ACTIVE"]);});[listItem,tab].forEach(function(node){return bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.addModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__["MODIFIER_ACTIVE"]);});this.node.dataset.tabId=id;}/**
+     * Finds the list item containing link up the DOM tree.
+     * @param {HTMLAnchorElement} link
+     */},{key:"getListItemByLink",value:function getListItemByLink(link){var listItemClassName=bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getBEMClassName(_constants__WEBPACK_IMPORTED_MODULE_1__["BLOCK_TABS"],_constants__WEBPACK_IMPORTED_MODULE_1__["ELEMENT_LIST_ITEM"]);var i=0;while(!link.classList.contains(listItemClassName)){link=link.parentElement;if(i>100){console.error('Failed to find list item');break;}}return link;}}]);return Tabs;}();// Start!
+_toConsumableArray(_constants__WEBPACK_IMPORTED_MODULE_1__["TABS"]).forEach(function(tabs){return new Tabs(tabs);});
+
+/***/ })
+
+}]);

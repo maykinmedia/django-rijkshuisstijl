@@ -1,2 +1,38 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[0],{312:function(t,n,e){"use strict";e.r(n);var r=e(5),i=e.n(r),o=e(119),a=e(49);function u(t){return function(t){if(Array.isArray(t)){for(var n=0,e=new Array(t.length);n<t.length;n++)e[n]=t[n];return e}}(t)||function(t){if(Symbol.iterator in Object(t)||"[object Arguments]"===Object.prototype.toString.call(t))return Array.from(t)}(t)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance")}()}function c(t,n){for(var e=0;e<n.length;e++){var r=n[e];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}var f=function(){function t(n){!function(t,n){if(!(t instanceof n))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=n,this.form=this.getForm(),this.input=this.getInput(),this.bindEvents()}var n,e,r;return n=t,(e=[{key:"bindEvents",value:function(){this.input&&this.input.addEventListener("change",this.onSubmit.bind(this))}},{key:"getForm",value:function(){var t=this.getInput();if(t){if(!t.form){var n=t.getAttribute("form");return document.getElementById(n)}return t.form}}},{key:"getInput",value:function(){var t=i.a.getChildBEMNode(this.node,a.a),n=i.a.getChildBEMNode(this.node,a.b);return t||n}},{key:"onSubmit",value:function(){var t=this,n=this.form.id;u(document.querySelectorAll('[form="'.concat(n,'"]'))).forEach((function(n){var e=document.createElement("input");n.form||(e.name=n.name,e.type="hidden",e.value=n.value,t.form.appendChild(e))})),this.form.submit()}}])&&c(n.prototype,e),r&&c(n,r),t}();u(o.a).forEach((function(t){return new f(t)}))}}]);
-//# sourceMappingURL=datagrid-filter.bundle.js.map
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["datagrid-filter"],{
+
+/***/ "./rijkshuisstijl/js/components/datagrid/datagrid-filter.js":
+/*!******************************************************************!*\
+  !*** ./rijkshuisstijl/js/components/datagrid/datagrid-filter.js ***!
+  \******************************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/datagrid/constants.js");
+/* harmony import */ var _form_constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../form/constants */ "./rijkshuisstijl/js/components/form/constants.js");
+function _toConsumableArray(arr){return _arrayWithoutHoles(arr)||_iterableToArray(arr)||_nonIterableSpread();}function _nonIterableSpread(){throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter){if(Symbol.iterator in Object(iter)||Object.prototype.toString.call(iter)==="[object Arguments]")return Array.from(iter);}function _arrayWithoutHoles(arr){if(Array.isArray(arr)){for(var i=0,arr2=new Array(arr.length);i<arr.length;i++){arr2[i]=arr[i];}return arr2;}}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}function _createClass(Constructor,protoProps,staticProps){if(protoProps)_defineProperties(Constructor.prototype,protoProps);if(staticProps)_defineProperties(Constructor,staticProps);return Constructor;}/**
+ * Polyfills form association from datagrid filter.
+ */var DataGridFilter=/*#__PURE__*/function(){/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */function DataGridFilter(node){_classCallCheck(this,DataGridFilter);/** @type {HTMLElement} */this.node=node;/** @type {(HTMLFormElement|null)} */this.form=this.getForm();/** @type {(HTMLInputElement|HTMLSelectElement|null)} */this.input=this.getInput();this.bindEvents();}/**
+     * Binds events to callbacks.
+     */_createClass(DataGridFilter,[{key:"bindEvents",value:function bindEvents(){if(this.input){this.input.addEventListener('change',this.onSubmit.bind(this));}}/**
+     * Finds the form associated with the filter.
+     * @return {(HTMLFormElement|null)}
+     */},{key:"getForm",value:function getForm(){var input=this.getInput();if(input){if(!input.form){var formId=input.getAttribute('form');return document.getElementById(formId);}return input.form;}}/**
+     * Finds the first input or select as child of this.node.
+     * @return {(HTMLInputElement|HTMLSelectElement|null)}
+     */},{key:"getInput",value:function getInput(){var input=bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getChildBEMNode(this.node,_form_constants__WEBPACK_IMPORTED_MODULE_2__["BLOCK_INPUT"]);var select=bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getChildBEMNode(this.node,_form_constants__WEBPACK_IMPORTED_MODULE_2__["BLOCK_SELECT"]);return input||select;}/**
+     * Appends clone of inputs pointing to this.form before submitting it when browser does not support input form
+     * attribute.
+     */},{key:"onSubmit",value:function onSubmit(){var _this=this;var formId=this.form.id;var inputs=document.querySelectorAll("[form=\"".concat(formId,"\"]"));_toConsumableArray(inputs).forEach(function(node){var newNode=document.createElement('input');if(node.form){// Browser supports input form attribute.
+return;}newNode.name=node.name;newNode.type='hidden';newNode.value=node.value;_this.form.appendChild(newNode);});this.form.submit();}}]);return DataGridFilter;}();// Start!
+_toConsumableArray(_constants__WEBPACK_IMPORTED_MODULE_1__["DATAGRID_FILTERS"]).forEach(function(node){return new DataGridFilter(node);});
+
+/***/ })
+
+}]);
