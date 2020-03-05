@@ -1,3 +1,4 @@
+from django.forms.widgets import CheckboxInput, DateInput, Input, Select
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl import settings
@@ -38,7 +39,31 @@ def button_link(**kwargs):
     kwargs["target"] = kwargs.get("target", None)
     kwargs["label"] = kwargs.get("label", None)
     kwargs["title"] = kwargs.get("title", kwargs.get("label"))
+    kwargs["config"] = kwargs
+    return kwargs
 
+
+@register.inclusion_tag("rijkshuisstijl/components/form/form.html", takes_context=True)
+def form(context, form=None, label="", **kwargs):
+    kwargs = merge_config(kwargs)
+
+    kwargs["form"] = form or parse_kwarg(kwargs, "form", context.get("form"))
+    kwargs["action"] = kwargs.get("action")
+    kwargs["compact"] = kwargs.get("compact")
+    kwargs["label"] = kwargs.get("label", label)
+    kwargs["title"] = kwargs.get("title")
+    kwargs["subtitle"] = kwargs.get("subtitle")
+    kwargs["text"] = kwargs.get("text")
+    kwargs["urlize"] = kwargs.get("urlize")
+    kwargs["wysiwyg"] = kwargs.get("wysiwyg")
+    kwargs["status"] = kwargs.get("status")
+    kwargs["intro_status"] = kwargs.get("intro_status")
+    kwargs["tag"] = kwargs.get("tag", "form")
+    kwargs["actions_align"] = kwargs.get("actions_align", "left")
+    kwargs["actions_position"] = kwargs.get("actions_position", "auto")
+    kwargs["help_text_position"] = kwargs.get("help_text_position", "bottom")
+
+    kwargs["request"] = context["request"]
     kwargs["config"] = kwargs
     return kwargs
 
@@ -74,10 +99,15 @@ def confirm_form(context, **kwargs):
     return config
 
 
-@register.inclusion_tag("rijkshuisstijl/components/form/form.html", takes_context=True)
-def form(context, form=None, label="", **kwargs):
-    kwargs = merge_config(kwargs)
-
+@register.inclusion_tag("rijkshuisstijl/components/form/form-control.html", takes_context=True)
+def form_control(context, form, field_name, **kwargs):
+    """
+    Rendes a form control for field "field_name" in form.
+    :param form: A (Django) form.
+    :param field_name: The name of the field in form.
+    :return:
+    """
+    config = merge_config(kwargs)
     kwargs["form"] = form or parse_kwarg(kwargs, "form", context.get("form"))
     kwargs["action"] = kwargs.get("action")
     kwargs["compact"] = kwargs.get("compact")
@@ -92,49 +122,29 @@ def form(context, form=None, label="", **kwargs):
     kwargs["tag"] = kwargs.get("tag", "form")
     kwargs["actions_align"] = kwargs.get("actions_align", "left")
     kwargs["actions_position"] = kwargs.get("actions_position", "auto")
-    kwargs["help_text_position"] = kwargs.get(
-        "help_text_position", settings.HELP_TEXT_POSITION
-    )
+    kwargs["help_text_position"] = kwargs.get("help_text_position", settings.HELP_TEXT_POSITION)
 
-    kwargs["request"] = context["request"]
-    kwargs["config"] = kwargs
-    return kwargs
+    def get_bound_field():
+        """
+        Returns the BoundField.
+        :return: BoundField
+        """
+
+        if isinstance(field_name, str):
+            return form[field_name]
+        return field_name
+
+    config["form"] = form
+    config["bound_field"] = _field(get_bound_field())
+    config["help_text_position"] = config.get("help_text_position", "bottom")
+    config["config"] = config
+    return config
 
 
-@register.inclusion_tag("rijkshuisstijl/components/form/form-control.html")
-def form_control(**kwargs):
+@register.inclusion_tag("rijkshuisstijl/components/form/label.html")
+def label(**kwargs):
     kwargs = merge_config(kwargs)
-    kwargs["help_text_position"] = kwargs.get(
-        "help_text_position", settings.HELP_TEXT_POSITION
-    )
-    kwargs["config"] = kwargs
-    return kwargs
-
-
-@register.inclusion_tag("rijkshuisstijl/components/form/input.html")
-def form_input(**kwargs):
-    kwargs = merge_config(kwargs)
-    kwargs["config"] = kwargs
-    return kwargs
-
-
-@register.inclusion_tag("rijkshuisstijl/components/form/checkbox.html")
-def form_checkbox(**kwargs):
-    kwargs = merge_config(kwargs)
-    kwargs["config"] = kwargs
-    return kwargs
-
-
-@register.inclusion_tag("rijkshuisstijl/components/form/radio.html")
-def form_radio(**kwargs):
-    kwargs = merge_config(kwargs)
-    kwargs["config"] = kwargs
-    return kwargs
-
-
-@register.inclusion_tag("rijkshuisstijl/components/form/select.html")
-def form_select(**kwargs):
-    kwargs = merge_config(kwargs)
+    kwargs["help_text_position"] = kwargs.get("help_text_position", settings.HELP_TEXT_POSITION)
     kwargs["config"] = kwargs
     return kwargs
 
@@ -148,8 +158,162 @@ def help_text(help_text, **kwargs):
     return kwargs
 
 
-@register.inclusion_tag("rijkshuisstijl/components/form/label.html")
-def label(**kwargs):
-    kwargs = merge_config(kwargs)
-    kwargs["config"] = kwargs
-    return kwargs
+@register.inclusion_tag("rijkshuisstijl/components/form/field.html")
+def form_field(form, field_name, **kwargs):
+    """
+    Renders a form field
+    :param form: A (Django) form.
+    :param field_name: The name of the field in form.
+    :param kwargs: Any kwargs will passed as "attr" in the fields widgets.
+    """
+    config = merge_config(kwargs)
+
+    def get_bound_field():
+        """
+        Returns the BoundField.
+        :return: BoundField
+        """
+
+        if isinstance(field_name, str):
+            return form[field_name]
+        return field_name
+
+    def get_extra_attrs():
+        """
+        Returns additional attrsibutes for the field widget.
+        :return: dict
+        """
+        return parse_kwarg(config, "attrs", {})
+
+    config["attrs"] = get_extra_attrs()
+    config["form"] = form
+    config["bound_field"] = _field(get_bound_field(), **get_extra_attrs())
+    config["config"] = config
+    return config
+
+
+@register.inclusion_tag("rijkshuisstijl/components/form/field.html")
+def form_input(**kwargs):
+    config = merge_config(kwargs)
+    return _form_widget(Input, {}, **config)
+
+
+@register.inclusion_tag("rijkshuisstijl/components/form/field.html")
+def form_checkbox(**kwargs):
+    config = merge_config(kwargs)
+    checked = parse_kwarg(config, "checked", False)
+    return _form_widget(CheckboxInput, {"check_test": lambda v: checked}, **config)
+
+
+@register.inclusion_tag("rijkshuisstijl/components/form/field.html")
+def form_select(**kwargs):
+    config = merge_config(kwargs)
+    return _form_widget(Select, {}, **config)
+
+
+def _form_widget(Widget, widget_config, **config):
+    name = config.get("name", "")
+    value = config.get("value", "")
+    widget = Widget(attrs=config, **widget_config)
+    config["bound_field"] = _field(widget).render(name, value)
+    config["config"] = config
+    return config
+
+
+def _field(bound_field, **extra_attrs):
+    def get_widget(bound_field):
+        """
+        Returns the widget.
+        :param bound_field:
+        :return:
+        """
+        try:
+            field = bound_field.field
+            return field.widget
+        except AttributeError:
+            return bound_field
+
+    def add_choices(bound_field):
+        """
+        Adds choices to widget..
+        :param bound_field:
+        :return: BoundField
+        """
+        widget = get_widget(bound_field)
+
+        # Make model objects work as choice.
+        try:
+            choices = widget.attrs.pop("choices")
+            if choices:
+
+                serialized_choices = []
+                for choice in choices:
+                    try:
+                        choice._meta.model  # noqa
+                        choice = (choice.pk, str(choice))
+                    except AttributeError:
+                        pass
+
+                    serialized_choices.append(choice)
+                widget.choices = serialized_choices
+        except KeyError:
+            pass
+
+        return bound_field
+
+    def add_attrs(bound_field):
+        """
+        Adds additional "kwargs" as "attrs" to widget.
+        :param bound_field: BoundField
+        :return: BoundField
+        """
+
+        # Get widget.
+        widget = get_widget(bound_field)
+
+        # Use ISO input formats for DateInput.
+        if isinstance(widget, DateInput):
+            widget.format = "%Y-%m-%d"
+
+        attrs = {**widget.attrs, **extra_attrs}
+
+        html_attrs = {k.replace("_", "-"): v for k, v in attrs.items() if v}
+        widget.attrs = html_attrs
+        return bound_field
+
+    def replace_template_paths(bound_field):
+        """
+        Replaces the default (Django) template paths by the ones provided by django-rijkshuisstijl.
+        :param bound_field: BoundField
+        :return: BoundField
+        """
+        bound_field = replace_template_path(bound_field, "template_name")
+        return replace_template_path(bound_field, "option_template_name")
+
+    def replace_template_path(bound_field, property):
+        """
+        Replaces the default (Django) template path in property by the one provided by django-rijkshuisstijl.
+        :param bound_field: BoundField
+        :return: BoundField
+        """
+        try:
+            field = bound_field.field
+            widget = field.widget
+        except AttributeError:
+            widget = bound_field
+
+        try:
+            template_name = getattr(widget, property)
+
+            if not "django" in template_name:
+                return bound_field
+
+            template_split = template_name.split("/")
+            template_file = template_split[-1]
+            setattr(widget, property, f"rijkshuisstijl/components/form/widgets/{template_file}")
+        except AttributeError:
+            pass
+
+        return bound_field
+
+    return replace_template_paths(add_attrs(add_choices(bound_field)))

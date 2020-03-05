@@ -102,11 +102,6 @@
     @include shade(5, color);
   }
 
-  &--error {
-    @include shade-color(red, $property: outline-color, $force: true);
-    outline: 2px solid;
-  }
-
   &#{&}--primary {
     @include color-primary(border-color);
     @include color-primary(color);

@@ -42,7 +42,11 @@
     @include shade(4, color);
   }
 
-  &__row:not(#{&}__row--edit) &__value .form-control,
+  &__row:not(#{&}__row--edit) &__value .checkbox,
+  &__row:not(#{&}__row--edit) &__value .radio,
+  &__row:not(#{&}__row--edit) &__value .input,
+  &__row:not(#{&}__row--edit) &__value .select,
+  &__row:not(#{&}__row--edit) &__value .textarea,
   &__row:not(#{&}__row--edit) ~ &__row--actions {
     display: none;
     visibility: hidden;
@@ -53,7 +57,7 @@
     visibility: visible;
   }
 
-  &__row--edit &__value > *:not(.form-control) {
+  &__row--edit &__value .toggle {
     display: none;
     visibility: hidden;
   }

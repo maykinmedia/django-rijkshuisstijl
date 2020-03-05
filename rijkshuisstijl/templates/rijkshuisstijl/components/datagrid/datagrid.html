@@ -1,6 +1,7 @@
 {% load l10n rijkshuisstijl %}{% singleline %}
     <div class="datagrid{% if class %} {{ class }}{% endif %}" id="{{ id }}" role="group">
 
+
         {# This (filter) form is located outside the datagrid to avoid conflict with selection form. #}
         {% if filters %}
             <form id="datagrid-filter-form-{{ id }}" method="GET">
@@ -13,6 +14,7 @@
                 <input class="input input--hidden" type="submit">
             </form>
         {% endif %}
+
 
         {# This (paginator) form is located outside the datagrid to avoid conflict with selection form. #}
         {% if is_paginated %}
@@ -31,6 +33,15 @@
             </form>
         {% endif %}
 
+
+        {# Render inline form #}
+        <form class="datagrid__inline-form" id="datagrid-inline-form-{{ id }}" method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+        </form>
+
+
+        {# Render a form for performing actions on the queryset. #}
         {% if form %}
           <form class="datagrid__form" method="{{ form_method }}"{% if form_action %} action="{{ form_action }}"{% endif %}>
 
@@ -39,48 +50,65 @@
             {% endif %}
         {% endif %}
 
-        {% if title or form and form_select_all_position in 'top,both' or form_buttons and toolbar_position in 'top,both' or dom_filter %}
-            <header class="datagrid__header">
-                <div class="toolbar toolbar--justify toolbar--pad">
-                    <ul class="toolbar__list">
-                        {% if title %}
-                            <li class="toolbar__list-item">
-                                <h4 class="datagrid__title">{{ title }}</h4>
-                            </li>
+
+        {#  Render the header. #}
+        {% if form_select_all_position in 'top,both' or toolbar_position in 'top,both' %}
+            {% if title or form or form_buttons or formset or dom_filter %}
+                <header class="datagrid__header">
+                    <div class="toolbar toolbar--justify toolbar--pad">
+                        <ul class="toolbar__list">
+                            {% if title %}
+                                <li class="toolbar__list-item">
+                                    <h4 class="datagrid__title">{{ title }}</h4>
+                                </li>
+                            {% endif %}
+
+                            {% if form %}
+                                <li class="toolbar__list-item">
+                                    <th class="datagrid__caption datagrid__caption--checkbox">
+                                        {% if form_select_all_position in 'top,both' %}
+                                            {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='top' label_select_all=label_select_all only %}
+                                        {% endif %}
+                                    </th>
+                                </li>
+                            {% endif %}
+
+                            {% if toolbar_position in 'top,both' %}
+                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select hide_list=True only %}
+                            {% endif %}
+                        </ul>
+
+                        {% if formset and toolbar_position in 'top,both' %}
+                            <ul class="toolbar__list">
+                                {# Save inline forms. #}
+                                <li class="toolbar__list-item">
+                                    {% button class='button--small button--primary datagrid__button--reset' form='datagrid-inline-form-'|add:id type="reset" label=_('Opslaan') toggle_target='#'|add:id|add:' datagrid__row' toggle_modifier='edit' %}
+                                    {% button class='button--small button--primary datagrid__button--save' form='datagrid-inline-form-'|add:id type="submit" label=_('Opslaan') %}
+                                </li>
+                            </ul>
                         {% endif %}
 
-                        {% if form %}
-                            <li class="toolbar__list-item">
-                                <th class="datagrid__caption datagrid__caption--checkbox">
-                                    {% if form_select_all_position in 'top,both' %}
-                                        {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='top' label_select_all=label_select_all only %}
-                                    {% endif %}
-                                </th>
-                            </li>
-                        {% endif %}
-
-                        {% if form_buttons and toolbar_position in 'top,both' %}
-                            <li class="toolbar__list-item">
-                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
-                            </li>
-                        {% endif %}
-                    </ul>
-
-                    <ul class="toolbar__list">
                         {% if dom_filter %}
-                            <li class="toolbar__list-item">
-                                {% dom_filter class='filter--class-only' input_class='input--contrast input--light' filter_target='#'|add:id|add:' tbody tr' label_placeholder=label_filter_placeholder %}
-                            </li>
+                            <ul class="toolbar__list">
+                                <li class="toolbar__list-item">
+                                    {% dom_filter class='filter--class-only' input_class='input--contrast input--light' filter_target='#'|add:id|add:' tbody tr' label_placeholder=label_filter_placeholder %}
+                                </li>
+                            </ul>
                         {% endif %}
-                    </ul>
-                </div>
-            </header>
+                    </div>
+                </header>
+            {% endif %}
         {% endif %}
 
+
+        {# Render the body.  #}
         <div class="datagrid__body">
             <table class="datagrid__table">
                 <thead class="datagrid__table-header">
                 <tr class="datagrid__row datagrid__row--captions">
+
+
+                    {#  Captions. #}
                     {% for column in columns %}
                         {% if column.key in ordering %}
                             {% with ordering|get:column.key as ordering %}
@@ -98,6 +126,8 @@
                     {% endfor %}
                 </tr>
 
+
+                {#  Filters. #}
                 {% if filters %}
                     <tr class="datagrid__row datagrid__row--filters">
                         {% for column in columns %}
@@ -106,11 +136,11 @@
                                 {% for filter in filters %}
                                     {% if filter.key == column.key %}
                                         {% if filter.type == 'DateField' or filter.type == 'DateTimeField' %}
-                                            {% form_input class='input--light' type='date' name=filter.key value=filter.value placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
+                                            {% form_input class='input--light' type='date' name=filter.key value=filter.value placeholder=column.label form='datagrid-filter-form-'|add:id onchange="this.form.submit()" %}
                                         {% elif filter.choices %}
-                                            {% form_select class='select--light' id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices form_id='datagrid-filter-form-'|add:id %}
+                                            {% form_select class='select--light' id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices form='datagrid-filter-form-'|add:id onchange="this.form.submit()" %}
                                         {% else %}
-                                            {% form_input class='input--light' type="search" id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form_id='datagrid-filter-form-'|add:id %}
+                                            {% form_input class='input--light' type="search" id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form='datagrid-filter-form-'|add:id onchange="this.form.submit()" %}
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}
@@ -120,13 +150,17 @@
                 {% endif %}
                 </thead>
 
+
+                {#  Table bodies. #}
                 {% for group in groups %}
-                    {% include 'rijkshuisstijl/components/datagrid/datagrid-table-body.html' with columns=columns form=form form_checkbox_name=form_checkbox_name group=group label_no_results=label_no_results modifier_column=modifier_column url_reverse=url_reverse only %}
+                    {% include 'rijkshuisstijl/components/datagrid/datagrid-table-body.html' with id=id columns=columns form=form form_checkbox_name=form_checkbox_name formset=formset group=group label_no_results=label_no_results modifier_column=modifier_column url_reverse=url_reverse urlize=urlize only %}
                 {% endfor %}
             </table>
         </div>
 
-        {% if is_paginated or form and form_select_all_position in 'bottom,both' %}
+
+        {# Render the footer. #}
+        {% if form_select_all_position in 'bottom,both' or toolbar_position in 'bottom,both' or is_paginated %}
             <footer class="datagrid__footer">
                 <div class="toolbar toolbar--justify toolbar--pad">
                     <ul class="toolbar__list">
@@ -134,34 +168,38 @@
                             <li class="toolbar__list-item">
                                 <th class="datagrid__caption datagrid__caption--checkbox">
                                     {% if form_select_all_position in 'bottom,both' %}
-                                        {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='bottom' label_select_all=label_select_all only %}
+                                        {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with form_select_all_position='bottom' label_select_all=label_select_all only %}
                                     {% endif %}
                                 </th>
                             </li>
-                        {% endif %}
 
-                        {% if form_buttons and toolbar_position in 'bottom,both' %}
-                            <li class="toolbar__list-item">
+                            {% if toolbar_position in 'bottom,both' %}
                                 {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
-                            </li>
+                            {% endif %}
                         {% endif %}
                     </ul>
+
+
                     <ul class="toolbar__list">
                         {% if is_paginated %}
                             <li class="toolbar__list-item datagrid__result-count">{{ paginator.count }} {{ label_result_count }}</li>
                             <li class="toolbar__list-item">{% paginator is_paginated=is_paginated paginator=paginator page_key=page_key page_number=page_number page_obj=page_obj form='datagrid-paginator-form-'|add:id %}</li>
                         {% endif %}
+
+                        {# Save inline forms. #}
+                        {% if formset and toolbar_position in 'bottom,both' %}
+                            <li class="toolbar__list-item">
+                                {% button class='button--small button--secondary datagrid__button--reset' form='datagrid-inline-form-'|add:id type="reset" label=_('Annuleren') toggle_target='#'|add:id|add:' .datagrid__row' toggle_modifier='edit' toggle_link_mode='noprevent' toggle_operation='remove' %}
+                                {% button class='button--small button--primary datagrid__button--save' form='datagrid-inline-form-'|add:id type="submit" label=_('Opslaan') %}
+                            </li>
+                        {% endif %}
                     </ul>
-                </div>
-            </footer>
-        {% elif form_buttons and toolbar_position in 'bottom,both' %}
-            <footer class="datagrid__footer">
-                <div class="toolbar toolbar--pad{% if form_buttons and toolbar_position in 'bottom,both' %} toolbar--justify{% else %} toolbar--align-right{% endif %}">
-                    {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
                 </div>
             </footer>
         {% endif %}
 
+
+        {# Close form. #}
         {% if form %}
             </form>
         {% endif %}

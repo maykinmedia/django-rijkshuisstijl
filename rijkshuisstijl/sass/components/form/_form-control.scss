@@ -9,6 +9,13 @@
   justify-content: space-between;
   box-sizing: border-box;
 
+  &--error .input,
+  &--error .select,
+  &--error .textarea {
+    @include shade-color(red, $property: outline-color, $force: true);
+    outline: 2px solid;
+  }
+
   &--stacked {
     flex-direction: column;
   }
@@ -59,6 +66,12 @@
 
   &--compact .textarea {
     min-height: 0;
+  }
+
+  &--compact .textarea:not(:focus) {
+    @include responsive(height, calc(#{$typography-line-height-text-mobile} * 1em), calc(#{$typography-line-height-text-tablet} * 1em), calc(#{$typography-line-height-text-laptop} * 1em), calc(#{$typography-line-height-text-desktop} * 1em));
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   &:not(#{&}--compact) {

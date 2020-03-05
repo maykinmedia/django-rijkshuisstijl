@@ -1,7 +1,8 @@
 import re
 
 from django.core.paginator import Paginator
-from django.http import QueryDict
+from django.forms import formset_factory, modelformset_factory
+from django.http import HttpResponseRedirect, QueryDict
 from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 
@@ -308,7 +309,7 @@ def datagrid(context, **kwargs):
         _cache["get_columns"] = columns
         return columns
 
-    def get_object_list():
+    def get_object_list(refresh=False):
         """
         Looks for the object_list to use based on the presence of these variables in order:
 
@@ -322,7 +323,7 @@ def datagrid(context, **kwargs):
         add_display() and add_modifier_class() are called for every object in the found object_list.
         :return: A list of objects to show data for.
         """
-        if _cache.get("get_object_list"):
+        if _cache.get("get_object_list") and not refresh:
             return _cache.get("get_object_list")
 
         # Get object list.
@@ -330,6 +331,9 @@ def datagrid(context, **kwargs):
         context_queryset = context.get("queryset", context_object_list)
         object_list = kwargs.get("object_list", context_queryset)
         object_list = kwargs.get("queryset", object_list)
+
+        if hasattr(object_list, "model") and refresh:
+            object_list = object_list.all()
 
         # Filtering
         filters = get_filters()
@@ -449,6 +453,7 @@ def datagrid(context, **kwargs):
         """
         Splits object_list into one or more groups, returns a dict for each group containing:
 
+        - id: a unique id identifying this group.
         - default: whether the group is the default groups (no groups were set).
         - label: the string represenation of a group, (rendered as subtitle).
         - lookup: the field on each object to lookup.
@@ -463,6 +468,7 @@ def datagrid(context, **kwargs):
         if not groups:
             return [
                 {
+                    "id": get_id({}, "datagrid-group"),
                     "default": True,
                     "label": None,
                     "lookup": None,
@@ -477,6 +483,7 @@ def datagrid(context, **kwargs):
 
         groups = [
             {
+                "id": get_id({}, "datagrid-group"),
                 "default": False,
                 "label": group_def.get("label"),
                 "lookup": lookup,
@@ -635,6 +642,32 @@ def datagrid(context, **kwargs):
 
         return None
 
+    def get_formset():
+        """
+        TODO:
+        :return: BaseModelFormSet
+        """
+        request = context.get("request")
+        form_class = config.get("form_class")
+        queryset = get_object_list()
+
+        if not (hasattr(queryset, "model") and form_class and queryset):
+            return []
+
+        model = queryset.model
+        ModelFormSet = modelformset_factory(model, form_class)
+
+        if request.method == "POST":
+            formset = ModelFormSet(request.POST)
+
+            if formset.is_valid():
+                formset.save()
+                return ModelFormSet(queryset=queryset.all())
+            else:
+                return formset
+
+        return ModelFormSet(queryset=queryset)
+
     def add_paginator(object_list):
         """
         Return datagrid_context with added paginator configuration.
@@ -736,7 +769,10 @@ def datagrid(context, **kwargs):
 
     # Showing Data/Filtering/Grouping/Ordering
     config["columns"] = get_columns()
-    config["object_list"] = get_object_list()
+    config["formset"] = get_formset()
+    config["object_list"] = get_object_list(
+        config.get("formset") and context.get("request").method == "POST"
+    )
     config["filters"] = get_filters()
     config["groups"] = get_groups()
     config["dom_filter"] = parse_kwarg(kwargs, "dom_filter", False)
@@ -754,6 +790,7 @@ def datagrid(context, **kwargs):
     config["form_select"] = get_form_select()
     config["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
     config["form_select_all_position"] = kwargs.get("form_select_all_position", "top")
+
     config["toolbar_position"] = kwargs.get("toolbar_position", "top")
 
     # Custom presentation (get_<field>_display)/Color coded rows

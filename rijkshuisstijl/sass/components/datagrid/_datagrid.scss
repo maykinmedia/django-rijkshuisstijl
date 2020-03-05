@@ -252,6 +252,11 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     @include border(top);
   }
 
+  &__row--edit {
+    @include color-info(background-color);
+    vertical-align: top;
+  }
+
   &__row--nomatch:not(&__row--placeholder) &__cell {
     opacity: 0.5;
   }
@@ -274,6 +279,36 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
 
   &__label {
     @include body;
+  }
+
+  &__row--edit &__cell--editable &__label {
+    display: none;
+    visibility: hidden;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    z-index: 0;
+  }
+
+  &__row:not(#{&}__row--edit) &__cell--editable .checkbox,
+  &__row:not(#{&}__row--edit) &__cell--editable .radio,
+  &__row:not(#{&}__row--edit) &__cell--editable .input,
+  &__row:not(#{&}__row--edit) &__cell--editable .select,
+  &__row:not(#{&}__row--edit) &__cell--editable .textarea {
+    display: none;
+    visibility: hidden;
+  }
+
+  &:not(#{&}--edit) &__button--reset,
+  &:not(#{&}--edit) &__button--save {
+    display: none;
+    visibility: hidden;
+  }
+
+  &__button--reset {
+    margin-right: $datagrid-spacing-row-h / 2;
   }
 
   .toolbar .checkbox {

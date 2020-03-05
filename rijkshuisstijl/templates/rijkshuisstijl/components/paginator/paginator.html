@@ -10,7 +10,7 @@
 
             <div class="paginator__section">
                 <span class="paginator__label">{{ label_page }}</span>
-                {% form_input class="input--contrast" type='number' name=page_key min=page_min|unlocalize max=page_max|unlocalize value=page_number|unlocalize form_id=form_id %}
+                {% form_input class="input--contrast" type='number' name=page_key min=page_min|unlocalize max=page_max|unlocalize value=page_number|unlocalize form=form_id %}
                 <span class="paginator__label">{{ label_from }} {{ page_max|unlocalize }}</span>
             </div>
 

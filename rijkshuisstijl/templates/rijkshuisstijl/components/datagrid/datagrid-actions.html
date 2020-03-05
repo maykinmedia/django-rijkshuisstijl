@@ -1,6 +1,6 @@
 {% spaceless %}{% load rijkshuisstijl %}
-    <ul class="toolbar__list">
-        {% if form_select %}
+{#    {% if not hide_list %}<ul class="toolbar__list">{% endif %}#}
+        {% if form_buttons and form_select %}
             <li class="toolbar__list-item">
                 {% form_select config=form_select %}
             </li>
@@ -16,5 +16,5 @@
                 {% endif %}
             </li>
         {% endfor %}
-    </ul>
+{#    {% if not hide_list %}</ul>{% endif %}#}
 {% endspaceless %}

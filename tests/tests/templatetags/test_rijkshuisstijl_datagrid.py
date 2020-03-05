@@ -86,24 +86,27 @@ class DatagridTestCase(InclusionTagWebTest):
         self.assertInHTML("Bar", html)
 
     def test_filter(self):
-        html = self.template_render(
-            {
-                "columns": ("title", "publisher"),
-                "queryset": Book.objects.all(),
-                "id": "my-first-datagrid",
-                "filterable_columns": ["title"],
-            },
-            {"title": "m"},
-        )
+        config = {
+            "columns": ("title", "publisher"),
+            "queryset": Book.objects.all(),
+            "id": "my-first-datagrid",
+            "filterable_columns": ["title"],
+        }
+        data = {"title": "m"}
 
-        self.assertInHTML(
-            '<form id="datagrid-filter-form-my-first-datagrid" method="GET"><input class="input input--hidden" type="submit"></form>',
-            html,
-        )
-        self.assertInHTML(
-            '<input class="input input--light" id="datagrid-filter-title-my-first-datagrid" form="datagrid-filter-form-my-first-datagrid" name="title" value="m" placeholder="title" type="search">',
-            html,
-        )
+        form = self.select_one("#datagrid-filter-form-my-first-datagrid", config, data)
+        self.assertTrue(form)
+        self.assertEqual(form.get("method"), "GET")
+
+        filter_input = self.select_one("#datagrid-filter-title-my-first-datagrid", config, data)
+        self.assertTrue(filter_input)
+        self.assertEqual(filter_input.get("form"), "datagrid-filter-form-my-first-datagrid")
+        self.assertEqual(filter_input.get("name"), "title")
+        self.assertEqual(filter_input.get("value"), "m")
+        self.assertEqual(filter_input.get("placeholder"), "title")
+        self.assertEqual(filter_input.get("type"), "search")
+
+        html = self.render(config, data)
         self.assertInHTML("Lorem", html)
         self.assertInHTML("Ipsum", html)
         self.assertNotIn("Dolor", html)
@@ -222,50 +225,56 @@ class DatagridTestCase(InclusionTagWebTest):
         Let the datagrid paginate the queryset/object list.
         """
 
-        # queryset
-        html = self.template_render(
-            {
-                "id": "my-first-datagrid",
-                "columns": ("title", "publisher"),
-                "queryset": Book.objects.all(),
-                "paginate": True,
-                "paginate_by": 2,
-                "page_key": "p",
-            },
-            {"p": 2},
-        )
+        # QuerySet
+        config = {
+            "id": "my-first-datagrid",
+            "columns": ("title", "publisher"),
+            "queryset": Book.objects.all(),
+            "paginate": True,
+            "paginate_by": 2,
+            "page_key": "p",
+        }
+        data = {"p": 2}
+        html = self.render(config, data)
 
         self.assertNotIn(str(self.book_1), html)
         self.assertNotIn(str(self.book_2), html)
         self.assertIn(str(self.book_3), html)
         self.assertIn("paginator", html)
-        self.assertInHTML(
-            '<input class="input input--contrast" form="datagrid-paginator-form-my-first-datagrid" name="p" value="2" type="number" min="1" max="2">',
-            html,
-        )
+
+        input = self.select_one(".paginator .input", config, data)
+        self.assertEqual(input.get("form"), "datagrid-paginator-form-my-first-datagrid")
+        self.assertEqual(input.get("name"), "p")
+        self.assertEqual(input.get("value"), "2")
+        self.assertEqual(input.get("type"), "number")
+        self.assertEqual(input.get("min"), "1")
+        self.assertEqual(input.get("max"), "2")
 
         # object_list
-        html = self.template_render(
-            {
-                "id": "my-first-datagrid",
-                "columns": ("title", "publisher"),
-                "object_list": [*Book.objects.all()],
-                "paginate": True,
-                "paginate_by": 2,
-                "page_key": "p",
-            },
-            {"p": 2},
-        )
+        config = {
+            "id": "my-first-datagrid",
+            "columns": ("title", "publisher"),
+            "object_list": [*Book.objects.all()],
+            "paginate": True,
+            "paginate_by": 2,
+            "page_key": "p",
+        }
+        data = {"p": 2}
+        html = self.render(config, data)
 
         self.assertNotIn(str(self.book_1), html)
         self.assertNotIn(str(self.book_2), html)
         self.assertIn(str(self.book_3), html)
         self.assertIn("paginator", html)
         self.assertIn("paginator", html)
-        self.assertInHTML(
-            '<input class="input input--contrast" form="datagrid-paginator-form-my-first-datagrid" name="p" value="2" type="number" min="1" max="2">',
-            html,
-        )
+
+        input = self.select_one(".paginator .input", config, data)
+        self.assertEqual(input.get("form"), "datagrid-paginator-form-my-first-datagrid")
+        self.assertEqual(input.get("name"), "p")
+        self.assertEqual(input.get("value"), "2")
+        self.assertEqual(input.get("type"), "number")
+        self.assertEqual(input.get("min"), "1")
+        self.assertEqual(input.get("max"), "2")
 
     def test_pagination(self):
         """
@@ -275,29 +284,32 @@ class DatagridTestCase(InclusionTagWebTest):
         page_number = 2
         page_obj = paginator.page(page_number)
 
-        html = self.template_render(
-            {
-                "id": "my-first-datagrid",
-                "columns": ("title", "publisher"),
-                "object_list": page_obj.object_list,
-                "paginate": False,
-                "is_paginated": True,
-                "paginator": paginator,
-                "page_key": "p",
-                "page_number": page_number,
-                "page_obj": page_obj,
-            }
-        )
+        config = {
+            "id": "my-first-datagrid",
+            "columns": ("title", "publisher"),
+            "object_list": page_obj.object_list,
+            "paginate": False,
+            "is_paginated": True,
+            "paginator": paginator,
+            "page_key": "p",
+            "page_number": page_number,
+            "page_obj": page_obj,
+        }
+
+        html = self.render(config)
 
         self.assertNotIn(str(self.book_1), html)
         self.assertNotIn(str(self.book_2), html)
         self.assertIn(str(self.book_3), html)
         self.assertIn("paginator", html)
         self.assertIn("paginator", html)
-        self.assertInHTML(
-            '<input class="input input--contrast" form="datagrid-paginator-form-my-first-datagrid" name="p" value="2" type="number" min="1" max="2">',
-            html,
-        )
+
+        input = self.select_one(".paginator .input", config)
+        self.assertEqual(input.get("form"), "datagrid-paginator-form-my-first-datagrid")
+        self.assertEqual(input.get("name"), "p")
+        self.assertEqual(input.get("type"), "number")
+        self.assertEqual(input.get("min"), "1")
+        self.assertEqual(input.get("max"), "2")
 
     def test_custom_presentation(self):
         html = self.template_render(
@@ -314,52 +326,62 @@ class DatagridTestCase(InclusionTagWebTest):
         self.assertInHTML("Joe Average", html)
 
     def test_form(self):
-        html = self.template_render(
-            {
-                "columns": ("title"),
-                "queryset": Book.objects.all(),
-                "id": "my-first-datagrid",
-                "form": True,
-                "form_action": "/foo",
-                "form_buttons": [
-                    {"label": "Foo", "name": "Lorem", "icon_src": "data:image/png;base64,"},
-                    {
-                        "class": "button--danger",
-                        "label": "Bar",
-                        "name": "Ipsum",
-                        "icon_src": "data:image/png;base64,",
-                    },
-                ],
-                "form_checkbox_name": "bar",
-            }
+        config = {
+            "columns": ("title"),
+            "queryset": Book.objects.all(),
+            "id": "my-first-datagrid",
+            "form": True,
+            "form_action": "/foo",
+            "form_buttons": [
+                {"label": "Foo", "name": "Lorem", "icon_src": "data:image/png;base64,"},
+                {
+                    "class": "button--danger",
+                    "label": "Bar",
+                    "name": "Ipsum",
+                    "icon_src": "data:image/png;base64,",
+                },
+            ],
+            "form_checkbox_name": "bar",
+        }
+
+        self.assertSelector("#my-first-datagrid", config)
+
+        form = self.select_one(".datagrid__form", config)
+        self.assertIn("datagrid__form", form.get("class"))
+        self.assertEqual(form.get("method"), "POST")
+        self.assertEqual(form.get("action"), "/foo")
+
+        button_foo = self.select_one(".button", config)
+        self.assertIn("button", button_foo.get("class"))
+        self.assertIn("button--icon", button_foo.get("class"))
+        self.assertIn("button--small", button_foo.get("class"))
+        self.assertIn("button--transparent", button_foo.get("class"))
+        self.assertNotIn("button--danger", button_foo.get("class"))
+        self.assertEqual(button_foo.get("name"), "Lorem")
+        self.assertEqual(button_foo.get("title"), "Foo")
+        self.assertTrue(button_foo.select_one(".button__icon"))
+        self.assertTrue(button_foo.select_one(".button__label"))
+
+        button_bar = self.select_one(".button--danger", config)
+        self.assertIn("button", button_bar.get("class"))
+        self.assertIn("button--icon", button_bar.get("class"))
+        self.assertIn("button--small", button_bar.get("class"))
+        self.assertNotIn("button--transparent", button_bar.get("class"))
+        self.assertIn("button--danger", button_bar.get("class"))
+        self.assertEqual(button_bar.get("name"), "Ipsum")
+        self.assertEqual(button_bar.get("title"), "Bar")
+        self.assertTrue(button_bar.select_one(".button__icon"))
+        self.assertTrue(button_bar.select_one(".button__label"))
+
+        select_all = self.select_one("#my-first-datagrid-select-all-top", config)
+        self.assertIn("select-all", select_all.get("class"))
+        self.assertEqual(select_all.get("type"), "checkbox")
+        self.assertEqual(
+            select_all.get("data-select-all"), '#my-first-datagrid .input[type="checkbox"]'
         )
 
-        self.assertIn('id="my-first-datagrid"', html)
-        self.assertIn('<form class="datagrid__form" method="POST" action="/foo">', html)
-        self.assertInHTML(
-            """
-            <button class="button button--icon button--small button--transparent" name="Lorem" title="Foo" >
-              <span class="button__icon"><img class="icon icon--image" alt="Foo" src="data:image/png;base64,"></span>
-              <span class="button__label">Foo</span>
-            </button>
-            """,
-            html,
-        )
-        self.assertInHTML(
-            """
-            <button class="button button--icon button--small button--danger" name="Ipsum" title="Bar" >
-              <span class="button__icon"><img class="icon icon--image" alt="Bar" src="data:image/png;base64,"></span>
-              <span class="button__label">Bar</span>
-            </button>
-            """,
-            html,
-        )
-
-        self.assertInHTML(
-            '<input class="input select-all" type="checkbox" id="my-first-datagrid-select-all-top" data-select-all="#my-first-datagrid .input[type=&quot;checkbox&quot;]">',
-            html,
-        )
-        self.assertInHTML('<input class="input" type="checkbox" name="bar" value="3">', html)
+        checkbox = self.select_one('.input[name="bar"][value="3"]', config)
+        self.assertEqual(checkbox.get("type"), "checkbox")
 
     def test_toolbar_position_top(self):
         html = self.template_render(
@@ -390,25 +412,23 @@ class DatagridTestCase(InclusionTagWebTest):
         self.assertLess(button_pos, table_body_pos)
 
     def test_toolbar_position_bottom(self):
-        html = self.template_render(
-            {
-                "columns": ("title"),
-                "queryset": Book.objects.all(),
-                "id": "my-first-datagrid",
-                "form": True,
-                "form_buttons": [
-                    {"label": "Foo", "name": "Lorem", "icon_src": "data:image/png;base64,"},
-                    {
-                        "class": "button--danger",
-                        "label": "Bar",
-                        "name": "Ipsum",
-                        "icon_src": "data:image/png;base64,",
-                    },
-                ],
-                "toolbar_position": "bottom",
-            }
-        )
-
+        config = {
+            "columns": ("title"),
+            "queryset": Book.objects.all(),
+            "id": "my-first-datagrid",
+            "form": True,
+            "form_buttons": [
+                {"label": "Foo", "name": "Lorem", "icon_src": "data:image/png;base64,"},
+                {
+                    "class": "button--danger",
+                    "label": "Bar",
+                    "name": "Ipsum",
+                    "icon_src": "data:image/png;base64,",
+                },
+            ],
+            "toolbar_position": "bottom",
+        }
+        html = self.render(config)
         button_pos = html.find('class="button')
         table_body_pos = html.find('class="datagrid__table-body')
 
@@ -448,20 +468,23 @@ class DatagridTestCase(InclusionTagWebTest):
         self.assertGreater(button_pos_bottom, table_body_pos)
 
     def test_modifier_key(self):
-        html = self.template_render(
-            {
-                "columns": ("publisher"),
-                "queryset": Book.objects.all(),
-                "modifier_key": "publisher",
-                "modifier_column": "publisher",
-                "modifier_mapping": {"Foo": "purple", "Bar": "violet"},
-            }
-        )
-        foo_html = '<tr class="datagrid__row datagrid__row--cells datagrid__row--purple"><td class="datagrid__cell datagrid__cell--modifier">Foo</td></tr>'
-        bar_html = '<tr class="datagrid__row datagrid__row--cells datagrid__row--violet"><td class="datagrid__cell datagrid__cell--modifier">Bar</td></tr>'
+        config = {
+            "columns": ("title", "publisher"),
+            "queryset": Book.objects.all(),
+            "modifier_key": "publisher",
+            "modifier_column": "publisher",
+            "modifier_mapping": {"Foo": "purple", "Bar": "violet"},
+        }
 
-        self.assertInHTML(foo_html, html)
-        self.assertInHTML(bar_html, html)
+        row_purple = self.select_one(".datagrid__row.datagrid__row--purple", config)
+        self.assertTrue(row_purple)
+        self.assertFalse(row_purple.select(".datagrid__cell.datagrid__cell--modifier:first-child"))
+        self.assertTrue(row_purple.select(".datagrid__cell.datagrid__cell--modifier:last-child"))
+
+        row_violet = self.select_one(".datagrid__row.datagrid__row--purple", config)
+        self.assertTrue(row_violet)
+        self.assertFalse(row_violet.select(".datagrid__cell.datagrid__cell--modifier:first-child"))
+        self.assertTrue(row_violet.select(".datagrid__cell.datagrid__cell--modifier:last-child"))
 
     def test_get_absolute_url(self):
         self.book_1.get_absolute_url = lambda: "/foo"
