@@ -1,5 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
+from rijkshuisstijl import settings
+
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_filters import get_attr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import (
@@ -153,6 +155,9 @@ def summary_list(**kwargs):
     config = merge_config(kwargs)
     config["id"] = get_id(config, "summary-list")
     config["object_list"] = parse_kwarg(config, "object_list", [])
+    config["help_text_position"] = parse_kwarg(
+        config, "help_text_position", settings.HELP_TEXT_POSITION
+    )
     config["config"] = config
     return config
 
@@ -294,6 +299,9 @@ def key_value(component, **kwargs):
     config["form_enctype"] = config.get("form_enctype", "multipart/form-data")
     config["full_width_fields"] = get_full_width_fields()
     config["object"] = config.get("object", None)
+    config["help_text_position"] = config.get(
+        "help_text_position", settings.HELP_TEXT_POSITION
+    )
 
     config["config"] = config
     return config

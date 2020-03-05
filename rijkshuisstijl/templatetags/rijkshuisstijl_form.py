@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
+from rijkshuisstijl import settings
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
 from .rijkshuisstijl_helpers import get_id, merge_config, parse_kwarg
@@ -91,7 +92,9 @@ def form(context, form=None, label="", **kwargs):
     kwargs["tag"] = kwargs.get("tag", "form")
     kwargs["actions_align"] = kwargs.get("actions_align", "left")
     kwargs["actions_position"] = kwargs.get("actions_position", "auto")
-    kwargs["help_text_position"] = kwargs.get("help_text_position", "bottom")
+    kwargs["help_text_position"] = kwargs.get(
+        "help_text_position", settings.HELP_TEXT_POSITION
+    )
 
     kwargs["request"] = context["request"]
     kwargs["config"] = kwargs
@@ -101,7 +104,9 @@ def form(context, form=None, label="", **kwargs):
 @register.inclusion_tag("rijkshuisstijl/components/form/form-control.html")
 def form_control(**kwargs):
     kwargs = merge_config(kwargs)
-    kwargs["help_text_position"] = kwargs.get("help_text_position", "bottom")
+    kwargs["help_text_position"] = kwargs.get(
+        "help_text_position", settings.HELP_TEXT_POSITION
+    )
     kwargs["config"] = kwargs
     return kwargs
 

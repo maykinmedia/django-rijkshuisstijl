@@ -6,6 +6,8 @@ from django.views.generic import (
     UpdateView as DjUpdateView,
 )
 
+from rijkshuisstijl import settings
+
 
 class FormMixin:
     """
@@ -22,7 +24,7 @@ class FormMixin:
     text = None
     wysiwyg = None
     actions_position = "auto"
-    help_text_position = "bottom"
+    help_text_position = settings.HELP_TEXT_POSITION
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
