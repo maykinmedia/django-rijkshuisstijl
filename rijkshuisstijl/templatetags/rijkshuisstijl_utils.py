@@ -64,14 +64,11 @@ def get_recursed_field_value(obj, field):
     """
     fields = field.split("__")
 
-    if len(fields) is 1:
-        return getattr(obj, field)
-
-    while len(fields) > 1:
+    while fields:
         field = fields.pop(0)
         obj = getattr(obj, field)
 
-    return getattr(obj, fields[0])
+    return obj
 
 
 @register.filter

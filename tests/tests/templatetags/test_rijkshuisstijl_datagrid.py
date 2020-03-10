@@ -560,3 +560,32 @@ class DatagridTestCase(InclusionTagWebTest):
 
         result_count = self.select_one(".datagrid__result-count", config)
         self.assertEqual(result_count.text, "3 resultaten")
+
+    def test_groups_callable(self):
+        config = {
+            "columns": ["title"],
+            "queryset": Book.objects.all(),
+            "groups": {
+                "lookup": lambda b: b.publisher.name,
+                "groups": [
+                    {"value": self.publisher_1.name, "label": "Publisher 1"},
+                    {"value": self.publisher_2.name, "label": "Publisher 2"},
+                ],
+            },
+        }
+
+        captions = self.select(".datagrid__subtitle", config)
+
+        self.assertEqual(captions[0].text, "Publisher 1")
+        self.assertEqual(captions[1].text, "Publisher 2")
+
+        groups = self.select(".datagrid__table-body", config)
+        group_1_cells = groups[0].select(".datagrid__cell")
+        group_2_cells = groups[1].select(".datagrid__cell")
+
+        self.assertEqual(len(group_1_cells), 2)
+        self.assertEqual(group_1_cells[0].text.strip(), "Lorem")
+        self.assertEqual(group_1_cells[1].text.strip(), "Dolor")
+
+        self.assertEqual(len(group_2_cells), 1)
+        self.assertEqual(group_2_cells[0].text.strip(), "Ipsum")

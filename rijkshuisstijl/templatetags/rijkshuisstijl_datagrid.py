@@ -92,7 +92,8 @@ def datagrid(context, **kwargs):
 
     - groups: Optional, a dict ("lookup", "values"). Lookup should be a string pointing to a (related) field. Groups
       should be a list_of_dict ("value", "label"). The result the lookup for each object is compared to the value of
-      each group.
+      each group. Optionally, a callable can be passed to lookup in which case it will be called with obj as first
+      argument and the returned value will be used as value to test against.
 
 
     Ordering
@@ -455,8 +456,10 @@ def datagrid(context, **kwargs):
 
         - id: a unique id identifying this group.
         - default: whether the group is the default groups (no groups were set).
-        - label: the string represenation of a group, (rendered as subtitle).
-        - lookup: the field on each object to lookup.
+        - label: the string representation of a group, (rendered as subtitle).
+        - lookup: The value for lookup in obj to test groups against, may be a field lookup. Optionally a callable can
+          be given in which case it will be called with obj as first argument and the returned value will be used as
+          value to test against.
         - value: the resulting value of lookup required to match object to this group.
         - object_list: the objects matching this group.
 
@@ -481,22 +484,35 @@ def datagrid(context, **kwargs):
         group_defs = groups.get("groups")
         group_defs = create_list_of_dict(group_defs, "value", "label")
 
-        groups = [
-            {
+        groups = []
+        for group_def in group_defs:
+            group = {
                 "id": get_id({}, "datagrid-group"),
                 "default": False,
                 "label": group_def.get("label"),
                 "lookup": lookup,
                 "value": group_def.get("value"),
                 "object_list": [
-                    object
-                    for object in object_list
-                    if get_recursed_field_value(object, lookup) == group_def.get("value")
+                    obj
+                    for obj in object_list
+                    if get_lookup_value(obj, lookup) == group_def.get("value")
                 ],
             }
-            for group_def in group_defs
-        ]
+            groups.append(group)
         return groups
+
+    def get_lookup_value(obj, lookup):
+        """
+        Returns the value for lookup in obj to test groups against, may be a field lookup. Optionally a callable can be
+        given in which case it will be called with obj as first argument and the returned value will be used as value to
+        test against.
+        :param obj:
+        :param lookup:
+        :return:
+        """
+        if callable(lookup):
+            return lookup(obj)
+        return get_recursed_field_value(obj, lookup)
 
     def get_ordering():
         """
