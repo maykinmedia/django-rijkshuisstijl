@@ -1,7 +1,7 @@
 from django.forms.widgets import CheckboxInput, DateInput, Input, Select
 from django.utils.translation import gettext_lazy as _
 
-from rijkshuisstijl import settings
+from rijkshuisstijl.conf import settings
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
 from .rijkshuisstijl_helpers import get_id, merge_config, parse_kwarg
@@ -122,7 +122,7 @@ def form_control(context, form, field_name, **kwargs):
     kwargs["tag"] = kwargs.get("tag", "form")
     kwargs["actions_align"] = kwargs.get("actions_align", "left")
     kwargs["actions_position"] = kwargs.get("actions_position", "auto")
-    kwargs["help_text_position"] = kwargs.get("help_text_position", settings.HELP_TEXT_POSITION)
+    kwargs["help_text_position"] = kwargs.get("help_text_position", settings.RH_HELP_TEXT_POSITION)
 
     def get_bound_field():
         """
@@ -144,7 +144,7 @@ def form_control(context, form, field_name, **kwargs):
 @register.inclusion_tag("rijkshuisstijl/components/form/label.html")
 def label(**kwargs):
     kwargs = merge_config(kwargs)
-    kwargs["help_text_position"] = kwargs.get("help_text_position", settings.HELP_TEXT_POSITION)
+    kwargs["help_text_position"] = kwargs.get("help_text_position", settings.RH_HELP_TEXT_POSITION)
     kwargs["config"] = kwargs
     return kwargs
 
