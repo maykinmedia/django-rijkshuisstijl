@@ -53,7 +53,7 @@
 
         {#  Render the header. #}
         {% if form_select_all_position in 'top,both' or toolbar_position in 'top,both' %}
-            {% if title or form or form_buttons or formset or dom_filter %}
+            {% if title or form or form_buttons or dom_filter or formset and toolbar_position in 'top,both' %}
                 <header class="datagrid__header">
                     <div class="toolbar toolbar--justify toolbar--pad">
                         <ul class="toolbar__list">

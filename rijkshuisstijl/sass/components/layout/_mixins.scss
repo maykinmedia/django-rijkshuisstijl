@@ -3,9 +3,18 @@
 @mixin layout {
   @include container;
 
-  &__section--flex {
+  &__section--justify {
     display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__section--margin {
+    @include rows(1, margin-top);
+    @include rows(1, margin-bottom);
+  }
+
+  &__section--pad {
+    @include container-padding;
   }
 }

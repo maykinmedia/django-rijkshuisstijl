@@ -2,10 +2,25 @@
     {% block content %}
         <div class="layout">
             {% block layout %}
-                {% if title %}
-                    {% title_header class='title-header--no-margin-bottom' title=title %}
-                {% endif %}
-                {% datagrid config=datagrid_config %}
+
+
+                {# Title. #}
+                {% block content_title %}
+                    {% if title %}
+                        <div class="layout__section layout__section--justify layout__section--pad layout__section--margin">
+                            {% title_header class='title-header--no-margin-bottom' title=title %}
+                            {% block content_title_inner %}{% endblock %}
+                        </div>
+                    {% endif %}
+                {% endblock %}
+
+
+                {# Datagrid. #}
+                {% block content_body %}
+                    {% datagrid config=datagrid_config %}
+                {% endblock %}
+
+
             {% endblock %}
         </div>
     {% endblock %}
