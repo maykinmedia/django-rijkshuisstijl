@@ -289,7 +289,17 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
   .input,
   .select,
   .textarea {
+    width: 100%;
     z-index: 0;
+  }
+
+  .textarea {
+    $height-mobile: calc(#{2 * $input-padding-h} + #{2 * $typography-line-height-text-mobile * $typography-font-size-text-mobile});
+    $height-tablet: calc(#{2 * $input-padding-h} + #{2 * $typography-line-height-text-tablet * $typography-font-size-text-tablet});
+    $height-laptop: calc(#{2 * $input-padding-h} + #{2 * $typography-line-height-text-laptop * $typography-font-size-text-laptop});
+    $height-desktop: calc(#{2 * $input-padding-h} + #{2 * $typography-line-height-text-desktop * $typography-font-size-text-desktop});
+    @include responsive(height, $height-mobile, $height-tablet, $height-laptop, $height-desktop);
+    min-height: 0;
   }
 
   &__row:not(#{&}__row--edit) &__cell--editable .checkbox,
