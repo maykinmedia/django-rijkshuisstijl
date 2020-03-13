@@ -1,9 +1,9 @@
+import datetime
 import re
 from collections.abc import Iterable
 
 from django import template
-from django.core.exceptions import FieldDoesNotExist
-from django.db.models import Field
+from django.db.models import QuerySet
 from django.templatetags.static import static
 from django.utils import formats
 from django.utils.functional import Promise
@@ -66,7 +66,10 @@ def get_recursed_field_value(obj, field):
 
     while fields:
         field = fields.pop(0)
-        obj = getattr(obj, field)
+        try:
+            obj = getattr(obj, field)
+        except AttributeError:
+            return ""
 
     return obj
 
@@ -79,7 +82,7 @@ def format_value(obj, field, empty_label="-"):
     :param obj: (Model) Object containing key column_key.
     :param field: key of field to get label for.
     :param empty_label: Label to show when no value is found.
-    :return: Formatted string.
+    :return: str
     """
 
     # Check for rh_display_<column> on object.
@@ -98,14 +101,20 @@ def format_value(obj, field, empty_label="-"):
     if field is "__str__":
         return str(obj) or empty_label
 
-    # Check for list.
-    if type(obj) in (list, dict,):
-        return obj.get(field, empty_label)
-
-    # Check for (related) value.
+    # Resolve value.
     val = get_recursed_field_value(obj, field)
 
-    # Check for boolean
+    while callable(val):
+        try:
+            val = val()
+        except TypeError:
+            break
+
+    # Check for None.
+    if val is None:
+        return empty_label
+
+    # Check for boolean.
     if type(val) is bool:
         src = static("rijkshuisstijl/lib/boolean/false.png")
 
@@ -114,52 +123,25 @@ def format_value(obj, field, empty_label="-"):
 
         return mark_safe(f'<img class="boolean" alt="{val}" src="{src}">')
 
-    # Check for None
-    if val is None:
-        return empty_label
+    # Check for str.
+    if isinstance(val, str) or isinstance(val, Promise):
+        return val or empty_label
 
-    try:
-        model_field = obj._meta.get_field(field)
+    # Check for Iterable, QuerySet.
+    if (
+        not isinstance(val, str)
+        and not isinstance(val, Promise)
+        and (isinstance(val, Iterable) or isinstance(val, QuerySet))
+    ):
+        object_list = [str(obj) for obj in val]
+        return ", ".join(object_list) or empty_label
 
-        if not isinstance(model_field, Field):
-            # field is a related manager
-            model_field = model_field.field
-    except FieldDoesNotExist:
-        model_field = None
+    # Check for date(time).
+    if type(val) in [datetime.datetime, datetime.date]:
+        return formats.date_format(val)
 
-    if model_field and model_field.is_relation:
-        if hasattr(val, "all"):
-            return ", ".join([str(instance) for instance in val.all()])
-        return str(val) or empty_label
-
-    if field.endswith("_set"):
-        possible_related_field = field.replace("_set", "")
-
-        try:
-            related_manager = obj._meta.get_field(possible_related_field)
-        except (FieldDoesNotExist, AttributeError) as e:
-            related_manager = None
-
-        if related_manager:
-            return ", ".join([str(instance) for instance in val.all()])
-
-    # Check for iterable.
-    if isinstance(val, Iterable) and not isinstance(val, (str, Promise,)):
-        return ", ".join(val)
-
-    # Check for callable.
-    if callable(val):
-        return val() or empty_label
-
-    if val:
-        try:
-            # Try to apply date formatting.
-            return formats.date_format(val)
-        except AttributeError:
-            return val or empty_label
-
-    # Return empty string
-    return empty_label
+    # Fallback
+    return val or empty_label
 
 
 class SingleLineNode(template.Node):

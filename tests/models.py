@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -7,6 +8,9 @@ class Publisher(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("publisher-detail", kwargs={"pk": self.pk})
 
 
 class Author(models.Model):
@@ -31,9 +35,7 @@ class Book(models.Model):
     last_updated = models.DateTimeField(default=timezone.now)
     stock = models.IntegerField(default=10)
     title = models.CharField(max_length=255, default="Lorem Ipsum")
-    random_set = models.CharField(
-        max_length=255, default="Lorem Lorem", verbose_name="random set"
-    )
+    random_set = models.CharField(max_length=255, default="Lorem Lorem", verbose_name="random set")
 
     def __str__(self):
         return self.title
@@ -44,9 +46,7 @@ class Book(models.Model):
 
 class Award(models.Model):
     name = models.CharField(max_length=255)
-    author = models.ForeignKey(
-        Author, related_name="awards", on_delete=models.CASCADE
-    )
+    author = models.ForeignKey(Author, related_name="awards", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

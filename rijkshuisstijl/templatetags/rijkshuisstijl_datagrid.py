@@ -1,8 +1,9 @@
 import re
 
+from django.core.exceptions import FieldDoesNotExist, FieldError
 from django.core.paginator import Paginator
-from django.forms import formset_factory, modelformset_factory
-from django.http import HttpResponseRedirect, QueryDict
+from django.forms import modelformset_factory
+from django.http import QueryDict
 from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 
@@ -292,19 +293,17 @@ def datagrid(context, **kwargs):
 
         columns = parse_kwarg(kwargs, "columns", [])
         columns = create_list_of_dict(columns, "key", "fallback_label")
+        queryset = _get_queryset()
 
         # Get column label.
         for column in columns:
-            context_queryset = context.get("queryset")
-            queryset = kwargs.get("queryset", context_queryset)
 
-            if queryset and not column.get(
-                "label"
-            ):  # If queryset present, resolve label via model.
+            # If queryset present, resolve label via model.
+            if queryset and not column.get("label"):
                 column["label"] = get_field_label(queryset, column["key"])
-            if not queryset and not column.get(
-                "label"
-            ):  # If queryset not present, fall back to fallback label.
+
+            # If queryset not present, fall back to fallback label.
+            if not queryset and not column.get("label"):
                 column["label"] = get_field_label(None, column.get("fallback_label"))
 
         _cache["get_columns"] = columns
@@ -328,40 +327,63 @@ def datagrid(context, **kwargs):
             return _cache.get("get_object_list")
 
         # Get object list.
-        context_object_list = context.get("object_list", [])
-        context_queryset = context.get("queryset", context_object_list)
-        object_list = kwargs.get("object_list", context_queryset)
-        object_list = kwargs.get("queryset", object_list)
-
-        if hasattr(object_list, "model") and refresh:
+        object_list = _get_object_list()
+        model = _get_model()
+        if _get_model() and refresh:
             object_list = object_list.all()
 
         # Filtering
         filters = get_filters()
-        if filters and hasattr(object_list, "filter") and callable(object_list.filter):
-            try:
-                active_filters = [
-                    active_filter for active_filter in filters if active_filter.get("value")
-                ]
-                for active_filter in active_filters:
-                    filter_key = active_filter.get("filter_key")
-                    value = active_filter.get("value")
-                    type = active_filter.get("type")
+        if filters and model:
+            # Active filters (with value set).
+            active_filters = [
+                active_filter for active_filter in filters if active_filter.get("value")
+            ]
 
-                    if type is "DateTimeField":
-                        value = parse_date(value)
-                        filter_kwargs = {
-                            filter_key + "__year": value.year,
-                            filter_key + "__month": value.month,
-                            filter_key + "__day": value.day,
-                        }
-                    elif active_filter.get("is_relation"):
-                        filter_kwargs = {filter_key: value}
-                    else:
-                        filter_kwargs = {filter_key + "__icontains": value}
+            # Filter one filter at a time.
+            for active_filter in active_filters:
+                filter_key = active_filter.get("filter_key")
+                filter_value = active_filter.get("value")
+                filter_type = active_filter.get("type")
+
+                # Date.
+                if filter_type is "DateTimeField":
+                    filter_value = parse_date(filter_value)
+                    filter_kwargs = {
+                        filter_key + "__year": filter_value.year,
+                        filter_key + "__month": filter_value.month,
+                        filter_key + "__day": filter_value.day,
+                    }
+
+                # Related field.
+                elif active_filter.get("is_relation"):
+                    filter_kwargs = {filter_key: filter_value}
+
+                # Anything else.
+                else:
+                    filter_kwargs = {filter_key + "__icontains": filter_value}
+
+                # Run filter using ORM.
+                try:
                     object_list = object_list.filter(**filter_kwargs)
-            except:
-                object_list = object_list.none()
+
+                # We can't filter on this using ORM, filter using Python instead (slow).
+                except FieldError:
+
+                    # Build a list of primary keys of objects matching our filter.
+                    pks = []
+                    for obj in object_list:
+                        obj_value = get_recursed_field_value(obj, filter_key)
+
+                        # If we have a function, call it, use it's return value in comparison.
+                        if callable(obj_value):
+                            obj_value = obj_value()
+
+                        if filter_value.upper() in str(obj_value).upper():
+                            pks.append(obj.pk)
+
+                    # Run filter.
+                    object_list = object_list.filter(pk__in=pks)
 
         # Ordering
         order = kwargs.get("order")
@@ -401,11 +423,10 @@ def datagrid(context, **kwargs):
 
         filterable_columns = parse_kwarg(kwargs, "filterable_columns", [])
         filterable_columns = create_list_of_dict(filterable_columns)
+        model = _get_model()
 
-        context_queryset = context.get("queryset")
-        queryset = kwargs.get("queryset", context_queryset)
-
-        if not queryset:  # Filtering is only supported on querysets.
+        # Filtering is only supported on querysets.
+        if not model:
             _cache["get_filters"] = {}
             return {}
 
@@ -415,7 +436,11 @@ def datagrid(context, **kwargs):
 
             field_key = filterable_column.get("key", "")
             field_name = field_key.split("__")[0]
-            field = queryset.model._meta.get_field(field_name)
+
+            try:
+                field = model._meta.get_field(field_name)
+            except FieldDoesNotExist:
+                continue
 
             if not "type" in filterable_column:
                 filterable_column["type"] = type(field).__name__
@@ -431,12 +456,15 @@ def datagrid(context, **kwargs):
 
                     if "__" in field_key:
                         remote_field_name = field_key.split("__")[-1]
-                        choices = [
-                            (value, value)
-                            for value in field.remote_field.model.objects.values_list(
-                                remote_field_name, flat=True
-                            )
-                        ]
+                        try:
+                            choices = [
+                                (value, value)
+                                for value in field.remote_field.model.objects.values_list(
+                                    remote_field_name, flat=True
+                                )
+                            ]
+                        except FieldError:
+                            choices = []
                     else:
                         choices = field.remote_field.model.objects.all()
 
@@ -660,17 +688,16 @@ def datagrid(context, **kwargs):
 
     def get_formset():
         """
-        TODO:
         :return: BaseModelFormSet
         """
         request = context.get("request")
         form_class = config.get("form_class")
-        queryset = get_object_list()
+        queryset = _get_queryset()
+        model = _get_model()
 
-        if not (hasattr(queryset, "model") and form_class and queryset):
-            return []
+        if not (form_class and model):
+            return
 
-        model = queryset.model
         ModelFormSet = modelformset_factory(model, form_class)
 
         if request.method == "POST":
@@ -771,6 +798,62 @@ def datagrid(context, **kwargs):
                     obj.datagrid_modifier_class = item_value
         except KeyError:
             pass
+
+    def _get_object_list():
+        """
+        Looks for the object_list to use based on the presence of these variables in order:
+
+            1) kwargs['queryset']
+            2) kwargs['object_list']
+            3) context['queryset']
+            4) context['object_list']
+
+        :return: QuerySet or list.
+        """
+        if _cache.get("_get_object_list"):
+            return _cache.get("_get_object_list")
+
+        context_object_list = context.get("object_list", [])
+        context_queryset = context.get("queryset", context_object_list)
+        object_list = kwargs.get("object_list", context_queryset)
+        object_list = kwargs.get("queryset", object_list)
+
+        _cache["_get_object_list"] = object_list
+        return object_list
+
+    def _get_queryset():
+        """
+        Returns the QuerySet (if passed).
+        :return: QuerySet or None.
+        """
+        if _cache.get("_get_queryset"):
+            return _cache.get("_get_queryset")
+
+        queryset = None
+
+        if _get_model():
+            queryset = _get_object_list()
+
+        _cache["_get_queryset"] = queryset
+        return queryset
+
+    def _get_model():
+        """
+        Returns the Model of the QuerySet (if passed).
+        :return: Model or None.
+        """
+        if _cache.get("_get_model"):
+            return _cache.get("_get_model")
+
+        model = None
+
+        try:
+            model = _get_object_list().model
+        except AttributeError:
+            pass
+
+        _cache["_get_model"] = model
+        return model
 
     kwargs = merge_config(kwargs)
     config = kwargs.copy()
