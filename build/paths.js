@@ -37,9 +37,6 @@ module.exports = {
     // Path to the js entry point (source)
     jsEntry: sourcesRoot + 'js/index.js',
 
-    // Path to the compatibility js entry point (source)
-    compatEntry: sourcesRoot + 'js/compat.js',
-
     // Path to css (sources)
     cssSrc: sourcesRoot + 'css/**/*.css',
 

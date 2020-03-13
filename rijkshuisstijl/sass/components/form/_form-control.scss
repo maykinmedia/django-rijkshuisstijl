@@ -82,10 +82,6 @@
     }
   }
 
-  & &__body .input + .input {
-    @include border(top, $style: dashed);
-  }
-
   &__choices {
     @include responsive(flex-direction, column, row);
     display: flex;

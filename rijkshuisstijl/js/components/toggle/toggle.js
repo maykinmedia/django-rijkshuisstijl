@@ -125,8 +125,8 @@ export class Toggle {
      */
     dispatchEvent(target) {
         const event = document.createEvent('Event');
-        event.initEvent("rh-toggle", true, true)
-        target.dispatchEvent(event)
+        event.initEvent('rh-toggle', true, true);
+        target.dispatchEvent(event);
     }
 
     /**

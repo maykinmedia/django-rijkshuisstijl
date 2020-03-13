@@ -498,7 +498,7 @@ class DatagridTestCase(InclusionTagWebTest):
 
         row_violet = self.select_one(".datagrid__row.datagrid__row--purple", config)
         self.assertTrue(row_violet)
-        self.assertFalse(rFow_violet.select(".datagrid__cell.datagrid__cell--modifier:first-child"))
+        self.assertFalse(row_violet.select(".datagrid__cell.datagrid__cell--modifier:first-child"))
         self.assertTrue(row_violet.select(".datagrid__cell.datagrid__cell--modifier:last-child"))
 
     def test_get_absolute_url(self):

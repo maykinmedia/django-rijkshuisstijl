@@ -1,9 +1,13 @@
 //jshint ignore:start
-import {FORM_CONTROLS, INPUT_FILEPICKERS, LINK_SELECTS} from './constants';
+import {DATE_INPUTS, FORM_CONTROLS, INPUT_FILEPICKERS, LINK_SELECTS} from './constants';
 
 // Start!
 if (FORM_CONTROLS.length) {
     import(/* webpackChunkName: 'form-control' */ './form-control');
+}
+
+if (DATE_INPUTS.length) {
+    import(/* webpackChunkName: 'date-input' */ './date-input');
 }
 
 if (INPUT_FILEPICKERS.length) {

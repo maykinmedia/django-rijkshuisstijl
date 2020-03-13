@@ -17,7 +17,6 @@ module.exports = {
     entry: {
         'rh-js': __dirname + '/' + paths.jsEntry,
         'rh-css': __dirname + '/' + paths.sassEntry,
-        'rh-compat': __dirname + '/' + paths.compatEntry,
     },
 
     // Path to the bundles.

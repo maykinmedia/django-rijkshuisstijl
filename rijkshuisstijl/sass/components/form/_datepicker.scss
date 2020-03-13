@@ -1,0 +1,177 @@
+@import "../../settings/lib/ro-shade";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import '~microscope-sass/lib/color';
+@import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/util';
+
+$flatpickr-day-size: $grid-row-height;
+$flatpickr-padding-h: $flatpickr-day-size;
+$flatpickr-padding-v: $grid-margin-6;
+
+.flatpickr {
+  @at-root {
+    &-calendar {
+      @include color-secondary(background-color);
+      @include shadow;
+      display: none;
+      visibility: hidden;
+      position: absolute;
+
+      @include mobile-only() {
+        position: fixed;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+      }
+
+      @include tablet {
+        width: $flatpickr-day-size * 7 + 2 * $flatpickr-padding-h;
+      }
+    }
+
+    &-calendar.open {
+      display: block;
+      visibility: visible;
+      z-index: 9999;
+    }
+
+    &-months {
+      @include color-primary(background-color);
+      line-height: $flatpickr-day-size;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 $flatpickr-padding-h + $flatpickr-padding-h;
+      position: relative;
+    }
+
+    &-prev-month,
+    &-next-month {
+      @extend .fas;
+      @include color-background(color);
+      cursor: pointer;
+      display: block;
+      width: $flatpickr-day-size;
+      height: $flatpickr-day-size;
+      line-height: $flatpickr-day-size!important;
+      text-align: center;
+
+      svg {
+        display: none;
+      }
+    }
+
+    &-prev-month {
+      @extend .fa-chevron-left;
+    }
+
+    &-next-month {
+      @extend .fa-chevron-right;
+    }
+
+    &-current-month {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: $flatpickr-day-size;
+    }
+
+    &-current-month &-monthDropdown-months,
+    &-current-month .cur-year {
+      @include h3;
+      @include color-background(color);
+      appearance: none;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      text-align: center;
+      text-align-last: center;
+    }
+
+    &-current-month .cur-year {
+      width: 4em;
+    }
+
+    &-current-month .cur-year::-webkit-outer-spin-button,
+    &-current-month .cur-year::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &-current-month .arrowUp,
+    &-current-month .arrowDown {
+      @include color-background(color);
+      @include center-v;
+      @extend .fas;
+      cursor: pointer;
+      font-size: 22px;
+      line-height: $flatpickr-day-size;
+    }
+
+    &-current-month .arrowDown {
+      @extend .fa-angle-double-left;
+      transform: translate(50%, -50%);
+      left: $flatpickr-padding-h;
+    }
+
+    &-current-month .arrowUp {
+      @extend .fa-angle-double-right;
+      transform: translate(-100%, -50%);
+      right: $flatpickr-padding-h;
+    }
+
+    &-innerContainer {
+      float: left;
+      padding: $flatpickr-padding-v $flatpickr-padding-h;
+    }
+
+    &-weekday,
+    &-day {
+      @include body;
+      display: block;
+      float: left;
+      width: floor(100/7*1%);
+      height: $flatpickr-day-size;
+      line-height: $flatpickr-day-size!important;
+      text-align: center;
+    }
+
+    &-weekday {
+      text-transform: uppercase;
+      font-size: 0;
+    }
+
+    &-weekday:first-letter {
+      @include h6;
+    }
+
+    &-day {
+      cursor: pointer;
+    }
+
+    &-day:hover {
+      @include color-background;
+    }
+
+    &-day.selected {
+      @include color-primary(background-color);
+      @include color-background(color);
+      font-weight: bold;
+    }
+
+    &-day.today {
+      @include outline();
+      @include shade-color(heaven-blue, 1, outline-color);
+    }
+
+    &-day.prevMonthDay,
+    &-day.nextMonthDay {
+      //@include shade(3, color);
+      height: 1px;
+      visibility: hidden;
+    }
+  }
+}

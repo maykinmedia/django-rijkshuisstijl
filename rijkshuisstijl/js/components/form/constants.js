@@ -9,6 +9,9 @@ export const FORM_CONTROLS = BEM.getBEMNodes(BLOCK_FORM_CONTROL);
 /** @const {string} Input block name. */
 export const BLOCK_INPUT = 'input';
 
+/** @const {string} Date inputs. */
+export const DATE_INPUTS = document.querySelectorAll(BEM.getBEMSelector(BLOCK_INPUT) + '[type="date"]');
+
 /** @const {string} Filepicker element name. */
 export const ELEMENT_FILEPICKER = 'filepicker';
 

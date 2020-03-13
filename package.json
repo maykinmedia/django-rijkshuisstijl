@@ -27,6 +27,7 @@
     "better-dateinput-polyfill": "^3.2.7",
     "better-dom": "^4.0.0",
     "debounce": "^1.2.0",
+    "flatpickr": "^4.6.3",
     "microscope-sass": "^0.3.2",
     "urijs": "^1.19.1"
   },

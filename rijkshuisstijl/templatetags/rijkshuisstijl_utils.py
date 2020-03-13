@@ -3,7 +3,7 @@ import re
 from collections.abc import Iterable
 
 from django import template
-from django.db.models import QuerySet
+from django.db.models import Manager, QuerySet
 from django.templatetags.static import static
 from django.utils import formats
 from django.utils.functional import Promise
@@ -126,6 +126,13 @@ def format_value(obj, field, empty_label="-"):
     # Check for str.
     if isinstance(val, str) or isinstance(val, Promise):
         return val or empty_label
+
+    # Check for Manager (assume None).
+    if isinstance(val, Manager):
+        try:
+            val = val.all()
+        except AttributeError:
+            return empty_label
 
     # Check for Iterable, QuerySet.
     if (

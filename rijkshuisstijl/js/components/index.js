@@ -1,5 +1,4 @@
 import './button';
-import './compat';
 import './datagrid';
 import './fake-link';
 import './filter';

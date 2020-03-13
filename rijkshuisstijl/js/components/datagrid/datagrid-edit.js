@@ -1,4 +1,4 @@
-import BEM from 'bem.js'
+import BEM from 'bem.js';
 import {BLOCK_DATAGRID, ELEMENT_ROW, MODIFIER_EDIT, DATAGRIDS} from './constants';
 
 class DataGridEdit {
@@ -25,7 +25,7 @@ class DataGridEdit {
      */
     update() {
         const editable_row = BEM.getChildBEMNodes(this.node, BLOCK_DATAGRID, ELEMENT_ROW, MODIFIER_EDIT);
-        const exp = Boolean(editable_row.length)
+        const exp = Boolean(editable_row.length);
         BEM.toggleModifier(this.node, MODIFIER_EDIT, exp);
     }
 }
