@@ -18,6 +18,9 @@ export const DATE_INPUTS = document.querySelectorAll(BEM.getBEMSelector(BLOCK_IN
 /** @const {string} Date inputs. */
 export const DATE_RANGE_INPUTS = BEM.getBEMNodes(BLOCK_INPUT, false, MODIFIER_DATE_RANGE);
 
+/** @const {string} Time inputs. */
+export const TIME_INPUTS = document.querySelectorAll(BEM.getBEMSelector(BLOCK_INPUT) + '[type="time"]');
+
 /** @const {string} Filepicker element name. */
 export const ELEMENT_FILEPICKER = 'filepicker';
 

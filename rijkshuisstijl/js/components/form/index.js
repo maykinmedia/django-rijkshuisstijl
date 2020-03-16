@@ -1,5 +1,5 @@
 //jshint ignore:start
-import {DATE_INPUTS, DATE_RANGE_INPUTS, FORM_CONTROLS, INPUT_FILEPICKERS, LINK_SELECTS} from './constants';
+import {DATE_INPUTS, DATE_RANGE_INPUTS, FORM_CONTROLS, INPUT_FILEPICKERS, LINK_SELECTS, TIME_INPUTS} from './constants';
 
 // Start!
 if (FORM_CONTROLS.length) {
@@ -8,6 +8,10 @@ if (FORM_CONTROLS.length) {
 
 if (DATE_INPUTS.length || DATE_RANGE_INPUTS.length) {
     import(/* webpackChunkName: 'date-input' */ './date-input');
+}
+
+if (TIME_INPUTS.length) {
+    import(/* webpackChunkName: 'time-input' */ './time-input');
 }
 
 if (INPUT_FILEPICKERS.length) {
