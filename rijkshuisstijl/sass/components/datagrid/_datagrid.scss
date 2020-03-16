@@ -124,6 +124,12 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     @include ellipsis;
   }
 
+  &--nowrap &__caption,
+  &--nowrap &__cell {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
   &__caption,
   &__filter {
     background-color: $toolbar-color-background;

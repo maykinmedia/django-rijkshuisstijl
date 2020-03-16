@@ -330,12 +330,37 @@ def datagrid(context, **kwargs):
 
         # Get object list.
         object_list = _get_object_list()
-        model = _get_model()
+
         if _get_model() and refresh:
             object_list = object_list.all()
 
-        # Filtering
+        # Filtering.
+        object_list = get_filtered_queryset(object_list)
+
+        # Ordering.
+        order = kwargs.get("order")
+        if order and hasattr(object_list, "order_by") and callable(object_list.order_by):
+            order_by = get_ordering()
+
+            if order_by:
+                object_list = object_list.order_by(order_by)
+
+        # Pagination
+        object_list = add_paginator(object_list)
+
+        _cache["get_object_list"] = object_list
+        return object_list
+
+    def get_filtered_queryset(object_list):
+        """
+        Fitlers the QuerySet (if set) based on provided filter input.
+        :return: List or QuerySet
+        """
+        if _cache.get("get_filtered_queryset"):
+            return _cache.get("get_filtered_queryset")
+
         filters = get_filters()
+        model = _get_model()
 
         if filters and model:
             # Active filters (with value set).
@@ -394,18 +419,7 @@ def datagrid(context, **kwargs):
                     # Run filter.
                     object_list = object_list.filter(pk__in=pks)
 
-        # Ordering
-        order = kwargs.get("order")
-        if order and hasattr(object_list, "order_by") and callable(object_list.order_by):
-            order_by = get_ordering()
-
-            if order_by:
-                object_list = object_list.order_by(order_by)
-
-        # Pagination
-        object_list = add_paginator(object_list)
-
-        _cache["get_object_list"] = object_list
+        _cache["get_filtered_queryset"] = object_list
         return object_list
 
     def get_modifier_column():
@@ -701,8 +715,8 @@ def datagrid(context, **kwargs):
         """
         request = context.get("request")
         form_class = config.get("form_class")
-        queryset = _get_queryset()
         model = _get_model()
+        queryset = get_filtered_queryset(_get_queryset())
 
         if not (form_class and model):
             return
@@ -767,9 +781,10 @@ def datagrid(context, **kwargs):
         :param datagrid_context:
         :return: datagrid_context
         """
-        object_list = datagrid_context.get("object_list", [])
+        object_list = get_object_list()
 
         for obj in object_list:
+
             add_display(obj)
             add_modifier_class(obj)
         return datagrid_context
