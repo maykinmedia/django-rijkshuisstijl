@@ -136,11 +136,11 @@
                                 {% for filter in filters %}
                                     {% if filter.key == column.key %}
                                         {% if filter.type == 'DateField' or filter.type == 'DateTimeField' %}
-                                            {% form_input class='input--light' type='date' name=filter.key value=filter.value placeholder=column.label form='datagrid-filter-form-'|add:id onchange="this.form.submit()" %}
+                                            {% form_input class='input--daterange input--light' type='text' name=filter.key value=filter.value placeholder=column.label form='datagrid-filter-form-'|add:id %}
                                         {% elif filter.choices %}
-                                            {% form_select class='select--light' id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices form='datagrid-filter-form-'|add:id onchange="this.form.submit()" %}
+                                            {% form_select class='select--light' id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices form='datagrid-filter-form-'|add:id %}
                                         {% else %}
-                                            {% form_input class='input--light' type="search" id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form='datagrid-filter-form-'|add:id onchange="this.form.submit()" %}
+                                            {% form_input class='input--light' type="search" id='datagrid-filter-'|add:filter.key|add:'-'|add:id name=filter.key value=filter.value choices=filter.choices placeholder=column.label form='datagrid-filter-form-'|add:id %}
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}

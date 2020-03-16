@@ -134,9 +134,11 @@ $flatpickr-padding-v: $grid-margin-6;
       display: block;
       float: left;
       width: floor(100/7*1%);
-      height: $flatpickr-day-size;
-      line-height: $flatpickr-day-size!important;
+      height: $flatpickr-day-size - 4px;
+      line-height: $flatpickr-day-size - 4px!important;
       text-align: center;
+      margin-top: 2px;
+      margin-bottom: 2px;
     }
 
     &-weekday {
@@ -150,26 +152,38 @@ $flatpickr-padding-v: $grid-margin-6;
 
     &-day {
       cursor: pointer;
+      position: relative;
     }
 
     &-day:hover {
       @include color-background;
     }
 
-    &-day.selected {
+    &-day.selected,
+    &-day.inRange {
       @include color-primary(background-color);
       @include color-background(color);
       font-weight: bold;
     }
 
+    &-day.startRange {
+      border-top-left-radius: 100%;
+      border-bottom-left-radius: 100%;
+    }
+
+    &-day.endRange {
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+    }
+
     &-day.today {
       @include outline();
       @include shade-color(heaven-blue, 1, outline-color);
+      z-index: 10;
     }
 
     &-day.prevMonthDay,
     &-day.nextMonthDay {
-      //@include shade(3, color);
       height: 1px;
       visibility: hidden;
     }

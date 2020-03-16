@@ -1,7 +1,7 @@
+import BEM from 'bem.js';
 import flatpickr from 'flatpickr';
 import {Dutch} from 'flatpickr/dist/l10n/nl';
-'flatpickr';
-import {DATE_INPUTS} from './constants';
+import {MODIFIER_DATE_RANGE, DATE_INPUTS, DATE_RANGE_INPUTS} from './constants';
 
 
 /**
@@ -33,6 +33,24 @@ class DateInput {
     }
 
     /**
+     * Returns the (Dutch) locale to use.
+     * @return {CustomLocale}
+     */
+    getLocale() {
+        const locale = Dutch;
+        locale.firstDayOfWeek = 0;
+        return locale;
+    }
+
+    /**
+     * Returns the mode to use, either "range" or "single".
+     * @return {string}
+     */
+    getMode() {
+        return BEM.hasModifier(this.node, MODIFIER_DATE_RANGE) ? 'range' : 'single';
+    }
+
+    /**
      * @TODO: Yet to be supported.
      * @return {boolean}
      */
@@ -40,32 +58,36 @@ class DateInput {
         return this.node.type === 'datetime';
     }
 
-    /**
-     * Adds the datepicker.
-     */
-    update() {
+    updatePlaceholder() {
         if (!this.node.placeholder) {
             const placeholder = this.getDateFormat()
                 .replace('d', 'dd')
                 .replace('m', 'mm')
-                .replace('Y', 'yyyy')
+                .replace('Y', 'yyyy');
             this.node.placeholder = placeholder;
         }
+    }
 
-        const locale = Dutch;
-        locale.firstDayOfWeek = 0;
+    /**
+     * Adds the datepicker.
+     */
+    update() {
+        this.updatePlaceholder();
 
-        flatpickr(this.node, {
+        const flatPicker = flatpickr(this.node, {
             altInput: true,
             altFormat: this.getDateFormat(),
             dateFormat: 'Y-m-d',
-            locale: locale,
+            defaultDate: this.node.value.split('/'),
+            locale: this.getLocale(),
+            mode: this.getMode(),
         });
+        flatPicker.l10n.rangeSeparator = '/';
     }
 }
 
 
 // Start!
-[...DATE_INPUTS].forEach(node => new DateInput(node));
+[...DATE_INPUTS, ...DATE_RANGE_INPUTS].forEach(node => new DateInput(node));
 
 

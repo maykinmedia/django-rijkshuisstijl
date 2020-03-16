@@ -1,10 +1,12 @@
 import re
+from datetime import timedelta
 
 from django.core.exceptions import FieldDoesNotExist, FieldError
 from django.core.paginator import Paginator
 from django.forms import modelformset_factory
 from django.http import QueryDict
-from django.utils.dateparse import parse_date
+from django.utils.dateparse import parse_date, parse_datetime
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
@@ -334,6 +336,7 @@ def datagrid(context, **kwargs):
 
         # Filtering
         filters = get_filters()
+
         if filters and model:
             # Active filters (with value set).
             active_filters = [
@@ -347,13 +350,20 @@ def datagrid(context, **kwargs):
                 filter_type = active_filter.get("type")
 
                 # Date.
-                if filter_type is "DateTimeField":
-                    filter_value = parse_date(filter_value)
-                    filter_kwargs = {
-                        filter_key + "__year": filter_value.year,
-                        filter_key + "__month": filter_value.month,
-                        filter_key + "__day": filter_value.day,
-                    }
+                if filter_type in ["DateField", "DateTimeField"]:  # TODO: DateTimeField
+                    dates = filter_value.split("/")
+
+                    if len(dates) is 1:
+                        date_end = parse_date(dates[0]) + timedelta(days=1)
+                        date_end_string = date_end.isoformat()
+                        dates.append(date_end_string)
+
+                    try:
+                        dates = [make_aware(parse_datetime(d)) for d in dates]
+                    except AttributeError:
+                        dates = [make_aware(parse_datetime(d + " 00:00:00")) for d in dates]
+
+                    filter_kwargs = {f"{filter_key}__range": dates}
 
                 # Related field.
                 elif active_filter.get("is_relation"):
@@ -368,8 +378,7 @@ def datagrid(context, **kwargs):
                     object_list = object_list.filter(**filter_kwargs)
 
                 # We can't filter on this using ORM, filter using Python instead (slow).
-                except FieldError:
-
+                except FieldError as e:
                     # Build a list of primary keys of objects matching our filter.
                     pks = []
                     for obj in object_list:
@@ -560,7 +569,7 @@ def datagrid(context, **kwargs):
         if ordering and ordering.replace("-", "") in [c["lookup"] for c in orderable_columns]:
             result = ordering
         elif ordering:
-            print(ordering, "is invalid, allowed columns are", orderable_columns)
+            pass
         _cache["get_ordering"] = result
         return result
 
