@@ -1,12 +1,13 @@
 from django.forms import ModelForm
 from django.template import Context, Template
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory
 
 from tests.models import Author, Book, Publisher
+from tests.tests.templatetags.utils import InclusionTagWebTest
 
 
-class KeyValueTableTestCase(TestCase):
-    component = "key_value_table"
+class KeyValueTableTestCase(InclusionTagWebTest):
+    tag = "key_value_table"
     group_class = "key-value-table__row"
 
     def setUp(self):
@@ -22,9 +23,9 @@ class KeyValueTableTestCase(TestCase):
     def template_render(self, config=None, data={}):
         config = config or {}
         config = Context({"config": config, "request": RequestFactory().get("/foo", data)})
-        return Template(
-            "{% load rijkshuisstijl %}{% " + self.component + " config=config %}"
-        ).render(config)
+        return Template("{% load rijkshuisstijl %}{% " + self.tag + " config=config %}").render(
+            config
+        )
 
     def test_render(self):
         html = self.template_render(
@@ -88,11 +89,11 @@ class KeyValueTableTestCase(TestCase):
         html = self.template_render(
             {"fields": ["title", "available"], "object": self.book, "form": form,}
         )
-        # self.assertIn('class="form"', html)
-        # self.assertIn(f"{self.group_class}--edit", html)
-        # self.assertIn('name="title"', html)
-        # self.assertNotIn('name="available"', html)
-        # self.assertNotIn('<span class="toggle"', html)
+        self.assertIn('class="form"', html)
+        self.assertIn(f"{self.group_class}--edit", html)
+        self.assertIn('name="title"', html)
+        self.assertNotIn('name="available"', html)
+        self.assertNotIn('<span class="toggle"', html)
 
     def test_form_toggle(self):
         class MyModelForm(ModelForm):
@@ -116,7 +117,41 @@ class KeyValueTableTestCase(TestCase):
         self.assertNotIn('name="available"', html)
         self.assertIn('<span class="toggle"', html)
 
+    def test_full_width(self):
+        class MyModelForm(ModelForm):
+            class Meta:
+                fields = ["title", "available"]
+                model = Book
+
+        form = MyModelForm(instance=self.book)
+
+        config = {
+            "fields": ["title", "available"],
+            "full_width_fields": ["available"],
+            "field_toggle_edit": True,
+            "form": form,
+            "object": self.book,
+        }
+        self.assertSelector('.key-value-table__value[colspan="2"]', config)
+
 
 class SummaryTestCase(KeyValueTableTestCase):
-    component = "summary"
+    tag = "summary"
     group_class = "summary__key-value"
+
+    def test_full_width(self):
+        class MyModelForm(ModelForm):
+            class Meta:
+                fields = ["title", "available"]
+                model = Book
+
+        form = MyModelForm(instance=self.book)
+
+        config = {
+            "fields": ["title", "available"],
+            "full_width_fields": ["available"],
+            "field_toggle_edit": True,
+            "form": form,
+            "object": self.book,
+        }
+        self.assertSelector(".summary__key-value--full-width", config)
