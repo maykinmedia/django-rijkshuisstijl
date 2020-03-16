@@ -23,6 +23,10 @@ $flatpickr-padding-v: $grid-margin-6;
         width: 100%;
         z-index: 9999;
       }
+
+      @include tablet {
+        width: $flatpickr-day-size * 7 + 2 * $flatpickr-padding-h;
+      }
     }
 
     &-calendar.open {
@@ -38,10 +42,6 @@ $flatpickr-padding-v: $grid-margin-6;
       justify-content: space-between;
       padding: 0 $flatpickr-padding-h + $flatpickr-padding-h;
       position: relative;
-
-      @include tablet {
-        width: $flatpickr-day-size * 7 + 2 * $flatpickr-padding-h;
-      }
     }
 
     &-prev-month,
@@ -120,10 +120,6 @@ $flatpickr-padding-v: $grid-margin-6;
     }
 
     &-innerContainer {
-      @include tablet {
-        width: $flatpickr-day-size * 7 + 2 * $flatpickr-padding-h;
-      }
-
       float: left;
       padding: $flatpickr-padding-v $flatpickr-padding-h;
     }
@@ -196,8 +192,6 @@ $flatpickr-padding-v: $grid-margin-6;
       justify-content: space-evenly;
       padding: 15px;
 
-      width: 100%;
-
       font-size: 22px;
 
       & .numInputWrapper {
@@ -211,9 +205,8 @@ $flatpickr-padding-v: $grid-margin-6;
       & .numInput {
         @extend .input;
 
-        @include mobile-only() {
-          padding: 0 2px !important;
-        }
+        padding: 0 !important;
+        width: 100%;
       }
     }
 
