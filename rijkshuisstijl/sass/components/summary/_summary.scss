@@ -134,7 +134,7 @@
     visibility: visible;
   }
 
-  &__key-value--edit &__value > .toggle {
+  &__key-value--edit &__value > .toggle:not(.button) {
     display: none;
     visibility: hidden;
   }
