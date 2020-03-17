@@ -23,21 +23,22 @@ def get_field_label(obj, field):
     :param field: A string indicating the field to get the label for.
     :return:
     """
+
     # If field is a callable. It's called with obj as parameter and the resulting value is returned.
     if callable(field):
         return field(obj)
 
     try:
         model = get_model(obj)
-        field = str(getattr(field, "name", field))
+        field_name = str(getattr(field, "name", field))
 
         # If column key is "__str__", use model name as label.
-        if field == "__str__":
+        if field_name == "__str__":
             return model.__name__
 
         # If model field can be found, use it's verbose name as label.
         else:
-            model_field = model._meta.get_field(field)
+            model_field = model._meta.get_field(field_name)
 
             if hasattr(model_field, "verbose_name"):
                 return model_field.verbose_name
@@ -51,7 +52,10 @@ def get_field_label(obj, field):
         pass
 
     regex = re.compile("[_-]+")
-    return re.sub(regex, " ", field)
+    try:
+        return re.sub(regex, " ", field)
+    except TypeError:
+        return field
 
 
 @register.filter

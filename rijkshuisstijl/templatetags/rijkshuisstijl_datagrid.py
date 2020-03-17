@@ -298,15 +298,16 @@ def datagrid(context, **kwargs):
         queryset = _get_queryset()
 
         # Get column label.
-        for column in columns:
+        model = _get_model()
 
+        for column in columns:
             # If queryset present, resolve label via model.
-            if queryset and not column.get("label"):
-                column["label"] = get_field_label(queryset, column["key"])
+            if model and not column.get("label"):
+                column["label"] = get_field_label(model, column["key"])
 
             # If queryset not present, fall back to fallback label.
             if not queryset and not column.get("label"):
-                column["label"] = get_field_label(None, column.get("fallback_label"))
+                column["label"] = column.get("fallback_label")
 
         _cache["get_columns"] = columns
         return columns

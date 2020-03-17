@@ -469,6 +469,12 @@ class ListViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertNotContains(response, "last updated")
         self.assertNotContains(response, "last_updated")
 
+    def test_empty(self):
+        Book.objects.all().delete()
+        response = self.client_get()
+        object_list = response.context_data.get("object_list")
+        self.assertEqual(len(object_list), 0)
+
 
 class UpdateViewTestCase(ViewTestCaseMixin, FormTestCaseMixin, TestCase):
     url_name = "update"
