@@ -19,9 +19,9 @@
 
 
             {% if form_id %}
-                {% form_field form field.form_field.name attrs='form:'|add:form_id %}
+                {% form_field form field.form_field.name attrs='form:'|add:form_id help_text_position=help_text_position %}
             {% else %}
-                {% form_field form field.form_field.name %}
+                {% form_field form field.form_field.name help_text_position=help_text_position %}
             {% endif %}
 
 
@@ -29,9 +29,9 @@
 
 
             {% if form_id %}
-                {% form_field form field.form_field.name attrs='form:'|add:form_id %}
+                {% form_field form field.form_field.name attrs='form:'|add:form_id help_text_position=help_text_position %}
             {% else %}
-                {% form_field form field.form_field.name %}
+                {% form_field form field.form_field.name help_text_position=help_text_position %}
             {% endif %}
             <span class="toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">{{ field.value|linebreaksbr }}</span>
 
