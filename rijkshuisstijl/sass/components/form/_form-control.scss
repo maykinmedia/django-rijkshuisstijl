@@ -83,8 +83,8 @@
   }
 
   &__choices {
-    @include responsive(flex-direction, column, row);
     display: flex;
+    flex-direction: column;
 
     @include tablet {
       margin-top: calc((#{$checkbox-size} - #{$typography-line-height-text * 1em}) / 2);

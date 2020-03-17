@@ -121,7 +121,7 @@ def format_value(obj, field, empty_label="-"):
         if val:
             src = static("rijkshuisstijl/lib/boolean/true.png")
 
-        return mark_safe(f'<img class="boolean" alt="{val}" src="{src}">')
+        return mark_safe(f'<span><img class="boolean" alt="{val}" src="{src}"></span>')
 
     # Check for str.
     if isinstance(val, str) or isinstance(val, Promise):
