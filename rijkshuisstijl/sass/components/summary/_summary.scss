@@ -123,6 +123,7 @@
   &__key-value:not(#{&}__key-value--edit) &__value .select,
   &__key-value:not(#{&}__key-value--edit) &__value .textarea,
   &__key-value:not(#{&}__key-value--edit) &__value .help-text,
+  &__key-value:not(#{&}__key-value--edit) &__value .button,
   &__key-value:not(#{&}__key-value--edit) ~ &__key-value--actions {
     display: none;
     visibility: hidden;
