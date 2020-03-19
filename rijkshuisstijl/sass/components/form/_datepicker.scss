@@ -92,6 +92,7 @@ $flatpickr-padding-v: $grid-margin-6;
     }
 
     &-current-month .cur-year {
+      -moz-appearance: textfield;
       width: 4em;
     }
 
