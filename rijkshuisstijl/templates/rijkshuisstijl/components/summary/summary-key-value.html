@@ -53,7 +53,8 @@
 {% if forloop.last %}
     <li class="summary__key-value summary__key-value--full-width summary__key-value--actions">
         <span class="summary__value">
-            {% button class='button--small button--primary' type="submit" label=_('Opslaan') form=form_id %}
+            {% button class='button--small button--secondary' type='reset' label=_('Annuleren') form=form_id toggle_target='#'|add:id|add:' .summary__key-value--edit' toggle_modifier='edit' toggle_link_mode='noprevent' %}
+            {% button class='button--small button--primary' type='submit' label=_('Opslaan') form=form_id %}
         </span>
     </li>
 {% endif %}

@@ -45,8 +45,8 @@ module.exports = {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {loader: 'css-loader', options: {url: false},},
-                    {loader: 'postcss-loader'},
+                    {loader: 'css-loader', options: {url: false, sourceMap: argv.sourcemap},},
+                    {loader: 'postcss-loader', options: {sourceMap: argv.sourcemap}},
                     {loader: 'sass-loader', options: {sassOptions: {comments: false, style: 'compressed'}, sourceMap: argv.sourcemap},},
                 ],
             },
@@ -55,4 +55,4 @@ module.exports = {
 
     // Use --sourcemap to generate sourcemap.
     devtool: argv.sourcemap ? 'sourcemap' : false,
-}
+};
