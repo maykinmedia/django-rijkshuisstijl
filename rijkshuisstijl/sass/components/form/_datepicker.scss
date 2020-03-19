@@ -26,6 +26,10 @@ $flatpickr-padding-v: $grid-margin-6;
 
       @include tablet {
         width: $flatpickr-day-size * 7 + 2 * $flatpickr-padding-h;
+
+        &.noCalendar {
+          width: auto;
+        }
       }
     }
 
@@ -195,6 +199,7 @@ $flatpickr-padding-v: $grid-margin-6;
       font-size: 22px;
 
       & .numInputWrapper {
+        width: 100%;
         margin: 0 10px;
 
         @include mobile-only() {
@@ -204,7 +209,6 @@ $flatpickr-padding-v: $grid-margin-6;
 
       & .numInput {
         @extend .input;
-
         padding: 0 !important;
         width: 100%;
       }
