@@ -6,6 +6,7 @@ from django import template
 from django.db.models import Manager, QuerySet
 from django.templatetags.static import static
 from django.utils import formats
+from django.utils.formats import localize
 from django.utils.functional import Promise
 from django.utils.safestring import mark_safe
 
@@ -149,7 +150,7 @@ def format_value(obj, field, empty_label="-"):
 
     # Check for date(time).
     if type(val) in [datetime.datetime, datetime.date]:
-        return formats.date_format(val)
+        return localize(val)
 
     # Fallback
     return val or empty_label
