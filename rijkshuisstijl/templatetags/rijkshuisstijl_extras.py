@@ -157,6 +157,7 @@ def summary_list(**kwargs):
     config["help_text_position"] = parse_kwarg(
         config, "help_text_position", settings.RH_HELP_TEXT_POSITION
     )
+    config["show_toggle"] = parse_kwarg(config, "show_toggle", False)
     config["config"] = config
     return config
 

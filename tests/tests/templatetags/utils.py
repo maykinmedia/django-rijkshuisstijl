@@ -21,6 +21,11 @@ class InclusionTagWebTest(WebTest):
         self.assertTrue(node)
         return node
 
+    def assertNotSelector(self, selector, config={}, data={}):
+        node = self.select(selector, config, data)
+        self.assertFalse(node)
+        return node
+
     def assertTextContent(self, selector, text, config={}, data={}):
         node = self.select_one(selector, config, data)
         self.assertEqual(str(text).strip(), node.text.strip())

@@ -103,19 +103,18 @@ class KeyValueTableTestCase(InclusionTagWebTest):
 
         form = MyModelForm(instance=self.book)
 
-        html = self.template_render(
-            {
-                "fields": ["title", "available"],
-                "object": self.book,
-                "form": form,
-                "field_toggle_edit": True,
-            }
-        )
-        self.assertIn('class="form"', html)
-        self.assertNotIn(f"{self.group_class}--edit", html)
-        self.assertIn('name="title"', html)
-        self.assertNotIn('name="available"', html)
-        self.assertIn('<span class="toggle"', html)
+        config = {
+            "fields": ["title", "available"],
+            "object": self.book,
+            "form": form,
+            "field_toggle_edit": True,
+        }
+
+        self.assertSelector(".form", config)
+        self.assertNotSelector(f".{self.group_class}--edit", config)
+        self.assertSelector('[name="title"]', config)
+        self.assertNotIn('[name="available"]', config)
+        self.assertSelector(".toggle", config)
 
     def test_full_width(self):
         class MyModelForm(ModelForm):
