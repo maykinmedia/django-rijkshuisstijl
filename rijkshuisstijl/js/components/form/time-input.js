@@ -19,11 +19,11 @@ class TimeInput {
     }
 
     getTimeFormat() {
-        if (this.node.dataset.timeFormat) {
-            return this.node.dataset.timeFormat;
-        }
-
         return this.isTime() ? 'H:i' : '';
+    }
+
+    getPlaceholderFormat() {
+        return this.isTime() ? '00:00' : '';
     }
 
     isTime() {
@@ -32,7 +32,7 @@ class TimeInput {
 
     updatePlaceholder() {
         if (!this.node.placeholder) {
-            const placeholder = this.getTimeFormat();
+            const placeholder = this.getPlaceholderFormat();
             this.node.placeholder = placeholder;
         }
     }
