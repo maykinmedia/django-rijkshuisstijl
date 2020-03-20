@@ -717,10 +717,18 @@ def datagrid(context, **kwargs):
         request = context.get("request")
         form_class = config.get("form_class")
         model = _get_model()
-        queryset = get_filtered_queryset(_get_queryset())
+        object_list = get_object_list()
 
         if not (form_class and model):
             return
+
+        # If our object_list is paginated, we need to convert it back to a queryset with objects only in page.
+        try:  # Not paginated (QuerySet)
+            model = object_list.model
+            queryset = object_list
+        except AttributeError:  # Not QuerySet, might be paginated.
+            pks = [o.pk for o in object_list]
+            queryset = model.objects.filter(pk__in=pks)
 
         ModelFormSet = modelformset_factory(model, form_class)
 
@@ -732,7 +740,6 @@ def datagrid(context, **kwargs):
                 return ModelFormSet(queryset=queryset.all())
             else:
                 return formset
-
         return ModelFormSet(queryset=queryset)
 
     def add_paginator(object_list):
