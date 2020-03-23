@@ -1,5 +1,5 @@
 {% spaceless %}{% load rijkshuisstijl %}
-    {% if form_buttons and form_select %}
+    {% if form_select and form_options %}
         <li class="toolbar__list-item">
             {% form_select config=form_select %}
         </li>
@@ -7,11 +7,10 @@
 
     {% for item in form_buttons %}
         <li class="toolbar__list-item">
-            {% firstof item.class 'button--transparent' as item_class %}
             {% if item.href %}
-                {% button_link class='button--small '|add:item_class config=item %}
+                {% button_link config=item %}
             {% else %}
-                {% button class='button--small '|add:item_class config=item %}
+                {% button config=item %}
             {% endif %}
         </li>
     {% endfor %}

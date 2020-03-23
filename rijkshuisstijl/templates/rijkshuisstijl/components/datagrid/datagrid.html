@@ -74,7 +74,7 @@
                             {% endif %}
 
                             {% if toolbar_position in 'top,both' %}
-                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select hide_list=True only %}
+                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select form_options=form_options hide_list=True only %}
                             {% endif %}
                         </ul>
 
@@ -176,7 +176,7 @@
                             </li>
 
                             {% if toolbar_position in 'bottom,both' %}
-                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select only %}
+                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select form_options=form_options only %}
                             {% endif %}
                         {% endif %}
                     </ul>

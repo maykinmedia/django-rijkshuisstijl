@@ -97,6 +97,12 @@
     border-width: 2px;
   }
 
+  &--small {
+    @include body--small;
+    height: $input-height-small;
+    line-height: $input-height-small;
+  }
+
   &--contrast {
     @include shade(1, background-color, $force: true);
     @include shade(5, color);

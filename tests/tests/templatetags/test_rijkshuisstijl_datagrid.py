@@ -604,3 +604,27 @@ class DatagridTestCase(InclusionTagWebTest):
 
         self.assertEqual(len(group_2_cells), 1)
         self.assertEqual(group_2_cells[0].text.strip(), "Ipsum")
+
+    def test_select(self):
+        config = {
+            "columns": ["title"],
+            "queryset": Book.objects.all(),
+            "form": True,
+            "form_select": {"name": "My First Select"},
+            "form_options": [
+                {"label": "Foo", "value": "Bar",},
+                {"label": "Lorem", "value": "Ipsum",},
+            ],
+        }
+
+        select = self.select_one(".select", config)
+        self.assertTrue(select)
+
+        options = select.select(".select__option")
+        self.assertEqual(len(options), 2)
+
+        self.assertEqual(options[0].text, "Foo")
+        self.assertEqual(options[0].get("value"), "Bar")
+
+        self.assertEqual(options[1].text, "Lorem")
+        self.assertEqual(options[1].get("value"), "Ipsum")

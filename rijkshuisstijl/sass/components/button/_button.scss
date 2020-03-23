@@ -14,7 +14,6 @@
   @include ellipsis;
   appearance: none;
   background-color: transparent;
-  border: none;
   box-sizing: border-box;
   cursor: pointer;
   display: inline-flex;
@@ -31,6 +30,7 @@
 
   &:before,
   &:after {
+    @include border(all, transparent);
     @include overlay;
     content: '';
   }
@@ -116,6 +116,7 @@
     @include color-background(color);
 
     &:before {
+      @include color-primary(border-color);
       @include color-primary(background-color);
     }
   }
@@ -124,6 +125,7 @@
     @include color-primary(color);
 
     &:before {
+      @include color-secondary(border-color);
       @include color-secondary(background-color);
     }
   }
@@ -147,6 +149,7 @@
 
     &:before {
       background-color: $button-color-success;
+      border-color: $button-color-success;
     }
   }
 
@@ -155,6 +158,7 @@
 
     &:before {
       background-color: $button-color-info;
+      border-color: $button-color-info;
     }
   }
 
@@ -163,6 +167,7 @@
 
     &:before {
       background-color: $button-color-warning;
+      border-color: $button-color-warning;
     }
   }
 
@@ -171,6 +176,7 @@
 
     &:before {
       background-color: $button-color-danger;
+      border-color: $button-color-danger;
     }
   }
 
@@ -179,7 +185,8 @@
       @include color-background(color);
 
       &:before {
-        background-color: $color
+        background-color: $color;
+        border-color: $color;
       }
     }
   }

@@ -705,10 +705,21 @@ def datagrid(context, **kwargs):
         form_select = parse_kwarg(kwargs, "form_select", None)
         if form_select:
             form_options = parse_kwarg(kwargs, "form_options", [])
-            form_select["choices"] = [tuple(d.values()) for d in form_options]
+            form_select["class"] = form_select.get("class", "") + " select--big"
+            form_select["choices"] = [get_option(o) for o in form_options]
             return form_select
 
         return None
+
+    def get_option(option):
+        """
+        Converts an option dict ("label", "value") to choice tuple.
+        :param option: dicts
+        :return: tuple
+        """
+        label = option.get("label")
+        value = option.get("value")
+        return value, label
 
     def get_formset():
         """

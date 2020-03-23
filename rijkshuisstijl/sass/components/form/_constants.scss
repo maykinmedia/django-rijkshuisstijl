@@ -28,6 +28,7 @@ $input-background-search: url('../components/form/search.svg') no-repeat center 
 $input-background-search-gray: url('../components/form/search-gray.svg') no-repeat center right #{($grid-row-height - $input-size-icon) / 2} / $input-size-icon;
 $input-background-input: linear-gradient(transparent);
 $input-color-placeholder: shade('4');
+$input-height-small: $grid-margin-4;
 $input-padding-h: 12px;
 
 $select-size-icon: 10px;
