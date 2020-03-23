@@ -1,6 +1,8 @@
+from django.utils.translation import gettext as _
 from django.views.generic import (
     CreateView as DjCreateView,
     DetailView as DjDetailView,
+    FormView as DjFormView,
     ListView as DjListView,
     TemplateView as DjTemplateView,
     UpdateView as DjUpdateView,
@@ -42,9 +44,13 @@ class FormMixin:
             "subtitle": self.subtitle,
             "text": self.text,
             "wysiwyg": self.wysiwyg,
+            "actions": self.get_actions(),
             "actions_position": self.actions_position,
             "help_text_position": self.help_text_position,
         }
+
+    def get_actions(self):
+        return [{"class": "button--primary", "label": _("Verzenden"), "type": "submit",}]
 
 
 class CreateView(FormMixin, DjCreateView):
@@ -195,6 +201,16 @@ class UpdateView(FormMixin, DjUpdateView):
     """
 
     template_name = "rijkshuisstijl/views/generic/update.html"
+
+
+class FormView(FormMixin, DjFormView):
+    """
+    Form view.
+    Shows a form.
+    Requires additional "title" property to be set to a form title.
+    """
+
+    pass
 
 
 class TemplateView(DjTemplateView):
