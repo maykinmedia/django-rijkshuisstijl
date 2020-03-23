@@ -30,6 +30,12 @@ export const INPUT_FILEPICKERS = BEM.getBEMNodes(BLOCK_INPUT, ELEMENT_FILEPICKER
 /** {string} Select block name. */
 export const BLOCK_SELECT = 'select';
 
+/** {string} Select block name. */
+export const SELECTS = BEM.getBEMNodes(BLOCK_SELECT);
+
+/** {string} Modifier indicating that a select has a value set. */
+export const MODIFIER_HAS_VALUE = 'has-value';
+
 /** {string} Modifier indicating a select should trigger a navigation. */
 export const MODIFIER_LINK = 'link';
 

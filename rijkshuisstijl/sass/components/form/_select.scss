@@ -28,16 +28,55 @@
   }
 
   &--big {
-    @include rows(1, line-height);
+    line-height: $grid-row-height - 2 * $typography-size-border;
   }
 
   &--big-responsive {
     @include laptop {
-      @include rows(1, line-height);
+      line-height: $grid-row-height - 2 * $typography-size-border;
     }
   }
 
   &__option {
     padding: 0 $input-padding-h;
+  }
+
+  //
+  // Add support for data-placeholder.
+  //
+
+  &-wrapper {
+    position: relative;
+  }
+
+  &-wrapper & {
+  }
+
+  &-wrapper &:not(#{&}--has-value) {
+    color: transparent;
+    background-color: transparent;
+  }
+
+  &__placeholder {
+    @extend .input::placeholder;
+    @include body;
+    @include color-background;
+    @include ellipsis;
+    @include overlay;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 0 $input-padding-h;
+    z-index: -1;
+  }
+
+  &--contrast &__placeholder {
+    @include shade(1, background-color, $force: true);
+    @include shade(5, color);
+  }
+
+  &--small &__placeholder {
+    @include body--small;
   }
 }
