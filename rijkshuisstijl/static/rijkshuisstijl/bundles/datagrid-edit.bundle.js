@@ -1,2 +1,27 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[1],{312:function(n,e,t){"use strict";t.r(e);var r=t(1),o=t.n(r),i=t(88);function a(n,e){for(var t=0;t<e.length;t++){var r=e[t];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(n,r.key,r)}}var u,c=function(){function n(e){!function(n,e){if(!(n instanceof e))throw new TypeError("Cannot call a class as a function")}(this,n),this.node=e,this.bindEvents()}var e,t,r;return e=n,(t=[{key:"bindEvents",value:function(){this.node.addEventListener("rh-toggle",this.update.bind(this))}},{key:"update",value:function(){var n=o.a.getChildBEMNodes(this.node,i.a,i.d,i.e),e=Boolean(n.length);o.a.toggleModifier(this.node,i.e,e)}}])&&a(e.prototype,t),r&&a(e,r),n}();(u=i.b,function(n){if(Array.isArray(n)){for(var e=0,t=new Array(n.length);e<n.length;e++)t[e]=n[e];return t}}(u)||function(n){if(Symbol.iterator in Object(n)||"[object Arguments]"===Object.prototype.toString.call(n))return Array.from(n)}(u)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance")}()).forEach((function(n){return new c(n)}))}}]);
-//# sourceMappingURL=datagrid-edit.bundle.js.map
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["datagrid-edit"],{
+
+/***/ "./rijkshuisstijl/js/components/datagrid/datagrid-edit.js":
+/*!****************************************************************!*\
+  !*** ./rijkshuisstijl/js/components/datagrid/datagrid-edit.js ***!
+  \****************************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/datagrid/constants.js");
+function _toConsumableArray(arr){return _arrayWithoutHoles(arr)||_iterableToArray(arr)||_nonIterableSpread();}function _nonIterableSpread(){throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter){if(Symbol.iterator in Object(iter)||Object.prototype.toString.call(iter)==="[object Arguments]")return Array.from(iter);}function _arrayWithoutHoles(arr){if(Array.isArray(arr)){for(var i=0,arr2=new Array(arr.length);i<arr.length;i++){arr2[i]=arr[i];}return arr2;}}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}function _createClass(Constructor,protoProps,staticProps){if(protoProps)_defineProperties(Constructor.prototype,protoProps);if(staticProps)_defineProperties(Constructor,staticProps);return Constructor;}var DataGridEdit=/*#__PURE__*/function(){/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */function DataGridEdit(node){_classCallCheck(this,DataGridEdit);/** @type {HTMLElement} */this.node=node;this.bindEvents();}/**
+     * Binds events to callbacks.
+     */_createClass(DataGridEdit,[{key:"bindEvents",value:function bindEvents(){this.node.addEventListener('rh-toggle',this.update.bind(this));}/**
+     * Toggle MODIFIER_EDIT on this.node based on presense of datagrid__row--edit matches.
+     */},{key:"update",value:function update(){var editable_row=bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getChildBEMNodes(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__["BLOCK_DATAGRID"],_constants__WEBPACK_IMPORTED_MODULE_1__["ELEMENT_ROW"],_constants__WEBPACK_IMPORTED_MODULE_1__["MODIFIER_EDIT"]);var exp=Boolean(editable_row.length);bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.toggleModifier(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__["MODIFIER_EDIT"],exp);}}]);return DataGridEdit;}();// Start!
+_toConsumableArray(_constants__WEBPACK_IMPORTED_MODULE_1__["DATAGRIDS"]).forEach(function(node){return new DataGridEdit(node);});
+
+/***/ })
+
+}]);

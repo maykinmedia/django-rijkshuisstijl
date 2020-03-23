@@ -68,6 +68,13 @@ class DateInput {
         }
     }
 
+  updateClassName() {
+    const parent = this.node.parentElement;
+    const datepicker = parent.querySelector(".input.form-control");
+
+    datepicker.className = "input active";
+  }
+
     /**
      * Adds the datepicker.
      */
@@ -83,6 +90,8 @@ class DateInput {
             mode: this.getMode(),
         });
         flatPicker.l10n.rangeSeparator = '/';
+
+      this.updateClassName();
     }
 }
 
