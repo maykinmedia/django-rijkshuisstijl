@@ -45,27 +45,27 @@ def button_link(**kwargs):
 
 @register.inclusion_tag("rijkshuisstijl/components/form/form.html", takes_context=True)
 def form(context, form=None, label="", **kwargs):
-    kwargs = merge_config(kwargs)
+    config = merge_config(kwargs)
 
-    kwargs["form"] = form or parse_kwarg(kwargs, "form", context.get("form"))
-    kwargs["action"] = kwargs.get("action")
-    kwargs["compact"] = kwargs.get("compact")
-    kwargs["label"] = kwargs.get("label", label)
-    kwargs["title"] = kwargs.get("title")
-    kwargs["subtitle"] = kwargs.get("subtitle")
-    kwargs["text"] = kwargs.get("text")
-    kwargs["urlize"] = kwargs.get("urlize")
-    kwargs["wysiwyg"] = kwargs.get("wysiwyg")
-    kwargs["status"] = kwargs.get("status")
-    kwargs["intro_status"] = kwargs.get("intro_status")
-    kwargs["tag"] = kwargs.get("tag", "form")
-    kwargs["actions_align"] = kwargs.get("actions_align", "left")
-    kwargs["actions_position"] = kwargs.get("actions_position", "auto")
-    kwargs["help_text_position"] = kwargs.get("help_text_position", "bottom")
+    config["form"] = form or parse_kwarg(config, "form", context.get("form"))
+    config["action"] = config.get("action")
+    config["compact"] = config.get("compact")
+    config["label"] = config.get("label", label)
+    config["title"] = config.get("title")
+    config["subtitle"] = config.get("subtitle")
+    config["text"] = config.get("text")
+    config["urlize"] = config.get("urlize")
+    config["wysiwyg"] = config.get("wysiwyg")
+    config["status"] = config.get("status")
+    config["intro_status"] = config.get("intro_status")
+    config["tag"] = config.get("tag", "form")
+    config["actions_align"] = config.get("actions_align", "left")
+    config["actions_position"] = config.get("actions_position", "auto")
+    config["help_text_position"] = config.get("help_text_position", "bottom")
 
-    kwargs["request"] = context["request"]
-    kwargs["config"] = kwargs
-    return kwargs
+    config["request"] = context["request"]
+    config["config"] = config
+    return config
 
 
 @register.inclusion_tag(
