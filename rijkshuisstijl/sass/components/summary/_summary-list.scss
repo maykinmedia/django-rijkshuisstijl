@@ -1,3 +1,5 @@
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
 @import '~microscope-sass/lib/animation';
 @import '~microscope-sass/lib/grid';
 @import '~microscope-sass/lib/transform';
@@ -23,11 +25,18 @@ $summary-list-spacing: $grid-margin-1;
   &__header .toggle {
     @include anchor(true);
     @include body;
+    @include body--small;
     @include shade(4, color);
   }
 
   &__toggle-label {
     margin-right: $summary-list-spacing;
+  }
+
+  &__header &__arrow,
+  .summary .summary__arrow  {
+    @extend .fas;
+    @extend .fa-chevron-down;
   }
 
   &--open &__header &__arrow,

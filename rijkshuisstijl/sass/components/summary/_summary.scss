@@ -24,7 +24,11 @@
   }
 
   &__summary > .toggle {
+    @include anchor(true);
+    @include body;
+    @include body--small;
     @include gutter(top);
+    @include shade(4, color);
     position: absolute;
     right: 0;
   }
