@@ -3,7 +3,11 @@
         <span class="button__label">{{ label }}</span>
     {% endif %}
 
-    {% if icon_src %}
+    {% if far_icon %}
+        <span class="far fa-{{ far_icon }}"></span>
+    {% elif fas_icon %}
+        <span class="fas fa-{{ fas_icon }}"></span>
+    {% elif icon_src %}
         <span class="button__icon">{% icon src=icon_src label=label %}</span>
     {% elif icon %}
         <span class="button__icon">{% icon icon label=label %}</span>

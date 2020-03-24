@@ -19,7 +19,7 @@
 
     {% endcomment %}
 
-    <button class="button{% if icon or icon_src %} button--icon{% endif %}{% if not label %} button--no-text{% endif %}{% if class %} {{ class }}{% endif %}{% if toggle_target %} toggle{% endif %}"
+    <button class="button{% if far_icon or fas_icon or icon or icon_src %} button--icon{% endif %}{% if not label %} button--no-text{% endif %}{% if class %} {{ class }}{% endif %}{% if toggle_target %} toggle{% endif %}"
             {% if id %} id="{{ id }}"{% endif %}
             {% if name %} name="{{ name }}"{% endif %}
             {% if value %} value="{{ value }}"{% endif %}
@@ -33,6 +33,6 @@
             {% if toggle_operation %}data-toggle-operation="{{ toggle_operation }}"{% endif %}
             {% if form %}form="{{ form }}"{% endif %}>
 
-        {% include 'rijkshuisstijl/components/button/label.html' with class=class label=label icon=icon icon_src=icon_src only %}
+        {% include 'rijkshuisstijl/components/button/label.html' with class=class label=label far_icon=far_icon icon=icon icon_src=icon_src only %}
     </button>
 {% endsingleline %}

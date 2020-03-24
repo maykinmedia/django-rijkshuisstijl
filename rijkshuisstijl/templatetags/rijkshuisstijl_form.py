@@ -9,38 +9,42 @@ from .rijkshuisstijl_helpers import get_id, merge_config, parse_kwarg
 
 @register.inclusion_tag("rijkshuisstijl/components/button/button.html")
 def button(**kwargs):
-    kwargs = merge_config(kwargs)
+    config = merge_config(kwargs)
 
     # kwargs
-    kwargs["class"] = kwargs.get("class", None)
-    kwargs["icon"] = kwargs.get("icon", None)
-    kwargs["icon_src"] = kwargs.get("icon_src", None)
-    kwargs["id"] = kwargs.get("id", None)
-    kwargs["label"] = kwargs.get("label", None)
-    kwargs["title"] = kwargs.get("title", kwargs.get("label"))
-    kwargs["toggle_target"] = kwargs.get("toggle_target", None)
-    kwargs["toggle_modifier"] = kwargs.get("toggle_modifier", None)
-    kwargs["type"] = kwargs.get("type", None)
-    kwargs["name"] = kwargs.get("name", None)
-    kwargs["value"] = kwargs.get("value", None)
+    config["class"] = config.get("class", None)
+    config["far_icon"] = config.get("far_icon", None)
+    config["fas_icon"] = config.get("fas_icon", None)
+    config["icon"] = config.get("icon", None)
+    config["icon_src"] = config.get("icon_src", None)
+    config["id"] = config.get("id", None)
+    config["label"] = config.get("label", None)
+    config["title"] = config.get("title", config.get("label"))
+    config["toggle_target"] = config.get("toggle_target", None)
+    config["toggle_modifier"] = config.get("toggle_modifier", None)
+    config["type"] = config.get("type", None)
+    config["name"] = config.get("name", None)
+    config["value"] = config.get("value", None)
 
-    kwargs["config"] = kwargs
-    return kwargs
+    config["config"] = config
+    return config
 
 
 @register.inclusion_tag("rijkshuisstijl/components/button/link.html")
-def button_link(**kwargs):
-    kwargs = merge_config(kwargs)
+def button_link(**config):
+    config = merge_config(config)
 
-    kwargs["class"] = kwargs.get("class", None)
-    kwargs["icon"] = kwargs.get("icon", None)
-    kwargs["icon_src"] = kwargs.get("icon_src", None)
-    kwargs["href"] = kwargs.get("href", "")
-    kwargs["target"] = kwargs.get("target", None)
-    kwargs["label"] = kwargs.get("label", None)
-    kwargs["title"] = kwargs.get("title", kwargs.get("label"))
-    kwargs["config"] = kwargs
-    return kwargs
+    config["class"] = config.get("class", None)
+    config["far_icon"] = config.get("far_icon", None)
+    config["fas_icon"] = config.get("fas_icon", None)
+    config["icon"] = config.get("icon", None)
+    config["icon_src"] = config.get("icon_src", None)
+    config["href"] = config.get("href", "")
+    config["target"] = config.get("target", None)
+    config["label"] = config.get("label", None)
+    config["title"] = config.get("title", config.get("label"))
+    config["config"] = config
+    return config
 
 
 @register.inclusion_tag("rijkshuisstijl/components/form/form.html", takes_context=True)

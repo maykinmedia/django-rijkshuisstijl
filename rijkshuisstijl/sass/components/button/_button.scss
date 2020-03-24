@@ -99,11 +99,18 @@
 
 
   &__label,
+  .far,
+  .fas,
   &__icon {
     position: relative;
     z-index: 20;
   }
 
+  .far,
+  .fas {}
+
+  .far,
+  .fas,
   &__icon {
     @include rows(1, min-width);
     display: flex;
