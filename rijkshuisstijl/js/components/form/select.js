@@ -29,7 +29,7 @@ export class Select {
      * Toggles MODIFIER_HAS_VALUE based on this.node.value.
      */
     update() {
-        const exp = Boolean("" + this.node.value);
+        const exp = Boolean('' + this.node.value);
         BEM.toggleModifier(this.node, MODIFIER_HAS_VALUE, exp);
     }
 }

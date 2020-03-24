@@ -11,12 +11,14 @@
     line-height: 1.5 !important;
   }
 
+  &--date,
   &[type*=date] {
     @include rows(1, padding-right);
     background: $input-background-date, $input-background-button;
     @include color-background;
   }
 
+  &--light#{&}--date,
   &--light#{&}[type*=date] {
     background: $input-background-date-gray;
     @include color-background;

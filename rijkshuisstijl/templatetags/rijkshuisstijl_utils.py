@@ -34,8 +34,8 @@ def get_field_label(obj, field):
         field_name = str(getattr(field, "name", field))
 
         # If column key is "__str__", use model name as label.
-        if field_name == "__str__":
-            return model.__name__
+        if field_name == "__str__" and model:
+            return model._meta.verbose_name
 
         # If model field can be found, use it's verbose name as label.
         else:

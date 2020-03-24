@@ -10,6 +10,9 @@ export const FORM_CONTROLS = BEM.getBEMNodes(BLOCK_FORM_CONTROL);
 export const BLOCK_INPUT = 'input';
 
 /** @const {string} Date range modifier name. */
+export const MODIFIER_DATE = 'date';
+
+/** @const {string} Date range modifier name. */
 export const MODIFIER_DATE_RANGE = 'daterange';
 
 /** @const {string} Date inputs. */

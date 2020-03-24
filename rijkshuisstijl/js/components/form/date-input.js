@@ -1,7 +1,7 @@
 import BEM from 'bem.js';
 import flatpickr from 'flatpickr';
 import {Dutch} from 'flatpickr/dist/l10n/nl';
-import {MODIFIER_DATE_RANGE, DATE_INPUTS, DATE_RANGE_INPUTS} from './constants';
+import {MODIFIER_DATE_RANGE, DATE_INPUTS, DATE_RANGE_INPUTS, MODIFIER_DATE} from './constants';
 
 
 /**
@@ -58,6 +58,16 @@ class DateInput {
         return this.node.type === 'datetime';
     }
 
+    /**
+     * Adds MODIFIER_DATE to this.node.
+     */
+    updateClassName() {
+        BEM.addModifier(this.node, MODIFIER_DATE);
+    }
+
+    /**
+     * Adds placeholder to this.node.
+     */
     updatePlaceholder() {
         if (!this.node.placeholder) {
             const placeholder = this.getDateFormat()
@@ -72,10 +82,11 @@ class DateInput {
      * Adds the datepicker.
      */
     update() {
+        this.updateClassName();
         this.updatePlaceholder();
-
         const flatPicker = flatpickr(this.node, {
             altInput: true,
+            altInputClass: this.node.className,
             altFormat: this.getDateFormat(),
             dateFormat: 'Y-m-d',
             defaultDate: this.node.value.split('/'),
