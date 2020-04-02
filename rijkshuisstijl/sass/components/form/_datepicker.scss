@@ -36,7 +36,7 @@ $flatpickr-padding-v: $grid-margin-6;
     &-calendar.open {
       display: block;
       visibility: visible;
-      z-index: 9999;
+      z-index: 10000;
     }
 
     &-months {
