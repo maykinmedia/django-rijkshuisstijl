@@ -56,26 +56,38 @@ def datagrid(context, **kwargs):
 
     - queryset: Optional, A queryset containing the objects to show.
 
-    - columns: Required, a dict or a list defining which columns/values to show for each object in object_list or
-      queryset.
+    - columns: Required, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "width") or a list
+      defining which columns/values to show for each object in object_list or queryset.
 
       - If a dict is passed, each key will represent a field in an object to obtain the data from and each value
         will represent the label to use for the column heading.
         Example: {'author': 'Written by', 'title': 'Title'}
 
+      - If a list_of_dict is passed:
+          - "key" will represent a field in an object to obtain the data from.
+          - "lookup" key can be passed to point to a different field/method providing a value. In this case "key" will
+             still be used when a (Model) field is referenced (if QuerySet is passed or obtained from context).
+          - "label" key can be supplied to set the column heading. if not set and a QuerySet is passed, an attempt will
+             be made to resolve the verbose_name from the model as column heading.
+          - "width" can be set to a CSS value valid for width.
+        Example: [{"key": "author", "lookup": "author__first_name", "label": "Written by", "width: "10%"}]
+
       - If a list is passed, each item will represent a field in an object to obtain the data from and will also
-        represent the label to use for the column heading.
+        represent the label to use for the column heading or, if a QuerySet is passed or obtained from the context, an
+        attempt will be made to resolve the verbose_name from the model as column heading.
         Example: ['author', 'title']
 
 
     Filtering
     ---------
 
-    If an (unpaginated) queryset is passed or obtained from the context, it can be filtered using controls.
+    If an (unpaginated) QuerySet is passed or obtained from the context, it can be filtered using controls.
     Pagination provided by the datagrid itself can be used in combination with filtering. The queryset's model is
     inspected to determine the type of the filters and optionally the choices.
 
-    - filterable_columns: Optional, a list defining which columns should be filterable.
+    - filterable_columns: Optional, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "width") or a
+      list defining which columns should be filterable. This may be configured equally to "columns".
+
 
     DOM filter
     ----------
@@ -371,7 +383,7 @@ def datagrid(context, **kwargs):
 
             # Filter one filter at a time.
             for active_filter in active_filters:
-                filter_key = active_filter.get("filter_key")
+                lookup = active_filter.get("lookup")
                 filter_value = active_filter.get("value")
                 filter_type = active_filter.get("type")
 
@@ -389,15 +401,15 @@ def datagrid(context, **kwargs):
                     except AttributeError:
                         dates = [make_aware(parse_datetime(d + " 00:00:00")) for d in dates]
 
-                    filter_kwargs = {f"{filter_key}__range": dates}
+                    filter_kwargs = {f"{lookup}__range": dates}
 
                 # Related field.
                 elif active_filter.get("is_relation"):
-                    filter_kwargs = {filter_key: filter_value}
+                    filter_kwargs = {lookup: filter_value}
 
                 # Anything else.
                 else:
-                    filter_kwargs = {filter_key + "__icontains": filter_value}
+                    filter_kwargs = {lookup + "__icontains": filter_value}
 
                 # Run filter using ORM.
                 try:
@@ -408,7 +420,7 @@ def datagrid(context, **kwargs):
                     # Build a list of primary keys of objects matching our filter.
                     pks = []
                     for obj in object_list:
-                        obj_value = get_recursed_field_value(obj, filter_key)
+                        obj_value = get_recursed_field_value(obj, lookup)
 
                         # If we have a function, call it, use it's return value in comparison.
                         if callable(obj_value):
@@ -435,7 +447,7 @@ def datagrid(context, **kwargs):
         """
         Returns a list_of_dict for filter configuration, each dict (if present) contains:
 
-        - filter_key: matching a column.
+        - lookup: matching a column.
         - type: matching the field class name.
         - choices: a tuple containing choice tuples. Used to provide options/suggestions for filter.
         - value: The value of the filter.
@@ -449,16 +461,17 @@ def datagrid(context, **kwargs):
         filterable_columns = create_list_of_dict(filterable_columns)
         model = _get_model()
 
-        # Filtering is only supported on querysets.
+        # Filtering is only supported on QuerySets.
         if not model:
             _cache["get_filters"] = {}
             return {}
 
         for filterable_column in filterable_columns:
-            if not "filter_key" in filterable_column:
-                filterable_column["filter_key"] = filterable_column.get("key")
-
             field_key = filterable_column.get("key", "")
+
+            if not "lookup" in filterable_column:
+                filterable_column["lookup"] = field_key
+
             field_name = field_key.split("__")[0]
 
             try:
@@ -496,8 +509,7 @@ def datagrid(context, **kwargs):
                     filterable_column["choices"] = [("", "---------")] + list(choices)
 
             request = context.get("request")
-            filter_key = filterable_column["filter_key"]
-            filterable_column["value"] = request.GET.get(filter_key)
+            filterable_column["value"] = request.GET.get(field_key)
 
         _cache["get_filters"] = filterable_columns
         return filterable_columns

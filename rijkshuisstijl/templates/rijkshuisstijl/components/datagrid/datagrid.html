@@ -131,8 +131,7 @@
                 {% if filters %}
                     <tr class="datagrid__row datagrid__row--filters">
                         {% for column in columns %}
-                            <th class="datagrid__filter datagrid__filter--{{ column.key }}"
-                                    {% if form and forloop.counter is 1 %} colspan="2"{% endif %}>
+                            <th class="datagrid__filter datagrid__filter--{{ column.key }}"{% if form and forloop.counter is 1 %} colspan="2"{% endif %}>
                                 {% for filter in filters %}
                                     {% if filter.key == column.key %}
                                         {% if filter.type == 'DateField' or filter.type == 'DateTimeField' %}
