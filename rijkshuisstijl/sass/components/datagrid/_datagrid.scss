@@ -29,6 +29,21 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
   display: flex;
   flex-direction: column;
 
+  @media print {
+    &__row--filters {
+      display: none;
+    }
+
+    &__cell--checkbox {
+      width: 0!important;
+      padding: 0!important;
+
+      * {
+        display: none;
+      }
+    }
+  }
+
   &--fit {
     width: 100%;
   }

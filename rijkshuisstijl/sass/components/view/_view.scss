@@ -86,8 +86,9 @@
   }
 
   .header {
-    @include responsive(position, sticky, static);
-    top: 0;
+    @media screen {
+      @include responsive(position, sticky, static);
+    }
   }
 
   .login-bar {
