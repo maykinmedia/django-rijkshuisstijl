@@ -10,6 +10,7 @@ from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
+from rijkshuisstijl.templatetags.rijkshuisstijl_filters import getattr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_utils import (
     get_field_label,
     get_recursed_field_value,
@@ -191,6 +192,9 @@ def datagrid(context, **kwargs):
       which buttons to create (see rijkshuisstijl_form.button). The name attribute of the buttons should be used to
       specify the performed action.
       example: [{'name': 'delete', 'label': 'delete' 'class': 'button--danger'}]
+
+      export_buttons: Optional, similar to "form_buttons" except rendered differntly, these buttons indicate possible
+      export formats.
 
     - form_method: Optional, method to use for the form, defaults to "POST".
 
@@ -457,8 +461,11 @@ def datagrid(context, **kwargs):
         if _cache.get("get_filters"):
             return _cache.get("get_filters")
 
+        # Get the columns configured to be filterable.
         filterable_columns = parse_kwarg(kwargs, "filterable_columns", [])
         filterable_columns = create_list_of_dict(filterable_columns)
+
+        # Get the model.
         model = _get_model()
 
         # Filtering is only supported on QuerySets.
@@ -466,50 +473,97 @@ def datagrid(context, **kwargs):
             _cache["get_filters"] = {}
             return {}
 
+        # Create configuration dict for each filterable_column.
         for filterable_column in filterable_columns:
-            field_key = filterable_column.get("key", "")
 
+            #
+            # Set the column key and the "lookup", this detirmines the actual value to filter against.
+            # This QuerySet is filtered in get_filtered_queryset()
+            #
+
+            # Use either the "key" as filter field, of optionally, the "lookup".
+            filter_field_key = filterable_column.get("key", "")
+            filter_field_lookup = filterable_column.get("lookup", "")
+
+            # Default the lookup to filter_field_key.
+            # This is used in get_filtered_queryset().
             if not "lookup" in filterable_column:
-                filterable_column["lookup"] = field_key
+                filterable_column["lookup"] = filter_field_key
 
-            field_name = field_key.split("__")[0]
+            #
+            # Find out what model and field the filter should work with.
+            # This can be the model of the QuerySet or a related model.
+            #
 
-            try:
-                field = model._meta.get_field(field_name)
-            except FieldDoesNotExist:
-                continue
+            # Create a split for lookup, start with the first item as filter_field_name.
+            fields_split = filter_field_key.split("__")
+            filter_field_name = fields_split[0]
 
+            # The default filter_model and filter_field.
+            filter_model = model
+            filter_field = filter_model._meta.get_field(filter_field_name)
+
+            # If we're dealing with related items, search for the related filter_model and filter_field in fields_split.
+            while fields_split:
+                field = fields_split.pop(0)
+
+                try:
+                    remote_field = filter_model._meta.get_field(field).remote_field
+
+                    # Not a remote field, break.
+                    if remote_field is None:
+                        break
+
+                    filter_field = remote_field
+                    filter_model = filter_field.model
+
+                except (AttributeError, FieldDoesNotExist):
+                    break
+
+            #
+            # We now know the (related) model and field for the filter.
+            # Set the type and choices based on this.
+            #
+
+            # If no type has been set, find it based on the field.
             if not "type" in filterable_column:
-                filterable_column["type"] = type(field).__name__
+                filterable_column["type"] = type(filter_field).__name__
 
+            # If not choices have been set, find them based on the field.
             if not "choices" in filterable_column:
-                choices = getattr(field, "choices", [])
+                # Default choices.
+                choices = getattr(filter_field, "choices", [])
 
+                # A boolean field gets choices for the boolean values.
                 if filterable_column.get("type") == "BooleanField":
                     choices = ((True, _("waar")), (False, _("onwaar")))
 
-                if field.is_relation:
-                    filterable_column["is_relation"] = field.is_relation
+                # A related field gets choices for all related objects. This can be slow if a lot of objects are found.
+                # To avoid this, set "choices" in dict in filterable_columns with a custom QuerySet.
+                if filter_field.is_relation:
+                    filterable_column["is_relation"] = filter_field.is_relation
 
-                    if "__" in field_key:
-                        remote_field_name = field_key.split("__")[-1]
-                        try:
-                            choices = [
-                                (value, value)
-                                for value in field.remote_field.model.objects.values_list(
-                                    remote_field_name, flat=True
-                                )
-                            ]
-                        except FieldError:
-                            choices = []
+                    # Use the last field from the "lookup" to specify the value for the choice.
+                    if filter_field_lookup:
+                        lookup = filter_field_lookup.split("__")[-1]
+                        choices = [
+                            (getattr_or_get(c, lookup), c) for c in filter_model.objects.all()
+                        ]
+
+                    # If no "lookup" is used, simply use the QuerySet.all() as choices.
                     else:
-                        choices = field.remote_field.model.objects.all()
+                        choices = filter_model.objects.all()
 
+                # Add an empty label to the choices to allow clearing the filter.
                 if choices:
                     filterable_column["choices"] = [("", "---------")] + list(choices)
 
+            #
+            # We now know the filter type and choices. Use the request to find the initial value (if set).
+            #
+
             request = context.get("request")
-            filterable_column["value"] = request.GET.get(field_key)
+            filterable_column["value"] = request.GET.get(filter_field_key)
 
         _cache["get_filters"] = filterable_columns
         return filterable_columns
@@ -815,7 +869,6 @@ def datagrid(context, **kwargs):
         object_list = get_object_list()
 
         for obj in object_list:
-
             add_display(obj)
             add_modifier_class(obj)
         return datagrid_context
@@ -853,6 +906,25 @@ def datagrid(context, **kwargs):
                     obj.datagrid_modifier_class = item_value
         except KeyError:
             pass
+
+    def get_export_buttons():
+        """
+        Returns a list of dict with button configurations for each button in export_buttons.
+        """
+        export_buttons = parse_kwarg(kwargs, "export_buttons")
+        export_buttons = create_list_of_dict(export_buttons, "name", "value")
+
+        for export_button in export_buttons:
+            class_name = export_button.get("class")
+            value = export_button.get("value")
+
+            export_button[
+                "class"
+            ] = f"button--icon-right button--light button--small datagrid__export datagrid__export--{value} {class_name}".strip()
+            export_button["far_icon"] = export_button.get("far-icon", f"file-{value}")
+            export_button["label"] = export_button.get("label", _("Exporteer"))
+
+        return export_buttons
 
     def _get_object_list():
         """
@@ -950,6 +1022,9 @@ def datagrid(context, **kwargs):
     # Custom presentation (get_<field>_display)/Color coded rows
     config = add_object_attributes(config)
     config["modifier_column"] = get_modifier_column()
+
+    # Export
+    config["export_buttons"] = get_export_buttons()
 
     # Additional options
     config["class"] = kwargs.get("class", None)

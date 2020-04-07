@@ -126,6 +126,19 @@ class DatagridTestCase(InclusionTagWebTest):
             ".datagrid__cell:nth-child(2)", self.publisher_2.get_absolute_url(), config, data
         )
 
+    def test_filter_related(self):
+        config = {
+            "columns": ("title", {"key": "publisher"}),
+            "queryset": Book.objects.all(),
+            "filterable_columns": ["publisher"],
+        }
+        data = {"publisher": self.publisher_2.pk}
+        rows = self.select(".datagrid__table-body .datagrid__row", config, data)
+        self.assertEqual(len(rows), 1)
+        self.assertTextContent(
+            ".datagrid__table-body .datagrid__cell:first-child", self.book_2.title, config, data
+        )
+
     def test_orderable_columns_list(self):
         """
         Configure the table headers for ordering using a list.
@@ -628,3 +641,12 @@ class DatagridTestCase(InclusionTagWebTest):
 
         self.assertEqual(options[1].text, "Lorem")
         self.assertEqual(options[1].get("value"), "Ipsum")
+
+    def export_pdf_visible(self):
+        config = {
+            "columns": ["title"],
+            "queryset": Book.objects.all(),
+            "form": True,
+            "export_buttons": ["pdf"],
+        }
+        self.assertSelector(".datagrid__export.datagrid__export--pdf", config)

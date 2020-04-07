@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.conf import settings
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
-from rijkshuisstijl.templatetags.rijkshuisstijl_filters import get_attr_or_get
+from rijkshuisstijl.templatetags.rijkshuisstijl_filters import getattr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import (
     get_id,
     merge_config,
@@ -456,10 +456,10 @@ def stacked_list(*args, **kwargs):
     def get_item(obj, field):
         url_field = kwargs.get("url_field")
         url_reverse = kwargs.get("url_reverse")
-        item = {"label": get_attr_or_get(obj, field)}
+        item = {"label": getattr_or_get(obj, field)}
 
         if url_field:
-            item["url"] = get_attr_or_get(obj, url_field)
+            item["url"] = getattr_or_get(obj, url_field)
 
         if url_reverse:
             item["url"] = reverse_lazy(url_reverse, object.pk)

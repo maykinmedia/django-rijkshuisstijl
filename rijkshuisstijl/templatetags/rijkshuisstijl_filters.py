@@ -18,7 +18,7 @@ def get(value, key):
 
 
 @register.filter
-def get_attr_or_get(value, key):
+def getattr_or_get(value, key):
     """
     Gets an attribute from an object or a value from a dict by key.
     Returns empty string on failure.
