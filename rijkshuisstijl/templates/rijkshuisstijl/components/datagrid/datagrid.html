@@ -44,7 +44,6 @@
         {# Render a form for performing actions on the queryset. #}
         {% if form %}
           <form class="datagrid__form" method="{{ form_method }}"{% if form_action %} action="{{ form_action }}"{% endif %}>
-
             {% if form_method|upper != "GET" %}
               {% csrf_token %}
             {% endif %}
@@ -74,9 +73,19 @@
                             {% endif %}
 
                             {% if toolbar_position in 'top,both' %}
-                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select form_options=form_options hide_list=True only %}
+                                {% include 'rijkshuisstijl/components/datagrid/datagrid-actions.html' with form_buttons=form_buttons form_select=form_select form_options=form_options only %}
                             {% endif %}
                         </ul>
+
+                        {% if form and export_buttons %}
+                            <ul class="toolbar__list">
+                                {% for export_button in export_buttons %}
+                                    <li class="toolbar__list-item">
+                                        {% button config=export_button %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
                         {% if formset and toolbar_position in 'top,both' %}
                             <ul class="toolbar__list">

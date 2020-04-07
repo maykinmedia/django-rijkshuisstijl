@@ -1,3 +1,4 @@
+@import '../../settings/lib/ro-shade';
 @import '~microscope-sass/lib/color';
 @import '~microscope-sass/lib/grid';
 @import '~microscope-sass/lib/responsive';
@@ -116,6 +117,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  &--light:not(:hover) {
+    @include shade(3);
+  }
+  &--light:hover:after {
+    opacity: 0;
   }
 
   [type=submit],
