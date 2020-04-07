@@ -68,6 +68,8 @@ def datagrid(context, **kwargs):
           - "key" will represent a field in an object to obtain the data from.
           - "lookup" key can be passed to point to a different field/method providing a value. In this case "key" will
              still be used when a (Model) field is referenced (if QuerySet is passed or obtained from context).
+          - "export_lookup" key can be passed to point to a different field/method providing a value when exporting.
+             Note: this will only affect the value of export_input_name, actual export relies on custom implementation.
           - "label" key can be supplied to set the column heading. if not set and a QuerySet is passed, an attempt will
              be made to resolve the verbose_name from the model as column heading.
           - "width" can be set to a CSS value valid for width.
@@ -193,8 +195,11 @@ def datagrid(context, **kwargs):
       specify the performed action.
       example: [{'name': 'delete', 'label': 'delete' 'class': 'button--danger'}]
 
-      export_buttons: Optional, similar to "form_buttons" except rendered differntly, these buttons indicate possible
-      export formats.
+    - export_buttons: Optional, similar to "form_buttons" except rendered differently, these buttons indicate possible
+      export formats. Note: actual export relies on custom implementation.
+
+    - export_input_name: Optional, A str indicating the name of the input used to pass the columns to export.
+      Note: actual export relies on custom implementation.
 
     - form_method: Optional, method to use for the form, defaults to "POST".
 
@@ -317,6 +322,10 @@ def datagrid(context, **kwargs):
         model = _get_model()
 
         for column in columns:
+            # Default lookup.
+            column["lookup"] = column.get("lookup", column.get("key"))
+            column["export_lookup"] = column.get("export_lookup", column.get("lookup"))
+
             # If queryset present, resolve label via model.
             if model and not column.get("label"):
                 column["label"] = get_field_label(model, column["key"])
@@ -1025,6 +1034,7 @@ def datagrid(context, **kwargs):
 
     # Export
     config["export_buttons"] = get_export_buttons()
+    config["export_input_name"] = kwargs.get("export_input_name", "fields")
 
     # Additional options
     config["class"] = kwargs.get("class", None)

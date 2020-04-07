@@ -3,6 +3,7 @@ import re
 from collections.abc import Iterable
 
 from django import template
+from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Manager, QuerySet
 from django.templatetags.static import static
 from django.utils import formats
@@ -59,13 +60,60 @@ def get_field_label(obj, field):
         return field
 
 
+@register.filter()
+def get_recursed_field(obj, field_lookup):
+    """
+    Finds a field in an object by recursing through related fields.
+    :param obj: A model instance or a QuerySet.
+    :param field: A field, possibly on a related instance. Example: "author__first_name".
+    :return: Field
+    """
+    try:
+        model = obj._meta.model
+    except AttributeError:
+        model = obj.model
+
+    field_split = field_lookup.split("__")
+    field_name = field_split[0]
+    field = model._meta.get_field(field_name)
+
+    while field_split:
+        field_lookup = field_split.pop(0)
+
+        try:
+            remote_field = model._meta.get_field(field_lookup).remote_field
+
+            # Not a remote field, break.
+            if remote_field is None:
+                break
+
+            field = remote_field
+            model = field.model
+
+        except (AttributeError, FieldDoesNotExist):
+            break
+    return field
+
+
+@register.filter()
+def get_recursed_field_label(obj, field_lookup):
+    """
+    Finds a field name in an object by recursing through related fields.
+    :param obj: A model instance or a QuerySet.
+    :param field: A field, possibly on a related instance. Example: "author__first_name".
+    :return: str
+    """
+    field = get_recursed_field(obj, field_lookup)
+    return get_field_label(field.model, field)
+
+
 @register.filter
 def get_recursed_field_value(obj, field):
     """
     Finds a field value in an object by recursing through related fields.
     :param obj: A model instance.
     :param field: A field, possibly on a related instance. Example: "author__first_name".
-    :return: The value of the final field.
+    :return: str
     """
     fields = field.split("__")
 

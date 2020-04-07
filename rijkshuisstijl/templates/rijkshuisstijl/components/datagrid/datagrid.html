@@ -78,6 +78,10 @@
                         </ul>
 
                         {% if form and export_buttons %}
+                            {% for column in columns %}
+                                <input name="{{ export_input_name }}" value="{{ column.export_lookup }}" type="hidden" />
+                            {% endfor %}
+
                             <ul class="toolbar__list">
                                 {% for export_button in export_buttons %}
                                     <li class="toolbar__list-item">
