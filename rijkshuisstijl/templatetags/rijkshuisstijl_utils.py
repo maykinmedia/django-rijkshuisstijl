@@ -104,6 +104,8 @@ def get_recursed_field_label(obj, field_lookup):
     :return: str
     """
     field = get_recursed_field(obj, field_lookup)
+    if field.remote_field:
+        field = field.remote_field
     return get_field_label(field.model, field)
 
 
