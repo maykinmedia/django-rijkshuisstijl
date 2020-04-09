@@ -6,13 +6,75 @@ from django import template
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Manager, QuerySet
 from django.templatetags.static import static
-from django.utils import formats
 from django.utils.formats import localize
 from django.utils.functional import Promise
 from django.utils.safestring import mark_safe
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_model
+
+
+@register.filter()
+def get_recursed_field(obj, field_lookup):
+    """
+    Finds a field in an object by recursing through related fields.
+    :param obj: A model instance or a QuerySet.
+    :param field: A field, possibly on a related instance. Example: "author__first_name".
+    :return: Field
+    """
+    try:
+        model = obj._meta.model
+    except AttributeError:
+        model = obj.model
+
+    field_split = field_lookup.split("__")
+    field_name = field_split[0]
+    try:
+        field = model._meta.get_field(field_name)
+    except FieldDoesNotExist:
+        return getattr(model, field_name)
+
+    while field_split:
+        field_lookup = field_split.pop(0)
+
+        try:
+            remote_field = model._meta.get_field(field_lookup).remote_field
+
+            # Not a remote field, break.
+            if remote_field is None:
+                break
+
+            field = remote_field
+            model = field.model
+
+        except (AttributeError, FieldDoesNotExist):
+            break
+    return field
+
+
+@register.filter()
+def get_recursed_field_label(obj, field_lookup):
+    """
+    Finds a field name in an object by recursing through related fields.
+    :param obj: A model instance or a QuerySet.
+    :param field: A field, possibly on a related instance. Example: "author__first_name".
+    :return: str
+    """
+    field = get_recursed_field(obj, field_lookup)
+    model = get_model(obj)
+
+    # Prefer remote_field over field.
+    try:
+        if field.remote_field:
+            field = field.remote_field
+    except AttributeError:  # Field is function/property, use function name.
+        try:
+            field = field.fget  # property
+        except AttributeError:
+            pass
+        field = field.__name__
+
+    return get_field_label(model, field)
 
 
 @register.filter
@@ -53,60 +115,13 @@ def get_field_label(obj, field):
     except:
         pass
 
-    regex = re.compile("[_-]+")
+    regex_get = re.compile("^get_")  # Remove leading "get_".
+    regex_dash = re.compile("[_-]+")  # Replace "_" and "-" with "".
     try:
-        return re.sub(regex, " ", field)
+        field = re.sub(regex_get, "", field)
+        return re.sub(regex_dash, " ", field)
     except TypeError:
         return field
-
-
-@register.filter()
-def get_recursed_field(obj, field_lookup):
-    """
-    Finds a field in an object by recursing through related fields.
-    :param obj: A model instance or a QuerySet.
-    :param field: A field, possibly on a related instance. Example: "author__first_name".
-    :return: Field
-    """
-    try:
-        model = obj._meta.model
-    except AttributeError:
-        model = obj.model
-
-    field_split = field_lookup.split("__")
-    field_name = field_split[0]
-    field = model._meta.get_field(field_name)
-
-    while field_split:
-        field_lookup = field_split.pop(0)
-
-        try:
-            remote_field = model._meta.get_field(field_lookup).remote_field
-
-            # Not a remote field, break.
-            if remote_field is None:
-                break
-
-            field = remote_field
-            model = field.model
-
-        except (AttributeError, FieldDoesNotExist):
-            break
-    return field
-
-
-@register.filter()
-def get_recursed_field_label(obj, field_lookup):
-    """
-    Finds a field name in an object by recursing through related fields.
-    :param obj: A model instance or a QuerySet.
-    :param field: A field, possibly on a related instance. Example: "author__first_name".
-    :return: str
-    """
-    field = get_recursed_field(obj, field_lookup)
-    if field.remote_field:
-        field = field.remote_field
-    return get_field_label(field.model, field)
 
 
 @register.filter
