@@ -35,9 +35,14 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
       display: none;
     }
 
+    &__caption,
+    &__cell {
+      border-width: 1px !important;
+      padding: 0 !important;
+    }
+
     &__cell--checkbox {
-      width: 0!important;
-      padding: 0!important;
+      width: 0 !important;
 
       * {
         display: none;

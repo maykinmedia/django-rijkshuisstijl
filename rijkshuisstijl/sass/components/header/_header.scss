@@ -17,15 +17,21 @@
   z-index: 1000;
 
   @media print {
+    height: auto;
     position: static;
-    height: 125px;
 
     .logo {
-      margin-left: -25px !important;
+      background-color: #134071;
+      display: flex;
+      align-items: flex-end;
+      width: 13mm;
+      height: 39mm;
+      outline: 1px solid green;
+      margin-bottom: 13mm;
     }
 
     .logo .image__image {
-      height: 125px;
+      width: 13mm;
     }
 
     .button {
