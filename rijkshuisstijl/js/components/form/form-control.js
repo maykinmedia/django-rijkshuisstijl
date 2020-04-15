@@ -116,6 +116,10 @@ class FormControl {
             console.warn(`Unable to inspect form control (${str}), got error: ${e}.`);
         }
 
+        // IE11 Does not trigger a paint when using the generated data attributes in CSS in certain conditions.
+        // We force a repaint by adding and removing an additional class.
+        this.node.classList.add("PAINT");
+        this.node.classList.remove("PAINT");
     }
 }
 
