@@ -780,7 +780,7 @@ def datagrid(context, **kwargs):
         form_select = parse_kwarg(kwargs, "form_select", None)
         if form_select:
             form_options = parse_kwarg(kwargs, "form_options", [])
-            form_select["class"] = form_select.get("class", "") + " select--big"
+            form_select["class"] = form_select.get("class", "")
             form_select["choices"] = [get_option(o) for o in form_options]
             return form_select
 
@@ -1019,7 +1019,7 @@ def datagrid(context, **kwargs):
         or bool(kwargs.get("form_action"))
         or bool(kwargs.get("form_buttons"))
     )
-    config["form_action"] = parse_kwarg(kwargs, "form_action", "")
+    config["form_action"] = config.get("form_action", "")
     config["form_buttons"] = get_form_buttons()
     config["form_method"] = parse_kwarg(kwargs, "form_method", "POST")
     config["form_select"] = get_form_select()

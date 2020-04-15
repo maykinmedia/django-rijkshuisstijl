@@ -56,12 +56,6 @@
                 <header class="datagrid__header">
                     <div class="toolbar toolbar--justify toolbar--pad">
                         <ul class="toolbar__list">
-                            {% if title %}
-                                <li class="toolbar__list-item">
-                                    <h4 class="datagrid__title">{{ title }}</h4>
-                                </li>
-                            {% endif %}
-
                             {% if form %}
                                 <li class="toolbar__list-item">
                                     <th class="datagrid__caption datagrid__caption--checkbox">
@@ -69,6 +63,12 @@
                                             {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='top' label_select_all=label_select_all only %}
                                         {% endif %}
                                     </th>
+                                </li>
+                            {% endif %}
+
+                            {% if title %}
+                                <li class="toolbar__list-item">
+                                    <h4 class="datagrid__title">{{ title }}</h4>
                                 </li>
                             {% endif %}
 

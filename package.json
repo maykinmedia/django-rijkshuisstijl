@@ -29,6 +29,7 @@
     "debounce": "^1.2.0",
     "flatpickr": "^4.6.3",
     "microscope-sass": "^0.3.2",
+    "object-fit-images": "^3.2.4",
     "urijs": "^1.19.1"
   },
   "devDependencies": {
@@ -67,6 +68,7 @@
     "mini-css-extract-plugin": "latest",
     "mocha": "latest",
     "postcss-loader": "^3.0.0",
+    "postcss-object-fit-images": "^1.1.2",
     "postcss-selector-lint": "latest",
     "sass-loader": "latest",
     "simulant": "latest",
