@@ -58,7 +58,7 @@ class DateInput {
     }
 
     /**
-     * Makes sure a usefull value is set on the value attribute.
+     * Makes sure a useful value is set on the value attribute.
      */
     cleanValue() {
         if (!this.node.value.match(/\d/)) {
