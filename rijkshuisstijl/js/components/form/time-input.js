@@ -18,18 +18,25 @@ class TimeInput {
         this.update();
     }
 
-    getTimeFormat() {
-        return this.isTime() ? 'H:i' : '';
-    }
-
+    /**
+     * Returns the placeholder string to use.
+     * @return {string}
+     */
     getPlaceholderFormat() {
         return this.isTime() ? '00:00' : '';
     }
 
+    /**
+     * Returns whether this.node is a time input.
+     * @return bBoolean}
+     */
     isTime() {
         return this.node.type === 'time';
     }
 
+    /**
+     * Updates the placholder (if any) with the format returned by this.getPlaceholderFormat().
+     */
     updatePlaceholder() {
         if (!this.node.placeholder) {
             const placeholder = this.getPlaceholderFormat();
@@ -43,12 +50,11 @@ class TimeInput {
     update() {
         this.updatePlaceholder();
 
-      flatpickr(this.node, {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: this.getTimeFormat(),
-        time_24hr: true
-      });
+        flatpickr(this.node, {
+            enableTime: true,
+            noCalendar: true,
+            time_24hr: true
+        });
     }
 }
 
