@@ -16,7 +16,6 @@ class DateInput {
     constructor(node) {
         /** @type {HTMLInputElement} */
         this.node = node;
-
         this.update();
     }
 
@@ -59,6 +58,15 @@ class DateInput {
     }
 
     /**
+     * Makes sure a usefull value is set on the value attribute.
+     */
+    cleanValue() {
+        if (!this.node.value.match(/\d/)) {
+            this.node.value = "";
+        }
+    }
+
+    /**
      * Adds MODIFIER_DATE to this.node.
      */
     updateClassName() {
@@ -92,6 +100,7 @@ class DateInput {
             defaultDate: this.node.value.split('/'),
             locale: this.getLocale(),
             mode: this.getMode(),
+            onReady: this.cleanValue.bind(this),
         });
         flatPicker.l10n.rangeSeparator = '/';
     }
