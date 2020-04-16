@@ -11,6 +11,8 @@
 
 
 .navigation-bar {
+  $this: &;
+
   @media print {
     display: none;
   }
@@ -171,48 +173,64 @@
 
     &--dropdown {
       .menu .menu {
-        @include absolute;
-        @include rows(1, top);
         @include rows(1, padding-bottom);
-        flex-direction: column;
-        top: 100%;
-        width: 100%;
-        height: auto;
-        z-index: 10;
-      }
-
-      .menu .menu {
-        @include shadow;
-        @include color-background;
         @include rows(1, padding-top);
         @include rows(1, padding-bottom);
+        @include rows(1, top);
         flex-direction: column;
+        height: auto;
         z-index: -1;
         visibility: hidden;
       }
 
-      .menu > .menu__list-item:hover .menu {
-        visibility: visible;
+      #{$this}__body > .menu > .menu__list-item--open > .menu__link:before {
+        @include center-hv;
+        content: "";
+        display: block;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 10px solid;
+        @include color-background(border-bottom-color);
+        top: calc(100% - 5px);
       }
 
-      .menu .menu:before,
-      .menu .menu:after {
-        display: none;
+      #{$this}__body > .menu > .menu__list-item > .menu {
+        @include color-background;
+        @include shadow;
+        width: 100%;
+      }
+
+      .menu .menu .menu__list-item {
+        @include ellipsis;
+        position: static;
+        width: 275px;
+      }
+
+      .menu .menu .menu {
+        $left-tablet: calc(275px + #{$grid-gutter-tablet});
+        $left-laptop: calc(275px + #{$grid-gutter-laptop});
+        $left-desktop: calc(275px + #{$grid-gutter-desktop});
+        @include responsive(left, 0, $left-tablet, $left-laptop, $left-desktop);
+        top: 0;
+      }
+
+      #{$this}__body > .menu > .menu__list-item--open > .menu,
+      #{$this}__body > .menu > .menu__list-item--open .menu__list-item--open > .menu {
+        visibility: visible;
       }
 
       .menu .menu .menu__link {
         @include border(bottom);
         @include shade(2, border-color);
-        @include columns-responsive(4, 4.5, 4, 3);
         @include rows(1, min-height);
-        color: inherit!important;
+        color: inherit !important;
         display: flex;
         align-items: center;
       }
 
-      .menu .menu .menu__list-item .menu__link:hover {
+      .menu .menu .menu__list-item .menu__link:hover,
+      .menu .menu .menu__list-item .menu__link--open {
         @include color-info(background-color);
-        text-decoration: none;
       }
 
       .menu .menu .menu__list-item:first-child .menu__link {
