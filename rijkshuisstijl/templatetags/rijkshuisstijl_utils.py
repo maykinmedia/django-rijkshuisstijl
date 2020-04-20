@@ -38,7 +38,10 @@ def get_recursed_field(obj, field_lookup):
         field_lookup = field_split.pop(0)
 
         try:
-            remote_field = model._meta.get_field(field_lookup).remote_field
+            remote_field = model._meta.get_field(field_lookup)
+
+            if remote_field.auto_created:
+                remote_field = remote_field.remote_field
 
             # Not a remote field, break.
             if remote_field is None:
@@ -63,10 +66,9 @@ def get_recursed_field_label(obj, field_lookup):
     field = get_recursed_field(obj, field_lookup)
     model = get_model(obj)
 
-    # Prefer remote_field over field.
     try:
-        if field.remote_field:
-            field = field.remote_field
+        if field.auto_created:  # Field is field.
+            pass
     except AttributeError:  # Field is function/property, use function name.
         try:
             field = field.fget  # property
