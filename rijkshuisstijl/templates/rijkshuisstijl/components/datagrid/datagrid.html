@@ -44,6 +44,7 @@
         {# Render a form for performing actions on the queryset. #}
         {% if form %}
           <form class="datagrid__form" method="{{ form_method }}"{% if form_action %} action="{{ form_action }}"{% endif %}>
+            {% if form_model_meta_label %}<input type="hidden" name="{{ form_model_name }}" value="{{ form_model_meta_label }}">{% endif %}
             {% if form_method|upper != "GET" %}
               {% csrf_token %}
             {% endif %}

@@ -18,7 +18,7 @@ def get(value, key):
 
 
 @register.filter
-def getattr_or_get(value, key):
+def getattr_or_get(value, key, default=""):
     """
     Gets an attribute from an object or a value from a dict by key.
     Returns empty string on failure.
@@ -26,8 +26,8 @@ def getattr_or_get(value, key):
     :return: The key's value or ''.
     """
     try:
-        return getattr(value, key, "")
+        return getattr(value, key, default)
     except AttributeError:
-        return get(value, key, "")
+        return get(value, key, default)
     except:
-        return ""
+        return default

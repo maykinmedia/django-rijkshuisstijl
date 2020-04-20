@@ -201,6 +201,9 @@ def datagrid(context, **kwargs):
     - export_input_name: Optional, A str indicating the name of the input used to pass the columns to export.
       Note: actual export relies on custom implementation.
 
+    - form_model_name: Optional, A str indicating the name of the input used to pass the model to export.
+      Note: actual export relies on custom implementation.
+
     - form_method: Optional, method to use for the form, defaults to "POST".
 
     - form_select: Optional, If set (dict, at least "name"), shows a select with actions (comparable to form_buttons).
@@ -556,7 +559,7 @@ def datagrid(context, **kwargs):
                     if filter_field_lookup:
                         lookup = filter_field_lookup.split("__")[-1]
                         choices = [
-                            (getattr_or_get(c, lookup), c) for c in filter_model.objects.all()
+                            (getattr_or_get(c, lookup, c.pk), c) for c in filter_model.objects.all()
                         ]
 
                     # If no "lookup" is used, simply use the QuerySet.all() as choices.
@@ -991,6 +994,20 @@ def datagrid(context, **kwargs):
         _cache["_get_model"] = model
         return model
 
+    def _get_model_label():
+        """
+        Returns the _meta.label of the Model of the QuerySet (if passed).
+        :return: str or None.
+        """
+        model_label = None
+
+        try:
+            model_label = _get_model()._meta.label
+        except AttributeError:
+            pass
+
+        return model_label
+
     kwargs = merge_config(kwargs)
     config = kwargs.copy()
 
@@ -1025,6 +1042,8 @@ def datagrid(context, **kwargs):
     config["form_select"] = get_form_select()
     config["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
     config["form_select_all_position"] = kwargs.get("form_select_all_position", "top")
+    config["form_model_name"] = kwargs.get("form_model_name", "model")
+    config["form_model_meta_label"] = _get_model_label()
 
     config["toolbar_position"] = kwargs.get("toolbar_position", "top")
 
