@@ -546,13 +546,16 @@ def datagrid(context, **kwargs):
                 # Default choices.
                 choices = getattr(filter_field, "choices", [])
 
+                if filterable_column.get("type") == "CharField":
+                    choices = []
+
                 # A boolean field gets choices for the boolean values.
-                if filterable_column.get("type") == "BooleanField":
+                elif filterable_column.get("type") == "BooleanField":
                     choices = ((True, _("waar")), (False, _("onwaar")))
 
                 # A related field gets choices for all related objects. This can be slow if a lot of objects are found.
                 # To avoid this, set "choices" in dict in filterable_columns with a custom QuerySet.
-                if filter_field.is_relation:
+                elif filter_field.is_relation:
                     filterable_column["is_relation"] = filter_field.is_relation
 
                     # Use the last field from the "lookup" to specify the value for the choice.
