@@ -275,6 +275,19 @@ def _field(bound_field, **extra_attrs):
         # Get widget.
         widget = get_widget(bound_field)
 
+        # Copy mark_required.
+        try:
+            mark_required = getattr(bound_field.field, "mark_required", False)
+        except AttributeError:
+            mark_required = getattr(bound_field, "mark_required", False)
+
+        if mark_required:
+            widget.attrs["data-mark-required"] = str(mark_required)
+
+        if widget.is_required or "data-mark-required" in widget.attrs:
+            if not widget.attrs.get("title"):
+                widget.attrs["title"] = _("Dit veld is verplicht.")
+
         # Use ISO input formats for DateInput.
         if isinstance(widget, DateInput):
             widget.format = "%Y-%m-%d"
