@@ -37,7 +37,7 @@ class DateInput {
      */
     getLocale() {
         const locale = Dutch;
-        locale.firstDayOfWeek = 0;
+        locale.firstDayOfWeek = 1;  // Start on monday.
         return locale;
     }
 
