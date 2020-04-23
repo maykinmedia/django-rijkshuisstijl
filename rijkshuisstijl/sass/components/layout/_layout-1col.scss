@@ -1,10 +1,6 @@
 @import '~microscope-sass/lib/grid';
-@import '../../settings/lib/sticky';
-@import 'mixins';
 
 .layout {
-  @include layout;
-
   &--auto-columns &__section {
     @include tablet {
       column-count: 2;
@@ -14,23 +10,5 @@
 
   &--auto-columns &__section > * {
     break-inside: avoid;
-  }
-
-  &--sidebar {
-    display: flex;
-  }
-
-  &--sidebar &__section {
-    width: 100%;
-  }
-
-  &--sidebar &__sidebar {
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-  }
-
-  &--sidebar &__sidebar--sticky &__sidebar-body {
-    @include sticky($grid-container-padding);
   }
 }
