@@ -42,6 +42,10 @@
     @include shade(4, color);
   }
 
+  &__value a {
+    @include anchor(true);
+  }
+
   &__row:not(#{&}__row--edit) &__value .checkbox,
   &__row:not(#{&}__row--edit) &__value .radio,
   &__row:not(#{&}__row--edit) &__value .input,

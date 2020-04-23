@@ -24,7 +24,7 @@
 
                 <ul class="summary__list">
                     {% for field in fields %}
-                        {% include './summary-key-value.html' with id=id field=field href_field=href_field field_toggle_edit=field_toggle_edit form=form form_id=form_id object=object forloop=forloop help_text_position=help_text_position only %}
+                        {% include './summary-key-value.html' with id=id field=field href_field=href_field field_toggle_edit=field_toggle_edit form=form form_id=form_id object=object forloop=forloop help_text_position=help_text_position urlize=urlize only %}
                     {% endfor %}
                 </ul>
             {% endfor %}

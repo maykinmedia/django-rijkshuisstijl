@@ -110,6 +110,7 @@
     position: relative;
   }
 
+  &__value a,
   &__link {
     @include anchor(true);
   }

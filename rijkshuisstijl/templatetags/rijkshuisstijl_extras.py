@@ -139,6 +139,8 @@ def key_value_table(**kwargs):
           tag will be created. This makes the input part of the referenced form.
         - full_width_fields: Optional, a list of keys of fields that should take the full width of the component.
         - class: Optional, a string with additional CSS classes.
+        - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating
+          hyperlinks if applicable in every cell.
 
     :param kwargs:
     """
@@ -300,6 +302,7 @@ def key_value(component, **kwargs):
     config["full_width_fields"] = get_full_width_fields()
     config["object"] = config.get("object", None)
     config["help_text_position"] = config.get("help_text_position", settings.RH_HELP_TEXT_POSITION)
+    config["urlize"] = parse_kwarg(config, "urlize", True)
 
     config["config"] = config
     return config
