@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/maykinmedia/django-rijkshuisstijl#readme",
   "dependencies": {
-    "@babel/compat-data": "^7.9.0",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "bem.js": "^1.0.10",
     "better-dateinput-polyfill": "^3.2.7",

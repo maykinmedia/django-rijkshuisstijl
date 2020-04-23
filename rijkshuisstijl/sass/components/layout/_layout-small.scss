@@ -1,9 +1,6 @@
 @import '~microscope-sass/lib/grid';
-@import 'mixins';
 
 .layout {
-  @include layout;
-
   &--small {
     @include container--small;
   }
