@@ -58,11 +58,37 @@ class DateInput {
     }
 
     /**
+     * onReady callback for flatpickr.
+     * @param {Array} selectedDates
+     * @param {string} dateStr
+     * @param {Object} flatpickr
+     */
+    onReady(selectedDates, dateStr, flatpickr) {
+        this.copyAttrs(flatpickr.altInput);
+        this.cleanValue()
+    }
+
+    /**
+     * Copies attributes of this.node to target only if not already set on target.
+     * @param {HTMLElement} target
+     */
+    copyAttrs(target) {
+        const targetAttributes = target.attributes;
+
+        [...this.node.attributes].forEach(attr => {
+            if (!(attr.name in targetAttributes)) {
+                target.setAttribute(attr.name, attr.value);
+            }
+        });
+
+    }
+
+    /**
      * Makes sure a useful value is set on the value attribute.
      */
     cleanValue() {
         if (!this.node.value.match(/\d/)) {
-            this.node.value = "";
+            this.node.value = '';
         }
     }
 
@@ -100,12 +126,11 @@ class DateInput {
             defaultDate: this.node.value.split('/'),
             locale: this.getLocale(),
             mode: this.getMode(),
-            onReady: this.cleanValue.bind(this),
+            onReady: this.onReady.bind(this),
         });
         flatPicker.l10n.rangeSeparator = '/';
     }
 }
-
 
 // Start!
 [...DATE_INPUTS, ...DATE_RANGE_INPUTS].forEach(node => new DateInput(node));
