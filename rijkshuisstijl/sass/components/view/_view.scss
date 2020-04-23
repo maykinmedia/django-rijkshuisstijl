@@ -53,7 +53,7 @@
   }
 
   &--full-width .article__body,
-  &--full-width .layout,
+  &--full-width .layout:not(.layout--small),
   &--full-width .login-bar__body,
   &--full-width .navigation-bar__body {
     max-width: 100%;
@@ -72,7 +72,7 @@
     @include container-padding;
   }
 
-  &--full-width .layout {
+  &--full-width .layout:not(.layout--small) {
     padding: 0;
   }
 
