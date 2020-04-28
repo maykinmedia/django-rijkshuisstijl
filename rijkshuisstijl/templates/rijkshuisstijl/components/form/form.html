@@ -39,6 +39,7 @@
 
                     <fieldset class="form__fieldset{% if fieldset.1.classes %} {{ fieldset.1.classes|join:' ' }}{% endif %}">
                         {% if fieldset.0 %}<legend class="form__legend">{{ fieldset.0 }}</legend>{% endif %}
+                        {% if fieldset.2 %}<p class="form__description">{{ fieldset.2 }}</p>{% endif %}
 
                         {# Render the field in form controls. #}
                         {% for field in form %}
