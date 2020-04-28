@@ -71,13 +71,25 @@
                                 {% endif %}
 
                                 <span class="toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">
-                                    {% if urlize %}{{ field.value|linebreaksbr|urlize }}{% else %}{{ field.value|linebreaksbr }}{% endif %}
+                                    {% firstof object|format_value:field.key as value %}
+
+                                    {% if urlize %}
+                                        {{ value|linebreaksbr|urlize }}
+                                    {% else %}
+                                        {{ value|linebreaksbr }}
+                                    {% endif %}
                                 </span>
 
 
                             {# No form field, render as label. #}
                             {% else %}
-                                {% if urlize %}{{ field.value|linebreaksbr|urlize }}{% else %}{{ field.value|linebreaksbr }}{% endif %}
+                                {% firstof object|format_value:field.key as value %}
+
+                                {% if urlize %}
+                                    {{ value|linebreaksbr|urlize }}
+                                {% else %}
+                                    {{ value|linebreaksbr }}
+                                {% endif %}
                             {% endif %}
                         {% endspaceless %}</td>
 

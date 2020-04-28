@@ -111,36 +111,45 @@ def key_value_table(**kwargs):
 
     Available options:
 
-        - fields: Required, A dict (key, label) or a list defining which attributes of object to show and what labels to
-          use.
+    - fields: Required, A dict (key, label) or a list defining which attributes of object to show and what labels to
+      use.
 
-          - If a dict is passed, each key will represent a field in an object to obtain the data from and each value
-            will represent the label to use for the column heading.
-            Example: {'author': 'Written by', 'title': 'Title'}
+      - If a dict is passed, each key will represent a field in an object to obtain the data from and each value
+        will represent the label to use for the column heading.
+        Example: {'author': 'Written by', 'title': 'Title'}
 
-          - If a list is passed, each item will represent a field in an object to obtain the data from and will also
-            represent the label to use for the column heading.
-            Example: ['author', 'title']
+      - If a list is passed, each item will represent a field in an object to obtain the data from and will also
+        represent the label to use for the column heading.
+        Example: ['author', 'title']
 
-            - Within a list, a dict may be passed.
-              Example: ['author': {'key': 'author', 'label': 'Written by'}, 'title']
+        - Within a list, a dict may be passed.
+          Example: ['author': {'key': 'author', 'label': 'Written by'}, 'title']
 
-          - A label can be a callable in which case it will receive the object as argument and the returned value is
-            used as label.
-            Example: ['author': {'key': 'author', 'label': lambda x: str(x) +' is written by'}, 'title']
+      - A label can be a callable in which case it will receive the object as argument and the returned value is
+        used as label.
+        Example: ['author': {'key': 'author', 'label': lambda x: str(x) +' is written by'}, 'title']
 
-        - object: Required, An object containing the keys defined fields.
-        - field_toggle_edit: Optional, If true (and form is set) allows toggle between value and input for each value.
-        - form: Optional, A (Django) form instance which fields become editable in the key/value table if provided.
-        - form_action: Optional,
-        - form_enctype: Optional,
-        - form_method: Optional,
-        - form_id: Optional, Optional, if set, value will be set on the "form" attribute of generated inputs. No <form>
-          tag will be created. This makes the input part of the referenced form.
-        - full_width_fields: Optional, a list of keys of fields that should take the full width of the component.
-        - class: Optional, a string with additional CSS classes.
-        - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating
-          hyperlinks if applicable in every cell.
+    - object: Required, An object containing the keys defined fields.
+    - field_toggle_edit: Optional, If true (and form is set) allows toggle between value and input for each value.
+    - form: Optional, A (Django) form instance which fields become editable in the key/value table if provided.
+    - form_action: Optional,
+    - form_enctype: Optional,
+    - form_method: Optional,
+    - form_id: Optional, Optional, if set, value will be set on the "form" attribute of generated inputs. No <form>
+      tag will be created. This makes the input part of the referenced form.
+    - full_width_fields: Optional, a list of keys of fields that should take the full width of the component.
+    - class: Optional, a string with additional CSS classes.
+    - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating
+      hyperlinks if applicable in every cell.
+
+    Custom presentation (get_<field>_display)
+    -----------------------------------------
+
+    - get_<field>_display: Optional, allows a callable to be used to generate a custom display value. Replace <field>
+    with a key which will map to a field  and set a callable as it's value.
+
+    The callable will receive the row's object and should return SafeText.
+    Example: `lambda object: mark_safe(<a href="{}">{}</a>.format(object.author.get_absolute_url, object.author))`
 
     :param kwargs:
     """
@@ -289,6 +298,29 @@ def key_value(component, **kwargs):
         _cache["get_field_toggle_edit"] = field_toggle_edit
         return field_toggle_edit
 
+    def add_object_attributes(config):
+        """
+        Calls add_display(obj) and add_modifier_class(obj) for every obj in (paginated) object_list.
+        :param config:
+        :return: datagrid_context
+        """
+        obj = config.get("object", None)
+        if obj:
+            add_display(obj, config)
+        return config
+
+    def add_display(obj, config):
+        """
+        If a get_<field>_display callable is set, add the evaluated result to the rh_display_<field> field on the
+        object passed to obj.
+        :param obj:
+        """
+        fields = config.get("fields", {})
+        for field in fields:
+            fn = config.get("get_{}_display".format(field), None)
+            if fn:
+                setattr(obj, "rh_display_{}".format(field), fn(obj))
+
     # config
     config["class"] = config.get("class", None)
     config["id"] = get_key_value_id()
@@ -303,6 +335,7 @@ def key_value(component, **kwargs):
     config["object"] = config.get("object", None)
     config["help_text_position"] = config.get("help_text_position", settings.RH_HELP_TEXT_POSITION)
     config["urlize"] = parse_kwarg(config, "urlize", True)
+    config = add_object_attributes(config)
 
     config["config"] = config
     return config

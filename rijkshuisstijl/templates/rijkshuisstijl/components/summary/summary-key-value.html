@@ -33,7 +33,13 @@
                 {% form_field form field.form_field.name help_text_position=help_text_position %}
             {% endif %}
             <span class="toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">
-                {% if urlize %}{{ field.value|linebreaksbr|urlize }}{% else %}{{ field.value|linebreaksbr }}{% endif %}
+                {% firstof object|format_value:field.key as value %}
+
+                {% if urlize %}
+                    {{ value|linebreaksbr|urlize }}
+                {% else %}
+                    {{ value|linebreaksbr }}
+                {% endif %}
             </span>
 
 
@@ -43,7 +49,13 @@
             {% if forloop.first and href_field %}
                 <a class="summary__link" href="{{ object|format_value:href_field }}">{{ field.value|linebreaksbr }}</a>
             {% else %}
-                {% if urlize %}{{ field.value|linebreaksbr|urlize }}{% else %}{{ field.value|linebreaksbr }}{% endif %}
+                {% firstof object|format_value:field.key as value %}
+
+                {% if urlize %}
+                    {{ value|linebreaksbr|urlize }}
+                {% else %}
+                    {{ value|linebreaksbr }}
+                {% endif %}
             {% endif %}
 
 

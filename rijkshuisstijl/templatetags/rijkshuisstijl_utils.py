@@ -282,5 +282,6 @@ class TryNode(template.Node):
     def render(self, context):
         try:
             return self.nodelist_try.render(context)
-        except:
+        except Exception as e:
+            context.push({"exception": e})
             return self.nodelist_except.render(context)
