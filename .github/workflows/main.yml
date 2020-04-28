@@ -1,0 +1,16 @@
+name: Django rijkshuisstijl
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.6]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run the python tests
+      uses: ./.github/actions/python
