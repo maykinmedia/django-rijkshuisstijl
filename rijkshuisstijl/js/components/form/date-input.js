@@ -74,9 +74,10 @@ class DateInput {
      */
     copyAttrs(target) {
         const targetAttributes = target.attributes;
+        const excludedAttributes = ['form', 'name', 'value'];
 
         [...this.node.attributes].forEach(attr => {
-            if (!(attr.name in targetAttributes)) {
+            if (!(attr.name in targetAttributes) && excludedAttributes.indexOf(attr.name) === -1) {
                 target.setAttribute(attr.name, attr.value);
             }
         });
