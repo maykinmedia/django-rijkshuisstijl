@@ -2,6 +2,7 @@
 @import '~microscope-sass/lib/grid';
 @import '~microscope-sass/lib/color';
 @import '~microscope-sass/lib/responsive';
+@import '~microscope-sass/lib/typography';
 @import 'constants';
 
 .form {
@@ -103,5 +104,10 @@
 
   &__actions .button:not(:last-child) {
     margin-right: $form-control-spacing;
+  }
+
+  &__description {
+    @include body;
+    padding: $form-description-padding-h 0;
   }
 }
