@@ -217,7 +217,7 @@ def format_value(obj, field, empty_label="-"):
 
     # Check for date(time).
     if type(val) in [datetime.datetime, datetime.date]:
-        return localize(val)
+        return val
 
     # Fallback
     return val or empty_label
