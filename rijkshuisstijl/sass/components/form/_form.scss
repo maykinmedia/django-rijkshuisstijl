@@ -107,7 +107,7 @@
   }
 
   &__description {
-    @include text;
-    padding: $description-padding-h 0;
+    @include body;
+    padding: $form-description-padding-h 0;
   }
 }
