@@ -181,6 +181,7 @@
         height: auto;
         z-index: -1;
         visibility: hidden;
+        display: none;
       }
 
       #{$this}__body > .menu > .menu__list-item--open > .menu__link:before {
@@ -217,6 +218,7 @@
       #{$this}__body > .menu > .menu__list-item--open > .menu,
       #{$this}__body > .menu > .menu__list-item--open .menu__list-item--open > .menu {
         visibility: visible;
+        display: flex;
       }
 
       .menu .menu .menu__link {
