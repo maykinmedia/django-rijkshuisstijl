@@ -18,7 +18,7 @@ class FormMixin:
 
     compact = False
     intro = None
-    label = None
+    label = _("Verzenden")
     status = "info"
     template_name = "rijkshuisstijl/views/generic/form.html"
     title = None
@@ -50,7 +50,7 @@ class FormMixin:
         }
 
     def get_actions(self):
-        return [{"class": "button--primary", "label": _("Verzenden"), "type": "submit",}]
+        return [{"class": "button--primary", "label": self.label, "type": "submit",}]
 
 
 class CreateView(FormMixin, DjCreateView):

@@ -513,7 +513,10 @@ def datagrid(context, **kwargs):
 
             # The default filter_model and filter_field.
             filter_model = model
-            filter_field = filter_model._meta.get_field(filter_field_name)
+            try:
+                filter_field = filter_model._meta.get_field(filter_field_name)
+            except FieldDoesNotExist:
+                filter_field = False
 
             # If we're dealing with related items, search for the related filter_model and filter_field in fields_split.
             while fields_split:
@@ -543,31 +546,35 @@ def datagrid(context, **kwargs):
 
             # If not choices have been set, find them based on the field.
             if not "choices" in filterable_column:
-                # Default choices.
-                choices = getattr(filter_field, "choices", [])
+                try:
+                    # Default choices.
+                    choices = getattr(filter_field, "choices", [])
 
-                if filterable_column.get("type") == "CharField":
-                    choices = []
+                    if filterable_column.get("type") == "CharField":
+                        choices = []
 
-                # A boolean field gets choices for the boolean values.
-                elif filterable_column.get("type") == "BooleanField":
-                    choices = ((True, _("waar")), (False, _("onwaar")))
+                    # A boolean field gets choices for the boolean values.
+                    elif filterable_column.get("type") == "BooleanField":
+                        choices = ((True, _("waar")), (False, _("onwaar")))
 
-                # A related field gets choices for all related objects. This can be slow if a lot of objects are found.
-                # To avoid this, set "choices" in dict in filterable_columns with a custom QuerySet.
-                elif filter_field.is_relation:
-                    filterable_column["is_relation"] = filter_field.is_relation
+                    # A related field gets choices for all related objects. This can be slow if a lot of objects are found.
+                    # To avoid this, set "choices" in dict in filterable_columns with a custom QuerySet.
+                    elif filter_field.is_relation:
+                        filterable_column["is_relation"] = filter_field.is_relation
 
-                    # Use the last field from the "lookup" to specify the value for the choice.
-                    if filter_field_lookup:
-                        lookup = filter_field_lookup.split("__")[-1]
-                        choices = [
-                            (getattr_or_get(c, lookup, c.pk), c) for c in filter_model.objects.all()
-                        ]
+                        # Use the last field from the "lookup" to specify the value for the choice.
+                        if filter_field_lookup:
+                            lookup = filter_field_lookup.split("__")[-1]
+                            choices = [
+                                (getattr_or_get(c, lookup, c.pk), c)
+                                for c in filter_model.objects.all()
+                            ]
 
-                    # If no "lookup" is used, simply use the QuerySet.all() as choices.
-                    else:
-                        choices = filter_model.objects.all()
+                        # If no "lookup" is used, simply use the QuerySet.all() as choices.
+                        else:
+                            choices = filter_model.objects.all()
+                except AttributeError:
+                    pass
 
                 # Add an empty label to the choices to allow clearing the filter.
                 if choices:
