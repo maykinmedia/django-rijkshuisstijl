@@ -71,7 +71,7 @@ class FormTestCaseMixin:
         response = self.client_get()
         context = response.context_data.get("form_config")
 
-        self.assertEqual(context.get("label"), None)
+        self.assertEqual(context.get("label"), "Verzenden")
         self.assertEqual(context.get("status"), "info")
         self.assertEqual(context.get("title"), None)
         self.assertEqual(context.get("text"), None)
