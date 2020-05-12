@@ -72,10 +72,6 @@
     @include container-padding;
   }
 
-  &--full-width .layout:not(.layout--small) {
-    padding: 0;
-  }
-
   &--full-width .navigation-bar__body,
   &--full-width .menu {
     padding-left: 0;
