@@ -2,6 +2,7 @@
 import {
     DATE_INPUTS,
     DATE_RANGE_INPUTS,
+    FORMS,
     FORM_CONTROLS,
     INPUT_FILEPICKERS,
     LINK_SELECTS,
@@ -10,6 +11,10 @@ import {
 } from './constants';
 
 // Start!
+if (FORMS.length) {
+    import(/* webpackChunkName: 'form' */ './form');
+}
+
 if (FORM_CONTROLS.length) {
     import(/* webpackChunkName: 'form-control' */ './form-control');
 }

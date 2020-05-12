@@ -28,6 +28,7 @@
     "better-dom": "^4.0.0",
     "debounce": "^1.2.0",
     "flatpickr": "^4.6.3",
+    "form-association-polyfill": "^1.0.3",
     "microscope-sass": "^0.3.2",
     "object-fit-images": "^3.2.4",
     "urijs": "^1.19.1"
@@ -41,7 +42,6 @@
     "chai": "latest",
     "css-loader": "latest",
     "cssnano": "latest",
-    "eyeglass": "latest",
     "gulp": "latest",
     "gulp-file": "latest",
     "gulp-hub": "latest",

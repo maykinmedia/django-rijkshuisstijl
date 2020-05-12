@@ -1,5 +1,11 @@
 import BEM from 'bem.js';
 
+/** @const {string} Form block name. */
+export const BLOCK_FORM = 'form';
+
+/** @const {NodeList} Forms */
+export const FORMS = BEM.getBEMNodes(BLOCK_FORM);
+
 /** @const {string} Form control block name. */
 export const BLOCK_FORM_CONTROL = 'form-control';
 
