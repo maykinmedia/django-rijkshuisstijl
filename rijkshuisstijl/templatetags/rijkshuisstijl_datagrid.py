@@ -308,6 +308,15 @@ def datagrid(context, **kwargs):
     # Keep a quick cache single use _cache dict to speed things up a bit, we might need to optimize this later.
     _cache = {}
 
+    def get_datagrid_id(config):
+        if _cache.get("get_datagrid_id"):
+            return _cache.get("get_datagrid_id")
+
+        datagrid_id = get_id(config, "datagrid")
+
+        _cache["get_datagrid_id"] = datagrid_id
+        return datagrid_id
+
     def get_columns():
         """
         Gets the columns to show based on kwargs['columns']. If no label is provided an attempt is made to create it
@@ -405,9 +414,10 @@ def datagrid(context, **kwargs):
 
                 # Date.
                 if filter_type in ["DateField", "DateTimeField"]:  # TODO: DateTimeField
-                    dates = filter_value.split("/")
+                    dates = re.split(r"[^\d-]+", filter_value)
 
                     if len(dates) is 1:
+                        print(dates)
                         date_end = parse_date(dates[0]) + timedelta(days=1)
                         date_end_string = date_end.isoformat()
                         dates.append(date_end_string)
@@ -781,9 +791,16 @@ def datagrid(context, **kwargs):
 
         # Convert dict to list_of_dict
         try:
-            return [{"name": key, "label": value} for key, value in form_buttons.items()]
+            form_buttons = [{"name": key, "label": value,} for key, value in form_buttons.items()]
         except AttributeError:
-            return form_buttons
+            pass
+
+        for form_button in form_buttons:
+            form_button["form"] = form_button.get(
+                "form", f"datagrid-action-form-{get_datagrid_id(config)}"
+            )
+
+        return form_buttons
 
     def get_form_select():
         """
@@ -795,6 +812,7 @@ def datagrid(context, **kwargs):
             form_options = parse_kwarg(kwargs, "form_options", [])
             form_select["class"] = form_select.get("class", "")
             form_select["choices"] = [get_option(o) for o in form_options]
+            form_select["form"] = f"datagrid-action-form-{get_datagrid_id(config)}"
             return form_select
 
         return None
@@ -945,6 +963,9 @@ def datagrid(context, **kwargs):
             ] = f"button--icon-right button--light button--small datagrid__export datagrid__export--{value} {class_name}".strip()
             export_button["far_icon"] = export_button.get("far-icon", f"file-{value}")
             export_button["label"] = export_button.get("label", _("Exporteer"))
+            export_button["form"] = export_button.get(
+                "form", f"datagrid-action-form-{get_datagrid_id(config)}"
+            )
 
         return export_buttons
 
@@ -1067,7 +1088,7 @@ def datagrid(context, **kwargs):
 
     # Additional options
     config["class"] = kwargs.get("class", None)
-    config["id"] = get_id(config, "datagrid")
+    config["id"] = get_datagrid_id(config)
     config["title"] = kwargs.get("title", None)
     config["url_reverse"] = kwargs.get("url_reverse", "")
     config["urlize"] = kwargs.get("urlize", True)

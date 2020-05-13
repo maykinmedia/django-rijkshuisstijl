@@ -4,7 +4,7 @@
 {# Checkbox. #}
 {% if form %}
     <td class="datagrid__cell datagrid__cell--checkbox">
-        {% form_checkbox name=form_checkbox_name value=object.pk|unlocalize checked=False %}
+        {% form_checkbox name=form_checkbox_name form='datagrid-action-form-'|add:id value=object.pk|unlocalize checked=False %}
     </td>
 {% endif %}
 

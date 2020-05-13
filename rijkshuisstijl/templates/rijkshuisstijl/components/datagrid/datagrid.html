@@ -4,21 +4,7 @@
 
         {# This (filter) form is located outside the datagrid to avoid conflict with selection form. #}
         {% if filters %}
-            <form id="datagrid-filter-form-{{ id }}" method="GET">
-                {% firstof ordering_key 'ordering' as ordering_key %}
-
-                {% if request.GET|get:ordering_key %}
-                    <input type="hidden" name="{{ ordering_key }}" value="{{ request.GET|get:ordering_key }}">
-                {% endif %}
-
-                <input class="input input--hidden" type="submit">
-            </form>
-        {% endif %}
-
-
-        {# This (paginator) form is located outside the datagrid to avoid conflict with selection form. #}
-        {% if is_paginated %}
-            <form id="datagrid-paginator-form-{{ id }}" method="GET">
+            <form class="form" id="datagrid-filter-form-{{ id }}" method="GET">
                 {% firstof ordering_key 'ordering' as ordering_key %}
 
                 {% if request.GET|get:ordering_key %}
@@ -34,8 +20,22 @@
         {% endif %}
 
 
+        {# This (paginator) form is located outside the datagrid to avoid conflict with selection form. #}
+        {% if is_paginated %}
+            <form class="form" id="datagrid-paginator-form-{{ id }}" method="GET">
+                {% firstof ordering_key 'ordering' as ordering_key %}
+
+                {% if request.GET|get:ordering_key %}
+                    <input type="hidden" name="{{ ordering_key }}" value="{{ request.GET|get:ordering_key }}">
+                {% endif %}
+
+                <input class="input input--hidden" type="submit">
+            </form>
+        {% endif %}
+
+
         {# Render inline form #}
-        <form class="datagrid__inline-form" id="datagrid-inline-form-{{ id }}" method="post">
+        <form class="form datagrid__inline-form" id="datagrid-inline-form-{{ id }}" method="post">
             {% csrf_token %}
             {{ formset.management_form }}
         </form>
@@ -43,11 +43,12 @@
 
         {# Render a form for performing actions on the queryset. #}
         {% if form %}
-          <form class="datagrid__form" method="{{ form_method }}"{% if form_action %} action="{{ form_action }}"{% endif %}>
+          <form class="form datagrid__form" id="datagrid-action-form-{{ id }}" method="{{ form_method }}"{% if form_action %} action="{{ form_action }}"{% endif %}>
             {% if form_model_meta_label %}<input type="hidden" name="{{ form_model_name }}" value="{{ form_model_meta_label }}">{% endif %}
             {% if form_method|upper != "GET" %}
               {% csrf_token %}
             {% endif %}
+          </form>
         {% endif %}
 
 
@@ -80,7 +81,7 @@
 
                         {% if form and export_buttons %}
                             {% for column in columns %}
-                                <input name="{{ export_input_name }}" value="{{ column.export_lookup }}" type="hidden" />
+                                <input form="datagrid-action-form-{{ id }}" name="{{ export_input_name }}" value="{{ column.export_lookup }}" type="hidden" />
                             {% endfor %}
 
                             <ul class="toolbar__list">
@@ -211,12 +212,6 @@
                     </ul>
                 </div>
             </footer>
-        {% endif %}
-
-
-        {# Close form. #}
-        {% if form %}
-            </form>
         {% endif %}
     </div>
 {% endsingleline %}
