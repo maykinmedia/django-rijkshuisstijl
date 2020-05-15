@@ -372,7 +372,7 @@ def search(context, **kwargs):
     kwargs["name"] = kwargs.get("name", "query")
     kwargs["label_placeholder"] = kwargs.get("label_placeholder", _("Zoeken"))
 
-    request_dict = getattr(request, kwargs["method"], {})
+    request_dict = getattr(request, str(kwargs["method"]).upper(), {})
     kwargs["value"] = request_dict.get(kwargs["name"], "")
 
     kwargs["request"] = context["request"]

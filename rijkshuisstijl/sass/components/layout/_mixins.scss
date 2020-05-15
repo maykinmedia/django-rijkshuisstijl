@@ -1,7 +1,7 @@
 @import '~microscope-sass/lib/grid';
 
 @mixin layout {
-  @include container;
+  @include container($padding: false);
 
   &__section--justify {
     display: flex;

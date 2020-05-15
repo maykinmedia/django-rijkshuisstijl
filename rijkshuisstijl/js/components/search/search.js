@@ -72,9 +72,12 @@ export class Search {
 
     /**
      * Callback for click event on this.buttonSecondary.
-     * Focuses this.input.
+     * Clears/focuses this.input.
+     * @param {Event} e
      */
-    onClickButtonSecondary() {
+    onClickButtonSecondary(e) {
+        e.preventDefault();
+        this.input.value = '';
         this.input.focus();
     }
 

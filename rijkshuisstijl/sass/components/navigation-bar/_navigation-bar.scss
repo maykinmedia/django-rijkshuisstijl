@@ -244,6 +244,10 @@
         background-color: transparent;
         font-weight: bold;
       }
+
+      .search .input {
+        height: $grid-row-height - $typography-size-border * 2;
+      }
     }
   }
 }

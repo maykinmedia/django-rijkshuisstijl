@@ -6,9 +6,9 @@
 
                 {# Title. #}
                 {% block content_title %}
-                    {% if title %}
+                    {% if title_header_config.title %}
                         <div class="layout__section layout__section--justify layout__section--pad layout__section--margin">
-                            {% title_header class='title-header--no-margin-bottom' title=title %}
+                            {% title_header class='title-header--no-margin-bottom' config=title_header_config %}
                             {% block content_title_inner %}{% endblock %}
                         </div>
                     {% endif %}

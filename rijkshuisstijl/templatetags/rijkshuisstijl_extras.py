@@ -527,7 +527,7 @@ def stacked_list(*args, **kwargs):
 
 
 @register.inclusion_tag("rijkshuisstijl/components/title-header/title-header.html")
-def title_header(title, **kwargs):
+def title_header(title=None, **kwargs):
     """
     Renders a title.
 
@@ -549,7 +549,8 @@ def title_header(title, **kwargs):
 
     # kwargs
     config["class"] = config.get("class")
-    config["title"] = title
+    config["title"] = config.get("title", title)
+    config["body"] = config.get("body")
 
     config["config"] = config
     return config

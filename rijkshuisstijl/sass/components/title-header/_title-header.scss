@@ -4,4 +4,10 @@
   &__title {
     @include h1;
   }
+
+  &__text {
+    @include body;
+    @include body--big;
+    @include margin(true, margin-top);
+  }
 }

@@ -124,8 +124,8 @@ class ListView(DjListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx["title_header_config"] = self.get_title_header_config()
         ctx["datagrid_config"] = self.get_datagrid_config()
-        ctx["title"] = self.title
         return ctx
 
     def get_paginate_by(self, queryset):
@@ -135,6 +135,10 @@ class ListView(DjListView):
         :return: None
         """
         return None
+
+    def get_title_header_config(self):
+        title_header_config = {"title": self.title}
+        return title_header_config
 
     def get_datagrid_config(self):
         datagrid_config = {}
