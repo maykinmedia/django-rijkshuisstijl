@@ -116,7 +116,7 @@ describe('search/search.js - Search ', function () {
         search.input = this.input;
         search.input.value = '';
         sinon.spy(search.input, 'focus');
-        search.onClickButtonSecondary();
+        search.onClickButtonSecondary({preventDefault: () => {}});
         assert.equal(search.input.focus.callCount, 1);
     });
 
