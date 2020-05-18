@@ -6,7 +6,6 @@ from django import template
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Manager, QuerySet
 from django.templatetags.static import static
-from django.utils.formats import localize
 from django.utils.functional import Promise
 from django.utils.safestring import mark_safe
 

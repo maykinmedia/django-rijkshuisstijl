@@ -104,10 +104,25 @@ class ListView(DjListView):
     Requires additional "fields" property to be set to model fields that should be shown.
     """
 
+    model = None
     datagrid_config = {}
     columns = None
     fields = []
     filterable_columns = None
+    filter_action = None
+    filter_query_params = None
+    form = None
+    form_action = None
+    form_buttons = None
+    form_checkbox_name = None
+    form_method = None
+    form_model_name = None
+    form_select = None
+    form_options = None
+    form_select_all_position = None
+    export_buttons = None
+    export_input_name = None
+    toolbar_position = None
     order = True
     orderable_columns = None
     ordering_key = "ordering"
@@ -144,11 +159,28 @@ class ListView(DjListView):
         datagrid_config = {}
         datagrid_config["class"] = "datagrid--overflow-mobile"
         datagrid_config["columns"] = self.get_columns()
+        datagrid_config["model"] = self.model
         datagrid_config["queryset"] = self.get_queryset()
         datagrid_config["title"] = self.subtitle
 
         # Filter
         datagrid_config["filterable_columns"] = self.get_filterable_columns()
+        datagrid_config["filter_action"] = self.filter_action
+        datagrid_config["filter_query_params"] = self.filter_query_params
+
+        # Form
+        datagrid_config["form"] = self.form
+        datagrid_config["form_action"] = self.form_action
+        datagrid_config["form_buttons"] = self.form_buttons
+        datagrid_config["form_checkbox_name"] = self.form_checkbox_name
+        datagrid_config["form_method"] = self.form_method
+        datagrid_config["form_model_name"] = self.form_model_name
+        datagrid_config["form_select"] = self.form_select
+        datagrid_config["form_options"] = self.form_options
+        datagrid_config["form_select_all_position"] = self.form_select_all_position
+        datagrid_config["export_buttons"] = self.export_buttons
+        datagrid_config["export_input_name"] = self.export_input_name
+        datagrid_config["toolbar_position"] = self.toolbar_position
 
         # Order
         datagrid_config["order"] = self.order

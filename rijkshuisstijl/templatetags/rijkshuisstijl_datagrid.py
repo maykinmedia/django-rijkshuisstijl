@@ -91,6 +91,11 @@ def datagrid(context, **kwargs):
     - filterable_columns: Optional, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "width") or a
       list defining which columns should be filterable. This may be configured equally to "columns".
 
+    - filter_action: Optional, specifies the url to submit filter actions to, this can be omitted in most cases.
+
+    - filter_query_params: Optional, a list_of_dict ("key", "value") specifying additional query parameters for
+      filtering.
+
 
     DOM filter
     ----------
@@ -408,6 +413,10 @@ def datagrid(context, **kwargs):
 
             # Filter one filter at a time.
             for active_filter in active_filters:
+                # Bypass filter if set.
+                if active_filter.get("bypass_filter", False):
+                    continue
+
                 lookup = active_filter.get("lookup")
                 filter_value = active_filter.get("value")
                 filter_type = active_filter.get("type")
@@ -417,7 +426,6 @@ def datagrid(context, **kwargs):
                     dates = re.split(r"[^\d-]+", filter_value)
 
                     if len(dates) is 1:
-                        print(dates)
                         date_end = parse_date(dates[0]) + timedelta(days=1)
                         date_end_string = date_end.isoformat()
                         dates.append(date_end_string)
@@ -599,6 +607,9 @@ def datagrid(context, **kwargs):
 
         _cache["get_filters"] = filterable_columns
         return filterable_columns
+
+    def get_filter_query_params():
+        return create_list_of_dict(kwargs.get("filter_query_params"), "key", "value")
 
     def get_groups():
         """
@@ -1015,7 +1026,10 @@ def datagrid(context, **kwargs):
         if _cache.get("_get_model"):
             return _cache.get("_get_model")
 
-        model = None
+        model = kwargs.get("model")
+
+        if model:
+            return model
 
         try:
             model = _get_object_list().model
@@ -1057,6 +1071,8 @@ def datagrid(context, **kwargs):
         config.get("formset") and context.get("request").method == "POST"
     )
     config["filters"] = get_filters()
+    config["filter_action"] = config.get("filter_action")
+    config["filter_query_params"] = get_filter_query_params()
     config["groups"] = get_groups()
     config["dom_filter"] = parse_kwarg(kwargs, "dom_filter", False)
     config["ordering"] = get_ordering_dict()
