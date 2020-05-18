@@ -195,31 +195,31 @@ def datagrid(context, **kwargs):
 
     - form_action: Optional, specifies the url to submit form actions to. If set, form will default to True.
 
+    - form_method: Optional, method to use for the form, defaults to "POST".
+
     - form_buttons: Optional, a list_of_dict (label, [href], [icon], [icon_src] [name], [target], [title]) defining
       which buttons to create (see rijkshuisstijl_form.button). The name attribute of the buttons should be used to
       specify the performed action.
       example: [{'name': 'delete', 'label': 'delete' 'class': 'button--danger'}]
 
-    - export_buttons: Optional, similar to "form_buttons" except rendered differently, these buttons indicate possible
-      export formats. Note: actual export relies on custom implementation.
+    - form_checkbox_name: Optional, specifies the name for each checkbox input for an object in the table. This
+      should be used for determining which objects should be manipulated by the performed action.
 
-    - export_input_name: Optional, A str indicating the name of the input used to pass the columns to export.
-      Note: actual export relies on custom implementation.
-
-    - form_model_name: Optional, A str indicating the name of the input used to pass the model to export.
-      Note: actual export relies on custom implementation.
-
-    - form_method: Optional, method to use for the form, defaults to "POST".
+    - form_select_all_position, Specifies the position of the select all checkbox (if applicable).
 
     - form_select: Optional, If set (dict, at least "name"), shows a select with actions (comparable to form_buttons).
       Requires form_options to be set as well. The name attribute should be used to specify the performed action.
 
     - form_options: Optional, a list_of_dict (label, value) defining which options to create within the select.
 
-    - form_checkbox_name: Optional, specifies the name for each checkbox input for an object in the table. This
-      should be used for determining which objects should be manipulated by the performed action.
+    - form_model_name: Optional, A str indicating the name of the input used to pass the model to export.
+      Note: actual export relies on custom implementation.
 
-    - form_select_all_position, Specifies the position of the select all checkbox (if applicable).
+    - export_buttons: Optional, similar to "form_buttons" except rendered differently, these buttons indicate possible
+      export formats. Note: actual export relies on custom implementation.
+
+    - export_input_name: Optional, A str indicating the name of the input used to pass the columns to export.
+      Note: actual export relies on custom implementation.
 
     - toolbar_position: Optional, a list_of_dict (value, label) defining
       toolbar containing the buttons specified by form_buttons.
@@ -1088,11 +1088,11 @@ def datagrid(context, **kwargs):
         or bool(kwargs.get("form_buttons"))
     )
     config["form_action"] = config.get("form_action", "")
+    config["form_method"] = parse_kwarg(kwargs, "form_method", "post")
     config["form_buttons"] = get_form_buttons()
-    config["form_method"] = parse_kwarg(kwargs, "form_method", "POST")
-    config["form_select"] = get_form_select()
     config["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
     config["form_select_all_position"] = kwargs.get("form_select_all_position", "top")
+    config["form_select"] = get_form_select()
     config["form_model_name"] = kwargs.get("form_model_name", "model")
     config["form_model_meta_label"] = _get_model_label()
 
