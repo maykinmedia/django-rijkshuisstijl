@@ -865,6 +865,8 @@ def datagrid(context, **kwargs):
 
             if formset.is_valid():
                 formset.save()
+                # Reset the cache for fresh data
+                _cache.clear()
                 return ModelFormSet(queryset=queryset.all())
             else:
                 return formset
@@ -1064,9 +1066,11 @@ def datagrid(context, **kwargs):
     config["label_result_count"] = parse_kwarg(kwargs, "label_result_count", _("resultaten"))
     config["label_select_all"] = parse_kwarg(kwargs, "label_select_all", _("(De)selecteer alles"))
 
+    # Formset modifies data so goes first
+    config["formset"] = get_formset()
+
     # Showing Data/Filtering/Grouping/Ordering
     config["columns"] = get_columns()
-    config["formset"] = get_formset()
     config["object_list"] = get_object_list(
         config.get("formset") and context.get("request").method == "POST"
     )
