@@ -376,7 +376,7 @@ class DatagridTestCase(InclusionTagWebTest):
 
         form = self.select_one(".datagrid__form", config)
         self.assertIn("datagrid__form", form.get("class"))
-        self.assertEqual(form.get("method"), "POST")
+        self.assertEqual(form.get("method"), "post")
         self.assertEqual(form.get("action"), "/foo")
 
         button_foo = self.select_one(".button", config)
