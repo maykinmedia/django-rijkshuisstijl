@@ -691,7 +691,7 @@ def datagrid(context, **kwargs):
         orderable_columns = get_orderable_columns()
 
         result = None
-        if ordering and ordering.replace("-", "") in [c["lookup"] for c in orderable_columns]:
+        if ordering and ordering.replace("-", "") in [c.get("lookup") for c in orderable_columns]:
             result = ordering
         elif ordering:
             pass
@@ -738,7 +738,9 @@ def datagrid(context, **kwargs):
                     Edge case: A dict is found within the list, this is also supported.
                     """
                     key = orderable_column["key"]
-                    lookup = orderable_column.get("lookup", key)
+                    lookup = orderable_column.get(
+                        "order_lookup", orderable_column.get("lookup", key)
+                    )
                     orderable_column_dict = {"key": key, "lookup": lookup}
                 else:
                     orderable_column_dict = {"key": orderable_column, "lookup": orderable_column}
