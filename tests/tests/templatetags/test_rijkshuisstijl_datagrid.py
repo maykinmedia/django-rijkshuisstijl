@@ -38,12 +38,13 @@ class DatagridTestCase(InclusionTagWebTest):
         html = Template(
             '{% load rijkshuisstijl %}{% datagrid queryset=queryset columns="title,publisher__name:publisher name" orderable_columns="title,publisher__name" %}'
         ).render(config)
+
         self.assertInHTML(
             '<a class="datagrid__link" href="{}">{}</a>'.format("?ordering=title", "title"), html
         )
         self.assertInHTML(
             '<a class="datagrid__link" href="{}">{}</a>'.format(
-                "?ordering=publisher__name", "publisher name"
+                "?ordering=publisher__name", "publishing house"
             ),
             html,
         )
@@ -342,8 +343,8 @@ class DatagridTestCase(InclusionTagWebTest):
     def test_custom_presentation(self):
         html = self.template_render(
             {
-                "columns": ("title", "author"),
-                "get_author_display": lambda book: book.authors.first(),
+                "columns": ("title", "authors"),
+                "get_authors_display": lambda book: book.authors.first(),
                 "queryset": Book.objects.all(),
             }
         )

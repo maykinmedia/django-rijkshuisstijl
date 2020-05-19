@@ -13,6 +13,7 @@ from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_filters import getattr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_utils import (
     get_field_label,
+    get_recursed_field_label,
     get_recursed_field_value,
 )
 
@@ -345,7 +346,7 @@ def datagrid(context, **kwargs):
 
             # If queryset present, resolve label via model.
             if model and not column.get("label"):
-                column["label"] = get_field_label(model, column["key"])
+                column["label"] = get_recursed_field_label(model, column["key"])
 
             # If queryset not present, fall back to fallback label.
             if not queryset and not column.get("label"):
