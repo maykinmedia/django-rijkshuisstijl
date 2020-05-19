@@ -141,6 +141,7 @@ def key_value_table(**kwargs):
     - class: Optional, a string with additional CSS classes.
     - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating
       hyperlinks if applicable in every cell.
+    - urlize_target: Optional, "target" attribute for links generated using "urlize".
 
     Custom presentation (get_<field>_display)
     -----------------------------------------
@@ -168,6 +169,7 @@ def summary_list(**kwargs):
     config["help_text_position"] = parse_kwarg(
         config, "help_text_position", settings.RH_HELP_TEXT_POSITION
     )
+    config["show_toggle"] = parse_kwarg(config, "show_toggle", False)
     config["show_toggle"] = parse_kwarg(config, "show_toggle", False)
     config["config"] = config
     return config
@@ -335,6 +337,7 @@ def key_value(component, **kwargs):
     config["object"] = config.get("object", None)
     config["help_text_position"] = config.get("help_text_position", settings.RH_HELP_TEXT_POSITION)
     config["urlize"] = parse_kwarg(config, "urlize", True)
+    config["urlize_target"] = parse_kwarg(config, "urlize_target")
     config = add_object_attributes(config)
 
     config["config"] = config

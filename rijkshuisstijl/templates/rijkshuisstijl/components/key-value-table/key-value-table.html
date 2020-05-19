@@ -74,7 +74,7 @@
                                     {% firstof object|format_value:field.key as value %}
 
                                     {% if urlize %}
-                                        {{ value|linebreaksbr|urlize }}
+                                        {{ value|linebreaksbr|rh_urlize:urlize_target }}
                                     {% else %}
                                         {{ value|linebreaksbr }}
                                     {% endif %}
@@ -86,7 +86,7 @@
                                 {% firstof object|format_value:field.key as value %}
 
                                 {% if urlize %}
-                                    {{ value|linebreaksbr|urlize }}
+                                    {{ value|linebreaksbr|rh_urlize:urlize_target }}
                                 {% else %}
                                     {{ value|linebreaksbr }}
                                 {% endif %}

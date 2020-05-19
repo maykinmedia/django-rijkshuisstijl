@@ -1,5 +1,9 @@
 import re
 
+from django.template.defaultfilters import urlize
+from django.utils.html import format_html
+
+from bs4 import BeautifulSoup
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
 
@@ -31,3 +35,14 @@ def getattr_or_get(value, key, default=""):
         return get(value, key, default)
     except:
         return default
+
+
+@register.filter
+def rh_urlize(value, target=None):
+    html = urlize(value)
+    soup = BeautifulSoup(html, "html.parser")
+    anchors = soup.find_all("a")
+    for anchor in anchors:
+        if target:
+            anchor["target"] = target
+    return format_html(str(soup))

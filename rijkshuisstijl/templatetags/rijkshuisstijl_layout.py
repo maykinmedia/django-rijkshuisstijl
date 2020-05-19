@@ -168,6 +168,7 @@ def intro(**kwargs):
         - text: Optional, Text to show.
         - wysiwyg: Optional, Raw HTML to be shown, styled automatically.
         - urlize: Optional, if True text is passed to "urlize" template filter, automatically creating hyperlinks.
+        - urlize_target: Optional, "target" attribute for links generated using "urlize".
 
 
     :param kwargs:
@@ -186,6 +187,7 @@ def intro(**kwargs):
     config["text"] = config.get("text", None)
     config["wysiwyg"] = get_wysiwyg()
     config["urlize"] = config.get("urlize", True)
+    config["urlize_target"] = config.get("urlize_target")
 
     config["config"] = config
     return config
@@ -463,6 +465,7 @@ def textbox(**kwargs):
         - text: Optional, Text to show.
         - wysiwyg: Optional, Raw HTML to be shown, styled automatically.
         - urlize: Optional, if True text is passed to "urlize" template filter, automatically creating hyperlinks.
+        - urlize_target: Optional, "target" attribute for links generated using "urlize".
 
     :param config:
     """
@@ -482,6 +485,7 @@ def textbox(**kwargs):
     config["text"] = config.get("text", None)
     config["wysiwyg"] = get_wysiwyg()
     config["urlize"] = config.get("urlize", True)
+    config["urlize_target"] = config.get("urlize_target")
 
     config["config"] = config
     return config
