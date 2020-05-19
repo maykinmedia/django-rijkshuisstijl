@@ -18,17 +18,8 @@
 
   @media print {
     height: auto;
-    position: static;
-
-    .logo {
-      background-color: #134071;
-      display: flex;
-      align-items: flex-end;
-      width: 13mm;
-      height: 39mm;
-      outline: 1px solid green;
-      margin-bottom: 13mm;
-    }
+    position: absolute;
+    top: -52mm;
 
     .logo .image__image {
       width: 13mm;
