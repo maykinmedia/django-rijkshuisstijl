@@ -131,6 +131,21 @@ class Tabs {
         [...this.listItems, ...this.tabs].forEach(node => BEM.removeModifier(node, MODIFIER_ACTIVE));
         [listItem, tab].forEach(node => BEM.addModifier(node, MODIFIER_ACTIVE));
         this.node.dataset.tabId = id;
+
+        // Support leaflet.
+        //
+        // Leaflet won't render correctly if not visible. Therefore, we need to invalidate it's size to re-render it.
+        // We don't have a direct reference to the leaflet instances so we try to find the callbacks in
+        // window._leaflet_events, then call it when activating the tab (if the even name matches resize).
+        //
+        // FIXME: There is probably a better way to do this.
+        try {
+            Object.entries(window._leaflet_events).forEach(([event_name, callback]) => {
+               if (event_name.indexOf("resize") > -1) {
+                    callback()
+               }
+            });
+        } catch (e) {}
     }
 
     /**
