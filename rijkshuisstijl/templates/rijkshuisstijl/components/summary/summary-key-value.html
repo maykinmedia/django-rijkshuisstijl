@@ -17,21 +17,47 @@
         {% if field.form_field and not field.toggle %}
 
 
-            {% if form_id %}
-                {% form_field form field.form_field.name attrs='form:'|add:form_id help_text_position=help_text_position %}
+            {% if formset_form %}
+
+                {% if form_id %}
+                    {% form_field formset_form field.form_field.name attrs='form:'|add:form_id help_text_position=help_text_position %}
+                {% else %}
+                    {% form_field formset_form field.form_field.name help_text_position=help_text_position %}
+                {% endif %}
+
             {% else %}
-                {% form_field form field.form_field.name help_text_position=help_text_position %}
+
+                {% if form_id %}
+                    {% form_field form field.form_field.name attrs='form:'|add:form_id help_text_position=help_text_position %}
+                {% else %}
+                    {% form_field form field.form_field.name help_text_position=help_text_position %}
+                {% endif %}
+
             {% endif %}
 
 
         {% elif field.toggle %}
 
 
-            {% if form_id %}
-                {% form_field form field.form_field.name attrs='form:'|add:form_id help_text_position=help_text_position %}
+            {% if formset_form %}
+
+                {% if form_id %}
+                    {% form_field formset_form field.form_field.name attrs='form:'|add:form_id help_text_position=help_text_position %}
+                {% else %}
+                    {% form_field formset_form field.form_field.name help_text_position=help_text_position %}
+                {% endif %}
+
             {% else %}
-                {% form_field form field.form_field.name help_text_position=help_text_position %}
+
+                {% if form_id %}
+                    {% form_field form field.form_field.name attrs='form:'|add:form_id help_text_position=help_text_position %}
+                {% else %}
+                    {% form_field form field.form_field.name help_text_position=help_text_position %}
+                {% endif %}
+
             {% endif %}
+
+
             <span class="toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">
                 {% firstof object|format_value:field.key as value %}
 

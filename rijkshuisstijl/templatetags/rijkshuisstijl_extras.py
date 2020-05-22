@@ -1,3 +1,4 @@
+from django.forms import modelformset_factory
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.conf import settings
@@ -5,6 +6,8 @@ from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_filters import getattr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import (
     get_id,
+    get_model,
+    get_queryset,
     merge_config,
     parse_arg,
     parse_kwarg,
@@ -157,19 +160,56 @@ def key_value_table(**kwargs):
     return key_value("key-value-table", **kwargs)
 
 
-@register.inclusion_tag("rijkshuisstijl/components/summary/summary-list.html")
-def summary_list(**kwargs):
+@register.inclusion_tag("rijkshuisstijl/components/summary/summary-list.html", takes_context=True)
+def summary_list(context, **kwargs):
     """
     Shows multiple "summary" components for every object in "object_list" option.
     Shares the interface with summary (see: key_value_table) with the exception of using object_list instead of object.
+
+
+    Inline forms (formsets)
+    -----------------------
+
+    Values within te summary list can be changed using formsets. To enable these "inline forms" specify the form_class
+    option and pass a (Django) ModelForm class specifying fields matching the columns.
+
+    - form_class: Optional, a (Django) Form class specifying the fields to be editable.
     """
     config = merge_config(kwargs)
+
+    def get_formset():
+        """
+        :return: BaseModelFormSet
+        """
+        request = context.get("request")
+        form_class = config.get("form_class")
+        model = get_model(context, config)
+        queryset = get_queryset(context, config)
+
+        if not (form_class and model):
+            return
+
+        ModelFormSet = modelformset_factory(model, form_class, extra=0)
+
+        if request.method == "POST":
+            formset = ModelFormSet(request.POST)
+
+            if formset.is_valid():
+                formset.save()
+                # Reset the cache for fresh data
+                queryset = queryset.all()
+                config["object_list"] = queryset
+                return ModelFormSet(queryset=queryset)
+            else:
+                return formset
+        return ModelFormSet(queryset=queryset)
+
     config["id"] = get_id(config, "summary-list")
     config["object_list"] = parse_kwarg(config, "object_list", [])
+    config["formset"] = get_formset()
     config["help_text_position"] = parse_kwarg(
         config, "help_text_position", settings.RH_HELP_TEXT_POSITION
     )
-    config["show_toggle"] = parse_kwarg(config, "show_toggle", False)
     config["show_toggle"] = parse_kwarg(config, "show_toggle", False)
     config["config"] = config
     return config
@@ -182,7 +222,8 @@ def summary(**kwargs):
     In addition to key_value_table options: "detail_fields" can be specified (same syntax as "fields". Setting this will
     result in a collapsible section in the summary.
     """
-    return key_value("summary", **kwargs)
+    config = key_value("summary", **kwargs)
+    return config
 
 
 def key_value(component, **kwargs):
@@ -232,7 +273,7 @@ def key_value(component, **kwargs):
         :param fields: A dict (key, label) or a list defining which attributes of object to show and what labels to use.
         :return: A list_of_dict (id, edit, form_field, toggle, full_width_field, key, label, value) for every field in in fields.
         """
-        form = config.get("form")
+        form = config.get("formset_form", config.get("form"))
         key_value_id = get_key_value_id()
         obj = config.get("object")
 

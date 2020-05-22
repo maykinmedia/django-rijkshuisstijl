@@ -9,6 +9,105 @@ except ImportError:
     JSONDecodeError = ValueError
 
 
+#
+# Template tag partials.
+#
+
+
+def get_id(config, prefix):
+    """
+    Gets the id to put on the component based on config["id"], if no id is provided a uuid4 is created and prefixed
+    with "<prefix>-".
+    :return: A str which should be unique to this template tag.
+    """
+    return config.get("id", prefix + "-" + str(uuid4()))
+
+
+def get_model(context, config):
+    """
+    Returns the Model of the QuerySet (if passed).
+   :param context: Template tag context.
+     :param config: Template tag configuration.
+    :return: Model or None.
+    """
+    # Get model from config.
+    model = config.get("model")
+
+    if not model:
+        # Get model from QuerySet.
+        try:
+            model = get_object_list(context, config).model
+        except AttributeError:
+            pass
+
+    if not model:
+        # Get model from form_class.
+        try:
+            model = config.get("form_class")._meta.model
+        except AttributeError:
+            pass
+
+    return model
+
+
+def get_model_label(context, config):
+    """
+    Returns the _meta.label of the Model of the QuerySet (if passed).
+    :param context: Template tag context.
+    :param config: Template tag configuration.
+    :return: str or None.
+    """
+    model_label = None
+
+    try:
+        model_label = get_model(context, config)._meta.label
+    except AttributeError:
+        pass
+
+    return model_label
+
+
+def get_object_list(context, config):
+    """
+    Looks for the object_list to use based on the presence of these variables in order:
+
+        1) config['queryset']
+        2) config['object_list']
+        3) context['queryset']
+        4) context['object_list']
+
+    :param context: Template tag context.
+    :param config: Template tag configuration.
+    :return: QuerySet or list.
+    """
+    context_object_list = context.get("object_list", [])
+    context_queryset = context.get("queryset", context_object_list)
+    object_list = config.get("object_list", context_queryset)
+    object_list = config.get("queryset", object_list)
+
+    return object_list
+
+
+def get_queryset(context, config):
+    """
+    Returns the QuerySet (if passed).
+    :param context: Template tag context.
+    :param config: Template tag configuration.
+    :return: QuerySet or None.
+    """
+    queryset = None
+
+    if get_model(context, config):
+        queryset = get_object_list(context, config)
+
+    return queryset
+
+
+#
+# Utility functions.
+#
+
+
 def create_list_of_dict(obj, name_key="key", name_value="label"):
     """
     Converts obj to a list_of_dict containing name_key and name_value for every dict.
@@ -45,18 +144,9 @@ def create_list_of_dict(obj, name_key="key", name_value="label"):
         return list_of_dict
 
 
-def get_id(config, prefix):
+def get_model_from_obj(obj):
     """
-    Gets the id to put on the component based on kwargs["id"], if no id is provided a uuid4 is created and prefixed
-    with "<prefix>-".
-    :return: A str which should be unique to this component.
-    """
-    return config.get("id", prefix + "-" + str(uuid4()))
-
-
-def get_model(obj):
-    """
-    Tries to return a model based obj.
+    Tries to return a model based on obj.
     :param obj: A model instance or a QuerySet.
     :return: The found model class or None.
     """

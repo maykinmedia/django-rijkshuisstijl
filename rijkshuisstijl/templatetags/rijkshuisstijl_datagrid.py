@@ -12,7 +12,6 @@ from django.utils.translation import gettext_lazy as _
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_filters import getattr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_utils import (
-    get_field_label,
     get_recursed_field_label,
     get_recursed_field_value,
 )
@@ -20,6 +19,10 @@ from rijkshuisstijl.templatetags.rijkshuisstijl_utils import (
 from .rijkshuisstijl_helpers import (
     create_list_of_dict,
     get_id,
+    get_model,
+    get_model_label,
+    get_object_list,
+    get_queryset,
     merge_config,
     parse_kwarg,
 )
@@ -51,8 +54,8 @@ def datagrid(context, **kwargs):
 
     .. code-block:: python
 
-        kwargs['queryset']
-        kwargs['object_list']
+        config['queryset']
+        config['object_list']
         context['queryset']
         context['object_list']
 
@@ -189,7 +192,7 @@ def datagrid(context, **kwargs):
     A form can be generated POSTing data to the url specified by the "form_action" option. When a form is active
     each row gets a checkbox input with a name specified by the "form_checkbox_name" option. Various actions can be
     defined by the "form_buttons" option which are placed either in the top, bottom or at both position based on the
-    value of the "toolbar_position" option.
+    value of the "toolbar_position" option. For creating inline forms, see "inline forms (formsets)".
 
     - form: Optional, if True, adds a form to the datagrid, useful for allowing user manipulations on the dataset.
       Defaults to false, unless "form_action" or "form_buttons" is set.
@@ -225,6 +228,15 @@ def datagrid(context, **kwargs):
     - toolbar_position: Optional, a list_of_dict (value, label) defining
       toolbar containing the buttons specified by form_buttons.
 
+
+    Inline forms (formsets)
+    -----------------------
+
+    Values within te datagrid can be changed using formsets. To enable these "inline forms" specify the form_class
+    option and pass a (Django) form class specifying fields matching the columns.
+
+    - form_class: Optional, a (Django) ModelForm class specifying the fields to be editable.
+
     Color coded rows
     ----------------
 
@@ -242,57 +254,13 @@ def datagrid(context, **kwargs):
 
     The supported colors are:
 
-    - purple
-    - purple-shade-1
-    - purple-shade-2
-    - violet
-    - violet-shade-1
-    - violet-shade-2
-    - ruby
-    - ruby-shade-1
-    - ruby-shade-2
-    - pink
-    - pink-shade-1
-    - pink-shade-2
-    - red
-    - red-shade-1
-    - red-shade-2
-    - orange
-    - orange-shade-1
-    - orange-shade-2
-    - dark-yellow
-    - dark-yellow-shade-1
-    - dark-yellow-shade-2
-    - yellow
-    - yellow-shade-1
-    - yellow-shade-2
-    - dark-brown
-    - dark-brown-shade-1
-    - dark-brown-shade-2
-    - brown
-    - brown-shade-1
-    - brown-shade-2
-    - dark-green
-    - dark-green-shade-1
-    - dark-green-shade-2
-    - green
-    - green-shade-1
-    - green-shade-2
-    - moss-green
-    - moss-green-shade-1
-    - moss-green-shade-2
-    - mint-green
-    - mint-green-shade-1
-    - mint-green-shade-2
-    - dark-blue
-    - dark-blue-shade-1
-    - dark-blue-shade-2
-    - heaven-blue
-    - heaven-blue-shade-1
-    - heaven-blue-shade-2
-    - light-blue
-    - light-blue-shade-1
-    - light-blue-shade-2
+    purple, purple-shade-1, purple-shade-2, violet, violet-shade-1, violet-shade-2, ruby, ruby-shade-1, ruby-shade-2,
+    pink, pink-shade-1, pink-shade-2, red, red-shade-1, red-shade-2, orange, orange-shade-1, orange-shade-2,
+    dark-yellow, dark-yellow-shade-1, dark-yellow-shade-2, yellow, yellow-shade-1, yellow-shade-2, dark-brown,
+    dark-brown-shade-1, dark-brown-shade-2, brown, brown-shade-1, brown-shade-2, dark-green, dark-green-shade-1,
+    dark-green-shade-2, green, green-shade-1, green-shade-2, moss-green, moss-green-shade-1, moss-green-shade-2,
+    mint-green, mint-green-shade-1, mint-green-shade-2, dark-blue, dark-blue-shade-1, dark-blue-shade-2, heaven-blue,
+    heaven-blue-shade-1, heaven-blue-shade-2, light-blue, light-blue-shade-1, light-blue-shade-2
 
 
     Additional options
@@ -325,19 +293,19 @@ def datagrid(context, **kwargs):
 
     def get_columns():
         """
-        Gets the columns to show based on kwargs['columns']. If no label is provided an attempt is made to create it
+        Gets the columns to show based on config['columns']. If no label is provided an attempt is made to create it
         based on the model or a simple replacement of dashes and underscores.
         :return: A list_of_dict where each dict contains "key" and "label" keys.
         """
         if _cache.get("get_columns"):
             return _cache.get("get_columns")
 
-        columns = parse_kwarg(kwargs, "columns", [])
+        columns = parse_kwarg(config, "columns", [])
         columns = create_list_of_dict(columns, "key", "fallback_label")
-        queryset = _get_queryset()
+        queryset = get_queryset(context, config)
 
         # Get column label.
-        model = _get_model()
+        model = get_model(context, config)
 
         for column in columns:
             # Default lookup.
@@ -355,12 +323,12 @@ def datagrid(context, **kwargs):
         _cache["get_columns"] = columns
         return columns
 
-    def get_object_list(refresh=False):
+    def get_datagrid_object_list(refresh=False):
         """
         Looks for the object_list to use based on the presence of these variables in order:
 
-            1) kwargs['queryset']
-            2) kwargs['object_list']
+            1) config['queryset']
+            2) config['object_list']
             3) context['queryset']
             4) context['object_list']
 
@@ -373,16 +341,16 @@ def datagrid(context, **kwargs):
             return _cache.get("get_object_list")
 
         # Get object list.
-        object_list = _get_object_list()
+        object_list = get_object_list(context, config)
 
-        if _get_model() and refresh:
+        if get_model(context, config) and refresh:
             object_list = object_list.all()
 
         # Filtering.
         object_list = get_filtered_queryset(object_list)
 
         # Ordering.
-        order = kwargs.get("order")
+        order = config.get("order")
         if order and hasattr(object_list, "order_by") and callable(object_list.order_by):
             order_by = get_ordering()
 
@@ -404,7 +372,7 @@ def datagrid(context, **kwargs):
             return _cache.get("get_filtered_queryset")
 
         filters = get_filters()
-        model = _get_model()
+        model = get_model(context, config)
 
         if filters and model:
             # Active filters (with value set).
@@ -476,7 +444,7 @@ def datagrid(context, **kwargs):
         of the modifier_key option.
         :return: A string othe modifier column or False.
         """
-        return kwargs.get("modifier_column", kwargs.get("modifier_key", False))
+        return config.get("modifier_column", config.get("modifier_key", False))
 
     def get_filters():
         """
@@ -493,11 +461,11 @@ def datagrid(context, **kwargs):
             return _cache.get("get_filters")
 
         # Get the columns configured to be filterable.
-        filterable_columns = parse_kwarg(kwargs, "filterable_columns", [])
+        filterable_columns = parse_kwarg(config, "filterable_columns", [])
         filterable_columns = create_list_of_dict(filterable_columns)
 
         # Get the model.
-        model = _get_model()
+        model = get_model(context, config)
 
         # Filtering is only supported on QuerySets.
         if not model:
@@ -610,7 +578,7 @@ def datagrid(context, **kwargs):
         return filterable_columns
 
     def get_filter_query_params():
-        return create_list_of_dict(kwargs.get("filter_query_params"), "key", "value")
+        return create_list_of_dict(config.get("filter_query_params"), "key", "value")
 
     def get_groups():
         """
@@ -627,8 +595,8 @@ def datagrid(context, **kwargs):
 
         :return: list_of_dict.
         """
-        groups = parse_kwarg(kwargs, "groups")
-        object_list = get_object_list()
+        groups = parse_kwarg(config, "groups")
+        object_list = get_datagrid_object_list()
 
         if not groups:
             return [
@@ -703,7 +671,7 @@ def datagrid(context, **kwargs):
         Returns the query parameter to use for ordering.
         :return: string
         """
-        return parse_kwarg(kwargs, "ordering_key", "ordering")
+        return parse_kwarg(config, "ordering_key", "ordering")
 
     def get_orderable_columns():
         """
@@ -713,7 +681,7 @@ def datagrid(context, **kwargs):
         if _cache.get("get_orderable_columns"):
             return _cache.get("get_orderable_columns")
 
-        orderable_columns = parse_kwarg(kwargs, "orderable_columns", {})
+        orderable_columns = parse_kwarg(config, "orderable_columns", {})
         orderable_columns_list_of_dict = []
 
         """
@@ -756,7 +724,7 @@ def datagrid(context, **kwargs):
         :return: dict
         """
         request = context["request"]
-        order_by_index = kwargs.get("order_by_index", False)
+        order_by_index = config.get("order_by_index", False)
         ordering_dict = {}
 
         try:
@@ -798,10 +766,10 @@ def datagrid(context, **kwargs):
 
     def get_form_buttons():
         """
-        Gets the buttons to use for the form based on kwargs['form_buttons'].
+        Gets the buttons to use for the form based on config['form_buttons'].
         :return: A list_of_dict where each dict contains at least "name" and "label" keys.
         """
-        form_buttons = parse_kwarg(kwargs, "form_buttons", {})
+        form_buttons = parse_kwarg(config, "form_buttons", {})
 
         # Convert dict to list_of_dict
         try:
@@ -818,12 +786,12 @@ def datagrid(context, **kwargs):
 
     def get_form_select():
         """
-        Gets the select to use for the form based on kwargs['form_select'] and form_options.
+        Gets the select to use for the form based on config['form_select'] and form_options.
         :return: A dict with at least "name" and "options" keys, options is a list_of_dict.
         """
-        form_select = parse_kwarg(kwargs, "form_select", None)
+        form_select = parse_kwarg(config, "form_select", None)
         if form_select:
-            form_options = parse_kwarg(kwargs, "form_options", [])
+            form_options = parse_kwarg(config, "form_options", [])
             form_select["class"] = form_select.get("class", "")
             form_select["choices"] = [get_option(o) for o in form_options]
             form_select["form"] = f"datagrid-action-form-{get_datagrid_id(config)}"
@@ -847,8 +815,8 @@ def datagrid(context, **kwargs):
         """
         request = context.get("request")
         form_class = config.get("form_class")
-        model = _get_model()
-        object_list = get_object_list()
+        model = get_model(context, config)
+        object_list = get_datagrid_object_list()
 
         if not (form_class and model):
             return
@@ -922,7 +890,7 @@ def datagrid(context, **kwargs):
         :param datagrid_context:
         :return: datagrid_context
         """
-        object_list = get_object_list()
+        object_list = get_datagrid_object_list()
 
         for obj in object_list:
             add_display(obj)
@@ -937,7 +905,7 @@ def datagrid(context, **kwargs):
         """
         for column in get_columns():
             key = column["key"]
-            fn = kwargs.get("get_{}_display".format(key), None)
+            fn = config.get("get_{}_display".format(key), None)
             if fn:
                 setattr(obj, "rh_display_{}".format(key), fn(obj))
 
@@ -948,12 +916,12 @@ def datagrid(context, **kwargs):
         :param obj:
         """
         try:
-            key = parse_kwarg(kwargs, "modifier_key", None)
+            key = parse_kwarg(config, "modifier_key", None)
 
             if not key:
                 return
 
-            modifier_map = parse_kwarg(kwargs, "modifier_mapping", {})
+            modifier_map = parse_kwarg(config, "modifier_mapping", {})
             object_value = getattr(obj, key)
 
             for item_key, item_value in modifier_map.items():
@@ -967,7 +935,7 @@ def datagrid(context, **kwargs):
         """
         Returns a list of dict with button configurations for each button in export_buttons.
         """
-        export_buttons = parse_kwarg(kwargs, "export_buttons")
+        export_buttons = parse_kwarg(config, "export_buttons")
         export_buttons = create_list_of_dict(export_buttons, "name", "value")
 
         for export_button in export_buttons:
@@ -985,121 +953,47 @@ def datagrid(context, **kwargs):
 
         return export_buttons
 
-    def _get_object_list():
-        """
-        Looks for the object_list to use based on the presence of these variables in order:
-
-            1) kwargs['queryset']
-            2) kwargs['object_list']
-            3) context['queryset']
-            4) context['object_list']
-
-        :return: QuerySet or list.
-        """
-        if _cache.get("_get_object_list"):
-            return _cache.get("_get_object_list")
-
-        context_object_list = context.get("object_list", [])
-        context_queryset = context.get("queryset", context_object_list)
-        object_list = kwargs.get("object_list", context_queryset)
-        object_list = kwargs.get("queryset", object_list)
-
-        _cache["_get_object_list"] = object_list
-        return object_list
-
-    def _get_queryset():
-        """
-        Returns the QuerySet (if passed).
-        :return: QuerySet or None.
-        """
-        if _cache.get("_get_queryset"):
-            return _cache.get("_get_queryset")
-
-        queryset = None
-
-        if _get_model():
-            queryset = _get_object_list()
-
-        _cache["_get_queryset"] = queryset
-        return queryset
-
-    def _get_model():
-        """
-        Returns the Model of the QuerySet (if passed).
-        :return: Model or None.
-        """
-        if _cache.get("_get_model"):
-            return _cache.get("_get_model")
-
-        model = kwargs.get("model")
-
-        if model:
-            return model
-
-        try:
-            model = _get_object_list().model
-        except AttributeError:
-            pass
-
-        _cache["_get_model"] = model
-        return model
-
-    def _get_model_label():
-        """
-        Returns the _meta.label of the Model of the QuerySet (if passed).
-        :return: str or None.
-        """
-        model_label = None
-
-        try:
-            model_label = _get_model()._meta.label
-        except AttributeError:
-            pass
-
-        return model_label
-
-    kwargs = merge_config(kwargs)
-    config = kwargs.copy()
+    config = merge_config(kwargs)
 
     # i18n
     config["label_filter_placeholder"] = parse_kwarg(
-        kwargs, "label_filter_placeholder", _("Filter resultaten")
+        config, "label_filter_placeholder", _("Filter resultaten")
     )
-    config["label_no_results"] = parse_kwarg(kwargs, "label_no_results", _("Geen resultaten"))
-    config["label_result_count"] = parse_kwarg(kwargs, "label_result_count", _("resultaten"))
-    config["label_select_all"] = parse_kwarg(kwargs, "label_select_all", _("(De)selecteer alles"))
+    config["label_no_results"] = parse_kwarg(config, "label_no_results", _("Geen resultaten"))
+    config["label_result_count"] = parse_kwarg(config, "label_result_count", _("resultaten"))
+    config["label_select_all"] = parse_kwarg(config, "label_select_all", _("(De)selecteer alles"))
 
     # Formset modifies data so goes first
     config["formset"] = get_formset()
 
     # Showing Data/Filtering/Grouping/Ordering
     config["columns"] = get_columns()
-    config["object_list"] = get_object_list(
+    config["object_list"] = get_datagrid_object_list(
         config.get("formset") and context.get("request").method == "POST"
     )
     config["filters"] = get_filters()
     config["filter_action"] = config.get("filter_action")
     config["filter_query_params"] = get_filter_query_params()
     config["groups"] = get_groups()
-    config["dom_filter"] = parse_kwarg(kwargs, "dom_filter", False)
+    config["dom_filter"] = parse_kwarg(config, "dom_filter", False)
     config["ordering"] = get_ordering_dict()
 
     # Manipulating data (form)
     config["form"] = (
-        parse_kwarg(kwargs, "form", False)
-        or bool(kwargs.get("form_action"))
-        or bool(kwargs.get("form_buttons"))
+        parse_kwarg(config, "form", False)
+        or bool(config.get("form_action"))
+        or bool(config.get("form_buttons"))
     )
     config["form_action"] = config.get("form_action", "")
-    config["form_method"] = parse_kwarg(kwargs, "form_method", "post")
+    config["form_method"] = parse_kwarg(config, "form_method", "post")
     config["form_buttons"] = get_form_buttons()
-    config["form_checkbox_name"] = kwargs.get("form_checkbox_name", "objects")
-    config["form_select_all_position"] = kwargs.get("form_select_all_position", "top")
+    config["form_checkbox_name"] = config.get("form_checkbox_name", "objects")
+    config["form_select_all_position"] = config.get("form_select_all_position", "top")
     config["form_select"] = get_form_select()
-    config["form_model_name"] = kwargs.get("form_model_name", "model")
-    config["form_model_meta_label"] = _get_model_label()
+    config["form_model_name"] = config.get("form_model_name", "model")
+    config["form_model_meta_label"] = get_model_label(context, config)
 
-    config["toolbar_position"] = kwargs.get("toolbar_position", "top")
+    config["toolbar_position"] = config.get("toolbar_position", "top")
 
     # Custom presentation (get_<field>_display)/Color coded rows
     config = add_object_attributes(config)
@@ -1107,16 +1001,16 @@ def datagrid(context, **kwargs):
 
     # Export
     config["export_buttons"] = get_export_buttons()
-    config["export_input_name"] = kwargs.get("export_input_name", "fields")
+    config["export_input_name"] = config.get("export_input_name", "fields")
 
     # Additional options
-    config["class"] = kwargs.get("class", None)
+    config["class"] = config.get("class", None)
     config["id"] = get_datagrid_id(config)
-    config["title"] = kwargs.get("title", None)
-    config["url_reverse"] = kwargs.get("url_reverse", "")
-    config["urlize"] = kwargs.get("urlize", True)
+    config["title"] = config.get("title", None)
+    config["url_reverse"] = config.get("url_reverse", "")
+    config["urlize"] = config.get("urlize", True)
 
     # Context
     config["request"] = context["request"]
-    config["config"] = kwargs
+    config["config"] = config
     return config

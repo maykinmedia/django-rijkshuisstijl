@@ -10,7 +10,7 @@ from django.utils.functional import Promise
 from django.utils.safestring import mark_safe
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
-from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_model
+from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_model_from_obj
 
 
 @register.filter()
@@ -63,7 +63,7 @@ def get_recursed_field_label(obj, field_lookup):
     :return: str
     """
     field = get_recursed_field(obj, field_lookup)
-    model = get_model(obj)
+    model = get_model_from_obj(obj)
 
     try:
         if field.auto_created:  # Field is field.
@@ -94,7 +94,7 @@ def get_field_label(obj, field):
         return field(obj)
 
     try:
-        model = get_model(obj)
+        model = get_model_from_obj(obj)
         field_name = str(getattr(field, "name", field))
 
         # If column key is "__str__", use model name as label.
