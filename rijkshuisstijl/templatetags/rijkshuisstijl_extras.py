@@ -255,7 +255,7 @@ def key_value(component, **kwargs):
             fieldset_title = fieldset[0]
             fieldset_keys = fieldset[1].get("fields", ())
 
-            if component is "summary":
+            if component == "summary":
                 fieldset_field_keys = [fk for fk in fieldset_keys if fk in field_keys]
             else:
                 fieldset_field_keys = [fk for fk in fieldset_keys]
