@@ -9,7 +9,7 @@ import {TOGGLES} from './constants';
  * Toggle should have data-toggle-target set to query selector for target.
  * Toggle should have data-toggle-modifier set to modifier to toggle.
  * Toggle could have data-focus-target set to query selector for node to focus on click.
- * Toggle could have data-toggle-link-mode set to either "normal", "positive", "negative" or "prevent", see this.onClick().
+ * Toggle could have data-toggle-link-mode set to either "normal", "positive", "negative", "prevent" or "noprevent", see this.onClick().
  * Toggle could have data-operation set to either "add" or "remove", see this.toggle().
  * @class
  */
@@ -47,6 +47,7 @@ export class Toggle {
      * - "positive": Prevent default on regular elements, dont prevent links if this.getState() returns true.
      * - "negative": Prevent default on regular elements, dont prevent links if this.getState() returns false.
      * - "prevent": Always prevent default.
+     * - "noprevent": Never prevent default.
      *
      * @param {MouseEvent} e
      */
@@ -71,6 +72,10 @@ export class Toggle {
         } else if (toggleLinkMode === 'prevent') {
             e.preventDefault();
             e.stopPropagation();
+        } else if (toggleLinkMode === 'noprevent') {
+            if(e.target.href) {
+                return;
+            }
         }
 
 

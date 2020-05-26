@@ -65,7 +65,7 @@ class DateInput {
      */
     onReady(selectedDates, dateStr, flatpickr) {
         this.copyAttrs(flatpickr.altInput);
-        this.cleanValue()
+        this.cleanValue();
     }
 
     /**

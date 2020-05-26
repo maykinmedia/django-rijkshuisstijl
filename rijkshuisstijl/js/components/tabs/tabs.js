@@ -141,8 +141,8 @@ class Tabs {
         // FIXME: There is probably a better way to do this.
         try {
             Object.entries(window._leaflet_events).forEach(([event_name, callback]) => {
-               if (event_name.indexOf("resize") > -1) {
-                    callback()
+               if (event_name.indexOf('resize') > -1) {
+                    callback();
                }
             });
         } catch (e) {}
