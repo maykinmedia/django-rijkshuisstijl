@@ -98,9 +98,7 @@
   }
 
   &--small {
-    @include body--small;
-    height: $input-height-small;
-    line-height: $input-height-small;
+    @include input--small;
   }
 
   &--contrast {
@@ -112,4 +110,11 @@
     @include color-primary(border-color);
     @include color-primary(color);
   }
+}
+
+
+@mixin input--small {
+  @include body--small;
+  height: $input-height-small;
+  line-height: $input-height-small;
 }

@@ -60,7 +60,7 @@
         {% if form_select_all_position in 'top,both' or toolbar_position in 'top,both' %}
             {% if title or form or form_buttons or dom_filter or formset and toolbar_position in 'top,both' %}
                 <header class="datagrid__header">
-                    <div class="toolbar toolbar--justify toolbar--pad">
+                    <div class="toolbar toolbar--justify toolbar--pad toolbar--responsive toolbar--spaced">
                         <ul class="toolbar__list">
                             {% if form %}
                                 <li class="toolbar__list-item">
@@ -182,7 +182,7 @@
         {# Render the footer. #}
         {% if form_select_all_position in 'bottom,both' or toolbar_position in 'bottom,both' or is_paginated %}
             <footer class="datagrid__footer">
-                <div class="toolbar toolbar--justify toolbar--pad">
+                <div class="toolbar toolbar--justify toolbar--pad toolbar--responsive toolbar--spaced">
                     <ul class="toolbar__list">
                         {% if form %}
                             <li class="toolbar__list-item">

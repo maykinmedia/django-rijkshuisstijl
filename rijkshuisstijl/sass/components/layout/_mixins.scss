@@ -4,6 +4,7 @@
   @include container($padding: false);
 
   &__section--justify {
+    @include responsive(flex-direction, column, row);
     display: flex;
     align-items: flex-start;
     justify-content: space-between;

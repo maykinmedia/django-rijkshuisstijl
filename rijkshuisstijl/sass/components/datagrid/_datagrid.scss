@@ -11,8 +11,10 @@
 @import '../../settings/lib/ro-shade';
 @import '../../settings/lib/sticky';
 @import '../button/constants';
+@import '../button/mixins';
 @import '../form/constants';
 @import '../header/constants';
+@import '../form/mixins';
 @import '../icon/mixins';
 @import '../toolbar/constants';
 
@@ -66,6 +68,10 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
 
   &__header {
     z-index: 10;
+  }
+
+  &__header .toolbar {
+    @include rows(0.5, margin-bottom);
   }
 
   &__footer {
@@ -358,13 +364,9 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     margin-right: $datagrid-spacing-row-h;
   }
 
-  .toolbar .button {
-    @extend .button--small;
-  }
-
   .toolbar .select {
     @extend .select--bordered;
-    @extend .select--small;
+    @extend .select--big;
   }
 
   .toolbar &__result-count {
