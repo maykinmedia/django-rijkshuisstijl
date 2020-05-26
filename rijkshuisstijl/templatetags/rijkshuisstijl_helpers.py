@@ -207,9 +207,9 @@ def parse_arg(arg, default=None):
     if type(arg) != str and type(arg) != SafeText:
         return arg
 
-    if arg is "True":
+    if arg == "True":
         return True
-    if arg is "False":
+    if arg == "False":
         return False
 
     if "," in arg or ":" in arg:

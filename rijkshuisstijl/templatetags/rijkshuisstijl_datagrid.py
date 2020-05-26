@@ -394,7 +394,7 @@ def datagrid(context, **kwargs):
                 if filter_type in ["DateField", "DateTimeField"]:  # TODO: DateTimeField
                     dates = re.split(r"[^\d-]+", filter_value)
 
-                    if len(dates) is 1:
+                    if len(dates) == 1:
                         date_end = parse_date(dates[0]) + timedelta(days=1)
                         date_end_string = date_end.isoformat()
                         dates.append(date_end_string)

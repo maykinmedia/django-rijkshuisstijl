@@ -169,7 +169,7 @@ def format_value(obj, field, empty_label="-"):
             return display() or empty_label
 
     # Check for __str__.
-    if field is "__str__":
+    if field == "__str__":
         return str(obj) or empty_label
 
     # Resolve value.
