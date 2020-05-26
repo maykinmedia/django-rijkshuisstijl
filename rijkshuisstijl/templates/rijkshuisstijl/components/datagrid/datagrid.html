@@ -101,7 +101,7 @@
                             <ul class="toolbar__list">
                                 {# Save inline forms. #}
                                 <li class="toolbar__list-item">
-                                    {% button class='button--small button--primary datagrid__button--reset' form='datagrid-inline-form-'|add:id type="reset" label=_('Opslaan') toggle_target='#'|add:id|add:' datagrid__row' toggle_modifier='edit' %}
+                                    {% button class='button--small button--secondary datagrid__button--reset' form='datagrid-inline-form-'|add:id type="reset" label=_('Annuleren') toggle_target='#'|add:id|add:' .datagrid__row' toggle_modifier='edit' toggle_link_mode='noprevent' toggle_operation='remove' %}
                                     {% button class='button--small button--primary datagrid__button--save' form='datagrid-inline-form-'|add:id type="submit" label=_('Opslaan') %}
                                 </li>
                             </ul>

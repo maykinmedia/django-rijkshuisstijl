@@ -4,9 +4,10 @@ from collections.abc import Iterable
 
 from django import template
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import Manager, QuerySet
+from django.db.models import Manager, Model, QuerySet
 from django.templatetags.static import static
 from django.utils.functional import Promise
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
@@ -217,6 +218,14 @@ def format_value(obj, field, empty_label="-"):
     # Check for date(time).
     if type(val) in [datetime.datetime, datetime.date]:
         return val
+
+    # Check for Model instance.
+    if isinstance(val, Model):
+        try:
+            url = val.get_absolute_url()
+            return format_html(f'<a class="link" href="{url}">{val}</a>')
+        except AttributeError:
+            pass
 
     # Fallback
     return val or empty_label
