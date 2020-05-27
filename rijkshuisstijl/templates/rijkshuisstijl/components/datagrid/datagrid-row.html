@@ -13,6 +13,13 @@
     {% firstof object|format_value:column.key '' as label %}
     {% firstof 'datagrid-inline-form-'|add:id as form_id %}
 
+    {% firstof 'get_'|add:column.key|add:'_display' as custom_display %}
+    {% firstof object|getattr_or_get:custom_display as custom_display %}
+
+    {% if not custom_display %}
+        {% firstof label|linebreaksbr as label %}
+    {% endif %}
+
 
     <td class="datagrid__cell{% if cell_input %} datagrid__cell--editable{% endif %}{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">
         {% if forloop.counter0 == 0 and formset_form %}

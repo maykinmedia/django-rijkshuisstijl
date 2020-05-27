@@ -6,14 +6,13 @@
     {% endif %}
 
     {% if field.toggle %}
-        <span class="summary__key toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">
-            {{ field.label }}
-        </span>
+        <span class="summary__key toggle" data-toggle-target="#{{ field.id }}" data-toggle-modifier="edit">{{ field.label }}</span>
     {% else %}
         <span class="summary__key">{{ field.label }}</span>
     {% endif %}
 
     <span class="summary__value">
+        {% endsingleline %}{% spaceless %}
         {% if field.form_field and not field.toggle %}
 
 
@@ -82,10 +81,12 @@
                 {% else %}
                     {{ value|linebreaksbr }}
                 {% endif %}
+
             {% endif %}
 
 
         {% endif %}
+        {% endspaceless %}{% singleline%}
     </span>
 </li>
 
