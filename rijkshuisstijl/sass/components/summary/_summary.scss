@@ -115,10 +115,6 @@
     @include anchor(true);
   }
 
-  &__value br:last-child {
-    display: none;
-  }
-
   &__value .input,
   &__value .select,
   &__value .textarea {
