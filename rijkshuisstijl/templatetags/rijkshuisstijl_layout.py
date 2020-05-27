@@ -83,27 +83,34 @@ def hero(**kwargs):
         - alt: Required, The alt text for the image.
         - src: Required, The url to the image (see mobile_src, tablet_src and laptop src).
 
-        - class: Optional, a string with additional CSS classes.
-        - href: Optional, an optional url to link to.
         - mobile_src: Optional, Specifies an image url specific to mobile screen sizes.
         - tablet_src: Optional, Specifies an image url specific to tablet screen sizes.
         - laptop_src: Optional, Specifies an image url specific to laptop screen sizes.
+        - class: Optional, a string with additional CSS classes.
         - width: Optional, Sets the width attribute on the image.
         - height: Optional, Sets the height attribute on the image.
         - hide_on_error: Optional, if true, hides the image (visibility: hidden) when loading fails.
+        - href: Optional, an optional url to link to.
+        - title: Optional, Shows title as text in the hero.
+        - body: Optional, Shows body as text in the hero.
     """
     config = merge_config(kwargs)
     config["alt"] = config.get("alt", "")
-    config["class"] = ("hero " + config.get("class", "")).strip()
-    config["href"] = config.get("href", "")
     config["src"] = config.get("src", "")
     config["mobile_src"] = config.get("mobile_src", None)
     config["tablet_src"] = config.get("tablet_src", None)
     config["laptop_src"] = config.get("laptop_src", None)
+    config["class"] = ("hero " + config.get("class", "")).strip()
     config["width"] = config.get("width", None)
     config["height"] = config.get("height", None)
     config["hide_on_error"] = config.get("hide_on_error", False)
+    config["href"] = config.get("href", "")
+    config["title"] = config.get("title")
+    config["title"] = config.get("body")
     config["config"] = config
+
+    config["image_config"] = config.copy()
+    config["image_config"].pop("class")
     return config
 
 
