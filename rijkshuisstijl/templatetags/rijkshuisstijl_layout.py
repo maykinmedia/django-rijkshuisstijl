@@ -1,12 +1,81 @@
+from django import template
 from django.conf import settings
 from django.shortcuts import resolve_url
+from django.template.base import TextNode
+from django.template.loader import render_to_string
 from django.templatetags.static import static
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
-from .rijkshuisstijl_helpers import get_id, merge_config, parse_kwarg
+from .rijkshuisstijl_helpers import get_id, merge_config, parse_arg, parse_kwarg
+
+
+@register.tag("row")
+def row(parser, token):
+    children = parser.parse(("endrow",))
+    parser.delete_first_token()
+    return ParentNode(token, children, "rijkshuisstijl/components/row/row.html")
+
+
+@register.inclusion_tag("rijkshuisstijl/components/card/card.html")
+def card(**kwargs):
+    """
+    Renders a card.
+
+    Example:
+
+        {% card config=config %}
+        {% card option1='foo' option2='bar' %}
+
+    Available options:
+
+        - class: Optional, a string with additional CSS classes.
+        - title: Optional, Title to show.
+        - text: Optional, Text to show.
+        - wysiwyg: Optional, Raw HTML to be shown, styled automatically.
+        - urlize: Optional, if True text is passed to "urlize" template filter, automatically creating hyperlinks.
+        - urlize_target: Optional, "target" attribute for links generated using "urlize".
+
+    :param config:
+    """
+    config = merge_config(kwargs)
+
+    def get_wysiwyg():
+        wysiwyg = config.get("wysiwyg")
+        if wysiwyg:
+            return mark_safe(wysiwyg)
+
+    def get_button_config():
+        href = config.get("button_href")
+
+        if not href:
+            return None
+
+        return {
+            "class": config.get("button_class"),
+            "far_icon": config.get("button_far_icon"),
+            "fas_icon": config.get("button_fas_icon"),
+            "href": href,
+            "label": config.get("button_label"),
+        }
+
+    # kwargs
+    config["class"] = config.get("class", None)
+    config["close"] = parse_kwarg(config, "close", False)
+    config["id"] = get_id(config, "textbox")
+    config["status"] = config.get("status", None)
+    config["title"] = config.get("title", None)
+    config["text"] = config.get("text", None)
+    config["wysiwyg"] = get_wysiwyg()
+    config["urlize"] = config.get("urlize", True)
+    config["urlize_target"] = config.get("urlize_target")
+    config["button_config"] = get_button_config()
+
+    config["config"] = config
+    return config
 
 
 @register.inclusion_tag("rijkshuisstijl/components/footer/footer.html", takes_context=True)
@@ -496,3 +565,95 @@ def textbox(**kwargs):
 
     config["config"] = config
     return config
+
+
+class ParentNode(template.Node):
+    """
+    A Node which can contain nested children.
+    All "TextNode" children will be skipped.
+    Children are rendered and added to context["children"] as list.
+    """
+
+    def __init__(self, token, children, template_name):
+        """
+        Initializes this Node.
+        :param token: The token providing the configuration for the parent.
+        :param children: NodeList containing the children.
+        :param template_name: The template name to use as template for the parent.
+        """
+        self.token = token
+        self.children = children
+        self.template_name = template_name
+
+    def render(self, context):
+        """
+        Renders the parent.
+        :param context:
+        :return: SafeText
+        """
+        context_data = self.get_context_data(context)
+        return render_to_string(self.template_name, context_data)
+
+    def get_context_data(self, context):
+        """
+        Returns the context for the template of the parent.
+        :param context:
+        :return: dict
+        """
+        context_data = context.flatten()
+        context_data["children"] = self.render_children(context)
+
+        return {**self.get_config(), **context_data}
+
+    def get_config(self):
+        """
+        Returns the parent config.
+        :return: dict
+        """
+        split = self.token.split_contents()
+        split.pop(0)
+        config = {}
+
+        for option in split:
+            try:
+                key, value = option.split("=")
+
+                # Strip redundant quotes.
+                if value[0] == '"' and value[-1] == '"':
+                    value = value[1:-1]
+
+                config[key] = parse_arg(value)
+            except ValueError:
+                pass
+        return config
+
+    def render_children(self, context):
+        """
+        Returns relevant children as str.
+        :param context:
+        :return: SafeText
+        """
+        children = self.get_children()
+
+        rendered_children = []
+        for child in children:
+            rendered_child = self.render_child(child, context)
+            if rendered_child.strip():
+                rendered_children.append(rendered_child)
+        return rendered_children
+
+    def render_child(self, child, context):
+        """
+        Returns child as str
+        :param child:
+        :param context:
+        :return: SafeText
+        """
+        return format_html(child.render(context))
+
+    def get_children(self):
+        """
+        Returns relevant chilren (strips out "TextNode" instance).
+        :return:
+        """
+        return [child for child in self.children if not isinstance(child, TextNode)]
