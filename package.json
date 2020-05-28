@@ -24,11 +24,9 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
     "bem.js": "^1.0.10",
-    "better-dateinput-polyfill": "^3.2.7",
-    "better-dom": "^4.0.0",
     "debounce": "^1.2.0",
     "flatpickr": "^4.6.3",
-    "form-association-polyfill": "^1.0.3",
+    "form-association-polyfill": "^2.0.2",
     "microscope-sass": "^0.3.2",
     "object-fit-images": "^3.2.4",
     "urijs": "^1.19.1"
