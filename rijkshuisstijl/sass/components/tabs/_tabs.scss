@@ -8,6 +8,11 @@ $tabs-height-spacer: $grid-margin-6;
 
 
 .tabs {
+  &__navigation {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
   &--sticky &__navigation {
     @include laptop {
       @include sticky();
@@ -42,6 +47,7 @@ $tabs-height-spacer: $grid-margin-6;
     @include responsive(justify-content, flex-start, flex-start, center);
     @include anchor(true);
     @include body;
+    @include ellipsis;
     @include rows(1, $force: true);
     border-bottom: none;
     background-color: transparent;
