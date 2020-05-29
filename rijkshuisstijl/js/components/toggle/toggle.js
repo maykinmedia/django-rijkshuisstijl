@@ -73,7 +73,7 @@ export class Toggle {
             e.preventDefault();
             e.stopPropagation();
         } else if (toggleLinkMode === 'noprevent') {
-            if(e.target.href) {
+            if(e.target.href || e.target.parentNode.href) {
                 return;
             }
         }
