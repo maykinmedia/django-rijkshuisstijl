@@ -1,7 +1,14 @@
 {% spaceless %}{% load i18n rijkshuisstijl_filters %}
     {% if bound_field.field.widget.input_type == 'hidden' %}
-        {% form_field form bound_field %}
+
+        {% if disabled %}
+            {% form_field form bound_field attrs='disabled:True' help_text_position=help_text_position %}
+        {% else %}
+            {% form_field form bound_field help_text_position=help_text_position %}
+        {% endif %}
+
     {% else %}
+
         <div class="form-control{% if compact %} form-control--compact{% endif %}{% if bound_field.errors %} form-control--error{% endif %}{% if class %} {{ class }}{% endif %}">
             {# Form control header. #}
             <header class="form-control__header">
@@ -16,8 +23,13 @@
 
             {#  Form control body. #}
             <div class="form-control__body">
-                {% form_field form bound_field help_text_position=help_text_position %}
+                {% if disabled %}
+                    {% form_field form bound_field attrs='disabled:True' help_text_position=help_text_position %}
+                {% else %}
+                    {% form_field form bound_field help_text_position=help_text_position %}
+                {% endif %}
             </div>
         </div>
+
     {% endif %}
 {% endspaceless %}

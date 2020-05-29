@@ -54,6 +54,7 @@ def form(context, form=None, label="", **kwargs):
     config["form"] = form or parse_kwarg(config, "form", context.get("form"))
     config["action"] = config.get("action")
     config["compact"] = config.get("compact")
+    config["disabled"] = config.get("disabled")
     config["label"] = config.get("label", label)
     config["title"] = config.get("title")
     config["subtitle"] = config.get("subtitle")

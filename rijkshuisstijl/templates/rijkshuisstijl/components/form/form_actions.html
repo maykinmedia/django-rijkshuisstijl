@@ -2,9 +2,9 @@
     <div class="form__actions{% if align %} form__actions--{{ align }}{% endif %}">
             {% for action in actions %}
                 {% if action.href %}
-                    {% button_link config=action form=form_id %}
+                    {% button_link config=action disabled=disabled form=form_id %}
                 {% else %}
-                    {% button config=action form=form_id %}
+                    {% button config=action disabled=disabled form=form_id %}
                 {% endif %}
             {% endfor %}
     </div>

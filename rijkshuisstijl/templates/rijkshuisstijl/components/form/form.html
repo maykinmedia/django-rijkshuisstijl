@@ -28,7 +28,7 @@
                     {# First fieldset gets actions appended to it if actions_postion equals top or both. #}
                     {% if forloop.first and actions_position in 'top,both' %}
                         <div class="form__body form__body--transparent">
-                            {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class label=label form_id=id %}
+                            {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class disabled=disabled label=label form_id=id %}
                         </div>
                         <br>
                     {% endif %}
@@ -44,13 +44,13 @@
                         {# Render the field in form controls. #}
                         {% for field in form %}
                             {% if field.name in fieldset.1.fields %}
-                                {% form_control form field class='form-control--choices-stacked' help_text_position=help_text_position %}
+                                {% form_control form field class='form-control--choices-stacked' disabled=disabled help_text_position=help_text_position %}
                             {% endif %}
                         {% endfor %}
 
                         {# Last fieldset gets actions appended to it if actions_postion equals bottom. #}
                         {% if forloop.last and actions_position == 'auto' %}
-                            {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class label=label form_id=id %}
+                            {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class disabled=disabled label=label form_id=id %}
                         {% endif %}
                     </fieldset>
 
@@ -58,7 +58,7 @@
                     {% if forloop.last and actions_position in 'bottom,both' %}
                         <br>
                         <div class="form__body">
-                            {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class label=label form_id=id %}
+                            {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class disabled=disabled label=label form_id=id %}
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -67,10 +67,10 @@
             {% else %}
                 <fieldset class="form__fieldset">
                     {% for field in form %}
-                        {% form_control form field class='form-control--choices-stacked' help_text_position=help_text_position %}
+                        {% form_control form field class='form-control--choices-stacked' disabled=disabled help_text_position=help_text_position %}
                     {% endfor %}
 
-                    {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class label=label form_id=id %}
+                    {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class disabled=disabled label=label form_id=id %}
                 </fieldset>
             {% endif %}
         </div>
