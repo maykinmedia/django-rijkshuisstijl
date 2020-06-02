@@ -175,7 +175,7 @@ def hero(**kwargs):
     config["hide_on_error"] = config.get("hide_on_error", False)
     config["href"] = config.get("href", "")
     config["title"] = config.get("title")
-    config["title"] = config.get("body")
+    config["body"] = config.get("body")
     config["config"] = config
 
     config["image_config"] = config.copy()
