@@ -8,6 +8,11 @@
             <a class="login-bar__link login-bar__link--primary" href="{{ login_url }}">{{ label_login }}</a>
             <a class="login-bar__link login-bar__link--secondary" href="{{ registration_url }}">{{ label_request_account }}</a>
         {% endif %}
+
+        {% if admin_link and request.user.is_staff %}
+            <a class="login-bar__link login-bar__link--secondary" href="{% url 'admin:index' %}">{{ label_admin }}</a>
+
+        {% endif %}
     </p>
 </div>
 {% endspaceless %}

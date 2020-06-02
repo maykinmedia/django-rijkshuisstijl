@@ -287,38 +287,44 @@ def login_bar(context, **kwargs):
         - registration_url: Required, The url to link to when the register link is clicked.
 
         - class: Optional, a string with additional CSS classes.
+        - admin_link: Optional, If true and user is staff, creates link to admin.
         - label_login: Optional, alternative label for the login link.
         - label_logged_in_as: Optional, alternative label for the logged in as label.
         - label_logout: Optional, alternative label for the logout link.
         - label_request_account: Optional, alternative label for the registration link.
+        - label_admin: Optional, alternative label for the admin link.
 
 
     :param context:
     :param kwargs:
     """
-    kwargs = merge_config(kwargs)
+    config = merge_config(kwargs)
 
     # i18n
-    kwargs["label_login"] = kwargs.get("label_login", _("Inloggen"))
-    kwargs["label_logged_in_as"] = kwargs.get("label_logged_in_as", _("Ingelogd als"))
-    kwargs["label_logout"] = kwargs.get("label_logout", _("Uitloggen"))
-    kwargs["label_request_account"] = kwargs.get("label_request_account", _("Account aanvragen"))
+    config["label_login"] = config.get("label_login", _("Inloggen"))
+    config["label_logged_in_as"] = config.get("label_logged_in_as", _("Ingelogd als"))
+    config["label_logout"] = config.get("label_logout", _("Uitloggen"))
+    config["label_request_account"] = config.get("label_request_account", _("Account aanvragen"))
+    config["label_admin"] = config.get("label_admin", _("Beheer"))
 
     # kwargs
-    kwargs["details_url"] = kwargs.get(
+    config["details_url"] = config.get(
         "details_url", resolve_url(getattr(settings, "LOGIN_REDIRECT_URL", "#/"))
     )
-    kwargs["logout_url"] = kwargs.get(
+    config["logout_url"] = config.get(
         "logout_url", resolve_url(getattr(settings, "LOGOUT_URL", "#/"))
     )
-    kwargs["login_url"] = kwargs.get("login_url", resolve_url(getattr(settings, "LOGIN_URL", "#/")))
-    kwargs["registration_url"] = kwargs.get(
+    config["login_url"] = config.get("login_url", resolve_url(getattr(settings, "LOGIN_URL", "#/")))
+    config["registration_url"] = config.get(
         "registration_url", resolve_url(getattr(settings, "REGISTRATION_URL", "#/"))
     )
 
-    kwargs["request"] = context["request"]
-    kwargs["config"] = kwargs
-    return kwargs
+    config["class"] = config.get("class")
+    config["admin_link"] = config.get("admin_link", False)
+
+    config["request"] = context["request"]
+    config["config"] = config
+    return config
 
 
 @register.inclusion_tag("rijkshuisstijl/components/logo/logo.html")
