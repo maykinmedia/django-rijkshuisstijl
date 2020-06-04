@@ -140,6 +140,7 @@ def key_value_table(**kwargs):
     - form_method: Optional,
     - form_id: Optional, Optional, if set, value will be set on the "form" attribute of generated inputs. No <form>
       tag will be created. This makes the input part of the referenced form.
+    - formset_valid: Optional, callback when formset saved successfully, called with arguments (request, instances)
     - full_width_fields: Optional, a list of keys of fields that should take the full width of the component.
     - class: Optional, a string with additional CSS classes.
     - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating
@@ -183,6 +184,7 @@ def summary_list(context, **kwargs):
         """
         request = context.get("request")
         form_class = config.get("form_class")
+        formset_valid = config.get("formset_valid")
         model = get_model(context, config)
         queryset = get_queryset(context, config)
 
@@ -195,10 +197,12 @@ def summary_list(context, **kwargs):
             formset = ModelFormSet(request.POST)
 
             if formset.is_valid():
-                formset.save()
+                instances = formset.save()
                 # Reset the cache for fresh data
                 queryset = queryset.all()
                 config["object_list"] = queryset
+                if formset_valid:
+                    formset_valid(request, instances)
                 return ModelFormSet(queryset=queryset)
             else:
                 return formset

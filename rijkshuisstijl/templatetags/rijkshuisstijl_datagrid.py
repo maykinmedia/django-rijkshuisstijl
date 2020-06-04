@@ -219,6 +219,8 @@ def datagrid(context, **kwargs):
     - form_model_name: Optional, A str indicating the name of the input used to pass the model to export.
       Note: actual export relies on custom implementation.
 
+    - formset_valid: Optional, callback when formset saved successfully, called with arguments (request, instances)
+
     - export_buttons: Optional, similar to "form_buttons" except rendered differently, these buttons indicate possible
       export formats. Note: actual export relies on custom implementation.
 
@@ -815,6 +817,7 @@ def datagrid(context, **kwargs):
         """
         request = context.get("request")
         form_class = config.get("form_class")
+        formset_valid = config.get("formset_valid")
         model = get_model(context, config)
         object_list = get_datagrid_object_list()
 
@@ -829,9 +832,11 @@ def datagrid(context, **kwargs):
             formset = ModelFormSet(request.POST)
 
             if formset.is_valid():
-                formset.save()
+                instances = formset.save()
                 # Reset the cache for fresh data
                 _cache.clear()
+                if formset_valid:
+                    formset_valid(request, instances)
                 return ModelFormSet(queryset=queryset.all())
             else:
                 return formset
@@ -959,6 +964,7 @@ def datagrid(context, **kwargs):
     config["label_select_all"] = parse_kwarg(config, "label_select_all", _("(De)selecteer alles"))
 
     # Formset modifies data so goes first
+    config["formset_valid"] = config.get("formset_valid", "")
     config["formset"] = get_formset()
 
     # Showing Data/Filtering/Grouping/Ordering
