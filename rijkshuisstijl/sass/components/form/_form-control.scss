@@ -35,6 +35,7 @@
   &__header .label {
     align-self: flex-start;
     box-sizing: border-box;
+    width: 10%;
   }
 
   &:not(#{&}--compact) &__header .label {
