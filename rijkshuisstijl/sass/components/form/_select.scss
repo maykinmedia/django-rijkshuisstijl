@@ -1,5 +1,6 @@
 @import '~microscope-sass/lib/color';
 @import '~microscope-sass/lib/grid';
+@import '~microscope-sass/lib/typography';
 @import 'constants';
 @import 'mixins';
 
@@ -38,6 +39,7 @@
   }
 
   &__option {
+    @include text;
     padding: 0 $input-padding-h;
   }
 
@@ -53,7 +55,7 @@
   }
 
   &-wrapper &:not(#{&}--has-value) {
-    color: transparent;
+    color: rgba(1, 0, 0, 0);  // 1 prevents converting CSS rule to "transparent" which doesn't work on IE11.
     background-color: transparent;
   }
 
