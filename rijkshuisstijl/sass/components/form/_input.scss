@@ -13,7 +13,7 @@
 
   &--date,
   &[type*=date] {
-    @include rows(1, padding-right);
+    @include rows(1, padding-right, $force: true);
     background: $input-background-date, $input-background-button;
     @include color-background;
   }
@@ -26,7 +26,7 @@
 
   &[type=file],
   &--light#{&}[type=file] + &__filepicker {
-    @include rows(1, padding-right);
+    @include rows(1, padding-right, $force: true);
     background: $input-background-file, $input-background-button;
     @include color-background;
   }
@@ -38,7 +38,7 @@
   }
 
   &[type=search] {
-    @include rows(1, padding-right);
+    @include rows(1, padding-right, $force: true);
     background: $input-background-search, $input-background-button;
     @include color-background;
   }
