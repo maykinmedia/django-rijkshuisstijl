@@ -22,6 +22,12 @@ module.exports = {
     // Path to the sass entry point
     sassEntry: sourcesRoot + 'sass/rijkshuisstijl.scss',
 
+    // Path to the (print landscape) sass entry point
+    sassEntryPrintLandscape: sourcesRoot + 'sass/rijkshuisstijl-print-landscape.scss',
+
+    // Path to the (print portrait) sass entry point
+    sassEntryPrintPortrait: sourcesRoot + 'sass/rijkshuisstijl-print-portrait.scss',
+
     // Path to the sass (sources) directory
     sassSrcDir: sourcesRoot + 'sass/',
 

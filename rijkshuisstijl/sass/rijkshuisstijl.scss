@@ -2,9 +2,6 @@
 @import './components/all';
 
 
-//
-// Some print hacks. Might need refactoring later.
-//
 @media print {
   * {
     font-family: "RO Serif" !important;
@@ -18,3 +15,4 @@
     margin-top: 52mm;
   }
 }
+
