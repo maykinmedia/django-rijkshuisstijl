@@ -40,7 +40,6 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     &__caption,
     &__cell {
       border-width: 1px !important;
-      padding: 0 !important;
     }
 
     &__cell--checkbox {
