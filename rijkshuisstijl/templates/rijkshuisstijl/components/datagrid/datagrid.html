@@ -11,10 +11,6 @@
                     <input type="hidden" name="{{ ordering_key }}" value="{{ request.GET|get:ordering_key }}">
                 {% endif %}
 
-                {% for filter in filters %}
-                    {% form_input type='hidden' name=filter.key value=filter.value %}
-                {% endfor %}
-
                 {% for query_param in filter_query_params %}
                     {% form_input type='hidden' name=query_param.key value=query_param.value %}
                 {% endfor %}
@@ -26,7 +22,7 @@
 
         {# This (paginator) form is located outside the datagrid to avoid conflict with selection form. #}
         {% if is_paginated %}
-            <form class="form" id="datagrid-paginator-form-{{ id }}" method="GET">
+            <form class="form" id="datagrid-paginator-form-{{ id }}" method="GET"  }}>
                 {% firstof ordering_key 'ordering' as ordering_key %}
 
                 {% if request.GET|get:ordering_key %}

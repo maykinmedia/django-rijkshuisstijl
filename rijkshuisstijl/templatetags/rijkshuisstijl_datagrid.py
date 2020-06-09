@@ -484,12 +484,14 @@ def datagrid(context, **kwargs):
 
             # Use either the "key" as filter field, of optionally, the "lookup".
             filter_field_key = filterable_column.get("key", "")
-            filter_field_lookup = filterable_column.get("lookup", "")
+            filter_field_lookup = filterable_column.get(
+                "filter_lookup", filterable_column.get("lookup", "")
+            )
 
             # Default the lookup to filter_field_key.
             # This is used in get_filtered_queryset().
             if not "lookup" in filterable_column:
-                filterable_column["lookup"] = filter_field_key
+                filterable_column["lookup"] = filter_field_lookup or filter_field_key
 
             #
             # Find out what model and field the filter should work with.
