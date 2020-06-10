@@ -69,10 +69,6 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     z-index: 10;
   }
 
-  &__header .toolbar {
-    @include rows(0.5, margin-bottom);
-  }
-
   &__footer {
     @include tablet {
       @include sticky(0, 'bottom');

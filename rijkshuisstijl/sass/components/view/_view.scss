@@ -27,7 +27,6 @@
   }
 
 
-
   .navigation-bar--compact + &__content .layout {
     min-height: $view-min-height-content-tablet-compact;
   }
@@ -82,8 +81,9 @@
   }
 
   .header {
-    @media screen {
-      @include responsive(position, sticky, static);
+    @include mobile-only(screen) {
+      position: sticky;
+      top: 0;
     }
   }
 

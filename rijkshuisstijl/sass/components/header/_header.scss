@@ -32,6 +32,7 @@
 
   @media screen {
     @include mobile-only {
+
       &:before {
         @include border(bottom);
         @include color-background;

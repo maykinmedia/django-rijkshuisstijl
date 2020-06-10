@@ -8,7 +8,7 @@ let selectorLintConfig = {
         attribute: false,
 
         // Pseudo
-        psuedo: false,
+        pseudo: true,
     },
 
     local: {
@@ -20,7 +20,7 @@ let selectorLintConfig = {
         attribute: true,
 
         // Pseudo
-        psuedo: true,
+        pseudo: true,
     },
 
     options: {

@@ -80,11 +80,14 @@
     @include responsive(flex-direction, column, row);
   }
 
-  &--responsive &__list:not(:last-child),
-  &--responsive#{&}--spaced &__list-item:not(:last-child) {
+  &--responsive &__list,
+  &--responsive#{&}--spaced &__list-item {
     margin-bottom: $toolbar-spacing;
 
-    @include laptop {
+  }
+
+  &--responsive#{&}--spaced &__list-item {
+    @include tablet {
       margin-bottom: 0;
     }
   }
@@ -94,6 +97,12 @@
   &--responsive .select {
     @include mobile-only {
       width: 100%;
+    }
+  }
+
+  .select {
+    @include tablet {
+      max-width: 300px;
     }
   }
 
