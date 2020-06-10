@@ -26,7 +26,7 @@
     "bem.js": "^1.0.10",
     "debounce": "^1.2.0",
     "flatpickr": "^4.6.3",
-    "form-association-polyfill": "^2.0.2",
+    "form-association-polyfill": "^2.0.3",
     "microscope-sass": "^0.3.2",
     "object-fit-images": "^3.2.4",
     "urijs": "^1.19.1"
