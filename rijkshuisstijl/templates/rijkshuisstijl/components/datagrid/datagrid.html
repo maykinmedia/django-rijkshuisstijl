@@ -4,7 +4,7 @@
 
         {# This (filter) form is located outside the datagrid to avoid conflict with selection form. #}
         {% if filters %}
-            <form class="form" id="datagrid-filter-form-{{ id }}"{% if filter_action %} action="{{ filter_action }}"{% endif %}method="GET">
+            <form class="form" id="datagrid-filter-form-{{ id }}"{% if filter_action %} action="{{ filter_action }}"{% endif %} method="GET">
                 {% firstof ordering_key 'ordering' as ordering_key %}
 
                 {% if request.GET|get:ordering_key %}
@@ -43,7 +43,7 @@
 
         {# Render a form for performing actions on the queryset. #}
         {% if form %}
-          <form class="form datagrid__form" id="datagrid-action-form-{{ id }}" method="{{ form_method }}"{% if form_action %} action="{{ form_action }}"{% endif %}>
+          <form class="form datagrid__form datagrid__form--action" id="datagrid-action-form-{{ id }}" method="{{ form_method }}"{% if form_action %} action="{{ form_action }}"{% endif %}>
             {% if form_model_meta_label %}<input type="hidden" name="{{ form_model_name }}" value="{{ form_model_meta_label }}">{% endif %}
             {% if form_method|upper != "GET" %}
               {% csrf_token %}
@@ -60,11 +60,9 @@
                         <ul class="toolbar__list">
                             {% if form %}
                                 <li class="toolbar__list-item">
-                                    <th class="datagrid__caption datagrid__caption--checkbox">
-                                        {% if form_select_all_position in 'top,both' %}
-                                            {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='top' label_select_all=label_select_all only %}
-                                        {% endif %}
-                                    </th>
+                                    {% if form_select_all_position in 'top,both' %}
+                                        {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='top' label_select_all=label_select_all only %}
+                                    {% endif %}
                                 </li>
                             {% endif %}
 
@@ -182,11 +180,9 @@
                     <ul class="toolbar__list">
                         {% if form %}
                             <li class="toolbar__list-item">
-                                <th class="datagrid__caption datagrid__caption--checkbox">
-                                    {% if form_select_all_position in 'bottom,both' %}
-                                        {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with form_select_all_position='bottom' label_select_all=label_select_all only %}
-                                    {% endif %}
-                                </th>
+                                {% if form_select_all_position in 'bottom,both' %}
+                                    {% include 'rijkshuisstijl/components/datagrid/datagrid-select-all.html' with id=id form_select_all_position='bottom' label_select_all=label_select_all only %}
+                                {% endif %}
                             </li>
 
                             {% if toolbar_position in 'bottom,both' %}
