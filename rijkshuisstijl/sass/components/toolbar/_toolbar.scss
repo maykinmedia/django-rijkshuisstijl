@@ -84,9 +84,6 @@
   &--responsive#{&}--spaced &__list-item {
     margin-bottom: $toolbar-spacing;
 
-  }
-
-  &--responsive#{&}--spaced &__list-item {
     @include tablet {
       margin-bottom: 0;
     }
