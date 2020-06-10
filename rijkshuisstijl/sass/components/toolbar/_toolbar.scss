@@ -80,13 +80,8 @@
     @include responsive(flex-direction, column, row);
   }
 
-  &--responsive &__list,
   &--responsive#{&}--spaced &__list-item {
     margin-bottom: $toolbar-spacing;
-
-    @include tablet {
-      margin-bottom: 0;
-    }
   }
 
   &--responsive .button,
@@ -98,7 +93,7 @@
   }
 
   .select {
-    @include tablet {
+    @include laptop {
       max-width: 300px;
     }
   }

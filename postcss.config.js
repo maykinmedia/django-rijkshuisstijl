@@ -4,7 +4,7 @@ let selectorLintConfig = {
         type: true,
         class: true,
         id: false,
-        universal: false,
+        universal: true,
         attribute: false,
 
         // Pseudo

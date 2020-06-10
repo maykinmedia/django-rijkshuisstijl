@@ -75,6 +75,10 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     }
   }
 
+  &__footer .toolbar__list-item {
+    margin-bottom: 0!important;
+  }
+
   .toolbar:empty {
     display: none;
   }
