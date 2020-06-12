@@ -52,7 +52,6 @@
   }
 
   .button {
-    @include animate;
     @include center-v($search-height, $search-height);
     border: none;
     outline: none;
