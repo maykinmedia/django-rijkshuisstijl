@@ -4,6 +4,7 @@ from django.shortcuts import resolve_url
 from django.template.base import TextNode
 from django.template.loader import render_to_string
 from django.templatetags.static import static
+from django.urls import NoReverseMatch
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -308,16 +309,33 @@ def login_bar(context, **kwargs):
     config["label_admin"] = config.get("label_admin", _("Beheer"))
 
     # kwargs
-    config["details_url"] = config.get(
-        "details_url", resolve_url(getattr(settings, "LOGIN_REDIRECT_URL", "#/"))
-    )
-    config["logout_url"] = config.get(
-        "logout_url", resolve_url(getattr(settings, "LOGOUT_URL", "#/"))
-    )
-    config["login_url"] = config.get("login_url", resolve_url(getattr(settings, "LOGIN_URL", "#/")))
-    config["registration_url"] = config.get(
-        "registration_url", resolve_url(getattr(settings, "REGISTRATION_URL", "#/"))
-    )
+    try:
+        config["details_url"] = config.get(
+            "details_url", resolve_url(getattr(settings, "LOGIN_REDIRECT_URL", ""))
+        )
+    except NoReverseMatch:
+        config["details_url"] = None
+
+    try:
+        config["logout_url"] = config.get(
+            "logout_url", resolve_url(getattr(settings, "LOGOUT_URL", ""))
+        )
+    except NoReverseMatch:
+        config["logout_url"] = None
+
+    try:
+        config["login_url"] = config.get(
+            "login_url", resolve_url(getattr(settings, "LOGIN_URL", ""))
+        )
+    except NoReverseMatch:
+        config["login_url"] = None
+
+    try:
+        config["registration_url"] = config.get(
+            "registration_url", resolve_url(getattr(settings, "REGISTRATION_URL", ""))
+        )
+    except NoReverseMatch:
+        config["registration_url"] = None
 
     config["class"] = config.get("class")
     config["admin_link"] = config.get("admin_link", False)
