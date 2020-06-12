@@ -62,7 +62,7 @@
   }
 
   &--spaced &__list-item:not(:last-child) {
-    @include laptop {
+    @include tablet {
       margin-right: $toolbar-spacing;
     }
   }
