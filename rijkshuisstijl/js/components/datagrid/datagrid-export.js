@@ -71,10 +71,10 @@ class DataGridExportHelper {
                 node.checked = true;
             });
 
-            const hiddenInput = document.createElement("input");
+            const hiddenInput = document.createElement('input');
             hiddenInput.name = this.node.name;
             hiddenInput.value = this.node.value;
-            hiddenInput.type = "hidden";
+            hiddenInput.type = 'hidden';
             form.appendChild(hiddenInput);
             form.submit();
         }

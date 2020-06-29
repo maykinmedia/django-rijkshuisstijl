@@ -127,7 +127,7 @@ def get_field_label(obj, field):
 
 
 @register.filter
-def get_recursed_field_value(obj, field):
+def get_recursed_field_value(obj, field=""):
     """
     Finds a field value in an object by recursing through related fields.
     :param obj: A model instance.
@@ -135,19 +135,19 @@ def get_recursed_field_value(obj, field):
     :return: str
     """
     fields = field.split("__")
-
     while fields:
         field = fields.pop(0)
-        try:
-            obj = getattr(obj, field)
-        except AttributeError:
-            return ""
+        if field:
+            try:
+                obj = getattr(obj, field)
+            except AttributeError:
+                return ""
 
     return obj
 
 
 @register.filter
-def format_value(obj, field, empty_label="-"):
+def format_value(obj, field="", empty_label="-"):
     """
     Formats field in obj. If obj is a model instance it supports
     get_<column_key>_display() and and date_format()
