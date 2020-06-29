@@ -158,6 +158,19 @@ def get_model_from_obj(obj):
         return None
 
 
+def get_request_user(request):
+    """
+    Safely get request.user
+    :param request: A http request
+    :return: A user instance if found on request or else an AnonymousUser
+    """
+    if hasattr(request, 'user'):
+        return request.user
+    else:
+        from django.contrib.auth.models import AnonymousUser
+        return AnonymousUser()
+
+
 def merge_config(kwargs):
     """
     Merges "config" and other items in kwarg to generate configuration dict.

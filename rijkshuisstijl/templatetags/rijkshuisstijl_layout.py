@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
-from .rijkshuisstijl_helpers import get_id, merge_config, parse_arg, parse_kwarg
+from .rijkshuisstijl_helpers import get_id, merge_config, parse_arg, parse_kwarg, get_request_user
 
 
 @register.tag("row")
@@ -437,6 +437,7 @@ def navigation_bar(context, **kwargs):
     kwargs["search_name"] = kwargs.get("search_name", "q")
 
     kwargs["request"] = context["request"]
+    kwargs["user"] = get_request_user(context["request"])
     kwargs["config"] = kwargs
     return kwargs
 
