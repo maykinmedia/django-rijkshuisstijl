@@ -1,6 +1,8 @@
 {% spaceless %}{% load rijkshuisstijl %}
     <header class="header{% if class %} {{ class }}{% endif %}">
-        {% button icon='hamburger' toggle_target='.view' toggle_modifier='menu-open' %}
+        {% if not hide_mobile_menu_button %}
+            {% button icon='hamburger' toggle_target='.view' toggle_modifier='menu-open' %}
+        {% endif %}
         {% logo src=logo_src mobile_src=logo_mobile_src %}
     </header>
 {% endspaceless %}

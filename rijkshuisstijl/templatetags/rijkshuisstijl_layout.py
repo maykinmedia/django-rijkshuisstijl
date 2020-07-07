@@ -11,7 +11,13 @@ from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
-from .rijkshuisstijl_helpers import get_id, merge_config, parse_arg, parse_kwarg, get_request_user
+from .rijkshuisstijl_helpers import (
+    get_id,
+    get_request_user,
+    merge_config,
+    parse_arg,
+    parse_kwarg,
+)
 
 
 @register.tag("row")
@@ -120,6 +126,9 @@ def header(**kwargs):
     Available options:
 
         - class: Optional, a string with additional CSS classes.
+        - hide_mobile_menu_button: Optional, a bool, if True, hides the toggle menu button.
+        - logo_src: Optional, a string to containing the logo url.
+        - logo_mobile_src: Optional, a string to containing the mobile logo url.
 
     :param kwargs:
     """
@@ -133,6 +142,7 @@ def header(**kwargs):
     kwargs["logo_mobile_src"] = kwargs.get(
         "logo_mobile_src", static("rijkshuisstijl/components/logo/ienw-logo-mobile.svg")
     )
+    kwargs["hide_mobile_menu_button"] = kwargs.get("hide_mobile_menu_button", False)
 
     kwargs["config"] = kwargs
     return kwargs
