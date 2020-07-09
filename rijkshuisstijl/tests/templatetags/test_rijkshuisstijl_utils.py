@@ -4,10 +4,17 @@ from django.utils.datetime_safe import date, datetime
 
 from rijkshuisstijl.templatetags.rijkshuisstijl_utils import (
     format_value,
+    get_field_label,
     get_recursed_field_label
 )
-from rijkshuisstijl.tests.factories import AuthorFactory, BookFactory, PublisherFactory
-from rijkshuisstijl.tests.models import Author, Book, Publisher
+from rijkshuisstijl.tests.factories import (
+    AwardFactory,
+    AuthorFactory,
+    BookFactory,
+    ConferenceFactory,
+    PublisherFactory
+)
+from rijkshuisstijl.tests.models import Author, Award, Book, Conference, Publisher
 
 
 class FormatValueTestCase(TestCase):
@@ -109,8 +116,8 @@ class FormatValueTestCase(TestCase):
         )
 
 
-class GetRecursedFieldLabelTestCase(TestCase):
-    def test_verbose_name_field(self):
+class InstanceGetRecursedFieldLabelTestCase(TestCase):
+    def test_verbose_name_field_label(self):
         """
         Test that verbose_name value will be returned from the given field_lookup
         """
@@ -120,64 +127,633 @@ class GetRecursedFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "random set")
 
-    @skip("Not implemented")
-    def test_regex_fallback_field(self):
+    def test_regex_fallback_field_label(self):
         """
         Test that dash formatted value will be returned from the given field_lookup
         which has no verbose_name
         """
-        pass
+        book = BookFactory()
 
-    @skip("Not implemented")
-    def test_related_field(self):
+        label = get_recursed_field_label(book, "last_updated")
+
+        self.assertEqual(label, "last updated")
+
+    def test_related_field_label(self):
         """
         Test that verbose_name will be returned from the given field_lookup
         which in this test is the name of a related (ForeignKey) field
         """
-        pass
+        book = BookFactory()
 
-    @skip("Not implemented")
-    def test_related_field_fallback(self):
+        label = get_recursed_field_label(book, "publisher")
+
+        self.assertEqual(label, "publishing house")
+
+    def test_related_field_verbose_name_fallback_label(self):
         """
         Test that verbose_name from the related model will be returned from the given
         field_lookup which in this test is the name of a related (ForeignKey) field
         """
-        pass
+        award = AwardFactory()
 
-    @skip("Not implemented")
-    def test_related_field_lookup(self):
+        label = get_recursed_field_label(award, "author")
+
+        self.assertEqual(label, "Book author")
+
+    def test_related_field_verbose_name_plural_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        book = BookFactory()
+
+        label = get_recursed_field_label(book, "awards")
+
+        self.assertEqual(label, "Awards")
+
+    def test_related_field_regex_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        publisher = PublisherFactory()
+
+        label = get_recursed_field_label(publisher, "conferences__event_date")
+
+        self.assertEqual(label, "event date")
+
+    def test_related_field_lookup_label(self):
         """
         Test that verbose_name will be returned from the given field_lookup
         which in this test is a lookup string upon a related (ForeignKey) field
         """
-        pass
+        award = AwardFactory()
 
-    @skip("Not implemented")
-    def test_related_field_lookup_regex_fallback(self):
+        label = get_recursed_field_label(award, "author__gender")
+
+        self.assertEqual(label, "Gender")
+
+    def test_related_field_lookup_same_field_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is a lookup string upon a related (ForeignKey) field.
+        The field is the same on both models but only one of them is correct.
+        """
+        award = AwardFactory()
+
+        label = get_recursed_field_label(award, "author__slug")
+
+        self.assertEqual(label, "Author id")
+
+    def test_related_field_lookup_regex_fallback_label(self):
         """
         Test that dash formatted value will be returned from the given field_lookup
         which in this test is a lookup string upon a related (ForeignKey) field
         """
-        pass
+        award = AwardFactory()
 
-    @skip("Not implemented")
+        label = get_recursed_field_label(award, "author__date_of_birth")
+
+        self.assertEqual(label, "date of birth")
+
     def test_function(self):
         """
-        Test that function will be called with the given object
+        Test that function will be called with the given object and the function's
+        return value will be used as label
         """
-        pass
+        author = AuthorFactory(first_name="Henk")
 
-    @skip("Not implemented")
+        label = get_recursed_field_label(author, "get_name_label")
+
+        self.assertEqual(label, "Foobar")
+
+    def test_property(self):
+        """
+        Test that property will be called with the given object and the property's
+        return value will be used as label
+        """
+        author = AuthorFactory()
+
+        label = get_recursed_field_label(author, "label")
+
+        self.assertEqual(label, "Author")
+
     def test_lookup_function(self):
         """
         Test that lookup function will be called with the given object
         """
-        pass
+        award = AwardFactory(author=AuthorFactory())
 
-    @skip("Not implemented")
-    def test_related_field_plural_name(self):
+        label = get_recursed_field_label(award, "author__get_name_label")
+
+        self.assertEqual(label, "Foobar")
+
+
+class QuerysetGetRecursedFieldLabelTestCase(TestCase):
+    def test_verbose_name_field_label(self):
+        """
+        Test that verbose_name value will be returned from the given field_lookup
+        """
+        BookFactory.create_batch(size=3)
+
+        label = get_recursed_field_label(Book.objects.all(), "random_set")
+
+        self.assertEqual(label, "random set")
+
+    def test_regex_fallback_field_label(self):
         """
         Test that dash formatted value will be returned from the given field_lookup
-        which in this test is lookup upon a related (ForeignKey) field
+        which has no verbose_name
         """
-        pass
+        BookFactory.create_batch(size=3)
+
+        label = get_recursed_field_label(Book.objects.all(), "last_updated")
+
+        self.assertEqual(label, "last updated")
+
+    def test_related_field_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is the name of a related (ForeignKey) field
+        """
+        BookFactory.create_batch(size=3)
+
+        label = get_recursed_field_label(Book.objects.all(), "publisher")
+
+        self.assertEqual(label, "publishing house")
+
+    def test_related_field_verbose_name_fallback_label(self):
+        """
+        Test that verbose_name from the related model will be returned from the given
+        field_lookup which in this test is the name of a related (ForeignKey) field
+        """
+        AwardFactory.create_batch(size=3)
+
+        label = get_recursed_field_label(Award.objects.all(), "author")
+
+        self.assertEqual(label, "Book author")
+
+    def test_related_field_verbose_name_plural_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        BookFactory.create_batch(size=3)
+
+        label = get_recursed_field_label(Book.objects.all(), "awards")
+
+        self.assertEqual(label, "Awards")
+
+    def test_related_field_regex_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        PublisherFactory.create_batch(size=3)
+
+        label = get_recursed_field_label(
+            Publisher.objects.all(), "conferences__event_date"
+        )
+
+        self.assertEqual(label, "event date")
+
+    def test_related_field_lookup_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is a lookup string upon a related (ForeignKey) field
+        """
+        AwardFactory.create_batch(size=3)
+
+        label = get_recursed_field_label(Award.objects.all(), "author__gender")
+
+        self.assertEqual(label, "Gender")
+
+    def test_related_field_lookup_same_field_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is a lookup string upon a related (ForeignKey) field.
+        The field is the same on both models but only one of them is correct.
+        """
+        AwardFactory.create_batch(size=3)
+
+        label = get_recursed_field_label(Award.objects.all(), "author__slug")
+
+        self.assertEqual(label, "Author id")
+
+    def test_related_field_lookup_regex_fallback_label(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which in this test is a lookup string upon a related (ForeignKey) field
+        """
+        AwardFactory.create_batch(size=3)
+
+        label = get_recursed_field_label(Award.objects.all(), "author__date_of_birth")
+
+        self.assertEqual(label, "date of birth")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_function(self):
+        """
+        Test that function will be called with the given object and the function's
+        return value will be used as label
+        """
+        AuthorFactory.create_batch(size=3)
+        queryset = Author.objects.all()
+
+        label = get_recursed_field_label(queryset, "get_name_label")
+
+        expected_instance = queryset[0]
+        self.assertEqual(label, expected_instance.get_name_label())
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_property(self):
+        """
+        Test that property will be called with the given object and the property's
+        return value will be used as label
+        """
+        AuthorFactory.create_batch(size=3)
+        queryset = Author.objects.all()
+
+        label = get_recursed_field_label(queryset, "label")
+
+        expected_instance = queryset[0]
+        self.assertEqual(label, expected_instance.label)
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_lookup_function(self):
+        """
+        Test that lookup function will be called with the given object
+        """
+        AwardFactory.create_batch(size=3)
+        queryset = Award.objects.all()
+
+        label = get_recursed_field_label(queryset, "author__get_name_label")
+
+        expected_instance = queryset[0]
+        self.assertEqual(label, expected_instance.author.get_name_label())
+
+
+class ClassGetRecursedFieldLabelTestCase(TestCase):
+    def test_verbose_name_field_label(self):
+        """
+        Test that verbose_name value will be returned from the given field_lookup
+        """
+        label = get_recursed_field_label(Book, "random_set")
+
+        self.assertEqual(label, "random set")
+
+    def test_regex_fallback_field_label(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which has no verbose_name
+        """
+        label = get_recursed_field_label(Book, "last_updated")
+
+        self.assertEqual(label, "last updated")
+
+    def test_related_field_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is the name of a related (ForeignKey) field
+        """
+        label = get_recursed_field_label(Book, "publisher")
+
+        self.assertEqual(label, "publishing house")
+
+    def test_related_field_verbose_name_fallback_label(self):
+        """
+        Test that verbose_name from the related model will be returned from the given
+        field_lookup which in this test is the name of a related (ForeignKey) field
+        """
+        label = get_recursed_field_label(Award, "author")
+
+        self.assertEqual(label, "Book author")
+
+    def test_related_field_verbose_name_plural_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        label = get_recursed_field_label(Book, "awards")
+
+        self.assertEqual(label, "Awards")
+
+    def test_related_field_regex_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        label = get_recursed_field_label(Publisher, "conferences__event_date")
+
+        self.assertEqual(label, "event date")
+
+    def test_related_field_lookup_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is a lookup string upon a related (ForeignKey) field
+        """
+        label = get_recursed_field_label(Award, "author__gender")
+
+        self.assertEqual(label, "Gender")
+
+    def test_related_field_lookup_same_field_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is a lookup string upon a related (ForeignKey) field.
+        The field is the same on both models but only one of them is correct.
+        """
+        label = get_recursed_field_label(Award, "author__slug")
+
+        self.assertEqual(label, "Author id")
+
+    def test_related_field_lookup_regex_fallback_label(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which in this test is a lookup string upon a related (ForeignKey) field
+        """
+        label = get_recursed_field_label(Award, "author__date_of_birth")
+
+        self.assertEqual(label, "date of birth")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_function(self):
+        """
+        Test that function will be called with the given class and returns the
+        regex fallback
+        """
+        label = get_recursed_field_label(Author, "get_name_label")
+
+        self.assertEqual(label, "name label")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_property(self):
+        """
+        Test that property will be called with the given class and the regex fallback
+        will be used as label
+        """
+        label = get_recursed_field_label(Author, "label")
+
+        self.assertEqual(label, "label")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_lookup_function(self):
+        """
+        Test that lookup function will be called with the given object
+        """
+        label = get_recursed_field_label(Award, "author__get_name_label")
+
+        self.assertEqual(label, "author name label")
+
+
+class ClassGetFieldLabelTestCase(TestCase):
+    # field_lookup's
+    def test_verbose_name_field_label(self):
+        """
+        Test that verbose_name value will be returned from the given field_lookup
+        """
+        label = get_field_label(Book, "random_set")
+
+        self.assertEqual(label, "random set")
+
+    def test_regex_fallback_field_label(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which has no verbose_name
+        """
+        label = get_field_label(Book, "last_updated")
+
+        self.assertEqual(label, "last updated")
+
+    def test_related_field_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is the name of a related (ForeignKey) field
+        """
+        label = get_field_label(Book, "publisher")
+
+        self.assertEqual(label, "publishing house")
+
+    def test_related_field_verbose_name_fallback_label(self):
+        """
+        Test that verbose_name from the related model will be returned from the given
+        field_lookup which in this test is the name of a related (ForeignKey) field
+        """
+        label = get_field_label(Award, "author")
+
+        self.assertEqual(label, "Book author")
+
+    def test_related_field_verbose_name_plural_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        label = get_field_label(Book, "awards")
+
+        self.assertEqual(label, "Awards")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_function(self):
+        """
+        Test that function will be called with the given class and returns the
+        regex fallback
+        """
+        label = get_field_label(Author, "get_name_label")
+
+        self.assertEqual(label, "name label")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_property(self):
+        """
+        Test that property will be called with the given class and the regex fallback
+        will be used as label
+        """
+        label = get_field_label(Author, "label")
+
+        self.assertEqual(label, "label")
+
+    # Field instances
+    def test_field_instance_verbose_name_field_label(self):
+        """
+        Test that verbose_name value will be returned from the given field_lookup
+        """
+        field = Book._meta.get_field("random_set")
+        label = get_field_label(Book, field)
+
+        self.assertEqual(label, "random set")
+
+    def test_field_instance_regex_fallback_field_label(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which has no verbose_name
+        """
+        field = Book._meta.get_field("last_updated")
+        label = get_field_label(Book, field)
+
+        self.assertEqual(label, "last updated")
+
+    def test_field_instance_related_field_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is the name of a related (ForeignKey) field
+        """
+        field = Book._meta.get_field("publisher")
+        label = get_field_label(Book, field)
+
+        self.assertEqual(label, "publishing house")
+
+    def test_field_instance_related_field_verbose_name_fallback_label(self):
+        """
+        Test that verbose_name from the related model will be returned from the given
+        field_lookup which in this test is the name of a related (ForeignKey) field
+        """
+        field = Award._meta.get_field("author")
+        label = get_field_label(Award, field)
+
+        self.assertEqual(label, "Book author")
+
+    def test_field_instance_related_field_verbose_name_plural_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        field = Book._meta.get_field("awards")
+        label = get_field_label(Book, field)
+
+        self.assertEqual(label, "Awards")
+
+
+class InstanceGetFieldLabelTestCase(TestCase):
+    # field_lookup's
+    def test_verbose_name_field_label(self):
+        """
+        Test that verbose_name value will be returned from the given field_lookup
+        """
+        label = get_field_label(BookFactory(), "random_set")
+
+        self.assertEqual(label, "random set")
+
+    def test_regex_fallback_field_label(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which has no verbose_name
+        """
+        label = get_field_label(BookFactory(), "last_updated")
+
+        self.assertEqual(label, "last updated")
+
+    def test_related_field_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is the name of a related (ForeignKey) field
+        """
+        label = get_field_label(BookFactory(), "publisher")
+
+        self.assertEqual(label, "publishing house")
+
+    def test_related_field_verbose_name_fallback_label(self):
+        """
+        Test that verbose_name from the related model will be returned from the given
+        field_lookup which in this test is the name of a related (ForeignKey) field
+        """
+        label = get_field_label(AwardFactory(), "author")
+
+        self.assertEqual(label, "Book author")
+
+    def test_related_field_verbose_name_plural_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        label = get_field_label(BookFactory(), "awards")
+
+        self.assertEqual(label, "Awards")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_function(self):
+        """
+        Test that function will be called with the given class and returns the
+        regex fallback
+        """
+        label = get_field_label(AuthorFactory(), "get_name_label")
+
+        self.assertEqual(label, "Foobar")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_property(self):
+        """
+        Test that property will be called with the given class and the regex fallback
+        will be used as label
+        """
+        label = get_field_label(AuthorFactory(), "label")
+
+        self.assertEqual(label, "Author")
+
+    # Field instances
+    def test_field_instance_verbose_name_field_label(self):
+        """
+        Test that verbose_name value will be returned from the given field_lookup
+        """
+        field = Book._meta.get_field("random_set")
+        label = get_field_label(BookFactory(), field)
+
+        self.assertEqual(label, "random set")
+
+    def test_field_instance_regex_fallback_field_label(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which has no verbose_name
+        """
+        field = Book._meta.get_field("last_updated")
+        label = get_field_label(BookFactory(), field)
+
+        self.assertEqual(label, "last updated")
+
+    def test_field_instance_related_field_label(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is the name of a related (ForeignKey) field
+        """
+        field = Book._meta.get_field("publisher")
+        label = get_field_label(BookFactory(), field)
+
+        self.assertEqual(label, "publishing house")
+
+    def test_field_instance_related_field_verbose_name_fallback_label(self):
+        """
+        Test that verbose_name from the related model will be returned from the given
+        field_lookup which in this test is the name of a related (ForeignKey) field
+        """
+        field = Award._meta.get_field("author")
+        label = get_field_label(AwardFactory(), field)
+
+        self.assertEqual(label, "Book author")
+
+    def test_field_instance_related_field_verbose_name_plural_fallback_label(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the name of
+        a related (ManyToManyField) field
+        """
+        field = Book._meta.get_field("awards")
+        label = get_field_label(BookFactory(), field)
+
+        self.assertEqual(label, "Awards")

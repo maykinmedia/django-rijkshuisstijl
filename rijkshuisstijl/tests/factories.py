@@ -5,13 +5,18 @@ import factory.fuzzy
 
 from django.utils import timezone
 
-from rijkshuisstijl.tests.models import Author, Award, Book, Publisher
+from rijkshuisstijl.tests.models import Author, Award, Book, Conference, Publisher
 
 
 class AuthorFactory(factory.django.DjangoModelFactory):
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
     gender = factory.fuzzy.FuzzyChoice(("female", "male"))
+    date_of_birth = factory.fuzzy.FuzzyDate(
+        timezone.now().date() - timedelta(days=30),
+        timezone.now().date() - timedelta(days=1)
+    )
+    slug = factory.Faker("uuid4")
 
     class Meta:
         model = Author
@@ -20,9 +25,18 @@ class AuthorFactory(factory.django.DjangoModelFactory):
 class AwardFactory(factory.django.DjangoModelFactory):
     name = factory.Faker("name")
     author = factory.SubFactory(AuthorFactory)
+    slug = factory.Faker("uuid4")
 
     class Meta:
         model = Award
+
+
+class ConferenceFactory(factory.django.DjangoModelFactory):
+    name = factory.Faker("name")
+    event_date = factory.Faker("date_object")
+
+    class Meta:
+        model = Conference
 
 
 class PublisherFactory(factory.django.DjangoModelFactory):
