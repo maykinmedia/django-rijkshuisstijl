@@ -9,7 +9,7 @@ def runtests():
     try:
         module = sys.argv[1]
     except IndexError:
-        module = "tests"
+        module = "rijkshuisstijl"
 
     argv = sys.argv[:1] + ["test", module]
     execute_from_command_line(argv)
@@ -22,12 +22,13 @@ if not settings.configured:
             "django.contrib.auth",
             "django.contrib.contenttypes",
             "rijkshuisstijl",
+            "rijkshuisstijl.tests",
             "sitetree",
-            "tests",
         ),
         MIDDLEWARE_CLASSES=[],
-        ROOT_URLCONF="tests.urls",
+        ROOT_URLCONF="rijkshuisstijl.tests.urls",
         STATIC_URL="/static/",
+        USE_TZ=True,
         TEMPLATES=[
             {
                 "BACKEND": "django.template.backends.django.DjangoTemplates",

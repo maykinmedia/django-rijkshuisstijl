@@ -2,9 +2,8 @@ from django.core.paginator import Paginator
 from django.template import Context, Template
 from django.test import RequestFactory, TestCase
 
-from tests.tests.templatetags.utils import InclusionTagWebTest
-
-from ...models import Author, Book, Publisher
+from rijkshuisstijl.tests.templatetags.utils import InclusionTagWebTest
+from rijkshuisstijl.tests.models import Author, Book, Publisher
 
 
 class DatagridTestCase(InclusionTagWebTest):

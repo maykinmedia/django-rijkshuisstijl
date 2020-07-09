@@ -2,7 +2,7 @@ from django import forms
 from django.template import Context, Template
 from django.test import RequestFactory, TestCase
 
-from tests.models import Author, Book, Publisher
+from rijkshuisstijl.tests.models import Author, Book, Publisher
 
 
 class FormTestCase(TestCase):

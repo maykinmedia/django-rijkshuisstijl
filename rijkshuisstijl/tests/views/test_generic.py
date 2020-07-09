@@ -11,7 +11,7 @@ from rijkshuisstijl.views.generic import (
     UpdateView,
 )
 
-from ...models import Author, Award, Book, Publisher
+from rijkshuisstijl.tests.models import Author, Award, Book, Publisher
 
 
 class ViewTestCaseMixin:

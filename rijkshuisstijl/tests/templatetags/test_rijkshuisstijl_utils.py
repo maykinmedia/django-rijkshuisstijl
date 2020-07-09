@@ -1,8 +1,13 @@
+from unittest import skip
 from django.test import TestCase
 from django.utils.datetime_safe import date, datetime
 
-from rijkshuisstijl.templatetags.rijkshuisstijl_utils import format_value
-from tests.models import Author, Book, Publisher
+from rijkshuisstijl.templatetags.rijkshuisstijl_utils import (
+    format_value,
+    get_recursed_field_label
+)
+from rijkshuisstijl.tests.factories import AuthorFactory, BookFactory, PublisherFactory
+from rijkshuisstijl.tests.models import Author, Book, Publisher
 
 
 class FormatValueTestCase(TestCase):
@@ -102,3 +107,77 @@ class FormatValueTestCase(TestCase):
         self.assertEqual(
             format_value(publisher), '<a class="link" href="http://lorem.ipsum">Foo Bar</a>'
         )
+
+
+class GetRecursedFieldLabelTestCase(TestCase):
+    def test_verbose_name_field(self):
+        """
+        Test that verbose_name value will be returned from the given field_lookup
+        """
+        book = BookFactory()
+
+        label = get_recursed_field_label(book, "random_set")
+
+        self.assertEqual(label, "random set")
+
+    @skip("Not implemented")
+    def test_regex_fallback_field(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which has no verbose_name
+        """
+        pass
+
+    @skip("Not implemented")
+    def test_related_field(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is the name of a related (ForeignKey) field
+        """
+        pass
+
+    @skip("Not implemented")
+    def test_related_field_fallback(self):
+        """
+        Test that verbose_name from the related model will be returned from the given
+        field_lookup which in this test is the name of a related (ForeignKey) field
+        """
+        pass
+
+    @skip("Not implemented")
+    def test_related_field_lookup(self):
+        """
+        Test that verbose_name will be returned from the given field_lookup
+        which in this test is a lookup string upon a related (ForeignKey) field
+        """
+        pass
+
+    @skip("Not implemented")
+    def test_related_field_lookup_regex_fallback(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which in this test is a lookup string upon a related (ForeignKey) field
+        """
+        pass
+
+    @skip("Not implemented")
+    def test_function(self):
+        """
+        Test that function will be called with the given object
+        """
+        pass
+
+    @skip("Not implemented")
+    def test_lookup_function(self):
+        """
+        Test that lookup function will be called with the given object
+        """
+        pass
+
+    @skip("Not implemented")
+    def test_related_field_plural_name(self):
+        """
+        Test that dash formatted value will be returned from the given field_lookup
+        which in this test is lookup upon a related (ForeignKey) field
+        """
+        pass

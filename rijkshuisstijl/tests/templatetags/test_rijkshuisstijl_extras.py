@@ -2,8 +2,8 @@ from django.forms import ModelForm
 from django.template import Context, Template
 from django.test import RequestFactory
 
-from tests.models import Author, Book, Publisher
-from tests.tests.templatetags.utils import InclusionTagWebTest
+from rijkshuisstijl.tests.models import Author, Book, Publisher
+from rijkshuisstijl.tests.templatetags.utils import InclusionTagWebTest
 
 
 class KeyValueTableTestCase(InclusionTagWebTest):
