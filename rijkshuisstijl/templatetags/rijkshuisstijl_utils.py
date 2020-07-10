@@ -5,125 +5,146 @@ from collections.abc import Iterable
 from django import template
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Manager, Model, QuerySet
+from django.db.models.base import ModelBase
+from django.db.models.fields import Field
 from django.templatetags.static import static
 from django.utils.functional import Promise
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
-from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_model_from_obj
 
 
-@register.filter()
-def get_recursed_field(obj, field_lookup):
+def _get_recursed_field(model_class, field_lookup):
     """
-    Finds a field in an object by recursing through related fields.
-    :param obj: A model instance or a QuerySet.
-    :param field: A field, possibly on a related instance. Example: "author__first_name".
-    :return: Field
+    :param model_class: a Django model class.
+    :param field_lookup: a str:  Django query filter like field lookup.
+    :return: typically, a Django model field, however lookups of class methods
+    are supported plus the resolved model_class
     """
-    try:
-        model = obj._meta.model
-    except AttributeError:
-        model = obj.model
+    field_fragments = field_lookup.split("__")
+    name = field_fragments[0]
 
-    field_split = field_lookup.split("__")
-    field_name = field_split[0]
     try:
-        field = model._meta.get_field(field_name)
+        field = model_class._meta.get_field(name)
     except FieldDoesNotExist:
-        return getattr(model, field_name)
+        return getattr(model_class, name, ""), model_class
 
-    while field_split:
-        field_lookup = field_split.pop(0)
+    while field_fragments:
+        lookup = field_fragments.pop()
 
         try:
-            remote_field = model._meta.get_field(field_lookup)
-
-            if remote_field.auto_created:
-                remote_field = remote_field.remote_field
-
-            # Not a remote field, break.
-            if remote_field is None:
-                break
-
-            field = remote_field
-            model = field.model
-
-        except (AttributeError, FieldDoesNotExist):
+            remote_field = model_class._meta.get_field(field_lookup)
+        except FieldDoesNotExist:
             break
-    return field
+
+        if remote_field.auto_created:
+            remote_field = remote_field.remote_field
+        else:
+            break
+
+        field = remote_field
+
+        if not field.many_to_one and not field.one_to_one:
+            model_class = field.model
+        else:
+            model_class = field.related_model
+
+    return field, model_class
+
+
+def _get_model(obj):
+    """
+    :param obj: Anything that resolves into a model, typically a model, a model
+    instance or a QuerySet.
+    :return: class: A Django model class when found or None
+    """
+    if isinstance(obj, QuerySet):
+        return obj.model
+    elif isinstance(obj, Model):
+        return obj._meta.model
+    elif isinstance(obj, ModelBase):
+        return obj
+
+    return None
 
 
 @register.filter()
 def get_recursed_field_label(obj, field_lookup):
     """
-    Finds a field name in an object by recursing through related fields.
-    :param obj: A model instance or a QuerySet.
-    :param field: A field, possibly on a related instance. Example: "author__first_name".
-    :return: str
+    Default way to go to resolve a (related) label with obj as input.
+
+    :param obj: Anything that resolves into a model, typically a model, a model
+    instance or a QuerySet.
+    :param field_lookup: a str:  Django like field lookup.
+    :return: str: resolved label name
     """
-    field = get_recursed_field(obj, field_lookup)
-    model = get_model_from_obj(obj)
+    model_class = _get_model(obj)
 
-    try:
-        if field.auto_created:  # Field is field.
-            pass
-    except AttributeError:  # Field is function/property, use function name.
-        try:
-            field = field.fget  # property
-        except AttributeError:
-            pass
-        field = field.__name__
+    if not model_class:
+        return field_lookup
 
-    return get_field_label(model, field)
+    field, model_class = _get_recursed_field(model_class, field_lookup)
+    return get_field_label(model_class, field)
+
+
+def _get_field_label_fallback(field_lookup):
+    """
+    :param field_lookup: string which whoms label needs to be retrieved
+    :return: str: a formatted version of field_lookup
+    """
+    if field_lookup is not str:
+        return str(field_lookup)
+
+    label = field.replace("get_", "", 1)
+    label = label.replace("_", "")
+    label = label.replace("-", "")
+    return label
 
 
 @register.filter
-def get_field_label(obj, field):
+def get_field_label(model_or_instance, field_or_field_name):
     """
-    Returns the label for a field based preferably based on obj's model.
-    Falls back to replacing dashes and underscores with " ".
-    If field is a callable. It's called with obj as parameter and the resulting value is returned.
-    :param obj: A model instance or a QuerySet.
-    :param field: A string indicating the field to get the label for.
-    :return:
+    :param model_or_instance: Either a model or a Model instance.
+    :param field_or_field_name: Typically, a Django model field or a field name,
+    however lookups of class methods are supported.
+    :return: str: label taken from field_or_field_name
     """
+    function = field_or_field_name if callable(field_or_field_name) else False
 
-    # If field is a callable. It's called with obj as parameter and the resulting value is returned.
-    if callable(field):
-        return field(obj)
+    if function and isinstance(model_or_instance, Model):
+        return function(model_or_instance)
 
-    try:
-        model = get_model_from_obj(obj)
-        field_name = str(getattr(field, "name", field))
+    model_class = _get_model(model_or_instance)
 
-        # If column key is "__str__", use model name as label.
-        if field_name == "__str__" and model:
-            return model._meta.verbose_name
+    if field_or_field_name is str and field_or_field_name == "__str__":
+        return model_class._meta.verbose_name
 
-        # If model field can be found, use it's verbose name as label.
-        else:
-            model_field = model._meta.get_field(field_name)
+    if field_or_field_name is str:
+        value = getattr(field_or_field_name, model_class, "")
 
-            if hasattr(model_field, "verbose_name"):
-                return model_field.verbose_name
-            elif model_field.one_to_many:
-                plural_name = model_field.related_model._meta.verbose_name_plural
-                verbose_name = model_field.related_model._meta.verbose_name
-                return plural_name if plural_name else verbose_name
+        if isinstance(value, property):
+            return value
 
-    # If label cannot be found, fall back to replacing dashes and underscores with " ".
-    except:
-        pass
+    if isinstance(field_or_field_name, Field):
+        field = field_or_field_name
+    else:
+        try:
+            field = model_class._meta.get_field(field_or_field_name)
+        except FieldDoesNotExist:
+            return _get_field_label_fallback(field_or_field_name)
 
-    regex_get = re.compile("^get_")  # Remove leading "get_".
-    regex_dash = re.compile("[_-]+")  # Replace "_" and "-" with "".
-    try:
-        field = re.sub(regex_get, "", field)
-        return re.sub(regex_dash, " ", field)
-    except TypeError:
-        return field
+    # ManyToOneRel fields don't have a verbose_name field
+    if hasattr(field, "verbose_name"):
+        return field.verbose_name
+
+    plural_name = field.related_model._meta.verbose_name_plural
+    verbose_name = field.related_model._meta.verbose_name
+
+    if not plural_name or not verbose_name:
+        return _get_field_label_fallback(field.name)
+
+    return plural_name if plural_name else verbose_name
 
 
 @register.filter
