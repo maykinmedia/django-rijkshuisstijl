@@ -18,45 +18,6 @@ from rijkshuisstijl.templatetags.rijkshuisstijl import register
 is_instance = lambda obj: isinstance(obj, Model)
 
 
-def _get_recursed_field(model_class, field_lookup):
-    """
-    :param model_class: a Django model class.
-    :param field_lookup: a str:  Django query filter like field lookup.
-    :return: typically, a Django model field, however lookups of class methods
-    are supported plus the resolved model_class
-    """
-    field_fragments = field_lookup.split("__")
-    name = field_fragments[0]
-
-    try:
-        field = model_class._meta.get_field(name)
-    except FieldDoesNotExist:
-        return getattr(model_class, name, ""), model_class
-
-    if field.related_model:
-        model_class = field.related_model
-
-    while field_fragments:
-        lookup = field_fragments.pop()
-
-        try:
-            remote_field = model_class._meta.get_field(lookup)
-        except FieldDoesNotExist:
-            break
-
-        if remote_field.auto_created:
-            remote_field = remote_field.remote_field
-
-        field = remote_field
-
-        if not field.many_to_one and not field.one_to_one:
-            model_class = field.model
-        else:
-            model_class = field.related_model
-
-    return field, model_class
-
-
 def _get_model(obj):
     """
     :param obj: Anything that resolves into a model, typically a model, a model
@@ -73,23 +34,56 @@ def _get_model(obj):
     return None
 
 
-@register.filter()
-def get_recursed_field_label(obj, field_lookup):
+# TODO update function docs
+def _get_recursed_field(obj, field_lookup):
     """
-    Default way to go to resolve a (related) label with obj as input.
-
-    :param obj: Anything that resolves into a model, typically a model, a model
-    instance or a QuerySet.
-    :param field_lookup: a str:  Django like field lookup.
-    :return: str: resolved label name
+    :param model_class: a Django model class.
+    :param field_lookup: a str:  Django query filter like field lookup.
+    :return: typically, a Django model field, however lookups of class methods
+    are supported plus the resolved model_class
     """
+    instance = obj if is_instance(obj) else None
     model_class = _get_model(obj)
 
-    if not model_class:
-        return field_lookup
+    field_fragments = field_lookup.split("__")
+    name = field_fragments[0]
 
-    field, model_class = _get_recursed_field(model_class, field_lookup)
-    return get_field_label(model_class, field)
+    if not model_class:
+        return None, None, None
+
+    try:
+        field = model_class._meta.get_field(name)
+    except FieldDoesNotExist:
+        lookup = getattr(model_class, name, "")
+
+        if isinstance(lookup, property):
+            return field_lookup, model_class, instance
+
+        return lookup, model_class, instance
+
+    if field.related_model:
+        model_class = field.related_model
+
+    while field_fragments:
+        lookup = field_fragments.pop()
+
+        try:
+            remote_field = model_class._meta.get_field(lookup)
+        except FieldDoesNotExist:
+            break
+
+        field = remote_field
+
+        if instance:
+            value = getattr(instance, lookup, "")
+            instance = value if is_instance(value) else None
+
+        if not field.many_to_one and not field.one_to_one:
+            model_class = field.model
+        else:
+            model_class = field.related_model
+
+    return field, model_class, instance
 
 
 def _get_field_label_fallback(field_lookup):
@@ -106,6 +100,27 @@ def _get_field_label_fallback(field_lookup):
     return label
 
 
+@register.filter()
+def get_recursed_field_label(obj, field_lookup):
+    """
+    Default way to go to resolve a (related) label with obj as input.
+
+    :param obj: Anything that resolves into a model, typically a model, a model
+    instance or a QuerySet.
+    :param field_lookup: a str:  Django like field lookup.
+    :return: str: resolved label name
+    """
+    field, model_class, instance = _get_recursed_field(obj, field_lookup)
+
+    if not model_class and not instance:
+        return _get_field_label_fallback(field_lookup)
+
+    if instance:
+        return get_field_label(instance, field)
+
+    return get_field_label(model_class, field)
+
+
 @register.filter
 def get_field_label(model_or_instance, field_or_field_name):
     """
@@ -114,17 +129,25 @@ def get_field_label(model_or_instance, field_or_field_name):
     however lookups of class methods are supported.
     :return: str: label taken from field_or_field_name
     """
-    function = field_or_field_name if callable(field_or_field_name) else False
-
-    if function and is_instance(model_or_instance):
-        return function(model_or_instance)
-
-    if is_instance(model_or_instance) and isinstance(field_or_field_name, property):
-        return model_or_instance(field_or_field_name)
-
+    instance = model_or_instance if is_instance(model_or_instance) else None
     model_class = _get_model(model_or_instance)
 
-    if field_or_field_name is str and field_or_field_name == "__str__":
+    if not model_class:
+        return _get_field_label_fallback(field_or_field_name)
+
+    function = field_or_field_name if callable(field_or_field_name) else False
+    if instance and function:
+        return function(model_or_instance)
+    elif function:
+        return _get_field_label_fallback(function.__name__)
+
+    if instance and type(field_or_field_name) is str:
+        attr = getattr(model_class, field_or_field_name, "")
+
+        if isinstance(attr, property):
+            return getattr(instance, field_or_field_name)
+
+    if type(field_or_field_name) is str and field_or_field_name == "__str__":
         return model_class._meta.verbose_name
 
     if isinstance(field_or_field_name, Field):
