@@ -705,26 +705,6 @@ class ClassGetFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Awards")
 
-    # Note this usecase will probably not happen, but testing expected behaviour
-    # is preferred
-    def test_many_to_many_property(self):
-        """
-        Test that many to many field property will fallback to regex fallback
-        """
-        label = get_field_label(Publisher, "conferences__full_name")
-
-        self.assertEqual(label, "full name")
-
-    # Note this usecase will probably not happen, but testing expected behaviour
-    # is preferred
-    def test_many_to_many_function(self):
-        """
-        Test that many to many field property will fallback to regex fallback
-        """
-        label = get_field_label(Publisher, "conferences__get_days_until")
-
-        self.assertEqual(label, "days until")
-
 
 class InstanceGetFieldLabelTestCase(TestCase):
     # field_lookup's
@@ -841,23 +821,3 @@ class InstanceGetFieldLabelTestCase(TestCase):
         label = get_field_label(BookFactory(), field)
 
         self.assertEqual(label, "Awards")
-
-    # Note this usecase will probably not happen, but testing expected behaviour
-    # is preferred
-    def test_many_to_many_property(self):
-        """
-        Test that many to many field property will fallback to regex fallback
-        """
-        label = get_field_label(PublisherFactory(), "conferences__full_name")
-
-        self.assertEqual(label, "full name")
-
-    # Note this usecase will probably not happen, but testing expected behaviour
-    # is preferred
-    def test_many_to_many_function(self):
-        """
-        Test that many to many field property will fallback to regex fallback
-        """
-        label = get_field_label(PublisherFactory(), "conferences__get_days_until")
-
-        self.assertEqual(label, "days until")
