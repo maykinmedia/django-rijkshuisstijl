@@ -261,7 +261,7 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(publisher, "conferences__full_name")
 
-        self.assertEqual(label, "conferences full name")
+        self.assertEqual(label, "full name")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -273,7 +273,7 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(publisher, "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences days until")
+        self.assertEqual(label, "days until")
 
 
 class QuerysetGetRecursedFieldLabelTestCase(TestCase):
@@ -406,7 +406,6 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(queryset, "label")
 
-        expected_instance = queryset[0]
         self.assertEqual(label, "label")
 
     # Note this usecase will probably not happen, but testing expected behaviour
@@ -420,7 +419,7 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(queryset, "author__get_name_label")
 
-        self.assertEqual(label, "author get name label")
+        self.assertEqual(label, "name label")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -433,7 +432,7 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(queryset, "conferences__full_name")
 
-        self.assertEqual(label, "conferences full name")
+        self.assertEqual(label, "full name")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -446,7 +445,7 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(queryset, "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences days until")
+        self.assertEqual(label, "days until")
 
 
 class ClassGetRecursedFieldLabelTestCase(TestCase):
@@ -563,7 +562,7 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
         """
         label = get_recursed_field_label(Award, "author__get_name_label")
 
-        self.assertEqual(label, "author name label")
+        self.assertEqual(label, "name label")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -573,7 +572,7 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
         """
         label = get_recursed_field_label(Publisher, "conferences__full_name")
 
-        self.assertEqual(label, "conferences full name")
+        self.assertEqual(label, "full name")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -583,7 +582,7 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
         """
         label = get_recursed_field_label(Publisher, "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences days until")
+        self.assertEqual(label, "days until")
 
 
 class ClassGetFieldLabelTestCase(TestCase):
@@ -714,7 +713,7 @@ class ClassGetFieldLabelTestCase(TestCase):
         """
         label = get_field_label(Publisher, "conferences__full_name")
 
-        self.assertEqual(label, "conferences full name")
+        self.assertEqual(label, "full name")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -724,7 +723,7 @@ class ClassGetFieldLabelTestCase(TestCase):
         """
         label = get_field_label(Publisher, "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences days until")
+        self.assertEqual(label, "days until")
 
 
 class InstanceGetFieldLabelTestCase(TestCase):
@@ -851,7 +850,7 @@ class InstanceGetFieldLabelTestCase(TestCase):
         """
         label = get_field_label(PublisherFactory(), "conferences__full_name")
 
-        self.assertEqual(label, "conferences full name")
+        self.assertEqual(label, "full name")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -861,4 +860,4 @@ class InstanceGetFieldLabelTestCase(TestCase):
         """
         label = get_field_label(PublisherFactory(), "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences days until")
+        self.assertEqual(label, "days until")
