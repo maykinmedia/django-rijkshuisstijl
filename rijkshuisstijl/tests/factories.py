@@ -72,8 +72,8 @@ class BookFactory(factory.django.DjangoModelFactory):
         timezone.now() - timedelta(days=5), timezone.now() - timedelta(days=1)
     )
     stock = factory.Faker("pyint", min_value=5)
-    title = factory.Faker("words", nb=3)
-    random_set = factory.Faker("words", nb=5)
+    title = factory.Faker("sentence")
+    random_set = factory.Faker("sentence")
 
     @factory.post_generation
     def authors(self, create, extracted, **kwargs):
