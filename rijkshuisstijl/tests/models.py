@@ -50,6 +50,14 @@ class Conference(models.Model):
     name = models.CharField(max_length=255)
     event_date = models.DateField()
 
+    @property
+    def full_name(self):
+        return f"{self.name} - {self.event_date}"
+
+    def get_days_until(self):
+        today = timezone.now().date()
+        return self.event_date - today
+
 
 class Publisher(models.Model):
     name = models.CharField(max_length=255, default="Foo Bar")
