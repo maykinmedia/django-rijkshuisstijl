@@ -134,17 +134,19 @@ def get_field_label(model_or_instance, field_or_field_name):
         except FieldDoesNotExist:
             return _get_field_label_fallback(field_or_field_name)
 
-    # ManyToOneRel fields don't have a verbose_name field
-    if hasattr(field, "verbose_name"):
-        return field.verbose_name
+    # ManyToOneRel fields don't have a verbose_name field.
+    # _verbose_name is used as override for the default created verbose_name
+    # see Django Field class.
+    if hasattr(field, "_verbose_name") and field._verbose_name:
+        return field._verbose_name
 
-    plural_name = field.related_model._meta.verbose_name_plural
-    verbose_name = field.related_model._meta.verbose_name
+    if field.related_model:
+        plural_name = field.related_model._meta.verbose_name_plural
+        verbose_name = field.related_model._meta.verbose_name
 
-    if not plural_name or not verbose_name:
-        return _get_field_label_fallback(field.name)
+        return plural_name if plural_name else verbose_name
 
-    return plural_name if plural_name else verbose_name
+    return _get_field_label_fallback(field.name)
 
 
 @register.filter
