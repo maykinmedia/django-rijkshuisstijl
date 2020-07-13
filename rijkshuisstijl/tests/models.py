@@ -59,9 +59,17 @@ class Conference(models.Model):
         return self.event_date - today
 
 
+class Company(models.Model):
+    name = models.CharField(max_length=255, default="Foo Bar Inc")
+
+    class Meta:
+        verbose_name = "Firm"
+
+
 class Publisher(models.Model):
     name = models.CharField(max_length=255, default="Foo Bar")
     conferences = models.ManyToManyField(Conference)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

@@ -5,7 +5,14 @@ import factory.fuzzy
 
 from django.utils import timezone
 
-from rijkshuisstijl.tests.models import Author, Award, Book, Conference, Publisher
+from rijkshuisstijl.tests.models import (
+    Author,
+    Award,
+    Book,
+    Conference,
+    Company,
+    Publisher
+)
 
 
 class AuthorFactory(factory.django.DjangoModelFactory):
@@ -39,8 +46,16 @@ class ConferenceFactory(factory.django.DjangoModelFactory):
         model = Conference
 
 
+class CompanyFactory(factory.django.DjangoModelFactory):
+    name = factory.Faker("name")
+
+    class Meta:
+        model = Company
+
+
 class PublisherFactory(factory.django.DjangoModelFactory):
     name = factory.Faker("name")
+    company = factory.SubFactory(CompanyFactory)
 
     class Meta:
         model = Publisher
