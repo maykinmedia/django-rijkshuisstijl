@@ -41,6 +41,8 @@ class Book(models.Model):
         return self.title
 
     class Meta:
+        verbose_name = "Boek"
+        verbose_name_plural = "Boeken"
         ordering = ("pk",)
 
 

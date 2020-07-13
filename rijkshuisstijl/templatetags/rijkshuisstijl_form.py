@@ -1,4 +1,4 @@
-from django.forms.widgets import CheckboxInput, DateInput, Input, Select
+from django.forms.widgets import CheckboxInput, DateInput, Input, Select, Widget
 from django.utils.translation import gettext_lazy as _
 
 from rijkshuisstijl.conf import settings
@@ -232,11 +232,16 @@ def _field(bound_field, **extra_attrs):
         :param bound_field:
         :return:
         """
+        widget = bound_field
+
         try:
             field = bound_field.field
-            return field.widget
+            widget = field.widget
         except AttributeError:
-            return bound_field
+            pass
+
+        if isinstance(widget, Widget):
+            return widget
 
     def add_choices(bound_field):
         """
@@ -245,6 +250,9 @@ def _field(bound_field, **extra_attrs):
         :return: BoundField
         """
         widget = get_widget(bound_field)
+
+        if not widget:
+            return
 
         # Make model objects work as choice.
         try:
@@ -275,6 +283,9 @@ def _field(bound_field, **extra_attrs):
 
         # Get widget.
         widget = get_widget(bound_field)
+
+        if not widget:
+            return
 
         # Copy mark_required.
         try:

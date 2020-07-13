@@ -1,12 +1,19 @@
+from django.core.exceptions import ImproperlyConfigured
+from django.forms import Form
+from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
 from django.views.generic import (
     CreateView as DjCreateView,
+    DeleteView as DjDeleteView,
     DetailView as DjDetailView,
     FormView as DjFormView,
     ListView as DjListView,
     TemplateView as DjTemplateView,
     UpdateView as DjUpdateView,
 )
+from django.views.generic.detail import BaseDetailView
+from django.views.generic.edit import DeletionMixin
+from django.views.generic.list import BaseListView
 
 from rijkshuisstijl.conf import settings
 
@@ -134,6 +141,7 @@ class ListView(DjListView):
     modifier_mapping = None
     page_key = "page"
     urlize = True
+    urlizetrunc = None
     title = None
     subtitle = None
     template_name = "rijkshuisstijl/views/generic/list.html"
@@ -207,6 +215,7 @@ class ListView(DjListView):
 
         # Urlize
         datagrid_config["urlize"] = self.urlize
+        datagrid_config["urlizetrunc"] = self.urlizetrunc
         return datagrid_config
 
     def get_columns(self):
@@ -248,6 +257,90 @@ class FormView(FormMixin, DjFormView):
     """
 
     pass
+
+
+class DeleteMixin:
+    label = _("Verwijderen")
+    label_cancel = _("Annuleren")
+    status = "danger"
+    title = _("Weet u het zeker?")
+    template_name = "rijkshuisstijl/views/generic/delete.html"
+
+    def get_form(self):
+        return Form()
+
+    def get_actions(self):
+        return [
+            {"class": "button--primary", "label": self.label_cancel, "href": self.success_url},
+            {"class": "button--danger", "label": self.label, "type": "submit",},
+        ]
+
+
+class DeleteView(DeleteMixin, FormMixin, DjDeleteView):
+    """
+    Delete view.
+    Allows the user to confirm deletion of a single object.
+    """
+
+    def get_form_config(self):
+        form_config = super().get_form_config()
+        text = _("U staat op het punt om %(object)s te verwijderen, weet u het zeker?") % {
+            "object": self.get_object()
+        }
+
+        return {
+            **form_config,
+            "text": text,
+        }
+
+
+class DeleteMultipleView(DeleteMixin, FormMixin, DeletionMixin, DjListView):
+    """
+    Delete multiple view.
+    Allows the user to confirm deletion of multiple objects.
+    """
+
+    pk_url_kwarg = "pk"
+
+    def get_form_config(self):
+        form_config = super().get_form_config()
+        text = _(
+            "U staat op het punt om %(count)i %(verbose_name_plural)s te verwijderen, weet u het zeker?"
+        ) % {"count": len(self.get_queryset()), "verbose_name_plural": self.get_verbose_name()}
+
+        return {
+            **form_config,
+            "text": text,
+        }
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL.
+        """
+
+        success_url = self.get_success_url()
+        self.get_queryset().delete()
+        return HttpResponseRedirect(success_url)
+
+    def get_queryset(self):
+        queryset = super().get_queryset().none()
+        Model = queryset.model
+        pks = self.request.GET.getlist(self.pk_url_kwarg)
+        return Model.objects.filter(pk__in=pks)
+
+    def get_verbose_name(self):
+        """
+        Returns the verbose_name_plural of th QuerySet's Model.
+        :return: str
+        """
+        return str(self.get_queryset().model._meta.verbose_name_plural).lower()
+
+    def get_success_url(self):
+        if self.success_url:
+            return self.success_url
+        else:
+            raise ImproperlyConfigured("No URL to redirect to. Provide a success_url.")
 
 
 class TemplateView(DjTemplateView):

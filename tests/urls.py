@@ -2,6 +2,8 @@ from django.urls import path
 
 from rijkshuisstijl.views.generic import (
     CreateView,
+    DeleteMultipleView,
+    DeleteView,
     DetailView,
     ListView,
     TemplateView,
@@ -18,6 +20,12 @@ urlpatterns = [
     path("<int:pk>", DetailView.as_view(model=Book, fields=fields), name="detail"),
     path("", ListView.as_view(model=Book, fields=fields, paginate_by=2), name="list"),
     path("<int:pk>/update", UpdateView.as_view(model=Book, fields=fields), name="update"),
+    path("<int:pk>/delete", DeleteView.as_view(model=Book, success_url="/"), name="delete"),
+    path(
+        "delete-multiple",
+        DeleteMultipleView.as_view(model=Book, success_url="/"),
+        name="delete-multiple",
+    ),
     path(
         "publisher/<int:pk>",
         DetailView.as_view(model=Publisher, fields=("name", "book_set",)),

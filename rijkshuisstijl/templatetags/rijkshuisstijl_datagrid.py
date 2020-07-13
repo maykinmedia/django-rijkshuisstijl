@@ -541,11 +541,8 @@ def datagrid(context, **kwargs):
                     # Default choices.
                     choices = getattr(filter_field, "choices", [])
 
-                    if filterable_column.get("type") == "CharField":
-                        choices = []
-
                     # A boolean field gets choices for the boolean values.
-                    elif filterable_column.get("type") == "BooleanField":
+                    if filterable_column.get("type") == "BooleanField":
                         choices = ((True, _("waar")), (False, _("onwaar")))
 
                     # A related field gets choices for all related objects. This can be slow if a lot of objects are found.
@@ -1012,6 +1009,7 @@ def datagrid(context, **kwargs):
     config["title"] = config.get("title", None)
     config["url_reverse"] = config.get("url_reverse", "")
     config["urlize"] = config.get("urlize", True)
+    config["urlizetrunc"] = config.get("urlizetrunc")
 
     # Context
     config["request"] = context["request"]

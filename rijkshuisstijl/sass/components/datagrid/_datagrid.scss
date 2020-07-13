@@ -298,7 +298,7 @@ $datagrid-spacing-cell-h: ($datagrid-spacing-row-h / 2) + $datagrid-spacing-row-
     text-align: center;
   }
 
-  &__cell a,
+  &__cell a:not(.button),
   &__link,
   &__link &__label {
     @include anchor(true);

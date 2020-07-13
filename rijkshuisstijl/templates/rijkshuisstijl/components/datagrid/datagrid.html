@@ -82,6 +82,7 @@
                                 <input form="datagrid-action-form-{{ id }}" name="{{ export_input_name }}" value="{{ column.export_lookup }}" type="hidden" />
                             {% endfor %}
 
+
                             <ul class="toolbar__list">
                                 {% for export_button in export_buttons %}
                                     <li class="toolbar__list-item">
@@ -166,7 +167,7 @@
                 {#  Table bodies. #}
                 {% endsingleline %}
                     {% for group in groups %}
-                        {% include 'rijkshuisstijl/components/datagrid/datagrid-table-body.html' with id=id columns=columns form=form form_checkbox_name=form_checkbox_name formset=formset group=group label_no_results=label_no_results modifier_column=modifier_column url_reverse=url_reverse urlize=urlize only %}
+                        {% include 'rijkshuisstijl/components/datagrid/datagrid-table-body.html' with id=id columns=columns form=form form_checkbox_name=form_checkbox_name formset=formset group=group label_no_results=label_no_results modifier_column=modifier_column url_reverse=url_reverse urlize=urlize urlizetrunc=urlizetrunc only%}
                     {% endfor %}
                 {% singleline%}
             </table>

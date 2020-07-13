@@ -1,6 +1,6 @@
 {% load rijkshuisstijl sitetree %}{% singleline %}
 {% if sitetree_items|length_is:"1" %}
-{% else %}
+{% elif sitetree_items %}
     <ul class="breadcrumbs">
         {% for item in sitetree_items %}
             {% sitetree_url for item as href %}

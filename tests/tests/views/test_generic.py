@@ -1,10 +1,10 @@
-import unittest
-
 from django.test import RequestFactory, TestCase
 from django.urls import reverse_lazy
 
 from rijkshuisstijl.views.generic import (
     CreateView,
+    DeleteMultipleView,
+    DeleteView,
     DetailView,
     ListView,
     TemplateView,
@@ -17,7 +17,7 @@ from ...models import Author, Award, Book, Publisher
 class ViewTestCaseMixin:
     url_name = ""
 
-    def client_get(self, url_name=None, kwargs=None):
+    def client_get(self, url_name=None, kwargs=None, method="get", get_params={}):
         url_name = url_name if url_name else self.url_name
 
         if not kwargs:
@@ -26,7 +26,12 @@ class ViewTestCaseMixin:
             except AttributeError:
                 kwargs = None
 
-        return self.client.get(reverse_lazy(url_name, kwargs=kwargs))
+        url = reverse_lazy(url_name, kwargs=kwargs)
+
+        if get_params:
+            url = url + "?" + get_params
+
+        return getattr(self.client, method.lower())(url)
 
     def test_200(self):
         response = self.client_get()
@@ -493,3 +498,67 @@ class UpdateViewTestCase(ViewTestCaseMixin, FormTestCaseMixin, TestCase):
     def test_components(self):
         response = self.client_get()
         self.assertTemplateUsed(response, template_name="rijkshuisstijl/components/form/form.html")
+
+
+class DeleteViewTestCase(ViewTestCaseMixin, TestCase):
+    url_name = "delete"
+    view = DeleteView
+
+    def setUp(self):
+        self.publisher = Publisher.objects.create()
+        self.object = Book.objects.create(publisher=self.publisher)
+
+    def test_template(self):
+        response = self.client_get()
+        self.assertTemplateUsed(response, template_name="rijkshuisstijl/views/generic/delete.html")
+
+    def test_components(self):
+        response = self.client_get()
+        self.assertTemplateUsed(response, template_name="rijkshuisstijl/components/form/form.html")
+
+    def test_confirm(self):
+        response = self.client_get(kwargs={"pk": self.object.pk})
+        self.assertContains(
+            response, "U staat op het punt om Lorem Ipsum te verwijderen, weet u het zeker?"
+        )
+        self.assertEqual(Book.objects.first(), self.object)
+
+    def test_delete(self):
+        response = self.client_get(kwargs={"pk": self.object.pk}, method="post")
+        self.assertRedirects(response, "/")
+        self.assertEqual(Book.objects.first(), None)
+
+
+class DeleteMultipleViewTestCase(ViewTestCaseMixin, TestCase):
+    url_name = "delete-multiple"
+    view = DeleteMultipleView
+
+    def setUp(self):
+        self.publisher = Publisher.objects.create()
+        self.object_1 = Book.objects.create(publisher=self.publisher)
+        self.object_2 = Book.objects.create(publisher=self.publisher)
+        self.object_3 = Book.objects.create(publisher=self.publisher)
+
+    def test_template(self):
+        response = self.client_get()
+        self.assertTemplateUsed(response, template_name="rijkshuisstijl/views/generic/delete.html")
+
+    def test_components(self):
+        response = self.client_get()
+        self.assertTemplateUsed(response, template_name="rijkshuisstijl/components/form/form.html")
+
+    def test_confirm(self):
+        response = self.client_get(get_params=f"pk={self.object_1.pk}&pk={self.object_3.pk}")
+        self.assertContains(
+            response, "U staat op het punt om 2 boeken te verwijderen, weet u het zeker?"
+        )
+        self.assertEqual(Book.objects.first(), self.object_1)
+        self.assertEqual(len(Book.objects.all()), 3)
+
+    def test_delete(self):
+        response = self.client_get(
+            get_params=f"pk={self.object_1.pk}&pk={self.object_3.pk}", method="post"
+        )
+        self.assertRedirects(response, "/")
+        self.assertEqual(Book.objects.first(), self.object_2)
+        self.assertEqual(len(Book.objects.all()), 1)

@@ -7,7 +7,7 @@
             {% form_field form bound_field help_text_position=help_text_position %}
         {% endif %}
 
-    {% else %}
+    {% elif bound_field %}
 
         <div class="form-control{% if compact %} form-control--compact{% endif %}{% if bound_field.errors %} form-control--error{% endif %}{% if class %} {{ class }}{% endif %}">
             {# Form control header. #}
