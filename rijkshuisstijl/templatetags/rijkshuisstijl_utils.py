@@ -97,7 +97,9 @@ def _get_field_label_fallback(field_lookup):
     label = field_lookup.replace("get_", "", 1)
     label = label.replace("_", " ")
     label = label.replace("-", " ")
-    return label
+
+    # Remove double spaces
+    return " ".join(word for word in label.split(" ") if word)
 
 
 @register.filter()
