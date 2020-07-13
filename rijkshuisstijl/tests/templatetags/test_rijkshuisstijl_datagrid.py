@@ -4,25 +4,26 @@ from django.test import RequestFactory, TestCase
 
 from rijkshuisstijl.tests.templatetags.utils import InclusionTagWebTest
 from rijkshuisstijl.tests.models import Author, Book, Publisher
+from rijkshuisstijl.tests.factories import AuthorFactory, BookFactory, PublisherFactory
 
 
 class DatagridTestCase(InclusionTagWebTest):
     def setUp(self):
         self.tag = "datagrid"
 
-        self.publisher_1 = Publisher.objects.create(name="Foo")
-        self.publisher_2 = Publisher.objects.create(name="Bar")
+        self.publisher_1 = PublisherFactory(name="Foo")
+        self.publisher_2 = PublisherFactory(name="Bar")
 
-        self.author_1 = Author.objects.create(first_name="John", last_name="Doe")
-        self.author_2 = Author.objects.create(first_name="Joe", last_name="Average")
+        self.author_1 = AuthorFactory(first_name="John", last_name="Doe")
+        self.author_2 = AuthorFactory(first_name="Joe", last_name="Average")
 
-        self.book_1 = Book.objects.create(title="Lorem", publisher=self.publisher_1)
+        self.book_1 = BookFactory(title="Lorem", publisher=self.publisher_1)
         self.book_1.authors.set((self.author_1,))
 
-        self.book_2 = Book.objects.create(title="Ipsum", publisher=self.publisher_2)
+        self.book_2 = BookFactory(title="Ipsum", publisher=self.publisher_2)
         self.book_2.authors.set((self.author_2,))
 
-        self.book_3 = Book.objects.create(title="Dolor", publisher=self.publisher_1)
+        self.book_3 = BookFactory(title="Dolor", publisher=self.publisher_1)
 
     def template_render(self, config=None, data={}):
         config = config or {}

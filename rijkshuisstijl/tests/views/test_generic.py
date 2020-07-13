@@ -12,6 +12,7 @@ from rijkshuisstijl.views.generic import (
 )
 
 from rijkshuisstijl.tests.models import Author, Award, Book, Publisher
+from rijkshuisstijl.tests.factories import AuthorFactory, AwardFactory, BookFactory, PublisherFactory
 
 
 class ViewTestCaseMixin:
@@ -53,8 +54,8 @@ class ViewTestCaseMixin:
 
 class FormTestCaseMixin:
     def setUp(self):
-        Publisher.objects.create()
-        Author.objects.create()
+        PublisherFactory()
+        AuthorFactory()
 
     def client_get_form(self, fields):
         kwargs = {"model": Book, "fields": fields}
@@ -222,9 +223,9 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
     view = DetailView
 
     def setUp(self):
-        self.publisher = Publisher.objects.create()
-        self.author = Author.objects.create()
-        self.object = Book.objects.create(publisher=self.publisher)
+        self.publisher = PublisherFactory()
+        self.author = AuthorFactory()
+        self.object = BookFactory(publisher=self.publisher)
         self.object.authors.set((self.author,))
 
     def test_context_default(self):
@@ -328,12 +329,10 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         url_name = "publisher-detail"
 
         books = [
-            Book(title="Jungle Book", publisher=self.publisher),
-            Book(title="Pinkeltje", publisher=self.publisher),
-            Book(title="Harry Potter", publisher=self.publisher),
+            BookFactory(title="Jungle Book", publisher=self.publisher),
+            BookFactory(title="Pinkeltje", publisher=self.publisher),
+            BookFactory(title="Harry Potter", publisher=self.publisher),
         ]
-
-        Book.objects.bulk_create(books)
 
         response = self.client_get(url_name=url_name, kwargs=kwargs)
 
@@ -348,12 +347,10 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         url_name = "author-detail"
 
         awards = [
-            Award(name="Book of the year 2012", author=self.author),
-            Award(name="Book of the decade 2020", author=self.author),
-            Award(name="Book of the century 1900", author=self.author),
+            AwardFactory(name="Book of the year 2012", author=self.author),
+            AwardFactory(name="Book of the decade 2020", author=self.author),
+            AwardFactory(name="Book of the century 1900", author=self.author),
         ]
-
-        Award.objects.bulk_create(awards)
 
         response = self.client_get(url_name=url_name, kwargs=kwargs)
 
@@ -364,12 +361,8 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         self.assertContains(response, expected_award_label)
 
     def test_many_to_many(self):
-        Author.objects.bulk_create(
-            [
-                Author(first_name="James", last_name="Bond"),
-                Author(first_name="John", last_name="Doe"),
-            ]
-        )
+        AuthorFactory(first_name="James", last_name="Bond"),
+        AuthorFactory(first_name="John", last_name="Doe"),
 
         authors = Author.objects.all()
 
@@ -391,8 +384,8 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         url_name = "author-book-detail"
 
         books = [
-            Book.objects.create(title="Lord Of The Rings", publisher=self.publisher),
-            Book.objects.create(title="The Witcher", publisher=self.publisher),
+            BookFactory(title="Lord Of The Rings", publisher=self.publisher),
+            BookFactory(title="The Witcher", publisher=self.publisher),
         ]
 
         self.author.book_set.set(books)
@@ -419,19 +412,19 @@ class ListViewTestCase(ViewTestCaseMixin, TestCase):
     view = ListView
 
     def setUp(self):
-        self.publisher_1 = Publisher.objects.create(name="foo")
-        self.publisher_2 = Publisher.objects.create(name="bar")
+        self.publisher_1 = PublisherFactory(name="foo")
+        self.publisher_2 = PublisherFactory(name="bar")
 
-        self.author_1 = Author.objects.create(first_name="John", last_name="Doe")
-        self.author_2 = Author.objects.create(first_name="Joe", last_name="Average")
+        self.author_1 = AuthorFactory(first_name="John", last_name="Doe")
+        self.author_2 = AuthorFactory(first_name="Joe", last_name="Average")
 
-        self.book_1 = Book.objects.create(title="Lorem", publisher=self.publisher_1)
+        self.book_1 = BookFactory(title="Lorem", publisher=self.publisher_1)
         self.book_1.authors.set((self.author_1,))
 
-        self.book_2 = Book.objects.create(title="Ipsum", publisher=self.publisher_2)
+        self.book_2 = BookFactory(title="Ipsum", publisher=self.publisher_2)
         self.book_2.authors.set((self.author_2,))
 
-        self.book_3 = Book.objects.create(title="Dolor", publisher=self.publisher_1)
+        self.book_3 = BookFactory(title="Dolor", publisher=self.publisher_1)
         self.book_3.authors.set((self.author_1, self.author_2))
 
     def test_context_default(self):
@@ -486,9 +479,9 @@ class UpdateViewTestCase(ViewTestCaseMixin, FormTestCaseMixin, TestCase):
     view = UpdateView
 
     def setUp(self):
-        self.publisher = Publisher.objects.create()
-        self.author = Author.objects.create()
-        self.object = Book.objects.create(publisher=self.publisher)
+        self.publisher = PublisherFactory()
+        self.author = AuthorFactory()
+        self.object = BookFactory(publisher=self.publisher)
         self.object.authors.set((self.author,))
 
     def test_template(self):

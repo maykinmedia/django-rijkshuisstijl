@@ -3,6 +3,7 @@ from django.template import Context, Template
 from django.test import RequestFactory
 
 from rijkshuisstijl.tests.models import Author, Book, Publisher
+from rijkshuisstijl.tests.factories import AuthorFactory, BookFactory, PublisherFactory
 from rijkshuisstijl.tests.templatetags.utils import InclusionTagWebTest
 
 
@@ -11,13 +12,13 @@ class KeyValueTableTestCase(InclusionTagWebTest):
     group_class = "key-value-table__row"
 
     def setUp(self):
-        self.publisher_1 = Publisher.objects.create(name="Foo")
-        self.publisher_2 = Publisher.objects.create(name="Bar")
+        self.publisher_1 = PublisherFactory(name="Foo")
+        self.publisher_2 = PublisherFactory(name="Bar")
 
-        self.author_1 = Author.objects.create(first_name="John", last_name="Doe")
-        self.author_2 = Author.objects.create(first_name="Joe", last_name="Average")
+        self.author_1 = AuthorFactory(first_name="John", last_name="Doe")
+        self.author_2 = AuthorFactory(first_name="Joe", last_name="Average")
 
-        self.book = Book.objects.create(title="Lorem", publisher=self.publisher_1)
+        self.book = BookFactory(title="Lorem", publisher=self.publisher_1)
         self.book.authors.set((self.author_1, self.author_2))
 
     def template_render(self, config=None, data={}):
