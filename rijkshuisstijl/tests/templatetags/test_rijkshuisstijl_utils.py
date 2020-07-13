@@ -689,10 +689,10 @@ class ClassGetFieldLabelTestCase(TestCase):
         Test that verbose_name from the related model will be returned from the given
         field_lookup which in this test is the name of a related (ForeignKey) field
         """
-        field = Award._meta.get_field("author")
-        label = get_field_label(Award, field)
+        field = Publisher._meta.get_field("company")
+        label = get_field_label(Publisher, field)
 
-        self.assertEqual(label, "Book authors")
+        self.assertEqual(label, "Firm")
 
     def test_field_instance_related_field_verbose_name_plural_fallback_label(self):
         """
@@ -806,8 +806,8 @@ class InstanceGetFieldLabelTestCase(TestCase):
         Test that verbose_name from the related model will be returned from the given
         field_lookup which in this test is the name of a related (ForeignKey) field
         """
-        field = Award._meta.get_field("company")
-        label = get_field_label(AwardFactory(), field)
+        field = Publisher._meta.get_field("company")
+        label = get_field_label(PublisherFactory(), field)
 
         self.assertEqual(label, "Firm")
 
