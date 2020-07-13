@@ -30,18 +30,19 @@ def _get_recursed_field(model_class, field_lookup):
     except FieldDoesNotExist:
         return getattr(model_class, name, ""), model_class
 
+    if field.related_model:
+        model_class = field.related_model
+
     while field_fragments:
         lookup = field_fragments.pop()
 
         try:
-            remote_field = model_class._meta.get_field(field_lookup)
+            remote_field = model_class._meta.get_field(lookup)
         except FieldDoesNotExist:
             break
 
         if remote_field.auto_created:
             remote_field = remote_field.remote_field
-        else:
-            break
 
         field = remote_field
 
@@ -93,12 +94,12 @@ def _get_field_label_fallback(field_lookup):
     :param field_lookup: string which whoms label needs to be retrieved
     :return: str: a formatted version of field_lookup
     """
-    if field_lookup is not str:
+    if type(field_lookup) is not str:
         return str(field_lookup)
 
-    label = field.replace("get_", "", 1)
-    label = label.replace("_", "")
-    label = label.replace("-", "")
+    label = field_lookup.replace("get_", "", 1)
+    label = label.replace("_", " ")
+    label = label.replace("-", " ")
     return label
 
 
@@ -141,8 +142,8 @@ def get_field_label(model_or_instance, field_or_field_name):
         return field._verbose_name
 
     if field.related_model:
-        plural_name = field.related_model._meta.verbose_name_plural
         verbose_name = field.related_model._meta.verbose_name
+        plural_name = field.related_model._meta.verbose_name_plural
 
         return plural_name if plural_name else verbose_name
 
