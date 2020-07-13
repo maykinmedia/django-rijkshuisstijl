@@ -72,6 +72,14 @@ def _get_recursed_field(obj, field_lookup):
         try:
             remote_field = model_class._meta.get_field(lookup)
         except FieldDoesNotExist:
+            attr = getattr(model_class, lookup, "")
+
+            if isinstance(attr, property):
+                return attr.fget, model_class, instance
+
+            if callable(attr):
+                return attr, model_class, instance
+
             break
 
         field = remote_field
@@ -147,9 +155,12 @@ def get_field_label(model_or_instance, field_or_field_name):
 
     if instance and type(field_or_field_name) is str:
         attr = getattr(model_class, field_or_field_name, "")
+        function = attr if callable(attr) else False
 
         if isinstance(attr, property):
             return getattr(instance, field_or_field_name)
+        elif function:
+            return function(model_or_instance)
 
     if type(field_or_field_name) is str and field_or_field_name == "__str__":
         return model_class._meta.verbose_name
