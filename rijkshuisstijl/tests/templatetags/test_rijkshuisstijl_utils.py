@@ -273,7 +273,7 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(publisher, "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences get days until")
+        self.assertEqual(label, "conferences days until")
 
 
 class QuerysetGetRecursedFieldLabelTestCase(TestCase):
@@ -446,7 +446,7 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(queryset, "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences get days until")
+        self.assertEqual(label, "conferences days until")
 
 
 class ClassGetRecursedFieldLabelTestCase(TestCase):
@@ -573,7 +573,7 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
         """
         label = get_recursed_field_label(Publisher, "conferences__full_name")
 
-        self.assertEqual(label, "conferences")
+        self.assertEqual(label, "conferences full name")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -583,7 +583,7 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
         """
         label = get_recursed_field_label(Publisher, "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences")
+        self.assertEqual(label, "conferences days until")
 
 
 class ClassGetFieldLabelTestCase(TestCase):
@@ -724,7 +724,7 @@ class ClassGetFieldLabelTestCase(TestCase):
         """
         label = get_field_label(Publisher, "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences get days until")
+        self.assertEqual(label, "conferences days until")
 
 
 class InstanceGetFieldLabelTestCase(TestCase):
@@ -774,8 +774,6 @@ class InstanceGetFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Awards")
 
-    # Note this usecase will probably not happen, but testing expected behaviour
-    # is preferred
     def test_function(self):
         """
         Test that function will be called with the given class and returns the
@@ -785,8 +783,6 @@ class InstanceGetFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Foobar")
 
-    # Note this usecase will probably not happen, but testing expected behaviour
-    # is preferred
     def test_property(self):
         """
         Test that property will be called with the given class and the regex fallback
@@ -865,4 +861,4 @@ class InstanceGetFieldLabelTestCase(TestCase):
         """
         label = get_field_label(PublisherFactory(), "conferences__get_days_until")
 
-        self.assertEqual(label, "conferences get days until")
+        self.assertEqual(label, "conferences days until")
