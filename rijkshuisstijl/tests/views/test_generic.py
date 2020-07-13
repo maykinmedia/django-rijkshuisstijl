@@ -404,7 +404,7 @@ class DetailViewTestCase(ViewTestCaseMixin, TestCase):
         model_field = Book._meta.get_field("random_set")
 
         self.assertContains(response, model_field.verbose_name)
-        self.assertContains(response, model_field.default)
+        self.assertContains(response, self.object.random_set)
 
 
 class ListViewTestCase(ViewTestCaseMixin, TestCase):
