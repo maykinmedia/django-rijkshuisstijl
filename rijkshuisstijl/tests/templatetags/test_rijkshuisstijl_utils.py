@@ -175,8 +175,8 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
 
     def test_related_field_regex_fallback_label(self):
         """
-        Test that verbose_name_plural from the related model will be returned from
-        the given field_lookup which in this test is the name of
+        Test that verbose_name of the field from the related model will be returned
+        from the given field_lookup which in this test is the name of
         a related (ManyToManyField) field
         """
         publisher = PublisherFactory()
@@ -310,8 +310,8 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
     def test_related_field_regex_fallback_label(self):
         """
-        Test that verbose_name_plural from the related model will be returned from
-        the given field_lookup which in this test is the name of
+        Test that verbose_name of the field from the related model will be returned
+        from the given field_lookup which in this test is the name of
         a related (ManyToManyField) field
         """
         PublisherFactory.create_batch(size=3)
@@ -449,8 +449,8 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
 
     def test_related_field_regex_fallback_label(self):
         """
-        Test that verbose_name_plural from the related model will be returned from
-        the given field_lookup which in this test is the name of
+        Test that verbose_name of the field from the related model will be returned
+        from the given field_lookup which in this test is the name of
         a related (ManyToManyField) field
         """
         label = get_recursed_field_label(Publisher, "conferences__event_date")
