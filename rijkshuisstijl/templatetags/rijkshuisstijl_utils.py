@@ -34,13 +34,15 @@ def _get_model(obj):
     return None
 
 
-# TODO update function docs
 def _get_recursed_field(obj, field_lookup):
     """
     :param model_class: a Django model class.
     :param field_lookup: a str:  Django query filter like field lookup.
-    :return: typically, a Django model field, however lookups of class methods
-    are supported plus the resolved model_class
+    :return: tuple (field_lookup, model_class, instance)
+        WHERE
+        str, Field, property or function: field_lookup: is the resolved field lookup
+        ModelBase, None: model_class: is the resolved class from the found field
+        Model, None: instance: is the resolved instances from the found field
     """
     instance = obj if is_instance(obj) else None
     model_class = _get_model(obj)
