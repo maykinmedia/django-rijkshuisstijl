@@ -63,11 +63,8 @@ def _get_recursed_field(obj, field_lookup):
 
         return lookup, model_class, instance
 
-    if field.related_model:
-        model_class = field.related_model
-
     while field_fragments:
-        lookup = field_fragments.pop()
+        lookup = field_fragments.pop(0)
 
         try:
             remote_field = model_class._meta.get_field(lookup)
@@ -88,10 +85,10 @@ def _get_recursed_field(obj, field_lookup):
             value = getattr(instance, lookup, "")
             instance = value if is_instance(value) else None
 
-        if not field.many_to_one and not field.one_to_one:
-            model_class = field.model
-        else:
+        if hasattr(field, "related_model") and field.related_model:
             model_class = field.related_model
+        else:
+            model_class = field.model
 
     return field, model_class, instance
 
