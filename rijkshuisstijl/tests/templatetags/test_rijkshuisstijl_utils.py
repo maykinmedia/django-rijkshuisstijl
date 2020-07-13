@@ -693,7 +693,7 @@ class ClassGetFieldLabelTestCase(TestCase):
         field = Award._meta.get_field("author")
         label = get_field_label(Award, field)
 
-        self.assertEqual(label, "Book author")
+        self.assertEqual(label, "Book authors")
 
     def test_field_instance_related_field_verbose_name_plural_fallback_label(self):
         """
