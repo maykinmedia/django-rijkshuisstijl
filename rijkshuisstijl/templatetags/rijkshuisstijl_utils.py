@@ -15,6 +15,9 @@ from django.utils.safestring import mark_safe
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 
 
+is_instance = lambda obj: isinstance(obj, Model)
+
+
 def _get_recursed_field(model_class, field_lookup):
     """
     :param model_class: a Django model class.
@@ -113,19 +116,16 @@ def get_field_label(model_or_instance, field_or_field_name):
     """
     function = field_or_field_name if callable(field_or_field_name) else False
 
-    if function and isinstance(model_or_instance, Model):
+    if function and is_instance(model_or_instance):
         return function(model_or_instance)
+
+    if is_instance(model_or_instance) and isinstance(field_or_field_name, property):
+        return model_or_instance(field_or_field_name)
 
     model_class = _get_model(model_or_instance)
 
     if field_or_field_name is str and field_or_field_name == "__str__":
         return model_class._meta.verbose_name
-
-    if field_or_field_name is str:
-        value = getattr(field_or_field_name, model_class, "")
-
-        if isinstance(value, property):
-            return value
 
     if isinstance(field_or_field_name, Field):
         field = field_or_field_name
