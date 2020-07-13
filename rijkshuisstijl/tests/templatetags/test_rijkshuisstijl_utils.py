@@ -392,8 +392,7 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(queryset, "get_name_label")
 
-        expected_instance = queryset[0]
-        self.assertEqual(label, expected_instance.get_name_label())
+        self.assertEqual(label, "name label")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -408,7 +407,7 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
         label = get_recursed_field_label(queryset, "label")
 
         expected_instance = queryset[0]
-        self.assertEqual(label, expected_instance.label)
+        self.assertEqual(label, "label")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -421,8 +420,7 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(queryset, "author__get_name_label")
 
-        expected_instance = queryset[0]
-        self.assertEqual(label, expected_instance.author.get_name_label())
+        self.assertEqual(label, "author get name label")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
