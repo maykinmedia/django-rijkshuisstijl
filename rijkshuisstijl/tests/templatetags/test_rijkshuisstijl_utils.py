@@ -112,8 +112,10 @@ class FormatValueTestCase(TestCase):
         publisher = PublisherFactory()
         publisher.get_absolute_url = lambda: "http://lorem.ipsum"
         self.assertEqual(
-            format_value(publisher), '<a class="link" href="http://lorem.ipsum">Foo Bar</a>'
+            format_value(publisher),
+            f'<a class="link" href="http://lorem.ipsum">{publisher.name}</a>'
         )
+
 
 
 class InstanceGetRecursedFieldLabelTestCase(TestCase):
