@@ -160,6 +160,18 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Book author")
 
+    def test_related_field_verbose_name_fallback_label_reverse(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the reverse name of a related
+        (ForeignKey) field
+        """
+        instance = AuthorFactory()
+
+        label = get_recursed_field_label(instance, "awards")
+
+        self.assertEqual(label, "Awards")
+
     def test_related_field_verbose_name_plural_fallback_label(self):
         """
         Test that verbose_name_plural from the related model will be returned from
@@ -331,6 +343,19 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Awards")
 
+    def test_related_field_verbose_name_fallback_label_reverse(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the reverse name of a related
+        (ForeignKey) field
+        """
+        AuthorFactory.create_batch(size=3)
+        queryset = Author.objects.all()
+
+        label = get_recursed_field_label(queryset, "awards")
+
+        self.assertEqual(label, "Awards")
+
     def test_related_field_regex_fallback_label(self):
         """
         Test that verbose_name of the field from the related model will be returned
@@ -483,6 +508,16 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Book author")
 
+    def test_related_field_verbose_name_fallback_label_reverse(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the reverse name of a related
+        (ForeignKey) field
+        """
+        label = get_recursed_field_label(AuthorFactory, "awards")
+
+        self.assertEqual(label, "Awards")
+
     def test_related_field_verbose_name_plural_fallback_label(self):
         """
         Test that verbose_name_plural from the related model will be returned from
@@ -621,6 +656,16 @@ class ClassGetFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Book author")
 
+    def test_related_field_verbose_name_fallback_label_reverse(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the reverse name of a related
+        (ForeignKey) field
+        """
+        label = get_field_label(AuthorFactory, "awards")
+
+        self.assertEqual(label, "Awards")
+
     def test_related_field_verbose_name_plural_fallback_label(self):
         """
         Test that verbose_name_plural from the related model will be returned from
@@ -741,6 +786,16 @@ class InstanceGetFieldLabelTestCase(TestCase):
         label = get_field_label(AwardFactory(), "author")
 
         self.assertEqual(label, "Book author")
+
+    def test_related_field_verbose_name_fallback_label_reverse(self):
+        """
+        Test that verbose_name_plural from the related model will be returned from
+        the given field_lookup which in this test is the reverse name of a related
+        (ForeignKey) field
+        """
+        label = get_field_label(AuthorFactory(), "awards")
+
+        self.assertEqual(label, "Awards")
 
     def test_related_field_verbose_name_plural_fallback_label(self):
         """
