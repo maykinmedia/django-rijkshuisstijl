@@ -34,13 +34,13 @@ def _get_model(obj):
     return None
 
 
-def _get_recursed_field(obj, field_lookup):
+def _get_recursed_values(obj, field_lookup):
     """
-    :param model_class: a Django model class.
+    :param obj: a Django model class or instance.
     :param field_lookup: a str:  Django query filter like field lookup.
-    :return: tuple (field_lookup, model_class, instance)
+    :return: tuple (field, model_class, instance)
         WHERE
-        str, Field, property or function: field_lookup: is the resolved field lookup
+        str, Field, property or function: field: is the resolved field lookup
         ModelBase, None: model_class: is the resolved class from the found field
         Model, None: instance: is the resolved instances from the found field
     """
@@ -119,7 +119,7 @@ def get_recursed_field_label(obj, field_lookup):
     :param field_lookup: a str:  Django like field lookup.
     :return: str: resolved label name
     """
-    field, model_class, instance = _get_recursed_field(obj, field_lookup)
+    field, model_class, instance = _get_recursed_values(obj, field_lookup)
 
     if not model_class and not instance:
         return _get_field_label_fallback(field_lookup)
