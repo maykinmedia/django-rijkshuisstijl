@@ -498,8 +498,8 @@ class DeleteViewTestCase(ViewTestCaseMixin, TestCase):
     view = DeleteView
 
     def setUp(self):
-        self.publisher = Publisher.objects.create()
-        self.object = Book.objects.create(publisher=self.publisher)
+        self.publisher = PublisherFactory()
+        self.object = BookFactory(publisher=self.publisher)
 
     def test_template(self):
         response = self.client_get()
@@ -511,8 +511,10 @@ class DeleteViewTestCase(ViewTestCaseMixin, TestCase):
 
     def test_confirm(self):
         response = self.client_get(kwargs={"pk": self.object.pk})
+
         self.assertContains(
-            response, "U staat op het punt om Lorem Ipsum te verwijderen, weet u het zeker?"
+            response,
+            f"U staat op het punt om {self.object} te verwijderen, weet u het zeker?"
         )
         self.assertEqual(Book.objects.first(), self.object)
 
@@ -527,10 +529,10 @@ class DeleteMultipleViewTestCase(ViewTestCaseMixin, TestCase):
     view = DeleteMultipleView
 
     def setUp(self):
-        self.publisher = Publisher.objects.create()
-        self.object_1 = Book.objects.create(publisher=self.publisher)
-        self.object_2 = Book.objects.create(publisher=self.publisher)
-        self.object_3 = Book.objects.create(publisher=self.publisher)
+        self.publisher = PublisherFactory()
+        self.object_1 = BookFactory(publisher=self.publisher)
+        self.object_2 = BookFactory(publisher=self.publisher)
+        self.object_3 = BookFactory(publisher=self.publisher)
 
     def test_template(self):
         response = self.client_get()
