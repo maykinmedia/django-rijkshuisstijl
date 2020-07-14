@@ -44,7 +44,7 @@ class DatagridTestCase(InclusionTagWebTest):
         )
         self.assertInHTML(
             '<a class="datagrid__link" href="{}">{}</a>'.format(
-                "?ordering=publisher__name", "publishing house"
+                "?ordering=publisher__name", "name"
             ),
             html,
         )
