@@ -3,7 +3,7 @@
 <html lang="nl" class="view view--full-width {% block body-class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}" {% block html-data %}{% endblock %}>
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}{{ _('Werkbezoek') }}{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     {% meta_css %}
     {% block extra_css %}{% endblock %}
     {% meta_icons %}
