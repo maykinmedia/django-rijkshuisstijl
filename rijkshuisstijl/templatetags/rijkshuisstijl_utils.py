@@ -7,6 +7,7 @@ from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Manager, Model, QuerySet
 from django.db.models.base import ModelBase
 from django.db.models.fields import Field
+from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.templatetags.static import static
 from django.utils.functional import Promise
 from django.utils.html import format_html
@@ -162,6 +163,17 @@ def get_field_label(model_or_instance, field_or_field_name):
     if type(field_or_field_name) is str and field_or_field_name == "__str__":
         return model_class._meta.verbose_name
 
+    # Reverse relations
+    if isinstance(field_or_field_name, ForeignObjectRel):
+        relation = field_or_field_name
+
+        if relation.many_to_many or relation.one_to_many:
+            verbose_name = relation.related_model._meta.verbose_name_plural
+        else:
+            verbose_name = relation.related_model._meta.verbose_name
+
+        return verbose_name
+
     if isinstance(field_or_field_name, Field):
         field = field_or_field_name
     else:
@@ -177,7 +189,7 @@ def get_field_label(model_or_instance, field_or_field_name):
         return field._verbose_name
 
     if field.related_model:
-        if field.many_to_many:
+        if field.many_to_many or field.one_to_many:
             verbose_name = field.related_model._meta.verbose_name_plural
         else:
             verbose_name = field.related_model._meta.verbose_name
