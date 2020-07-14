@@ -177,10 +177,12 @@ def get_field_label(model_or_instance, field_or_field_name):
         return field._verbose_name
 
     if field.related_model:
-        verbose_name = field.related_model._meta.verbose_name
-        plural_name = field.related_model._meta.verbose_name_plural
+        if field.many_to_many:
+            verbose_name = field.related_model._meta.verbose_name_plural
+        else:
+            verbose_name = field.related_model._meta.verbose_name
 
-        return plural_name if plural_name else verbose_name
+        return verbose_name
 
     return _get_field_label_fallback(field.name)
 
