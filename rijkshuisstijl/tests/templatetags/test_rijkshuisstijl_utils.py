@@ -116,7 +116,6 @@ class FormatValueTestCase(TestCase):
         )
 
 
-# TODO prioritize verbose_name/verbose_name_plural depending on field relation?
 class InstanceGetRecursedFieldLabelTestCase(TestCase):
     def test_verbose_name_field_label(self):
         """
@@ -159,7 +158,7 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(award, "author")
 
-        self.assertEqual(label, "Book authors")
+        self.assertEqual(label, "Book author")
 
     def test_related_field_verbose_name_plural_fallback_label(self):
         """
@@ -318,7 +317,7 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
         label = get_recursed_field_label(Award.objects.all(), "author")
 
-        self.assertEqual(label, "Book authors")
+        self.assertEqual(label, "Book author")
 
     def test_related_field_verbose_name_plural_fallback_label(self):
         """
@@ -482,7 +481,7 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
         """
         label = get_recursed_field_label(Award, "author")
 
-        self.assertEqual(label, "Book authors")
+        self.assertEqual(label, "Book author")
 
     def test_related_field_verbose_name_plural_fallback_label(self):
         """
@@ -620,7 +619,7 @@ class ClassGetFieldLabelTestCase(TestCase):
         """
         label = get_field_label(Award, "author")
 
-        self.assertEqual(label, "Book authors")
+        self.assertEqual(label, "Book author")
 
     def test_related_field_verbose_name_plural_fallback_label(self):
         """
@@ -741,7 +740,7 @@ class InstanceGetFieldLabelTestCase(TestCase):
         """
         label = get_field_label(AwardFactory(), "author")
 
-        self.assertEqual(label, "Book authors")
+        self.assertEqual(label, "Book author")
 
     def test_related_field_verbose_name_plural_fallback_label(self):
         """
