@@ -514,7 +514,7 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
         the given field_lookup which in this test is the reverse name of a related
         (ForeignKey) field
         """
-        label = get_recursed_field_label(AuthorFactory, "awards")
+        label = get_recursed_field_label(Author, "awards")
 
         self.assertEqual(label, "Awards")
 
@@ -662,7 +662,7 @@ class ClassGetFieldLabelTestCase(TestCase):
         the given field_lookup which in this test is the reverse name of a related
         (ForeignKey) field
         """
-        label = get_field_label(AuthorFactory, "awards")
+        label = get_field_label(Author, "awards")
 
         self.assertEqual(label, "Awards")
 
