@@ -2,18 +2,19 @@ from django import forms
 from django.template import Context, Template
 from django.test import RequestFactory, TestCase
 
-from tests.models import Author, Book, Publisher
+from rijkshuisstijl.tests.models import Author, Book, Publisher
+from rijkshuisstijl.tests.factories import AuthorFactory, BookFactory, PublisherFactory
 
 
 class FormTestCase(TestCase):
     def test_select_multiple(self):
-        publisher = Publisher.objects.create(name="Foo")
+        publisher = PublisherFactory(name="Foo")
 
-        author_1 = Author.objects.create(first_name="Jane", last_name="Doe", pk=1)
-        author_2 = Author.objects.create(first_name="John", last_name="Doe", pk=2)
-        Author.objects.create(first_name="Joe", last_name="Average")
+        author_1 = AuthorFactory(first_name="Jane", last_name="Doe", pk=1)
+        author_2 = AuthorFactory(first_name="John", last_name="Doe", pk=2)
+        AuthorFactory(first_name="Joe", last_name="Average")
 
-        book = Book.objects.create(publisher=publisher)
+        book = BookFactory(publisher=publisher)
         book.authors.set((author_1, author_2))
 
         class BookForm(forms.ModelForm):

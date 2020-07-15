@@ -9,7 +9,7 @@ from rijkshuisstijl.views.generic import (
     TemplateView,
     UpdateView,
 )
-from tests.models import Author, Book, Publisher
+from rijkshuisstijl.tests.models import Author, Book, Publisher
 
 app_name = "test"
 fields = ("title", "authors", "publisher", "date_published", "stock", "random_set")

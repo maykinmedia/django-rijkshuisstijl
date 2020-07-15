@@ -5,125 +5,198 @@ from collections.abc import Iterable
 from django import template
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Manager, Model, QuerySet
+from django.db.models.base import ModelBase
+from django.db.models.fields import Field
+from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.templatetags.static import static
 from django.utils.functional import Promise
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
-from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import get_model_from_obj
 
 
-@register.filter()
-def get_recursed_field(obj, field_lookup):
+is_instance = lambda obj: isinstance(obj, Model)
+
+
+def _get_model(obj):
     """
-    Finds a field in an object by recursing through related fields.
-    :param obj: A model instance or a QuerySet.
-    :param field: A field, possibly on a related instance. Example: "author__first_name".
-    :return: Field
+    :param obj: Anything that resolves into a model, typically a model, a model
+    instance or a QuerySet.
+    :return: class: A Django model class when found or None
     """
-    try:
-        model = obj._meta.model
-    except AttributeError:
-        model = obj.model
+    if isinstance(obj, QuerySet):
+        return obj.model
+    elif isinstance(obj, Model):
+        return obj._meta.model
+    elif isinstance(obj, ModelBase):
+        return obj
 
-    field_split = field_lookup.split("__")
-    field_name = field_split[0]
+    return None
+
+
+def _get_recursed_values(obj, field_lookup):
+    """
+    :param obj: a Django model class or instance.
+    :param field_lookup: a str:  Django query filter like field lookup.
+    :return: tuple (field, model_class, instance)
+        WHERE
+        str, Field, property or function: field: is the resolved field lookup
+        ModelBase, None: model_class: is the resolved class from the found field
+        Model, None: instance: is the resolved instances from the found field
+    """
+    instance = obj if is_instance(obj) else None
+    model_class = _get_model(obj)
+
+    field_fragments = field_lookup.split("__")
+    name = field_fragments[0]
+
+    if not model_class:
+        return None, None, None
+
     try:
-        field = model._meta.get_field(field_name)
+        field = model_class._meta.get_field(name)
     except FieldDoesNotExist:
-        return getattr(model, field_name)
+        lookup = getattr(model_class, name, "")
 
-    while field_split:
-        field_lookup = field_split.pop(0)
+        if isinstance(lookup, property):
+            return field_lookup, model_class, instance
+
+        return lookup, model_class, instance
+
+    while field_fragments:
+        lookup = field_fragments.pop(0)
 
         try:
-            remote_field = model._meta.get_field(field_lookup)
+            remote_field = model_class._meta.get_field(lookup)
+        except FieldDoesNotExist:
+            attr = getattr(model_class, lookup, "")
 
-            if remote_field.auto_created:
-                remote_field = remote_field.remote_field
+            if isinstance(attr, property):
+                return attr.fget, model_class, instance
 
-            # Not a remote field, break.
-            if remote_field is None:
-                break
+            if callable(attr):
+                return attr, model_class, instance
 
-            field = remote_field
-            model = field.model
-
-        except (AttributeError, FieldDoesNotExist):
             break
-    return field
+
+        field = remote_field
+
+        if instance:
+            value = getattr(instance, lookup, "")
+            instance = value if is_instance(value) else None
+
+        if hasattr(field, "related_model") and field.related_model:
+            model_class = field.related_model
+        else:
+            model_class = field.model
+
+    return field, model_class, instance
+
+
+def _get_field_label_fallback(field_lookup):
+    """
+    :param field_lookup: string which whoms label needs to be retrieved
+    :return: str: a formatted version of field_lookup
+    """
+    if type(field_lookup) is not str:
+        return str(field_lookup)
+
+    label = field_lookup.replace("get_", "", 1)
+    label = label.replace("_", " ")
+    label = label.replace("-", " ")
+
+    # Remove double spaces
+    return " ".join(word for word in label.split(" ") if word)
 
 
 @register.filter()
 def get_recursed_field_label(obj, field_lookup):
     """
-    Finds a field name in an object by recursing through related fields.
-    :param obj: A model instance or a QuerySet.
-    :param field: A field, possibly on a related instance. Example: "author__first_name".
-    :return: str
+    Default way to go to resolve a (related) label with obj as input.
+
+    :param obj: Anything that resolves into a model, typically a model, a model
+    instance or a QuerySet.
+    :param field_lookup: a str:  Django like field lookup.
+    :return: str: resolved label name
     """
-    field = get_recursed_field(obj, field_lookup)
-    model = get_model_from_obj(obj)
+    field, model_class, instance = _get_recursed_values(obj, field_lookup)
 
-    try:
-        if field.auto_created:  # Field is field.
-            pass
-    except AttributeError:  # Field is function/property, use function name.
-        try:
-            field = field.fget  # property
-        except AttributeError:
-            pass
-        field = field.__name__
+    if not model_class and not instance:
+        return _get_field_label_fallback(field_lookup)
 
-    return get_field_label(model, field)
+    if instance:
+        return get_field_label(instance, field)
+
+    return get_field_label(model_class, field)
 
 
 @register.filter
-def get_field_label(obj, field):
+def get_field_label(model_or_instance, field_or_field_name):
     """
-    Returns the label for a field based preferably based on obj's model.
-    Falls back to replacing dashes and underscores with " ".
-    If field is a callable. It's called with obj as parameter and the resulting value is returned.
-    :param obj: A model instance or a QuerySet.
-    :param field: A string indicating the field to get the label for.
-    :return:
+    :param model_or_instance: Either a model or a Model instance.
+    :param field_or_field_name: Typically, a Django model field or a field name,
+    however lookups of class methods are supported.
+    :return: str: label taken from field_or_field_name
     """
+    instance = model_or_instance if is_instance(model_or_instance) else None
+    model_class = _get_model(model_or_instance)
 
-    # If field is a callable. It's called with obj as parameter and the resulting value is returned.
-    if callable(field):
-        return field(obj)
+    if not model_class:
+        return _get_field_label_fallback(field_or_field_name)
 
-    try:
-        model = get_model_from_obj(obj)
-        field_name = str(getattr(field, "name", field))
+    function = field_or_field_name if callable(field_or_field_name) else False
+    if instance and function:
+        return function(model_or_instance)
+    elif function:
+        return _get_field_label_fallback(function.__name__)
 
-        # If column key is "__str__", use model name as label.
-        if field_name == "__str__" and model:
-            return model._meta.verbose_name
+    if instance and type(field_or_field_name) is str:
+        attr = getattr(model_class, field_or_field_name, "")
+        function = attr if callable(attr) else False
 
-        # If model field can be found, use it's verbose name as label.
+        if isinstance(attr, property):
+            return getattr(instance, field_or_field_name)
+        elif function:
+            return function(model_or_instance)
+
+    if type(field_or_field_name) is str and field_or_field_name == "__str__":
+        return model_class._meta.verbose_name
+
+    # Reverse relations
+    if isinstance(field_or_field_name, ForeignObjectRel):
+        relation = field_or_field_name
+
+        if relation.many_to_many or relation.one_to_many:
+            verbose_name = relation.related_model._meta.verbose_name_plural
         else:
-            model_field = model._meta.get_field(field_name)
+            verbose_name = relation.related_model._meta.verbose_name
 
-            if hasattr(model_field, "verbose_name"):
-                return model_field.verbose_name
-            elif model_field.one_to_many:
-                plural_name = model_field.related_model._meta.verbose_name_plural
-                verbose_name = model_field.related_model._meta.verbose_name
-                return plural_name if plural_name else verbose_name
+        return verbose_name
 
-    # If label cannot be found, fall back to replacing dashes and underscores with " ".
-    except:
-        pass
+    if isinstance(field_or_field_name, Field):
+        field = field_or_field_name
+    else:
+        try:
+            field = model_class._meta.get_field(field_or_field_name)
+        except FieldDoesNotExist:
+            return _get_field_label_fallback(field_or_field_name)
 
-    regex_get = re.compile("^get_")  # Remove leading "get_".
-    regex_dash = re.compile("[_-]+")  # Replace "_" and "-" with "".
-    try:
-        field = re.sub(regex_get, "", field)
-        return re.sub(regex_dash, " ", field)
-    except TypeError:
-        return field
+    # ManyToOneRel fields don't have a verbose_name field.
+    # _verbose_name is used as override for the default created verbose_name
+    # see Django Field class.
+    if hasattr(field, "_verbose_name") and field._verbose_name:
+        return field._verbose_name
+
+    if field.related_model:
+        if field.many_to_many or field.one_to_many:
+            verbose_name = field.related_model._meta.verbose_name_plural
+        else:
+            verbose_name = field.related_model._meta.verbose_name
+
+        return verbose_name
+
+    return _get_field_label_fallback(field.name)
 
 
 @register.filter
