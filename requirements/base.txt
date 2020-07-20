@@ -1,4 +1,8 @@
 Django==2.2.8
 django-sitetree==1.13.1
+
+beautifulsoup4
+lxml
+
 pytz==2019.3
 sqlparse==0.3.0

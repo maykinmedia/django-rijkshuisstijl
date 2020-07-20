@@ -1,17 +1,15 @@
 from datetime import timedelta
 
-import factory
-import factory.fuzzy
-
 from django.utils import timezone
 
+import factory.fuzzy
 from rijkshuisstijl.tests.models import (
     Author,
     Award,
     Book,
-    Conference,
     Company,
-    Publisher
+    Conference,
+    Publisher,
 )
 
 
@@ -20,8 +18,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     last_name = factory.Faker("last_name")
     gender = factory.fuzzy.FuzzyChoice(("female", "male"))
     date_of_birth = factory.fuzzy.FuzzyDate(
-        timezone.now().date() - timedelta(days=30),
-        timezone.now().date() - timedelta(days=1)
+        timezone.now().date() - timedelta(days=30), timezone.now().date() - timedelta(days=1)
     )
     slug = factory.Faker("uuid4")
 

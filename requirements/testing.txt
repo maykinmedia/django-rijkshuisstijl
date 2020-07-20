@@ -1,6 +1,4 @@
 -r base.txt
 
 django-webtest
-beautifulsoup4
 factory_boy
-lxml
