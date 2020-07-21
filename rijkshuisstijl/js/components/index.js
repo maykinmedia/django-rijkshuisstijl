@@ -7,6 +7,7 @@ import './object-fit-images';
 import './paginator';
 import './search';
 import './sticky-detect';
+import './summary';
 import './tabs';
 import './toggle';
 import './view';
