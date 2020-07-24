@@ -1,4 +1,4 @@
-{% load l10n rijkshuisstijl %}{% singleline %}
+{% load l10n rijkshuisstijl %}
     <div class="datagrid{% if class %} {{ class }}{% endif %}" id="{{ id }}" role="group">
 
 
@@ -165,11 +165,11 @@
 
 
                 {#  Table bodies. #}
-                {% endsingleline %}
+
                     {% for group in groups %}
                         {% include 'rijkshuisstijl/components/datagrid/datagrid-table-body.html' with id=id columns=columns form=form form_checkbox_name=form_checkbox_name formset=formset group=group label_no_results=label_no_results modifier_column=modifier_column url_reverse=url_reverse urlize=urlize urlizetrunc=urlizetrunc only%}
                     {% endfor %}
-                {% singleline%}
+
             </table>
         </div>
 
@@ -211,4 +211,4 @@
             </footer>
         {% endif %}
     </div>
-{% endsingleline %}
+

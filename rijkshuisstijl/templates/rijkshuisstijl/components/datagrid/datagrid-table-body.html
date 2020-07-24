@@ -1,4 +1,4 @@
-{% load l10n rijkshuisstijl %}{% singleline %}
+{% load l10n rijkshuisstijl %}
     {#  Subtitle (groups). #}
     {% if group.object_list and group.label %}
         <thead class="datagrid__table-head datagrid__table-head--group">
@@ -14,7 +14,7 @@
 
     {# Body. #}
     <tbody class="datagrid__table-body">
-    {% endsingleline %}
+
         {% for object in group.object_list %}
             {% firstof forloop.counter|upper as index %}
             {% firstof group.id|add:'-row-'|add:index as row_id %}
@@ -35,7 +35,7 @@
                 {% include 'rijkshuisstijl/components/datagrid/datagrid-row.html' with id=id row_id=row_id form=form object=object url=url columns=columns form=form form_checkbox_name=form_checkbox_name modifier_column=modifier_column urlize=urlize urlizetrunc=urlizetrunc only %}
             {% endif %}
         {% endfor %}
-    {% singleline %}
+
 
 
     {# No results. #}
@@ -48,4 +48,4 @@
         </tr>
     {% endif %}
     </tbody>
-{% endsingleline %}
+
