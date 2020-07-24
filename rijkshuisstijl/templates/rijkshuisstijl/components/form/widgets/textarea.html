@@ -1,1 +1,1 @@
-<textarea name="{{ widget.name }}"{% include "rijkshuisstijl/components/form/widgets/attrs.html" with class="textarea" %}>{% if widget.value %}{{ widget.value }}{% endif %}</textarea>
+<textarea name="{{ widget.name }}" class="textarea{% if widget.attrs.class %} {{ widget.attrs.class }}{% endif %}"{% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>{% if widget.value %}{{ widget.value }}{% endif %}</textarea>

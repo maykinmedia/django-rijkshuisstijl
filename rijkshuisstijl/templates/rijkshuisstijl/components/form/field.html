@@ -1,12 +1,15 @@
+{% if bound_field.help_text and help_text_position|default:'bottom' == 'top' %}
+    <div class="help-text">
+        <label class="help-text__body" {% if for %} for="{{ for }}"{% endif %}>{{ help_text|safe }}</label>
+    </div>
+{% endif %}
 
-    {% if bound_field.help_text and help_text_position|default:'bottom' == 'top' %}
-        {% include 'rijkshuisstijl/components/form/help-text.html' with for=bound_field.id_for_label help_text=bound_field.help_text only %}
-    {% endif %}
+{{ bound_field }}
+{{ bound_field.errors }}
 
-    {{ bound_field }}
-    {{ bound_field.errors }}
-
-    {% if bound_field.help_text and help_text_position|default:'bottom' == 'bottom' %}
-        {% include 'rijkshuisstijl/components/form/help-text.html' with for=bound_field.id_for_label help_text=bound_field.help_text only %}
-    {% endif %}
+{% if bound_field.help_text and help_text_position|default:'bottom' == 'bottom' %}
+    <div class="help-text">
+        <label class="help-text__body" {% if for %} for="{{ for }}"{% endif %}>{{ help_text|safe }}</label>
+    </div>
+{% endif %}
 

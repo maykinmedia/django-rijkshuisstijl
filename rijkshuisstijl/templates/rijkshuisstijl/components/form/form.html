@@ -17,8 +17,10 @@
             {% csrf_token %}
 
             {#  Non field errors. #}
-            {% for error in form.non_field_errors %}
-                {% include 'rijkshuisstijl/components/form/errors.html' with class='errors--non-field' errors=error only %}
+            {% for errors in form.non_field_errors %}
+                <label class="errors errors--non-field">
+                    <div class="errors__body">{{ errors }}</div>
+                </label>
             {% endfor %}
 
             {# Fielsets (define fieldsets on form using admin fieldset syntax). #}
@@ -28,7 +30,17 @@
                     {# First fieldset gets actions appended to it if actions_postion equals top or both. #}
                     {% if forloop.first and actions_position in 'top,both' %}
                         <div class="form__body form__body--transparent">
-                            {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class disabled=disabled label=label form_id=id %}
+
+                            <div class="form__actions{% if align %} form__actions--{{ actions_align }}{% endif %}">
+                                {% for action in actions %}
+                                    {% if action.href %}
+                                        {% button_link config=action disabled=disabled form=id %}
+                                    {% else %}
+                                        {% button config=action disabled=disabled form=id %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
                         </div>
                         <br>
                     {% endif %}
@@ -50,7 +62,17 @@
 
                         {# Last fieldset gets actions appended to it if actions_postion equals bottom. #}
                         {% if forloop.last and actions_position == 'auto' %}
-                            {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class disabled=disabled label=label form_id=id %}
+
+                            <div class="form__actions{% if align %} form__actions--{{ actions_align }}{% endif %}">
+                                {% for action in actions %}
+                                    {% if action.href %}
+                                        {% button_link config=action disabled=disabled form=id %}
+                                    {% else %}
+                                        {% button config=action disabled=disabled form=id %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
                         {% endif %}
                     </fieldset>
 
@@ -58,7 +80,17 @@
                     {% if forloop.last and actions_position in 'bottom,both' %}
                         <br>
                         <div class="form__body">
-                            {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class disabled=disabled label=label form_id=id %}
+
+                            <div class="form__actions{% if align %} form__actions--{{ actions_align }}{% endif %}">
+                                {% for action in actions %}
+                                    {% if action.href %}
+                                        {% button_link config=action disabled=disabled form=id %}
+                                    {% else %}
+                                        {% button config=action disabled=disabled form=id %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -70,7 +102,15 @@
                         {% form_control form field class='form-control--choices-stacked' disabled=disabled help_text_position=help_text_position %}
                     {% endfor %}
 
-                    {% include 'rijkshuisstijl/components/form/form_actions.html' with actions=actions align=actions_align button_class=button_class disabled=disabled label=label form_id=id %}
+                    <div class="form__actions{% if align %} form__actions--{{ actions_align }}{% endif %}">
+                        {% for action in actions %}
+                            {% if action.href %}
+                                {% button_link config=action disabled=disabled form=id %}
+                            {% else %}
+                                {% button config=action disabled=disabled form=id %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </fieldset>
             {% endif %}
         </div>

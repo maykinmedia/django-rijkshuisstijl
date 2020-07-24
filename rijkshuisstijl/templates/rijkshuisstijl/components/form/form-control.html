@@ -14,9 +14,9 @@
             <header class="form-control__header">
                 {% if bound_field.label %}
                     {% if bound_field.field.required or bound_field.field.mark_required %}
-                        {% include 'rijkshuisstijl/components/form/label.html' with label=bound_field.label|add:'&nbsp;*'|safe for=bound_field.id_for_label only %}
+                        <label class="label" for="{{ bound_field.id_for_label }}">{{ bound_field.label }}&nbsp;*</label>
                     {% else %}
-                        {% include 'rijkshuisstijl/components/form/label.html' with label=bound_field.label for=bound_field.id_for_label only %}
+                        <label class="label" for="{{ bound_field.id_for_label }}">{{ bound_field.label }}</label>
                     {% endif %}
                 {% endif %}
             </header>

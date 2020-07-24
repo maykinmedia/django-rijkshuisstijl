@@ -2,4 +2,4 @@
 <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}">
 <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>{% endif %}<br>
 {{ widget.input_text }}:{% endif %}
-<input type="{{ widget.type }}" name="{{ widget.name }}"{% include "rijkshuisstijl/components/form/widgets/attrs.html" %}>
+<input type="{{ widget.type }}" name="{{ widget.name }}" class="{{ class|default:'input' }}{% if widget.attrs.class %} {{ widget.attrs.class }}{% endif %}"{% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>

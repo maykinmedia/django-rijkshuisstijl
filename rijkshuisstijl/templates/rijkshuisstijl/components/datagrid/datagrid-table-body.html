@@ -27,6 +27,7 @@
             {% if formset %}
                 {% for formset_form in formset.forms %}
                     {% if formset_form.instance == object %}
+                        {#  TODO: OPTIMIZE #}
                         {% include 'rijkshuisstijl/components/datagrid/datagrid-row.html' with id=id row_id=row_id object=object form=form url=url columns=columns form=form form_checkbox_name=form_checkbox_name formset_form=formset_form modifier_column=modifier_column urlize=urlize urlizetrunc=urlizetrunc only %}
                     {% endif %}
                 {% endfor %}

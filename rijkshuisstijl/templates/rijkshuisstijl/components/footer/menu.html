@@ -1,12 +1,14 @@
-{% load i18n %}
-    {% if sitetree_items %}
-        <div class="footer__section">
-            <h2 class="footer__title">{{ _('Service') }}</h2>
-            <ul class="footer__list">
-                {% for item in sitetree_items %}
-                  {% include 'rijkshuisstijl/components/footer/footer-list-item.html' with item=item only %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+{% load sitetree i18n %}
+{% if sitetree_items %}
+    <div class="footer__section">
+        <h2 class="footer__title">{{ _('Service') }}</h2>
+        <ul class="footer__list">
+            {% for item in sitetree_items %}
+                <li class="footer__list-item">
+                    <a class="footer__link" href="{% sitetree_url for item %}">{{ item.title_resolved }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
 

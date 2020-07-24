@@ -5,7 +5,7 @@
         {% endif %}
     {% endfor %}
 
-<select name="{{ widget.name }}"{% include "rijkshuisstijl/components/form/widgets/attrs.html" with class="select" %}>
+<select name="{{ widget.name }}" class="select{% if widget.attrs.class %} {{ widget.attrs.class }}{% endif %}"{% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
     {% for group_name, group_choices, group_index in widget.optgroups %}{% if group_name %}
         <optgroup label="{{ group_name }}">{% endif %}{% for option in group_choices %}
         {% include option.template_name with widget=option %}{% endfor %}{% if group_name %}
