@@ -1,4 +1,4 @@
-{% load rijkshuisstijl %}{% spaceless %}
+{% load rijkshuisstijl %}
     <div class="form__actions{% if align %} form__actions--{{ align }}{% endif %}">
             {% for action in actions %}
                 {% if action.href %}
@@ -8,4 +8,4 @@
                 {% endif %}
             {% endfor %}
     </div>
-{% endspaceless %}
+

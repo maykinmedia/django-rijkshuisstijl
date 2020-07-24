@@ -1,4 +1,4 @@
-{% spaceless %}{% load i18n rijkshuisstijl sitetree %}
+{% load i18n rijkshuisstijl sitetree %}
     <nav class="navigation-bar{% if class %} {{ class }}{% endif %}">
         <div class="navigation-bar__body">
             {% login_bar config=config class=None %}
@@ -12,4 +12,4 @@
         </div>
     </nav>
     {% sitetree_breadcrumbs from "navigation-bar" template 'rijkshuisstijl/components/navigation-bar/breadcrumbs.html' %}
-{% endspaceless %}
+

@@ -1,4 +1,4 @@
-{% spaceless %}{% load rijkshuisstijl %}
+{% load rijkshuisstijl %}
     <form class="search{% if request.path == '/' or value %} search--initial{% endif %}{% if class %} {{ class }}{% endif %}" action="{{ url }}" method="{{ method }}">
         {% if method|upper == 'POST' %}
             {% try %}
@@ -12,4 +12,4 @@
         {% button class='button--secondary button--small button--transparent' icon='close' type='reset' %}
         {% if search_method|upper == 'post' %}{% csrf_token %}{% endif %}
     </form>
-{% endspaceless %}
+

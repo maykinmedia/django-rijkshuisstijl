@@ -1,4 +1,4 @@
-{% spaceless %}{% load rijkshuisstijl %}
+{% load rijkshuisstijl %}
     {% if 'button--icon-right' in class and not 'button--no-text' in class and label %}
         <span class="button__label">{{ label }}</span>
     {% endif %}
@@ -16,4 +16,4 @@
     {% if not 'button--icon-right' in class and not 'button--no-text' in class and label %}
         <span class="button__label">{{ label }}</span>
     {% endif %}
-{% endspaceless %}
+

@@ -1,4 +1,4 @@
-{% load l10n rijkshuisstijl %}{% spaceless %}
+{% load l10n rijkshuisstijl %}
 <tr class="datagrid__row datagrid__row--cells{% if formset_form.errors %} datagrid__row--edit{% endif %}{% if object.datagrid_modifier_class %} datagrid__row--{{ object.datagrid_modifier_class }}{% endif %}{% if not formset_form and url %} fake-link fake-link--double-click" data-href="{{ url }}"{% else %}"{% endif %} id="{{ row_id }}">
 
 {# Checkbox. #}
@@ -70,4 +70,4 @@
         {% endif %}
     </td>
 {% endfor %}
-</tr>{% endspaceless %}
+</tr>

@@ -1,4 +1,4 @@
-{% spaceless %}{% load l10n rijkshuisstijl_form %}
+{% load l10n rijkshuisstijl_form %}
     {% if is_paginated %}
         <{{ tag }} class="paginator{% if class %} {{ class }}{% endif %}"{% if form %} method="get"{% endif %}>
             <div class="paginator__section">
@@ -22,4 +22,4 @@
             </div>
         </{{ tag }}>
     {% endif %}
-{% endspaceless %}
+

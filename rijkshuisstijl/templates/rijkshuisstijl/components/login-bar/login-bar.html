@@ -1,4 +1,4 @@
-{% spaceless %}
+
     <div class="login-bar{% if class %} {{ class }}{% endif %}">
         <p class="login-bar__body">
             {% if request.user.is_authenticated %}
@@ -25,4 +25,4 @@
             {% endif %}
         </p>
     </div>
-{% endspaceless %}
+

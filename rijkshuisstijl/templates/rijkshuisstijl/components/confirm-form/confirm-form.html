@@ -1,4 +1,4 @@
-{% spaceless %}{% load rijkshuisstijl %}
+{% load rijkshuisstijl %}
     <form class="confirm-form{% if class %} {{ class }}{% endif %}" id="{{ id }}" method="{{ method }}">
         {% textbox title=title text=text status=status %}
         {% stacked_list object_list %}
@@ -17,4 +17,4 @@
             </ul>
         </div>
     </form>
-{% endspaceless %}
+
