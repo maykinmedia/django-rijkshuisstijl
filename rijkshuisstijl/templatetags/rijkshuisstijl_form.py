@@ -64,6 +64,7 @@ def form(context, form=None, label="", **kwargs):
     config["status"] = config.get("status")
     config["intro_status"] = config.get("intro_status")
     config["tag"] = config.get("tag", "form")
+    config["actions"] = parse_kwarg(kwargs, "actions", [])  # TODO: Default action
     config["actions_align"] = config.get("actions_align", "left")
     config["actions_position"] = config.get("actions_position", "auto")
     config["help_text_position"] = config.get("help_text_position", settings.RH_HELP_TEXT_POSITION)
