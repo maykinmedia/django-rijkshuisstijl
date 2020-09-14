@@ -11,5 +11,8 @@
             {% endif %}
         </div>
     </nav>
-    {% sitetree_breadcrumbs from "navigation-bar" template 'rijkshuisstijl/components/navigation-bar/breadcrumbs.html' %}
+
+    {% if show_breadcrumbs %}
+        {% sitetree_breadcrumbs from "navigation-bar" template 'rijkshuisstijl/components/navigation-bar/breadcrumbs.html' %}
+    {% endif %}
 {% endspaceless %}

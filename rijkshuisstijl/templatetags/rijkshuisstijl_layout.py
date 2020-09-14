@@ -417,6 +417,7 @@ def navigation_bar(context, **kwargs):
         - search_placeholder: Optional, alternative label to show as search input placeholder.
         - search_method: Optional, The method to use for the search form.
         - search_name: Optional, The method to use for the search input.
+        - show_breadcrumbs: Optional, If True (default) breadcrumbs will be shown.
 
 
     :param context:
@@ -445,6 +446,8 @@ def navigation_bar(context, **kwargs):
     kwargs["search_placeholder"] = kwargs.get("search_placeholder", _("Zoeken"))
     kwargs["search_method"] = kwargs.get("search_method", "get")
     kwargs["search_name"] = kwargs.get("search_name", "q")
+
+    kwargs["show_breadcrumbs"] = kwargs.get("show_breadcrumbs", True)
 
     kwargs["request"] = context["request"]
     kwargs["user"] = get_request_user(context["request"])
