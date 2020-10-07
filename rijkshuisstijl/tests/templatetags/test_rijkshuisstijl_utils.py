@@ -243,6 +243,16 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Foobar")
 
+    def test_function_short_description(self):
+        """
+        Test that function's short_description will be returned
+        """
+        author = AuthorFactory(first_name="Henk")
+
+        label = get_recursed_field_label(author, "get_slug_display")
+
+        self.assertEqual(label, "Fancy slug label")
+
     def test_property(self):
         """
         Test that property will be called with the given object and the property's
@@ -264,6 +274,16 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Foobar")
 
+    def test_lookup_function_short_description(self):
+        """
+        Test that lookup function's short_description will be returned
+        """
+        award = AwardFactory(author=AuthorFactory())
+
+        label = get_recursed_field_label(award, "author__get_slug_display")
+
+        self.assertEqual(label, "Fancy slug label")
+
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
     def test_many_to_many_property(self):
@@ -280,13 +300,25 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
     # is preferred
     def test_many_to_many_function(self):
         """
-        Test that many to many field property will fallback to regex fallback
+        Test that many to many function will fallback to regex fallback
         """
         publisher = PublisherFactory()
 
         label = get_recursed_field_label(publisher, "conferences__get_days_until")
 
         self.assertEqual(label, "days until")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_many_to_many_function_short_description(self):
+        """
+        Test that many to many function's short_description will be returned
+        """
+        publisher = PublisherFactory()
+
+        label = get_recursed_field_label(publisher, "conferences__get_days_after")
+
+        self.assertEqual(label, "Days after conference")
 
 
 class QuerysetGetRecursedFieldLabelTestCase(TestCase):
@@ -422,6 +454,19 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
+    def test_function_short_description(self):
+        """
+        Test that the function's short_description will be returned
+        """
+        AuthorFactory.create_batch(size=3)
+        queryset = Author.objects.all()
+
+        label = get_recursed_field_label(queryset, "get_slug_display")
+
+        self.assertEqual(label, "Fancy slug label")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
     def test_property(self):
         """
         Test that property will be called with the given object and the property's
@@ -449,6 +494,19 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
+    def test_lookup_function_short_description(self):
+        """
+        Test that lookup function will return the function's short_description
+        """
+        AwardFactory.create_batch(size=3)
+        queryset = Award.objects.all()
+
+        label = get_recursed_field_label(queryset, "author__get_slug_display")
+
+        self.assertEqual(label, "Fancy slug label")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
     def test_many_to_many_property(self):
         """
         Test that many to many field property will fallback to regex fallback
@@ -472,6 +530,19 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
         label = get_recursed_field_label(queryset, "conferences__get_days_until")
 
         self.assertEqual(label, "days until")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_many_to_many_function_short_description(self):
+        """
+        Test that many to many lookup function will use the short_description
+        """
+        PublisherFactory.create_batch(size=3)
+        queryset = Publisher.objects.all()
+
+        label = get_recursed_field_label(queryset, "conferences__get_days_after")
+
+        self.assertEqual(label, "Days after conference")
 
 
 class ClassGetRecursedFieldLabelTestCase(TestCase):
@@ -578,6 +649,16 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
         label = get_recursed_field_label(Author, "get_name_label")
 
         self.assertEqual(label, "name label")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_function_short_description(self):
+        """
+        Test that the function's short_description will be returned
+        """
+        label = get_recursed_field_label(Author, "get_slug_display")
+
+        self.assertEqual(label, "Fancy slug label")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -688,6 +769,16 @@ class ClassGetFieldLabelTestCase(TestCase):
         label = get_field_label(Author, "get_name_label")
 
         self.assertEqual(label, "name label")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_function_short_description(self):
+        """
+        Test that the function's short_description will be returned
+        """
+        label = get_field_label(Author, "get_slug_display")
+
+        self.assertEqual(label, "Fancy slug label")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -811,16 +902,24 @@ class InstanceGetFieldLabelTestCase(TestCase):
 
     def test_function(self):
         """
-        Test that function will be called with the given class and returns the
+        Test that function will be called with the given instance and returns the
         regex fallback
         """
         label = get_field_label(AuthorFactory(), "get_name_label")
 
         self.assertEqual(label, "Foobar")
 
+    def test_function_short_description(self):
+        """
+        Test that function's short_description will be returned
+        """
+        label = get_field_label(AuthorFactory(), "get_slug_display")
+
+        self.assertEqual(label, "Fancy slug label")
+
     def test_property(self):
         """
-        Test that property will be called with the given class and the regex fallback
+        Test that property will be called with the given instance and the regex fallback
         will be used as label
         """
         label = get_field_label(AuthorFactory(), "label")
