@@ -146,18 +146,26 @@ def get_field_label(model_or_instance, field_or_field_name):
         return _get_field_label_fallback(field_or_field_name)
 
     function = field_or_field_name if callable(field_or_field_name) else False
-    if instance and function:
-        return function(model_or_instance)
-    elif function:
+    if function:
+        short_description = getattr(function, "short_description", None)
+
+        if short_description:
+            return str(short_description)
+        elif instance:
+            return function(model_or_instance)
+
         return _get_field_label_fallback(function.__name__)
 
-    if instance and type(field_or_field_name) is str:
+    if type(field_or_field_name) is str:
         attr = getattr(model_class, field_or_field_name, "")
         function = attr if callable(attr) else False
+        short_description = getattr(function, "short_description", None)
 
-        if isinstance(attr, property):
+        if instance and isinstance(attr, property):
             return getattr(instance, field_or_field_name)
-        elif function:
+        elif short_description:
+            return str(short_description)
+        elif instance and function:
             return function(model_or_instance)
 
     if type(field_or_field_name) is str and field_or_field_name == "__str__":
