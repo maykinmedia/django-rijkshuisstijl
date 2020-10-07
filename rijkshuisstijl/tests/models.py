@@ -24,6 +24,10 @@ class Author(models.Model):
     def get_name_label(self):
         return "Foobar"
 
+    def get_slug_display(self):
+        return f"Fancy slug {self.slug}"
+    get_slug_display.short_description = _("Fancy slug label")
+
     @property
     def label(self):
         return "Author"
@@ -57,6 +61,11 @@ class Conference(models.Model):
     def get_days_until(self):
         today = timezone.now().date()
         return self.event_date - today
+
+    def get_days_after(self):
+        today = timezone.now().date()
+        return today - self.event_date
+    get_days_after.short_description = _("Days after conference")
 
 
 class Company(models.Model):
