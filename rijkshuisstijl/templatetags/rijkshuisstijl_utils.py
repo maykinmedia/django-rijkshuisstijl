@@ -159,14 +159,21 @@ def get_field_label(model_or_instance, field_or_field_name):
     if type(field_or_field_name) is str:
         attr = getattr(model_class, field_or_field_name, "")
         function = attr if callable(attr) else False
-        short_description = getattr(function, "short_description", None)
 
-        if instance and isinstance(attr, property):
-            return getattr(instance, field_or_field_name)
-        elif short_description:
-            return str(short_description)
-        elif instance and function:
-            return function(model_or_instance)
+        if isinstance(attr, property):
+            short_description = getattr(attr.fget, "short_description", None)
+
+            if short_description:
+                return str(short_description)
+            elif instance:
+                return getattr(instance, field_or_field_name)
+        elif function:
+            short_description = getattr(function, "short_description", None)
+
+            if short_description:
+                return str(short_description)
+            elif instance:
+                return function(model_or_instance)
 
     if type(field_or_field_name) is str and field_or_field_name == "__str__":
         return model_class._meta.verbose_name

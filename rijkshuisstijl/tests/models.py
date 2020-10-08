@@ -32,6 +32,11 @@ class Author(models.Model):
     def label(self):
         return "Author"
 
+    @property
+    def first_name_localized(self):
+        return _(self.first_name)
+    first_name_localized.fget.short_description = _("Translated first name")
+
     class Meta:
         verbose_name = "Book author"
         verbose_name_plural = "Book authors"
@@ -57,6 +62,11 @@ class Conference(models.Model):
     @property
     def full_name(self):
         return f"{self.name} - {self.event_date}"
+
+    @property
+    def full_name_localized(self):
+        return f"{self.name} - {self.event_date} foo"
+    full_name_localized.fget.short_description = _("Localized full name")
 
     def get_days_until(self):
         today = timezone.now().date()
