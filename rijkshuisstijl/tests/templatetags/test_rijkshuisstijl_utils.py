@@ -264,6 +264,16 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
 
         self.assertEqual(label, "Author")
 
+    def test_property_short_description(self):
+        """
+        Test that property's short_description will be returned
+        """
+        author = AuthorFactory()
+
+        label = get_recursed_field_label(author, "first_name_localized")
+
+        self.assertEqual(label, "Translated first name")
+
     def test_lookup_function(self):
         """
         Test that lookup function will be called with the given object
@@ -295,6 +305,18 @@ class InstanceGetRecursedFieldLabelTestCase(TestCase):
         label = get_recursed_field_label(publisher, "conferences__full_name")
 
         self.assertEqual(label, "full name")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_many_to_many_property_short_description(self):
+        """
+        Test that many to many field property's short_description will be returned
+        """
+        publisher = PublisherFactory()
+
+        label = get_recursed_field_label(publisher, "conferences__full_name_localized")
+
+        self.assertEqual(label, "Localized full name")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -481,6 +503,19 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
+    def test_property_short_description(self):
+        """
+        Test that property's short_description will be returned
+        """
+        AuthorFactory.create_batch(size=3)
+        queryset = Author.objects.all()
+
+        label = get_recursed_field_label(queryset, "first_name_localized")
+
+        self.assertEqual(label, "Translated first name")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
     def test_lookup_function(self):
         """
         Test that lookup function will be called with the given object
@@ -517,6 +552,19 @@ class QuerysetGetRecursedFieldLabelTestCase(TestCase):
         label = get_recursed_field_label(queryset, "conferences__full_name")
 
         self.assertEqual(label, "full name")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_many_to_many_property_short_description(self):
+        """
+        Test that many to many field property's short_description will be used
+        """
+        PublisherFactory.create_batch(size=3)
+        queryset = Publisher.objects.all()
+
+        label = get_recursed_field_label(queryset, "conferences__full_name_localized")
+
+        self.assertEqual(label, "Localized full name")
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
@@ -673,6 +721,16 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
+    def test_property_short_description(self):
+        """
+        Test that property's short_description will be returned
+        """
+        label = get_recursed_field_label(Author, "first_name_localized")
+
+        self.assertEqual(label, "Translated first name")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
     def test_lookup_function(self):
         """
         Test that lookup function will be called with the given object
@@ -693,13 +751,33 @@ class ClassGetRecursedFieldLabelTestCase(TestCase):
 
     # Note this usecase will probably not happen, but testing expected behaviour
     # is preferred
+    def test_many_to_many_property_short_description(self):
+        """
+        Test that many to many field property's short_description will be returned
+        """
+        label = get_recursed_field_label(Publisher, "conferences__full_name_localized")
+
+        self.assertEqual(label, "Localized full name")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
     def test_many_to_many_function(self):
         """
-        Test that many to many field property will fallback to regex fallback
+        Test that many to many field function will fallback to regex fallback
         """
         label = get_recursed_field_label(Publisher, "conferences__get_days_until")
 
         self.assertEqual(label, "days until")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_many_to_many_function_short_description(self):
+        """
+        Test that many to many field function's short_description will be returned
+        """
+        label = get_recursed_field_label(Publisher, "conferences__get_days_after")
+
+        self.assertEqual(label, "Days after conference")
 
 
 class ClassGetFieldLabelTestCase(TestCase):
@@ -790,6 +868,17 @@ class ClassGetFieldLabelTestCase(TestCase):
         label = get_field_label(Author, "label")
 
         self.assertEqual(label, "label")
+
+    # Note this usecase will probably not happen, but testing expected behaviour
+    # is preferred
+    def test_property_short_description(self):
+        """
+        Test that property's short_description will be returned
+        will be used as label
+        """
+        label = get_field_label(Author, "first_name_localized")
+
+        self.assertEqual(label, "Translated first name")
 
     # Field instances
     def test_field_instance_verbose_name_field_label(self):
@@ -925,6 +1014,14 @@ class InstanceGetFieldLabelTestCase(TestCase):
         label = get_field_label(AuthorFactory(), "label")
 
         self.assertEqual(label, "Author")
+
+    def test_property_short_description(self):
+        """
+        Test that properties's short_description will be returned
+        """
+        label = get_field_label(AuthorFactory(), "first_name_localized")
+
+        self.assertEqual(label, "Translated first name")
 
     # Field instances
     def test_field_instance_verbose_name_field_label(self):
