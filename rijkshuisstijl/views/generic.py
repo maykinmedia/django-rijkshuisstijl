@@ -11,9 +11,7 @@ from django.views.generic import (
     TemplateView as DjTemplateView,
     UpdateView as DjUpdateView,
 )
-from django.views.generic.detail import BaseDetailView
 from django.views.generic.edit import DeletionMixin
-from django.views.generic.list import BaseListView
 
 from rijkshuisstijl.conf import settings
 
@@ -271,7 +269,7 @@ class DeleteMixin:
 
     def get_actions(self):
         return [
-            {"class": "button--primary", "label": self.label_cancel, "href": self.success_url},
+            {"class": "button--primary", "label": self.label_cancel, "href": self.get_success_url()},
             {"class": "button--danger", "label": self.label, "type": "submit",},
         ]
 
