@@ -237,7 +237,15 @@ def summary(**kwargs):
     - toolbar_*: Prefixed configuration, adds a toolbar. See toolbar.
 
     """
+
+    def get_href(object, href):
+        if callable(href):
+            return href(object)
+        return config
+
     config = key_value("summary", **kwargs)
+    object = config.get("object")
+    config["toolbar_items"] = [{**item, "href": get_href(object, item.get("href"))} for item in config.get("toolbar_items", [])]
     config["toolbar_config"] = get_config_from_prefix(config, "toolbar")
     return config
 
