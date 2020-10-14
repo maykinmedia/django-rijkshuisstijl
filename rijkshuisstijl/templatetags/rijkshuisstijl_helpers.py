@@ -108,6 +108,22 @@ def get_queryset(context, config):
 #
 
 
+def get_config_from_prefix(config, prefix):
+    """
+    Creates a new "config" from kwargs, only for keys that start with prefix.
+    Strips prefix from resulting dict keys.
+    Strips leading underscore ("_") from dict keys.
+    :param config: A dict, possibly output from get_config().
+    :param prefix: A str, the prefix (without trailing underscore) to filter config on.
+    :return: dict
+    """
+    return {
+        key[len(prefix) + 1:]: value
+        for key, value in config.items()
+        if key.startswith(prefix)
+    }
+
+
 def create_list_of_dict(obj, name_key="key", name_value="label"):
     """
     Converts obj to a list_of_dict containing name_key and name_value for every dict.

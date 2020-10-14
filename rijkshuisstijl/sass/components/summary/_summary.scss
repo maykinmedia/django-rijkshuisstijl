@@ -159,4 +159,8 @@
   &__key-value--actions [type=reset] {
     margin-right: $datagrid-spacing-row-h / 2;
   }
+
+  .toolbar {
+    @include gutter(margin-bottom);
+  }
 }

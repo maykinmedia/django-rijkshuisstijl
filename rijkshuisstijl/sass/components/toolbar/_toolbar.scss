@@ -41,6 +41,10 @@
     background-color: darken($toolbar-color-background, 4);
   }
 
+  &--transparent {
+    background-color: transparent;
+  }
+
   &--pad {
     padding: 0 $toolbar-spacing;
   }

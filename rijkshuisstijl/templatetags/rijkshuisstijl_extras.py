@@ -5,6 +5,7 @@ from rijkshuisstijl.conf import settings
 from rijkshuisstijl.templatetags.rijkshuisstijl import register
 from rijkshuisstijl.templatetags.rijkshuisstijl_filters import getattr_or_get
 from rijkshuisstijl.templatetags.rijkshuisstijl_helpers import (
+    get_config_from_prefix,
     get_id,
     get_model,
     get_queryset,
@@ -225,8 +226,19 @@ def summary(**kwargs):
     An alternative representation of "key_value_table" with the same interface (see: key_value_table).
     In addition to key_value_table options: "detail_fields" can be specified (same syntax as "fields". Setting this will
     result in a collapsible section in the summary.
+
+    Example:
+
+        {% summary config=config %}
+        {% summary option1='foo' option2='bar' %}
+
+    (Additional) available options:
+
+    - toolbar_*: Prefixed configuration, adds a toolbar. See toolbar.
+
     """
     config = key_value("summary", **kwargs)
+    config["toolbar_config"] = get_config_from_prefix(config, "toolbar")
     return config
 
 
@@ -639,6 +651,7 @@ def toolbar(*args, **kwargs):
             kwargs["items"].append(parse_arg(item))
 
     for item in kwargs["items"]:
+        item["class"] = item.get("class", "button--hover button--icon-left")
         item["config"] = item
 
     kwargs["config"] = kwargs
