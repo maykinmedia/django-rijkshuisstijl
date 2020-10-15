@@ -384,16 +384,20 @@ def datagrid(context, **kwargs):
 
             # Filter one filter at a time.
             for active_filter in active_filters:
-                # Bypass filter if set.
-                if active_filter.get("bypass_filter", False):
-                    continue
-
                 lookup = active_filter.get("lookup")
                 filter_value = active_filter.get("value")
                 filter_type = active_filter.get("type")
 
+                # Bypass filter if set.
+                if active_filter.get("bypass_filter", False):
+                    continue
+
+                # "filter_queryset".
+                elif active_filter.get("filter_queryset"):
+                    filter_kwargs = {lookup: filter_value}
+
                 # Date.
-                if filter_type in ["DateField", "DateTimeField"]:  # TODO: DateTimeField
+                elif filter_type in ["DateField", "DateTimeField"]:  # TODO: DateTimeField
                     dates = re.split(r"[^\d-]+", filter_value)
 
                     if len(dates) == 1:
@@ -541,8 +545,12 @@ def datagrid(context, **kwargs):
                     # Default choices.
                     choices = getattr(filter_field, "choices", [])
 
+                    # Allow a "filter_queryset" to be set.
+                    if "filter_queryset" in filterable_column:
+                        choices = filterable_column.get("filter_queryset")
+
                     # A boolean field gets choices for the boolean values.
-                    if filterable_column.get("type") == "BooleanField":
+                    elif filterable_column.get("type") == "BooleanField":
                         choices = ((True, _("waar")), (False, _("onwaar")))
 
                     # A related field gets choices for all related objects. This can be slow if a lot of objects are found.
