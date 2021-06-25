@@ -38,7 +38,7 @@
 
 
         {% else %}
-            {% if urlize and not column.urlize == False %}
+            {% if column.urlize or urlize and not column.urlize == False %}
 
 
                 <span class="datagrid__label{% if formset_form %} toggle{% endif %}"{% if formset_form %} data-toggle-target="#{{ row_id }}" data-toggle-modifier="edit" data-toggle-link-mode="noprevent"{% endif %}>{{ label|rh_urlize }}</span>
