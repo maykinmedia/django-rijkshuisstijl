@@ -27,9 +27,14 @@ urlpatterns = [
         name="delete-multiple",
     ),
     path(
-        "publisher/<int:pk>",
+        "publishers/<int:pk>",
         DetailView.as_view(model=Publisher, fields=("name", "book_set",)),
         name="publisher-detail",
+    ),
+    path(
+        "publishers/",
+        ListView.as_view(model=Publisher),
+        name="publisher-list",
     ),
     path(
         "author/<int:pk>",

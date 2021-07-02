@@ -473,6 +473,23 @@ class ListViewTestCase(ViewTestCaseMixin, TestCase):
         object_list = response.context_data.get("object_list")
         self.assertEqual(len(object_list), 0)
 
+    def test_urlize_override(self):
+        """
+        Tests that setting urlize on a column basis overrides datagrid's global urlize
+        """
+        self.view.columns = [{"key": "name"}, {"key": "company", "urlize": False}]
+
+        response = self.client_get(url_name="publisher-list")
+
+        companies = (self.publisher_1.company, self.publisher_2.company,)
+
+        for company in companies:
+            with self.subTest(company=company):
+                self.assertContains(
+                    response,
+                    f'<a class="link" href="{company.get_absolute_url()}">{company}</a>'
+                )
+
 
 class UpdateViewTestCase(ViewTestCaseMixin, FormTestCaseMixin, TestCase):
     url_name = "update"
