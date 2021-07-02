@@ -81,6 +81,9 @@ class Conference(models.Model):
 class Company(models.Model):
     name = models.CharField(max_length=255, default="Foo Bar Inc")
 
+    def get_absolute_url(self):
+        return "https://example.com"
+
     class Meta:
         verbose_name = "Firm"
 
