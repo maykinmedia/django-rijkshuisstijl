@@ -61,7 +61,7 @@ def datagrid(context, **kwargs):
 
     - queryset: Optional, A queryset containing the objects to show.
 
-    - columns: Required, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "width") or a list
+    - columns: Required, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "width", "urlize") or a list
       defining which columns/values to show for each object in object_list or queryset.
 
       - If a dict is passed, each key will represent a field in an object to obtain the data from and each value
@@ -274,7 +274,7 @@ def datagrid(context, **kwargs):
     - url_reverse: Optional, A URL name to reverse using the object's 'pk' attribute as one and only attribute,
       creates hyperlinks in the first cell. If no url_reverse if passed get_absolute_url is tried in order to find
       a url.
-    - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating
+    - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating. Passing FQN urls to this filter will cause urlize to be ran twice which lead to unwanted behaviour, set urlize to False on a column basis to prevent this.
       hyperlinks if applicable in every cell.
 
     :param context:
