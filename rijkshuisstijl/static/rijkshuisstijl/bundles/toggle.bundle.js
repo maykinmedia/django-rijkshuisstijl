@@ -1,2 +1,78 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[23],{333:function(t,e,o){"use strict";o.r(e),o.d(e,"Toggle",(function(){return u}));var n=o(1),r=o.n(n),a=o(63);function i(t){return function(t){if(Array.isArray(t))return s(t)}(t)||function(t){if("undefined"!=typeof Symbol&&Symbol.iterator in Object(t))return Array.from(t)}(t)||function(t,e){if(!t)return;if("string"==typeof t)return s(t,e);var o=Object.prototype.toString.call(t).slice(8,-1);"Object"===o&&t.constructor&&(o=t.constructor.name);if("Map"===o||"Set"===o)return Array.from(t);if("Arguments"===o||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(o))return s(t,e)}(t)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function s(t,e){(null==e||e>t.length)&&(e=t.length);for(var o=0,n=new Array(e);o<e;o++)n[o]=t[o];return n}function l(t,e){for(var o=0;o<e.length;o++){var n=e[o];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}var u=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=e,this.toggleModifier=this.node.dataset.toggleModifier,this.toggleMobileState=this.node.dataset.toggleMobileState?"TRUE"===this.node.dataset.toggleMobileState.toUpperCase():void 0,this.restoreState(),this.bindEvents()}var e,o,n;return e=t,(o=[{key:"bindEvents",value:function(){this.node.addEventListener("click",this.onClick.bind(this))}},{key:"onClick",value:function(t){var e=this,o=this.node.dataset.toggleLinkMode||"normal";if("normal"===o)t.target.getAttribute("href")&&"#"!==t.target.getAttribute("href")||(t.preventDefault(),t.stopPropagation());else if("positive"===o)t.target.href&&this.getState()||(t.preventDefault(),t.stopPropagation());else if("negative"===o)t.target.href&&!this.getState()||(t.preventDefault(),t.stopPropagation());else if("prevent"===o)t.preventDefault(),t.stopPropagation();else if("noprevent"===o&&(t.target.href||t.target.parentNode.href))return;setTimeout((function(){e.toggle(),e.saveState(),e.focus()}),100)}},{key:"focus",value:function(){var t=this.node.dataset.focusTarget;t&&this.getState()&&document.querySelector(t).focus()}},{key:"toggle",value:function(){var t=this,e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:void 0;"add"===this.node.dataset.toggleOperation?e=!0:"remove"===this.node.dataset.toggleOperation&&(e=!1);var o=this.getTargets();o.forEach((function(o){r.a.toggleModifier(o,t.toggleModifier,e),t.dispatchEvent(o)})),this.getExclusive().filter((function(t){return-1===o.indexOf(t)})).forEach((function(e){return r.a.removeModifier(e,t.toggleModifier)}))}},{key:"dispatchEvent",value:function(t){var e=document.createEvent("Event");e.initEvent("rh-toggle",!0,!0),t.dispatchEvent(e)}},{key:"getState",value:function(){var t=this.getTargets()[0];return t?Boolean(r.a.hasModifier(t,this.toggleModifier)):null}},{key:"getTargets",value:function(){var t=this.node.dataset.toggleTarget;return this.getRelated(t)}},{key:"getExclusive",value:function(){var t=this.node.dataset.toggleExclusive||"";return this.getRelated(t)}},{key:"getRelated",value:function(t){var e=[];return t.split(",").filter((function(t){return t.length})).forEach((function(t){return e=[].concat(i(e),i(document.querySelectorAll(t)))})),e}},{key:"saveState",value:function(){var t=this.node.id,e=this.getState();if("boolean"==typeof e&&t){var o="ToggleButton#".concat(t,".modifierApplied");try{localStorage.setItem(o,e)}catch(t){console.warn(this,"Unable to save state to localstorage")}}}},{key:"restoreState",value:function(){if(void 0!==this.toggleMobileState&&matchMedia("(max-width: 767px)").matches)this.toggle(this.toggleMobileState);else{var t=this.node.id;if(t){var e="ToggleButton#".concat(t,".modifierApplied");try{var o=localStorage.getItem(e)||!1;this.toggle("TRUE"===o.toUpperCase())}catch(t){}}}}}])&&l(e.prototype,o),n&&l(e,n),t}();i(a.c).forEach((function(t){return new u(t)}))}}]);
-//# sourceMappingURL=toggle.bundle.js.map
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["toggle"],{
+
+/***/ "./rijkshuisstijl/js/components/toggle/toggle.js":
+/*!*******************************************************!*\
+  !*** ./rijkshuisstijl/js/components/toggle/toggle.js ***!
+  \*******************************************************/
+/*! exports provided: Toggle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Toggle", function() { return Toggle; });
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/toggle/constants.js");
+function _toConsumableArray(arr){return _arrayWithoutHoles(arr)||_iterableToArray(arr)||_unsupportedIterableToArray(arr)||_nonIterableSpread();}function _nonIterableSpread(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o,minLen){if(!o)return;if(typeof o==="string")return _arrayLikeToArray(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);if(n==="Object"&&o.constructor)n=o.constructor.name;if(n==="Map"||n==="Set")return Array.from(o);if(n==="Arguments"||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return _arrayLikeToArray(o,minLen);}function _iterableToArray(iter){if(typeof Symbol!=="undefined"&&Symbol.iterator in Object(iter))return Array.from(iter);}function _arrayWithoutHoles(arr){if(Array.isArray(arr))return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr,len){if(len==null||len>arr.length)len=arr.length;for(var i=0,arr2=new Array(len);i<len;i++){arr2[i]=arr[i];}return arr2;}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}function _createClass(Constructor,protoProps,staticProps){if(protoProps)_defineProperties(Constructor.prototype,protoProps);if(staticProps)_defineProperties(Constructor,staticProps);return Constructor;}/**
+ * Class for generic toggles.
+ *
+ * Toggle should have BLOCK_TOGGLE present in classList for detection.
+ * Toggle should have data-toggle-target set to query selector for target.
+ * Toggle should have data-toggle-modifier set to modifier to toggle.
+ * Toggle could have data-focus-target set to query selector for node to focus on click.
+ * Toggle could have data-toggle-link-mode set to either "normal", "positive", "negative", "prevent" or "noprevent", see this.onClick().
+ * Toggle could have data-operation set to either "add" or "remove", see this.toggle().
+ * @class
+ */var Toggle=/*#__PURE__*/function(){/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */function Toggle(node){_classCallCheck(this,Toggle);/** @type {HTMLElement} */this.node=node;/** @type {string} */this.toggleModifier=this.node.dataset.toggleModifier;/** @type {(boolean|undefined)} */this.toggleMobileState=this.node.dataset.toggleMobileState?this.node.dataset.toggleMobileState.toUpperCase()==='TRUE':undefined;this.restoreState();this.bindEvents();}/**
+     * Binds events to callbacks.
+     */_createClass(Toggle,[{key:"bindEvents",value:function bindEvents(){this.node.addEventListener('click',this.onClick.bind(this));}/**
+     * Callback for this.node click.
+     *
+     * Prevents default action (e.preventDefault()) based on target and this.node.dataset.toggleLinkMode value:
+     * - "normal" (default): Prevent default on regular elements and links towards "#", pass all other links.
+     * - "positive": Prevent default on regular elements, dont prevent links if this.getState() returns true.
+     * - "negative": Prevent default on regular elements, dont prevent links if this.getState() returns false.
+     * - "prevent": Always prevent default.
+     * - "noprevent": Never prevent default.
+     *
+     * @param {MouseEvent} e
+     */},{key:"onClick",value:function onClick(e){var _this=this;var toggleLinkMode=this.node.dataset.toggleLinkMode||'normal';if(toggleLinkMode==='normal'){if(!e.target.getAttribute('href')||e.target.getAttribute('href')==='#'){e.preventDefault();e.stopPropagation();}}else if(toggleLinkMode==='positive'){if(!e.target.href||!this.getState()){e.preventDefault();e.stopPropagation();}}else if(toggleLinkMode==='negative'){if(!e.target.href||this.getState()){e.preventDefault();e.stopPropagation();}}else if(toggleLinkMode==='prevent'){e.preventDefault();e.stopPropagation();}else if(toggleLinkMode==='noprevent'){if(e.target.href||e.target.parentNode.href){return;}}setTimeout(function(){_this.toggle();_this.saveState();_this.focus();},100);}/**
+     * Focuses this.node.dataset.focusTarget.
+     */},{key:"focus",value:function focus(){var querySelector=this.node.dataset.focusTarget;if(querySelector&&this.getState()){var target=document.querySelector(querySelector);target.focus();}}/**
+     * Performs toggle.
+     * Toggle behaviour can optionally controlled by this.node.dataset.toggleOperation value.
+     * - undefined (default): Toggles add/remove based on exp or presence of this.toggleModifier
+     * - "add": Always add this.toggleModifier to targets.
+     * - "remove": Always removes this.toggleModifier from targets.
+     *
+     * @param {boolean} [exp] If passed, add/removes this.toggleModifier based on exp.
+     */},{key:"toggle",value:function toggle(){var _this2=this;var exp=arguments.length>0&&arguments[0]!==undefined?arguments[0]:undefined;if(this.node.dataset.toggleOperation==='add'){exp=true;}else if(this.node.dataset.toggleOperation==='remove'){exp=false;}var targets=this.getTargets();targets.forEach(function(target){bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.toggleModifier(target,_this2.toggleModifier,exp);_this2.dispatchEvent(target);});this.getExclusive().filter(function(exclusive){return targets.indexOf(exclusive)===-1;}).forEach(function(exclusive){return bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.removeModifier(exclusive,_this2.toggleModifier);});}/**
+     * Dispatches "rh-toggle" event on target.
+     * @param {HTMLElement} target
+     */},{key:"dispatchEvent",value:function dispatchEvent(target){var event=document.createEvent('Event');event.initEvent('rh-toggle',true,true);target.dispatchEvent(event);}/**
+     * Returns the toggle state (whether this.node.toggleModifier is applied).
+     * State is retrieved from first target.
+     * @returns {(boolean|null)} Boolean is target is found and state is retrieved, null if no target has been found.
+     */},{key:"getState",value:function getState(){var referenceTarget=this.getTargets()[0];if(!referenceTarget){return null;}return Boolean(bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.hasModifier(referenceTarget,this.toggleModifier));}/**
+     * Returns all the targets for this.node.
+     * @returns {*}
+     */},{key:"getTargets",value:function getTargets(){var selector=this.node.dataset.toggleTarget;return this.getRelated(selector);}/**
+     * Returns all the grouped "exclusive" toggles of this.node.
+     * @returns {*}
+     */},{key:"getExclusive",value:function getExclusive(){var selector=this.node.dataset.toggleExclusive||'';return this.getRelated(selector);}/**
+     * Splits selector by "," and query selects each part.
+     * @param {string} selector Selector(s) (optionally divided by ",").
+     * @return {Array} An array of all matched nodes.
+     */},{key:"getRelated",value:function getRelated(selector){var targets=[];selector.split(',').filter(function(selector){return selector.length;}).forEach(function(selector){return targets=[].concat(_toConsumableArray(targets),_toConsumableArray(document.querySelectorAll(selector)));});return targets;}/**
+     * Saves state to localstorage.
+     */},{key:"saveState",value:function saveState(){var id=this.node.id;var value=this.getState();if(typeof value!=='boolean'){return;}if(id){var key="ToggleButton#".concat(id,".modifierApplied");try{localStorage.setItem(key,value);}catch(e){console.warn(this,'Unable to save state to localstorage');}}}/**
+     * Restores state from localstorage.
+     */},{key:"restoreState",value:function restoreState(){if(this.toggleMobileState!==undefined&&matchMedia('(max-width: 767px)').matches){this.toggle(this.toggleMobileState);return;}var id=this.node.id;if(id){var key="ToggleButton#".concat(id,".modifierApplied");try{var value=localStorage.getItem(key)||false;this.toggle(value.toUpperCase()==='TRUE');}catch(e){}}}}]);return Toggle;}();// Start!
+_toConsumableArray(_constants__WEBPACK_IMPORTED_MODULE_1__["TOGGLES"]).forEach(function(node){return new Toggle(node);});
+
+/***/ })
+
+}]);
