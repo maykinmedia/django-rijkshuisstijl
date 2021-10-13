@@ -1,2 +1,39 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[11],{328:function(n,t,e){"use strict";e.r(t),e.d(t,"Paginator",(function(){return d}));var i=e(1),r=e.n(i),a=e(312),o=e.n(a),u=e(122);function s(n,t){(null==t||t>n.length)&&(t=n.length);for(var e=0,i=new Array(t);e<t;e++)i[e]=n[e];return i}function c(n,t){for(var e=0;e<t.length;e++){var i=t[e];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(n,i.key,i)}}var l,d=function(){function n(t){!function(n,t){if(!(n instanceof t))throw new TypeError("Cannot call a class as a function")}(this,n),this.node=t,this.input=r.a.getChildBEMNode(this.node,u.a),this.bindEvents()}var t,e,i;return t=n,(e=[{key:"bindEvents",value:function(){this.node.addEventListener("submit",this.onChange.bind(this)),this.node.addEventListener("change",this.onChange.bind(this)),this.node.addEventListener("click",this.onClick.bind(this))}},{key:"onChange",value:function(n){n.preventDefault(),this.navigate()}},{key:"onClick",value:function(n){n.preventDefault(),n.target.dataset.page&&this.navigate(n.target.dataset.page)}},{key:"navigate",value:function(){var n=arguments.length>0&&void 0!==arguments[0]?arguments[0]:this.input.value;window.location=o()(window.location).setSearch(this.input.name,n)}}])&&c(t.prototype,e),i&&c(t,i),n}();(l=u.b,function(n){if(Array.isArray(n))return s(n)}(l)||function(n){if("undefined"!=typeof Symbol&&Symbol.iterator in Object(n))return Array.from(n)}(l)||function(n,t){if(n){if("string"==typeof n)return s(n,t);var e=Object.prototype.toString.call(n).slice(8,-1);return"Object"===e&&n.constructor&&(e=n.constructor.name),"Map"===e||"Set"===e?Array.from(n):"Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e)?s(n,t):void 0}}(l)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()).forEach((function(n){return new d(n)}))}}]);
-//# sourceMappingURL=paginator.bundle.js.map
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["paginator"],{
+
+/***/ "./rijkshuisstijl/js/components/paginator/paginator.js":
+/*!*************************************************************!*\
+  !*** ./rijkshuisstijl/js/components/paginator/paginator.js ***!
+  \*************************************************************/
+/*! exports provided: Paginator */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Paginator", function() { return Paginator; });
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var urijs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! urijs */ "./node_modules/urijs/src/URI.js");
+/* harmony import */ var urijs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(urijs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/paginator/constants.js");
+function _toConsumableArray(arr){return _arrayWithoutHoles(arr)||_iterableToArray(arr)||_unsupportedIterableToArray(arr)||_nonIterableSpread();}function _nonIterableSpread(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o,minLen){if(!o)return;if(typeof o==="string")return _arrayLikeToArray(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);if(n==="Object"&&o.constructor)n=o.constructor.name;if(n==="Map"||n==="Set")return Array.from(o);if(n==="Arguments"||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return _arrayLikeToArray(o,minLen);}function _iterableToArray(iter){if(typeof Symbol!=="undefined"&&Symbol.iterator in Object(iter))return Array.from(iter);}function _arrayWithoutHoles(arr){if(Array.isArray(arr))return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr,len){if(len==null||len>arr.length)len=arr.length;for(var i=0,arr2=new Array(len);i<len;i++){arr2[i]=arr[i];}return arr2;}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}function _createClass(Constructor,protoProps,staticProps){if(protoProps)_defineProperties(Constructor.prototype,protoProps);if(staticProps)_defineProperties(Constructor,staticProps);return Constructor;}/**
+ * Contains logic for making the paginator work with existing GET params.
+ * @class
+ */var Paginator=/*#__PURE__*/function(){/**
+     * Constructor method.
+     * @param {HTMLFormElement} node
+     */function Paginator(node){_classCallCheck(this,Paginator);/** @type {HTMLFormElement} */this.node=node;/** @type {HTMLInputElement} */this.input=bem_js__WEBPACK_IMPORTED_MODULE_0___default.a.getChildBEMNode(this.node,_constants__WEBPACK_IMPORTED_MODULE_2__["BLOCK_INPUT"]);this.bindEvents();}/**
+     * Binds events to callbacks.
+     */_createClass(Paginator,[{key:"bindEvents",value:function bindEvents(){this.node.addEventListener('submit',this.onChange.bind(this));this.node.addEventListener('change',this.onChange.bind(this));this.node.addEventListener('click',this.onClick.bind(this));}/**
+     * Callback for change event on this.node.
+     * @param {Event} e
+     */},{key:"onChange",value:function onChange(e){e.preventDefault();this.navigate();}/**
+     * Callback for click event on this.node.
+     * @param {Event} e
+     */},{key:"onClick",value:function onClick(e){e.preventDefault();if(e.target.dataset.page){this.navigate(e.target.dataset.page);}}/**
+     * Navigate to the page specified in this.input.
+     */},{key:"navigate",value:function navigate(){var page=arguments.length>0&&arguments[0]!==undefined?arguments[0]:this.input.value;window.location=urijs__WEBPACK_IMPORTED_MODULE_1___default()(window.location).setSearch(this.input.name,page);}}]);return Paginator;}();// Start!
+_toConsumableArray(_constants__WEBPACK_IMPORTED_MODULE_2__["PAGINATORS"]).forEach(function(node){return new Paginator(node);});
+
+/***/ })
+
+}]);
