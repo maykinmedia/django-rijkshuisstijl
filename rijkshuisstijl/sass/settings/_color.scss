@@ -69,13 +69,13 @@ $colors: (
   'light-blue': #8fcae7,
   'light-blue-shade-1': #ddeff8,
   'light-blue-shade-2': #eef7fb,
-);
+)!default;
 
-$scheme: dark-blue;
-//$scheme: purple;  // Start wearing purple!
-//$scheme: orange;
-$color-primary: map-get($colors, $scheme);
-$color-secondary: map_get($colors, #{$scheme}-shade-2);
+$scheme: dark-blue!default;
+//$scheme: purple!default;  // Start wearing purple!
+//$scheme: orange!default;
+$color-primary: map-get($colors, $scheme)!default;
+$color-secondary: map_get($colors, #{$scheme}-shade-2)!default;
 
 
 /**
@@ -94,9 +94,9 @@ $shades: (
   gray-5: #999999,
   gray-6: #696969,
   gray-7: #535353,
-);
+)!default;
 
-$color-border: map-get($colors, 'heaven-blue-shade-2');
+$color-border: map-get($colors, 'heaven-blue-shade-2')!default;
 
 
 /**
@@ -108,7 +108,7 @@ link contrast checker om 1 geschikte linkkleur te vinden voor de hele website, m
 - Hou ook rekening met contrasteisen bij tinten van achtergrondkaders, tabellen, grafieken, etc.
  */
 
-$typography-color-link: $color-primary;
+$typography-color-link: $color-primary!default;
 
 
 /**
@@ -119,16 +119,16 @@ onderscheidend. Door toenemend mobiel gebruik is het aan te bevelen de melding n
 desbetreffende invulveld te laten zien om onnodig heen en weer scrollen te voorkomen.
  */
 
-$color-danger: map-get($colors, 'red-shade-2');
-$color-danger-dark: map-get($colors, 'red');
-$color-info: map-get($colors, 'heaven-blue-shade-2');
-$color-info-dark: map-get($colors, 'heaven-blue');
-$color-success: map-get($colors, 'green-shade-2');
-$color-success-dark: map-get($colors, 'green');
-$color-warning: map-get($colors, 'orange-shade-2');
-$color-warning-dark: map-get($colors, 'orange');
+$color-danger: map-get($colors, 'red-shade-2')!default;
+$color-danger-dark: map-get($colors, 'red')!default;
+$color-info: map-get($colors, 'heaven-blue-shade-2')!default;
+$color-info-dark: map-get($colors, 'heaven-blue')!default;
+$color-success: map-get($colors, 'green-shade-2')!default;
+$color-success-dark: map-get($colors, 'green')!default;
+$color-warning: map-get($colors, 'orange-shade-2')!default;
+$color-warning-dark: map-get($colors, 'orange')!default;
 
-$color-red: map-get($colors, 'red');
-$color-green: map-get($colors, 'pink');
-$color-yellow: map-get($colors, 'yellow')
+$color-red: map-get($colors, 'red')!default;
+$color-green: map-get($colors, 'pink')!default;
+$color-yellow: map-get($colors, 'yellow')!default;
 
