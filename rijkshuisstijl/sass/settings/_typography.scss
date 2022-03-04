@@ -73,117 +73,117 @@ versie toegpast worden.
     src: url("/static/rijkshuisstijl/fonts/ro-icons-1.11.woff") format("opentype"),url("/static/rijkshuisstijl/fonts/ro-icons-1.11.ttf") format("truetype")
 }
 
-$typography-default-hover-link: false;
-$typography-size-border: 2px;
+$typography-default-hover-link: false!default;
+$typography-size-border: 2px!default;
 
-$typography-font-family-base: 'RO Sans', Calibri, sans-serif;
+$typography-font-family-base: 'RO Sans', Calibri, sans-serif!default;
 
-$typography-font-size-text-mobile: 16/16*1rem;
-$typography-font-size-text-tablet: 16/16*1rem;
-$typography-font-size-text-laptop: 16/16*1rem;
-$typography-font-size-text-desktop: 18/16*1rem;
+$typography-font-size-text-mobile: 16/16*1rem!default;
+$typography-font-size-text-tablet: 16/16*1rem!default;
+$typography-font-size-text-laptop: 16/16*1rem!default;
+$typography-font-size-text-desktop: 18/16*1rem!default;
 
-$typography-font-size-text-big-mobile: 20/16*1rem;
-$typography-font-size-text-big-tablet: 21/16*1rem;
-$typography-font-size-text-big-laptop: 21/16*1rem;
-$typography-font-size-text-big-desktop: 24/16*1rem;
+$typography-font-size-text-big-mobile: 20/16*1rem!default;
+$typography-font-size-text-big-tablet: 21/16*1rem!default;
+$typography-font-size-text-big-laptop: 21/16*1rem!default;
+$typography-font-size-text-big-desktop: 24/16*1rem!default;
 
-$typography-font-size-text-small-mobile: 12/16*1rem;
-$typography-font-size-text-small-tablet: 12/16*1rem;
-$typography-font-size-text-small-laptop: 12/16*1rem;
-$typography-font-size-text-small-desktop: 14/16*1rem;
+$typography-font-size-text-small-mobile: 12/16*1rem!default;
+$typography-font-size-text-small-tablet: 12/16*1rem!default;
+$typography-font-size-text-small-laptop: 12/16*1rem!default;
+$typography-font-size-text-small-desktop: 14/16*1rem!default;
 
-$typography-font-size-h1-mobile: 26/16*1rem;
-$typography-font-size-h1-tablet: 28/16*1rem;
-$typography-font-size-h1-laptop: 28/16*1rem;
-$typography-font-size-h1-desktop: 32/16*1rem;
+$typography-font-size-h1-mobile: 26/16*1rem!default;
+$typography-font-size-h1-tablet: 28/16*1rem!default;
+$typography-font-size-h1-laptop: 28/16*1rem!default;
+$typography-font-size-h1-desktop: 32/16*1rem!default;
 
-$typography-font-size-h2-mobile: 21/16*1rem;
-$typography-font-size-h2-tablet: 21/16*1rem;
-$typography-font-size-h2-laptop: 21/16*1rem;
-$typography-font-size-h2-desktop: 24/16*1rem;
+$typography-font-size-h2-mobile: 21/16*1rem!default;
+$typography-font-size-h2-tablet: 21/16*1rem!default;
+$typography-font-size-h2-laptop: 21/16*1rem!default;
+$typography-font-size-h2-desktop: 24/16*1rem!default;
 
-$typography-font-size-h3-mobile: 18/16*1rem;
-$typography-font-size-h3-tablet: 18/16*1rem;
-$typography-font-size-h3-laptop: 18/16*1rem;
-$typography-font-size-h3-desktop: 20/16*1rem;
+$typography-font-size-h3-mobile: 18/16*1rem!default;
+$typography-font-size-h3-tablet: 18/16*1rem!default;
+$typography-font-size-h3-laptop: 18/16*1rem!default;
+$typography-font-size-h3-desktop: 20/16*1rem!default;
 
-$typography-font-size-h4-mobile: 16/16*1rem;
-$typography-font-size-h4-tablet: 16/16*1rem;
-$typography-font-size-h4-laptop: 16/16*1rem;
-$typography-font-size-h4-desktop: 18/16*1rem;
+$typography-font-size-h4-mobile: 16/16*1rem!default;
+$typography-font-size-h4-tablet: 16/16*1rem!default;
+$typography-font-size-h4-laptop: 16/16*1rem!default;
+$typography-font-size-h4-desktop: 18/16*1rem!default;
 
-$typography-font-size-h5-mobile: $typography-font-size-text-mobile;
-$typography-font-size-h5-tablet: $typography-font-size-text-tablet;
-$typography-font-size-h5-laptop: $typography-font-size-text-laptop;
-$typography-font-size-h5-desktop: $typography-font-size-text-desktop;
+$typography-font-size-h5-mobile: $typography-font-size-text-mobile!default;
+$typography-font-size-h5-tablet: $typography-font-size-text-tablet!default;
+$typography-font-size-h5-laptop: $typography-font-size-text-laptop!default;
+$typography-font-size-h5-desktop: $typography-font-size-text-desktop!default;
 
-$typography-font-size-h6-mobile: $typography-font-size-text-mobile;
-$typography-font-size-h6-tablet: $typography-font-size-text-tablet;
-$typography-font-size-h6-laptop: $typography-font-size-text-laptop;
-$typography-font-size-h6-desktop: $typography-font-size-text-desktop;
-
-
-$typography-font-weight-text: 400;
-$typography-font-weight-h: 700;
+$typography-font-size-h6-mobile: $typography-font-size-text-mobile!default;
+$typography-font-size-h6-tablet: $typography-font-size-text-tablet!default;
+$typography-font-size-h6-laptop: $typography-font-size-text-laptop!default;
+$typography-font-size-h6-desktop: $typography-font-size-text-desktop!default;
 
 
-$typography-line-height-text-mobile: 22/16;
-$typography-line-height-text-tablet: 22/16;
-$typography-line-height-text-laptop: 26/16;
-$typography-line-height-text-desktop: 29/19;
-
-$typography-line-height-text-big-mobile: 26/20;
-$typography-line-height-text-big-tablet: 32/21;
-$typography-line-height-text-big-laptop: 32/21;
-$typography-line-height-text-big-desktop: 36/24;
-
-$typography-line-height-h1-mobile: 30/26;
-$typography-line-height-h1-tablet: 32/28;
-$typography-line-height-h1-laptop: 32/28;
-$typography-line-height-h1-desktop: 36/32;
-
-$typography-line-height-h2-mobile: 26/21;
-$typography-line-height-h2-tablet: 26/21;
-$typography-line-height-h2-laptop: 26/21;
-$typography-line-height-h2-desktop: 29/24;
-
-$typography-line-height-h3-mobile: 26/18;
-$typography-line-height-h3-tablet: 26/18;
-$typography-line-height-h3-laptop: 26/18;
-$typography-line-height-h3-desktop: 29/20;
-
-$typography-line-height-h4-mobile: 26/16;
-$typography-line-height-h4-tablet: 26/16;
-$typography-line-height-h4-laptop: 26/16;
-$typography-line-height-h4-desktop: 29/18;
+$typography-font-weight-text: 400!default;
+$typography-font-weight-h: 700!default;
 
 
-$typography-margin-base: .8125rem;
-$typography-margin-h: 0;
+$typography-line-height-text-mobile: 22/16!default;
+$typography-line-height-text-tablet: 22/16!default;
+$typography-line-height-text-laptop: 26/16!default;
+$typography-line-height-text-desktop: 29/19!default;
 
-$typography-margin-h1-mobile: 0px 0px .7692em;
-$typography-margin-h1-tablet: 0px 0px .7692em;
-$typography-margin-h1-laptop: 0px 0px 1em;
-$typography-margin-h1-desktop: 0px 0px 1em;
+$typography-line-height-text-big-mobile: 26/20!default;
+$typography-line-height-text-big-tablet: 32/21!default;
+$typography-line-height-text-big-laptop: 32/21!default;
+$typography-line-height-text-big-desktop: 36/24!default;
 
-$typography-margin-h2-mobile: .952em 0 .2em;
-$typography-margin-h2-tablet: .952em 0 .2em;
-$typography-margin-h2-laptop: 2em 0 .2em;
-$typography-margin-h2-desktop: 2em 0 .2em;
+$typography-line-height-h1-mobile: 30/26!default;
+$typography-line-height-h1-tablet: 32/28!default;
+$typography-line-height-h1-laptop: 32/28!default;
+$typography-line-height-h1-desktop: 36/32!default;
 
-$typography-margin-h3-mobile: 0px 0px 0px;
-$typography-margin-h3-tablet: 0px 0px 0px;
-$typography-margin-h3-laptop: 0px 0px 0px;
-$typography-margin-h3-desktop: 0px 0px 0px;
+$typography-line-height-h2-mobile: 26/21!default;
+$typography-line-height-h2-tablet: 26/21!default;
+$typography-line-height-h2-laptop: 26/21!default;
+$typography-line-height-h2-desktop: 29/24!default;
 
-$typography-margin-h4-mobile: 0px 0px 60px;
-$typography-margin-h4-tablet: 0px 0px 60px;
-$typography-margin-h4-laptop: 0px 0px 60px;
-$typography-margin-h4-desktop: 0px 0px 60px;
+$typography-line-height-h3-mobile: 26/18!default;
+$typography-line-height-h3-tablet: 26/18!default;
+$typography-line-height-h3-laptop: 26/18!default;
+$typography-line-height-h3-desktop: 29/20!default;
+
+$typography-line-height-h4-mobile: 26/16!default;
+$typography-line-height-h4-tablet: 26/16!default;
+$typography-line-height-h4-laptop: 26/16!default;
+$typography-line-height-h4-desktop: 29/18!default;
 
 
-$typography-margin-property-h: margin;
+$typography-margin-base: .8125rem!default;
+$typography-margin-h: 0!default;
+
+$typography-margin-h1-mobile: 0px 0px .7692em!default;
+$typography-margin-h1-tablet: 0px 0px .7692em!default;
+$typography-margin-h1-laptop: 0px 0px 1em!default;
+$typography-margin-h1-desktop: 0px 0px 1em!default;
+
+$typography-margin-h2-mobile: .952em 0 .2em!default;
+$typography-margin-h2-tablet: .952em 0 .2em!default;
+$typography-margin-h2-laptop: 2em 0 .2em!default;
+$typography-margin-h2-desktop: 2em 0 .2em!default;
+
+$typography-margin-h3-mobile: 0px 0px 0px!default;
+$typography-margin-h3-tablet: 0px 0px 0px!default;
+$typography-margin-h3-laptop: 0px 0px 0px!default;
+$typography-margin-h3-desktop: 0px 0px 0px!default;
+
+$typography-margin-h4-mobile: 0px 0px 60px!default;
+$typography-margin-h4-tablet: 0px 0px 60px!default;
+$typography-margin-h4-laptop: 0px 0px 60px!default;
+$typography-margin-h4-desktop: 0px 0px 60px!default;
 
 
-$typography-padding-table: 0;
+$typography-margin-property-h: margin!default;
+
+
+$typography-padding-table: 0!default;

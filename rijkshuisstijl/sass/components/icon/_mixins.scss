@@ -1,5 +1,5 @@
+@import '~microscope-sass/lib/responsive';
 @import 'constants';
-
 
 @mixin ro-icon-before($icon, $color: null, $size: (18px, 22px)) {
   @include ro-icon(before, $icon, $color, $size);
