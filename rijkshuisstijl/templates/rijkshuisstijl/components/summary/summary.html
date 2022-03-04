@@ -21,7 +21,7 @@
                     <h2 class="summary__title">{{ title }}</h2>
                 {% endif %}
 
-                {% if forloop.first and detail_data %}
+                {% if forloop.first and detail_data or forloop.first and toolbar_config %}
                     <a class="toggle" href="#{{ id|slugify }}" data-toggle-target="#{{ id|slugify }}" data-toggle-modifier="open" data-link-mode="prevent">
                         <span class="summary__arrow" />
                     </a>
@@ -35,7 +35,7 @@
             {% endfor %}
         </header>
 
-        {% if detail_data %}
+        {% if detail_data or toolbar_config %}
             <section class="summary__details">
                 {% for title, fields in detail_data %}
                     {% if title %}
@@ -48,6 +48,10 @@
                         {% endfor %}
                     </ul>
                 {% endfor %}
+
+                {% if toolbar_config %}
+                    {% toolbar config=toolbar_config %}
+                {% endif %}
             </section>
         {% endif %}
 

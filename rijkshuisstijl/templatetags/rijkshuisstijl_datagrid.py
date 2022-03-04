@@ -61,7 +61,7 @@ def datagrid(context, **kwargs):
 
     - queryset: Optional, A queryset containing the objects to show.
 
-    - columns: Required, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "width") or a list
+    - columns: Required, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "width", "urlize") or a list
       defining which columns/values to show for each object in object_list or queryset.
 
       - If a dict is passed, each key will represent a field in an object to obtain the data from and each value
@@ -274,7 +274,7 @@ def datagrid(context, **kwargs):
     - url_reverse: Optional, A URL name to reverse using the object's 'pk' attribute as one and only attribute,
       creates hyperlinks in the first cell. If no url_reverse if passed get_absolute_url is tried in order to find
       a url.
-    - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating
+    - urlize: Optional, if True (default) cell values are passed to "urlize" template filter, automatically creating. Passing FQN urls to this filter will cause urlize to be ran twice which lead to unwanted behaviour, set urlize to False on a column basis to prevent this.
       hyperlinks if applicable in every cell.
 
     :param context:
@@ -384,16 +384,20 @@ def datagrid(context, **kwargs):
 
             # Filter one filter at a time.
             for active_filter in active_filters:
-                # Bypass filter if set.
-                if active_filter.get("bypass_filter", False):
-                    continue
-
                 lookup = active_filter.get("lookup")
                 filter_value = active_filter.get("value")
                 filter_type = active_filter.get("type")
 
+                # Bypass filter if set.
+                if active_filter.get("bypass_filter", False):
+                    continue
+
+                # "filter_queryset".
+                elif active_filter.get("filter_queryset"):
+                    filter_kwargs = {lookup: filter_value}
+
                 # Date.
-                if filter_type in ["DateField", "DateTimeField"]:  # TODO: DateTimeField
+                elif filter_type in ["DateField", "DateTimeField"]:  # TODO: DateTimeField
                     dates = re.split(r"[^\d-]+", filter_value)
 
                     if len(dates) == 1:
@@ -541,8 +545,12 @@ def datagrid(context, **kwargs):
                     # Default choices.
                     choices = getattr(filter_field, "choices", [])
 
+                    # Allow a "filter_queryset" to be set.
+                    if "filter_queryset" in filterable_column:
+                        choices = filterable_column.get("filter_queryset")
+
                     # A boolean field gets choices for the boolean values.
-                    if filterable_column.get("type") == "BooleanField":
+                    elif filterable_column.get("type") == "BooleanField":
                         choices = ((True, _("waar")), (False, _("onwaar")))
 
                     # A related field gets choices for all related objects. This can be slow if a lot of objects are found.

@@ -27,9 +27,8 @@
     "debounce": "^1.2.0",
     "flatpickr": "^4.6.3",
     "form-association-polyfill": "^2.0.3",
-    "microscope-sass": "^0.3.2",
-    "object-fit-images": "^3.2.4",
-    "urijs": "^1.19.1"
+    "microscope-sass": "latest",
+    "urijs": "^1.19.9"
   },
   "devDependencies": {
     "@babel/core": "latest",
@@ -49,7 +48,6 @@
     "gulp-postcss": "latest",
     "gulp-sass": "latest",
     "gulp-sourcemaps": "latest",
-    "istanbul-instrumenter-loader": "latest",
     "jsdom": "latest",
     "jsdom-global": "latest",
     "jshint": "latest",
@@ -65,9 +63,9 @@
     "karma-webpack": "latest",
     "mini-css-extract-plugin": "latest",
     "mocha": "latest",
-    "postcss-loader": "^3.0.0",
-    "postcss-object-fit-images": "^1.1.2",
+    "postcss-loader": "latest",
     "postcss-selector-lint": "latest",
+    "sass": "^1.49.9",
     "sass-loader": "latest",
     "simulant": "latest",
     "sinon": "latest",

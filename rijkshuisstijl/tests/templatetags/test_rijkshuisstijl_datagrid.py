@@ -2,9 +2,9 @@ from django.core.paginator import Paginator
 from django.template import Context, Template
 from django.test import RequestFactory, TestCase
 
-from rijkshuisstijl.tests.templatetags.utils import InclusionTagWebTest
-from rijkshuisstijl.tests.models import Author, Book, Publisher
 from rijkshuisstijl.tests.factories import AuthorFactory, BookFactory, PublisherFactory
+from rijkshuisstijl.tests.models import Author, Book, Publisher
+from rijkshuisstijl.tests.templatetags.utils import InclusionTagWebTest
 
 
 class DatagridTestCase(InclusionTagWebTest):
@@ -139,6 +139,25 @@ class DatagridTestCase(InclusionTagWebTest):
         self.assertTextContent(
             ".datagrid__table-body .datagrid__cell:first-child", self.book_2.title, config, data
         )
+
+    def test_filter_filter_queryset(self):
+        config = {
+            "columns": ("title", {"key": "publisher"}),
+            "queryset": Book.objects.all(),
+            "filterable_columns": [{
+                "key": "publisher",
+                "filter_queryset": Publisher.objects.filter(name=self.publisher_1.name),
+            }]
+        }
+        publisher_options = self.select("[name=\"publisher\"] option", config)
+
+        self.assertEqual(len(publisher_options), 2)
+
+        self.assertEqual(publisher_options[0].text, "---------")
+        self.assertEqual(publisher_options[0]["value"], "")
+
+        self.assertEqual(publisher_options[1].text, self.publisher_1.name)
+        self.assertEqual(publisher_options[1]["value"], str(self.publisher_1.pk))
 
     def test_orderable_columns_list(self):
         """
@@ -626,8 +645,8 @@ class DatagridTestCase(InclusionTagWebTest):
             "form": True,
             "form_select": {"name": "My First Select"},
             "form_options": [
-                {"label": "Foo", "value": "Bar",},
-                {"label": "Lorem", "value": "Ipsum",},
+                {"label": "Foo", "value": "Bar", },
+                {"label": "Lorem", "value": "Ipsum", },
             ],
         }
 

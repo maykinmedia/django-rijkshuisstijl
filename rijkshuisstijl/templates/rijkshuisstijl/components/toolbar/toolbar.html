@@ -4,9 +4,9 @@
             {% for item in items %}
                 <li class="toolbar__list-item">
                     {% if item.href %}
-                        {% button_link class='button--hover button--icon-left' config=item.config %}
+                        {% button_link config=item.config %}
                     {% else %}
-                        {% button class='button--hover button--icon-left' config=item.config %}
+                        {% button config=item.config %}
                     {% endif %}
                 </li>
             {% endfor %}

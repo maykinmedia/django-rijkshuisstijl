@@ -24,9 +24,18 @@ class Author(models.Model):
     def get_name_label(self):
         return "Foobar"
 
+    def get_slug_display(self):
+        return f"Fancy slug {self.slug}"
+    get_slug_display.short_description = _("Fancy slug label")
+
     @property
     def label(self):
         return "Author"
+
+    @property
+    def first_name_localized(self):
+        return _(self.first_name)
+    first_name_localized.fget.short_description = _("Translated first name")
 
     class Meta:
         verbose_name = "Book author"
@@ -54,13 +63,26 @@ class Conference(models.Model):
     def full_name(self):
         return f"{self.name} - {self.event_date}"
 
+    @property
+    def full_name_localized(self):
+        return f"{self.name} - {self.event_date} foo"
+    full_name_localized.fget.short_description = _("Localized full name")
+
     def get_days_until(self):
         today = timezone.now().date()
         return self.event_date - today
 
+    def get_days_after(self):
+        today = timezone.now().date()
+        return today - self.event_date
+    get_days_after.short_description = _("Days after conference")
+
 
 class Company(models.Model):
     name = models.CharField(max_length=255, default="Foo Bar Inc")
+
+    def get_absolute_url(self):
+        return "https://example.com"
 
     class Meta:
         verbose_name = "Firm"

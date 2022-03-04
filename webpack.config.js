@@ -56,5 +56,5 @@ module.exports = {
     },
 
     // Use --sourcemap to generate sourcemap.
-    devtool: argv.sourcemap ? 'sourcemap' : false,
+    devtool: argv.sourcemap ? 'source-map' : false,
 };

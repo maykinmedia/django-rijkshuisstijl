@@ -20,7 +20,6 @@
         {% firstof label|linebreaksbr as label %}
     {% endif %}
 
-
     <td class="datagrid__cell{% if cell_input %} datagrid__cell--editable{% endif %}{% if column.key == modifier_column %} datagrid__cell--modifier{% endif %}">
         {% if forloop.counter0 == 0 and formset_form %}
             <input type="hidden" name="{{ formset_form.id.html_name }}" value="{{ formset_form.id.value|unlocalize }}" form="{{ 'datagrid-inline-form-'|add:id }}">
@@ -39,7 +38,7 @@
 
 
         {% else %}
-            {% if urlize %}
+            {% if column.urlize or urlize and not column.urlize == False %}
 
 
                 <span class="datagrid__label{% if formset_form %} toggle{% endif %}"{% if formset_form %} data-toggle-target="#{{ row_id }}" data-toggle-modifier="edit" data-toggle-link-mode="noprevent"{% endif %}>{{ label|rh_urlize }}</span>

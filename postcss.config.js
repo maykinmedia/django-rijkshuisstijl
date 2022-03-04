@@ -32,7 +32,6 @@ module.exports = {
     plugins: [
         require('autoprefixer'),
         require('cssnano'),
-        require('postcss-object-fit-images'),
         require('postcss-selector-lint')(selectorLintConfig),
 
     ]

@@ -60,12 +60,12 @@
   }
 
   &__placeholder {
-    @extend .input::placeholder;
     @include body;
     @include color-background;
     @include ellipsis;
     @include overlay;
     box-sizing: border-box;
+    color: $input-color-placeholder;
     display: flex;
     align-items: center;
     overflow: hidden;

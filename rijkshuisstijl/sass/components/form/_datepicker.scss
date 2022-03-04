@@ -4,7 +4,9 @@
 @import '~microscope-sass/lib/color';
 @import '~microscope-sass/lib/grid';
 @import '~microscope-sass/lib/responsive';
-@import '~microscope-sass/lib/util';
+@import '~microscope-sass/lib/transform';
+@import '~microscope-sass/lib/typography';
+
 
 $flatpickr-day-size: $grid-row-height;
 $flatpickr-padding-h: $flatpickr-day-size;
