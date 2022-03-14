@@ -17,6 +17,7 @@ recursive-include rijkshuisstijl *.js.map
 recursive-include rijkshuisstijl *.eot
 recursive-include rijkshuisstijl *.ttf
 recursive-include rijkshuisstijl *.woff
+recursive-include rijkshuisstijl *.woff2
 
 # Assets
 recursive-include rijkshuisstijl *.txt
