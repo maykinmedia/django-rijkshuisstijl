@@ -112,6 +112,10 @@
   }
 
   @each $color-name, $color in $colors {
+    &__row--#{$color-name}:not(:hover) {
+      background-color: rgba($color, 0.2);
+    }
+
     &__row--#{$color-name} &__cell:first-child:before {
       @include overlay;
       content: '';
@@ -119,7 +123,7 @@
       background-color: $color;
     }
 
-    &__row--#{$color-name} &__cell--modifier {
+    &__row--#{$color-name} &__cell--modifier &__label {
       color: $color;
     }
   }
