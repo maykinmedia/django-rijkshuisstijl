@@ -3,7 +3,7 @@
 
 
 @media print {
-  * {
+  *:not([class^=fa ]) {
     font-family: "RO Serif" !important;
   }
 
