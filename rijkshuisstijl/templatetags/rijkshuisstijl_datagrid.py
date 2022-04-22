@@ -393,7 +393,7 @@ def datagrid(context, **kwargs):
                     continue
 
                 # "filter_queryset".
-                elif active_filter.get("filter_queryset"):
+                elif active_filter.get("filter_queryset") or active_filter.get('choices'):
                     filter_kwargs = {lookup: filter_value}
 
                 # Date.
