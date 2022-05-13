@@ -540,7 +540,7 @@ def datagrid(context, **kwargs):
                 filterable_column["type"] = type(filter_field).__name__
 
             # If not choices have been set, find them based on the field.
-            if not "choices" in filterable_column:
+            if not "choices" in filterable_column or "is_relation" in filterable_column:
                 try:
                     # Default choices.
                     choices = getattr(filter_field, "choices", [])
