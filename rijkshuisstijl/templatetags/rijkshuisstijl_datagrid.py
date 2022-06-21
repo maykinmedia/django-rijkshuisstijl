@@ -61,8 +61,8 @@ def datagrid(context, **kwargs):
 
     - queryset: Optional, A queryset containing the objects to show.
 
-    - columns: Required, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "width", "urlize") or a list
-      defining which columns/values to show for each object in object_list or queryset.
+    - columns: Required, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "filter_label", "width",
+      "urlize") or a list defining which columns/values to show for each object in object_list or queryset.
 
       - If a dict is passed, each key will represent a field in an object to obtain the data from and each value
         will represent the label to use for the column heading.
@@ -76,6 +76,7 @@ def datagrid(context, **kwargs):
              Note: this will only affect the value of export_input_name, actual export relies on custom implementation.
           - "label" key can be supplied to set the column heading. if not set and a QuerySet is passed, an attempt will
              be made to resolve the verbose_name from the model as column heading.
+          - "filter_label" key can be passed to set a custom placeholder label on the filter.
           - "width" can be set to a CSS value valid for width.
         Example: [{"key": "author", "lookup": "author__first_name", "label": "Written by", "width: "10%"}]
 
@@ -92,8 +93,8 @@ def datagrid(context, **kwargs):
     Pagination provided by the datagrid itself can be used in combination with filtering. The queryset's model is
     inspected to determine the type of the filters and optionally the choices.
 
-    - filterable_columns: Optional, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "width") or a
-      list defining which columns should be filterable. This may be configured equally to "columns".
+    - filterable_columns: Optional, a dict ("key", "label"), a list_of_dict ("key", "lookup", "label", "filter_label",
+      "width") or a list defining which columns should be filterable. This may be configured equally to "columns".
 
     - filter_action: Optional, specifies the url to submit filter actions to, this can be omitted in most cases.
 
@@ -482,7 +483,7 @@ def datagrid(context, **kwargs):
         for filterable_column in filterable_columns:
 
             #
-            # Set the column key and the "lookup", this detirmines the actual value to filter against.
+            # Set the column key and the "lookup", this determines the actual value to filter against.
             # This QuerySet is filtered in get_filtered_queryset()
             #
 
@@ -491,6 +492,19 @@ def datagrid(context, **kwargs):
             filter_field_lookup = filterable_column.get(
                 "filter_lookup", filterable_column.get("lookup", "")
             )
+
+            try:
+                column = [column for column in get_columns() if column['key'] == filter_field_key][0]
+            except:
+                column = {}
+
+            # Set label.
+            filter_field_filter_label = filterable_column.get("filter_label")
+            column_filter_label = column.get("filter_label")
+            column_label = column.get("label")
+            filter_field_label = filterable_column.get("label")
+            filterable_column[
+                "filter_label"] = filter_field_filter_label or column_filter_label or filter_field_label or column_label
 
             # Default the lookup to filter_field_key.
             # This is used in get_filtered_queryset().

@@ -88,7 +88,7 @@ class DatagridTestCase(InclusionTagWebTest):
 
     def test_filter(self):
         config = {
-            "columns": ("title", "publisher"),
+            "columns": ({"key": "title", "filter_label": "search title"}, "publisher"),
             "queryset": Book.objects.all(),
             "id": "my-first-datagrid",
             "filterable_columns": ["title"],
@@ -104,7 +104,7 @@ class DatagridTestCase(InclusionTagWebTest):
         self.assertEqual(filter_input.get("form"), "datagrid-filter-form-my-first-datagrid")
         self.assertEqual(filter_input.get("name"), "title")
         self.assertEqual(filter_input.get("value"), "m")
-        self.assertEqual(filter_input.get("placeholder"), "title")
+        self.assertEqual(filter_input.get("placeholder"), "search title")
         self.assertEqual(filter_input.get("type"), "search")
 
         html = self.render(config, data)
