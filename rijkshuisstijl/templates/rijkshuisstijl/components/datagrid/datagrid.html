@@ -83,13 +83,27 @@
                             {% endfor %}
 
 
-                            <ul class="toolbar__list">
-                                {% for export_button in export_buttons %}
-                                    <li class="toolbar__list-item">
-                                        {% button config=export_button %}
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                            {% if export_disclaimer %}
+                              <div class="toolbar__container">
+                                  {% textbox class='textbox--compact' text=export_disclaimer status='info' %}
+
+                                  <ul class="toolbar__list">
+                                      {% for export_button in export_buttons %}
+                                          <li class="toolbar__list-item">
+                                              {% button config=export_button %}
+                                          </li>
+                                      {% endfor %}
+                                  </ul>
+                              </div>
+                            {% else %}
+                                <ul class="toolbar__list">
+                                    {% for export_button in export_buttons %}
+                                        <li class="toolbar__list-item">
+                                            {% button config=export_button %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                         {% endif %}
 
                         {% if formset and toolbar_position in 'top,both' %}
