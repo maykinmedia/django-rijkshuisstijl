@@ -30,7 +30,7 @@ $input-background-file-gray: url('../components/form/file-gray.svg') no-repeat c
 $input-background-search: url('../components/form/search.svg') no-repeat center right #{($grid-row-height - $input-size-icon) / 2} / $input-size-icon!default;
 $input-background-search-gray: url('../components/form/search-gray.svg') no-repeat center right #{($grid-row-height - $input-size-icon) / 2} / $input-size-icon!default;
 $input-background-input: linear-gradient(transparent)!default;
-$input-color-placeholder: shade('4')!default;
+$input-color-placeholder: #767676;
 $input-height-small: $grid-margin-4!default;
 $input-padding-h: 12px!default;
 
