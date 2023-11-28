@@ -127,6 +127,7 @@ def header(**kwargs):
 
         - class: Optional, a string with additional CSS classes.
         - hide_mobile_menu_button: Optional, a bool, if True, hides the toggle menu button.
+        - logo_alt: Optional, a string to containing the logo alt text.
         - logo_src: Optional, a string to containing the logo url.
         - logo_mobile_src: Optional, a string to containing the mobile logo url.
 
@@ -136,6 +137,7 @@ def header(**kwargs):
 
     # kwargs
     kwargs["class"] = kwargs.get("class", None)
+    kwargs["logo_alt"] = kwargs.get("logo_alt")
     kwargs["logo_src"] = kwargs.get(
         "logo_src", static("rijkshuisstijl/components/logo/logo-tablet.svg")
     )
