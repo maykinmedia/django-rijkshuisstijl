@@ -120,6 +120,7 @@ class DateInput {
         this.updateClassName();
         this.updatePlaceholder();
         const flatPicker = flatpickr(this.node, {
+            allowInput: true,
             altInput: true,
             altInputClass: this.node.className,
             altFormat: this.getDateFormat(),
