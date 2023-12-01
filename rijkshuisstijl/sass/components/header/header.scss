@@ -54,7 +54,11 @@
     right: 0;
   }
 
-  .logo {
+  &--version-legacy .logo {
     @include responsive(margin-left, -20px, 0.9 * -25px, -25px);
+  }
+
+  &--version-2 .logo {
+    @include responsive(margin-left, $header-height-mobile/125px * -50px, $header-height-tablet/125px * -50px);
   }
 }
