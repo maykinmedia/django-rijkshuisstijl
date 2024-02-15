@@ -288,6 +288,11 @@ def _field(bound_field, **extra_attrs):
         if not widget:
             return
 
+        # Errors
+        if hasattr(bound_field, "errors") and bool(bound_field.errors):
+            widget.attrs["aria-invalid"] = True
+            widget.attrs["aria-errormessage"] = "{}_errors".format(bound_field.auto_id)
+
         # Copy mark_required.
         try:
             mark_required = getattr(bound_field.field, "mark_required", False)
