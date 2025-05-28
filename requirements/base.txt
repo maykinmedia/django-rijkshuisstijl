@@ -1,8 +1,7 @@
-Django==2.2.13
-django-sitetree==1.13.1
+django-sitetree
 
 beautifulsoup4
 lxml
 
-pytz==2019.3
-sqlparse==0.3.0
+pytz
+sqlparse
