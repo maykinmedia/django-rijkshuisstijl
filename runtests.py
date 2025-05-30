@@ -40,6 +40,8 @@ if not settings.configured:
                 },
             },
         ],
+        DEFAULT_AUTO_FIELD="django.db.models.AutoField",
+        SECRET_KEY="SECRET_KEY",
     )
 
 
