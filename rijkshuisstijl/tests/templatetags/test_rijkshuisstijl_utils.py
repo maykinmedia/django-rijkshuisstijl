@@ -1,6 +1,6 @@
 from unittest import skip
 from django.test import TestCase
-from django.utils.datetime_safe import date, datetime
+from datetime import datetime, date
 
 from rijkshuisstijl.templatetags.rijkshuisstijl_utils import (
     format_value,

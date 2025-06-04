@@ -1,0 +1,9 @@
+[tool.bumpversion]
+current_version = "0.3.0"
+
+files = [
+    {filename = "setup.cfg"},
+    {filename = "README.rst"},
+    {filename = "package.json"},
+    {filename = "package-lock.json"},
+]

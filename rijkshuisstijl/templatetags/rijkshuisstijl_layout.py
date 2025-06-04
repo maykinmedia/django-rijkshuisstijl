@@ -127,8 +127,13 @@ def header(**kwargs):
 
         - class: Optional, a string with additional CSS classes.
         - hide_mobile_menu_button: Optional, a bool, if True, hides the toggle menu button.
+        - logo_alt: Optional, a string to containing the logo alt text.
         - logo_src: Optional, a string to containing the logo url.
         - logo_mobile_src: Optional, a string to containing the mobile logo url.
+        - version: Optional, a version specifier, defaults to "2" to support newer logo implementations.
+            "legacy": For backwards compatibility only, don't use on newer projects.
+            "2": Suits requirements for using "Logo achtergrond wit - Nederlands – Logo externe samenwerking" logo's
+                 from rijkshuisstijl.nl. Convert EPS to SVG for correct file for both mobile and desktop devices.
 
     :param kwargs:
     """
@@ -136,13 +141,12 @@ def header(**kwargs):
 
     # kwargs
     kwargs["class"] = kwargs.get("class", None)
+    kwargs["logo_alt"] = kwargs.get("logo_alt")
     kwargs["logo_src"] = kwargs.get(
         "logo_src", static("rijkshuisstijl/components/logo/logo-tablet.svg")
     )
-    kwargs["logo_mobile_src"] = kwargs.get(
-        "logo_mobile_src", static("rijkshuisstijl/components/logo/logo-mobile.svg")
-    )
     kwargs["hide_mobile_menu_button"] = kwargs.get("hide_mobile_menu_button", False)
+    kwargs["version"] = kwargs.get("version", "2")
 
     kwargs["config"] = kwargs
     return kwargs
@@ -369,7 +373,11 @@ def logo(**kwargs):
 
         - alt: Required, The alt text for the image.
         - src: Required, The url to the image (see mobile_src).
-        - mobile_src: Required, Specifies an image url specific to mobile screen sizes.
+        - mobile_src: Optional, Specifies an image url specific to mobile screen sizes.
+        - version: Optional, a version specifier, defaults to "2" to support newer logo implementations.
+            "legacy": For backwards compatibility only, don't use on newer projects.
+            "2": Suits requirements for using "Logo achtergrond wit - Nederlands – Logo externe samenwerking" logo's
+                 from rijkshuisstijl.nl. Convert EPS to SVG for correct file for both mobile and desktop devices.
 
         - class: Optional, a string with additional CSS classes.
 
@@ -381,9 +389,7 @@ def logo(**kwargs):
     # kwargs
     kwargs["alt"] = kwargs.get("alt", _("Logo Rijksoverheid"))
     kwargs["src"] = kwargs.get("src", static("rijkshuisstijl/components/logo/logo-tablet.svg"))
-    kwargs["mobile_src"] = kwargs.get(
-        "mobile_src", static("rijkshuisstijl/components/logo/logo-mobile.svg")
-    )
+    kwargs["version"] = kwargs.get("version", "2")
 
     kwargs["config"] = kwargs
     return kwargs

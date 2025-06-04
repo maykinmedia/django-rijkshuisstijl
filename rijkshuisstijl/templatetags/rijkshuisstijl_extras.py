@@ -301,19 +301,32 @@ def key_value(component, **kwargs):
         key_value_id = get_key_value_id()
         obj = config.get("object")
 
-        fields = [
-            {
+        rijkshuisstijl_fields = []
+
+        for field in fields:
+            field_name = get_key_value_key(field)
+
+            field_data = {
                 "id": f"{key_value_id}-{get_key_value_key(field)}",
                 "full_width_field": get_key_value_key(field) in get_full_width_fields(),
-                "key": get_key_value_key(field),
+                "key": field_name,
                 "label": get_field_label(obj, get_key_value_label(fields, field)),
                 "value": format_value(obj, get_key_value_key(field)),
             }
-            for field in fields
-        ]
+
+            if not form:
+                rijkshuisstijl_fields.append(field_data)
+                continue
+
+            form_field = form.fields.get(field_name)
+
+            if form_field and form_field.label:
+                field_data["label"] = form_field.label
+
+            rijkshuisstijl_fields.append(field_data)
 
         if form:
-            for field in fields:
+            for field in rijkshuisstijl_fields:
                 key = get_key_value_key(field)
 
                 if key in form.fields:
@@ -321,7 +334,7 @@ def key_value(component, **kwargs):
                     field["edit"] = not get_field_toggle_edit() or key in form.errors
                     field["toggle"] = get_field_toggle_edit()
 
-        return fields
+        return rijkshuisstijl_fields
 
     def get_key_value_id():
         if _cache.get("get_key_value_id"):

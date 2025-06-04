@@ -264,8 +264,6 @@ class DeleteMixin:
     title = _("Weet u het zeker?")
     template_name = "rijkshuisstijl/views/generic/delete.html"
 
-    def get_form(self):
-        return Form()
 
     def get_actions(self):
         return [
@@ -299,6 +297,9 @@ class DeleteMultipleView(DeleteMixin, FormMixin, DeletionMixin, DjListView):
     """
 
     pk_url_kwarg = "pk"
+
+    def get_form(self):
+        return Form()
 
     def get_form_config(self):
         form_config = super().get_form_config()
