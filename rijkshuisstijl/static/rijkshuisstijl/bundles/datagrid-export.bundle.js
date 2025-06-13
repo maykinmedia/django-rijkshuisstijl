@@ -1,1 +1,33 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[9363],{3814:function(e,t,n){n.r(t);var r=n(9879),i=n.n(r),o=n(3644),a=n(6307),u=n(5210);function c(e){return function(e){if(Array.isArray(e))return d(e)}(e)||function(e){if("undefined"!=typeof Symbol&&null!=e[Symbol.iterator]||null!=e["@@iterator"])return Array.from(e)}(e)||function(e,t){if(e){if("string"==typeof e)return d(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?d(e,t):void 0}}(e)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function d(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}function l(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}var f=function(){function e(t){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),this.node=t,this.bindEvents()}var t,n;return t=e,(n=[{key:"bindEvents",value:function(){this.node.addEventListener("click",this.update.bind(this))}},{key:"getDataGrid",value:function(){for(var e=this.node,t=0;!e.classList.contains(o.bm);)if(t++,e=e.parentNode,t>100)throw"MAX_ITERATION_COUNT (".concat(100,") reached while trying to find data grid element.");return e}},{key:"update",value:function(e){var t=this.getDataGrid(),n=c(i().getChildBEMNodes(t,o.bm,o.Yi,o.fy)).map((function(e){return i().getChildBEMNode(e,a.f3)}));if(!n.find((function(e){return e.checked}))){e.preventDefault();var r=i().getChildBEMNode(t,o.bm,o.Od,o.NC);i().getChildBEMNode(t,u.t0).checked=!0,n.forEach((function(e){e.checked=!0}));var d=document.createElement("input");d.name=this.node.name,d.value=this.node.value,d.type="hidden",r.appendChild(d),r.submit()}}}])&&l(t.prototype,n),Object.defineProperty(t,"prototype",{writable:!1}),e}();c(o.Np).forEach((function(e){return new f(e)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["datagrid-export"],{
+
+/***/ "./rijkshuisstijl/js/components/datagrid/datagrid-export.js":
+/*!******************************************************************!*\
+  !*** ./rijkshuisstijl/js/components/datagrid/datagrid-export.js ***!
+  \******************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/datagrid/constants.js");
+/* harmony import */ var _form_constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../form/constants */ "./rijkshuisstijl/js/components/form/constants.js");
+/* harmony import */ var _toggle_constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../toggle/constants */ "./rijkshuisstijl/js/components/toggle/constants.js");
+const MAX_ITERATION_COUNT=100;/**
+ * Makes sure data grid export buttons default to current page selection.
+ */class DataGridExportHelper{/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */constructor(node){/** @type {HTMLElement} */this.node=node;this.bindEvents();}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.node.addEventListener('click',this.update.bind(this));}getDataGrid(){let node=this.node;let i=0;while(!node.classList.contains(_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_DATAGRID)){i++;node=node.parentNode;if(i>MAX_ITERATION_COUNT){throw`MAX_ITERATION_COUNT (${MAX_ITERATION_COUNT}) reached while trying to find data grid element.`;}}return node;}/**
+     * Checks all checkboxes in the data grid if none has been checked.
+     * @param {MouseEvent} e
+     */update(e){const dataGrid=this.getDataGrid();const checkboxCells=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNodes(dataGrid,_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_DATAGRID,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_CELL,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_CHECKBOX);const checkboxesInputs=[...checkboxCells].map(node=>bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNode(node,_form_constants__WEBPACK_IMPORTED_MODULE_2__.BLOCK_INPUT));const selectedCheckboxInputs=checkboxesInputs.find(node=>node.checked);// Only check checkboxes if none hase been already checked.
+if(!selectedCheckboxInputs){e.preventDefault();const form=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNode(dataGrid,_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_DATAGRID,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_FORM,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_ACTION);const selectAll=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNode(dataGrid,_toggle_constants__WEBPACK_IMPORTED_MODULE_3__.BLOCK_SELECT_ALL);// Select all checkboxes, including the "select all" toggle.
+selectAll.checked=true;checkboxesInputs.forEach(node=>{node.checked=true;});const hiddenInput=document.createElement('input');hiddenInput.name=this.node.name;hiddenInput.value=this.node.value;hiddenInput.type='hidden';form.appendChild(hiddenInput);form.submit();}}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_1__.DATAGRID_EXPORTS].forEach(node=>new DataGridExportHelper(node));
+
+/***/ })
+
+}]);

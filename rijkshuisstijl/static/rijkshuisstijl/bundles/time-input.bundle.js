@@ -1,1 +1,34 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[7377],{4978:function(e,t,r){r.r(t);var n=r(8527),o=r(6307);function a(e,t){(null==t||t>e.length)&&(t=e.length);for(var r=0,n=new Array(t);r<t;r++)n[r]=e[r];return n}function i(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}var u,l=function(){function e(t){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),this.node=t,this.update()}var t,r;return t=e,(r=[{key:"getPlaceholderFormat",value:function(){return this.isTime()?"00:00":""}},{key:"isTime",value:function(){return"time"===this.node.type}},{key:"updatePlaceholder",value:function(){if(!this.node.placeholder){var e=this.getPlaceholderFormat();this.node.placeholder=e}}},{key:"update",value:function(){this.updatePlaceholder(),(0,n.Z)(this.node,{enableTime:!0,noCalendar:!0,time_24hr:!0})}}])&&i(t.prototype,r),Object.defineProperty(t,"prototype",{writable:!1}),e}();(u=o.i7,function(e){if(Array.isArray(e))return a(e)}(u)||function(e){if("undefined"!=typeof Symbol&&null!=e[Symbol.iterator]||null!=e["@@iterator"])return Array.from(e)}(u)||function(e,t){if(e){if("string"==typeof e)return a(e,t);var r=Object.prototype.toString.call(e).slice(8,-1);return"Object"===r&&e.constructor&&(r=e.constructor.name),"Map"===r||"Set"===r?Array.from(e):"Arguments"===r||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?a(e,t):void 0}}(u)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()).forEach((function(e){return new l(e)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["time-input"],{
+
+/***/ "./rijkshuisstijl/js/components/form/time-input.js":
+/*!*********************************************************!*\
+  !*** ./rijkshuisstijl/js/components/form/time-input.js ***!
+  \*********************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var flatpickr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/form/constants.js");
+/**
+ * Adds a timepicker to time inputs.
+ * @class
+ */class TimeInput{/**
+     * Constructor method.
+     * @param {HTMLInputElement} node
+     */constructor(node){/** @type {HTMLInputElement} */this.node=node;this.update();}/**
+     * Returns the placeholder string to use.
+     * @return {string}
+     */getPlaceholderFormat(){return this.isTime()?'00:00':'';}/**
+     * Returns whether this.node is a time input.
+     * @return bBoolean}
+     */isTime(){return this.node.type==='time';}/**
+     * Updates the placholder (if any) with the format returned by this.getPlaceholderFormat().
+     */updatePlaceholder(){if(!this.node.placeholder){const placeholder=this.getPlaceholderFormat();this.node.placeholder=placeholder;}}/**
+     * Adds the timepicker.
+     */update(){this.updatePlaceholder();(0,flatpickr__WEBPACK_IMPORTED_MODULE_0__["default"])(this.node,{enableTime:true,noCalendar:true,time_24hr:true});}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_1__.TIME_INPUTS].forEach(node=>new TimeInput(node));
+
+/***/ })
+
+}]);

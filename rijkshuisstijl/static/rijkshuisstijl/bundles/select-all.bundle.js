@@ -1,1 +1,42 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[1286],{136:function(t,e,n){n.r(e),n.d(e,{SelectAll:function(){return u}});var r=n(5210);function o(t){return function(t){if(Array.isArray(t))return i(t)}(t)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(t)||function(t,e){if(t){if("string"==typeof t)return i(t,e);var n=Object.prototype.toString.call(t).slice(8,-1);return"Object"===n&&t.constructor&&(n=t.constructor.name),"Map"===n||"Set"===n?Array.from(t):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?i(t,e):void 0}}(t)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function i(t,e){(null==e||e>t.length)&&(e=t.length);for(var n=0,r=new Array(e);n<e;n++)r[n]=t[n];return r}function a(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}var u=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=e,this.bindEvents()}var e,n;return e=t,n=[{key:"bindEvents",value:function(){this.node.addEventListener("click",this.onClick.bind(this))}},{key:"onClick",value:function(t){t.stopPropagation(),t.preventDefault(),setTimeout(this.toggle.bind(this))}},{key:"toggle",value:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:!this.getState();this.getTargets().forEach((function(e){var n=document.createEvent("Event");n.initEvent("change",!0,!0),setTimeout((function(){return e.dispatchEvent(n)})),e.checked=t})),this.node.checked=t}},{key:"getState",value:function(){return this.node.checked}},{key:"getTargets",value:function(){var t=[];return this.node.dataset.selectAll.split(",").filter((function(t){return t.length})).forEach((function(e){return t=[].concat(o(t),o(document.querySelectorAll(e)))})),t}}],n&&a(e.prototype,n),Object.defineProperty(e,"prototype",{writable:!1}),t}();o(r.Ep).forEach((function(t){return new u(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["select-all"],{
+
+/***/ "./rijkshuisstijl/js/components/toggle/select-all.js":
+/*!***********************************************************!*\
+  !*** ./rijkshuisstijl/js/components/toggle/select-all.js ***!
+  \***********************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SelectAll: function() { return /* binding */ SelectAll; }
+/* harmony export */ });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/toggle/constants.js");
+/**
+ * Class for generic select all checkboxes.
+ * Toggle should have BLOCK_SELECT_ALL present in classList for detection.
+ * Toggle should have data-select-all set to queryselector for target(s).
+ * @class
+ */class SelectAll{/**
+     * Constructor method.
+     * @param {HTMLInputElement} node
+     */constructor(node){/** @type {HTMLInputElement} */this.node=node;this.bindEvents();}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.node.addEventListener('click',this.onClick.bind(this));}/**
+     * Callback for this.node click.
+     * @param {Event} e
+     */onClick(e){e.stopPropagation();e.preventDefault();setTimeout(this.toggle.bind(this));}/**
+     * Performs toggle.
+     * @param {boolean} [exp] If passed, add/removes this.toggleModifier based on exp.
+     */toggle(){let exp=arguments.length>0&&arguments[0]!==undefined?arguments[0]:!this.getState();this.getTargets().forEach(target=>{let event=document.createEvent('Event');event.initEvent('change',true,true);setTimeout(()=>target.dispatchEvent(event));target.checked=exp;});this.node.checked=exp;}/**
+     * Returns the checkbox state.
+     * @returns {boolean} Boolean
+     */getState(){return this.node.checked;}/**
+     * Returns all the targets for this.node.
+     * @returns {*}
+     */getTargets(){let targets=[];let selector=this.node.dataset.selectAll;selector.split(',').filter(selector=>selector.length).forEach(selector=>targets=[...targets,...document.querySelectorAll(selector)]);return targets;}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_0__.SELECT_ALLS].forEach(node=>new SelectAll(node));
+
+/***/ })
+
+}]);

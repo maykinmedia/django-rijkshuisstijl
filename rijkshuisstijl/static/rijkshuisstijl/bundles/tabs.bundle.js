@@ -1,1 +1,54 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[7520],{7926:function(t,e,n){n.r(e);var i=n(9879),r=n.n(i),a=n(6194);function o(t){return function(t){if(Array.isArray(t))return u(t)}(t)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(t)||s(t)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function s(t,e){if(t){if("string"==typeof t)return u(t,e);var n=Object.prototype.toString.call(t).slice(8,-1);return"Object"===n&&t.constructor&&(n=t.constructor.name),"Map"===n||"Set"===n?Array.from(t):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?u(t,e):void 0}}function u(t,e){(null==e||e>t.length)&&(e=t.length);for(var n=0,i=new Array(e);n<e;n++)i[n]=t[n];return i}function c(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var l=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=e,this.listItems=r().getChildBEMNodes(this.node,a.x6,a.pL),this.links=r().getChildBEMNodes(this.node,a.x6,a.uJ),this.track=r().getChildBEMNode(this.node,a.x6,a.Xv),this.tabs=r().getChildBEMNodes(this.node,a.x6,a.x),this.bindEvents(),this.activateHashLinkTab()||this.activateCurrentTab()}var e,n;return e=t,(n=[{key:"bindEvents",value:function(){var t=this;o(this.links).forEach((function(e){return t.bindLink(e)})),window.addEventListener("popstate",this.activateHashLinkTab.bind(this)),window.addEventListener("resize",this.activateCurrentTab.bind(this))}},{key:"bindLink",value:function(t){t.addEventListener("click",this.onClick.bind(this))}},{key:"activateCurrentTab",value:function(){var t=this.getActiveTabId();t&&this.activateTab(t)}},{key:"activateHashLinkTab",value:function(){var t=window.location.hash.replace("#",""),e=document.getElementById(t);if(e&&e.classList.contains(r().getBEMClassName(a.x6,a.x)))return window.addEventListener("scroll",(function t(){window.scrollTo(0,0),window.removeEventListener("scroll",t)})),this.activateTab(t),!0}},{key:"getActiveTabId",value:function(){var t=this.node.dataset.tabId;if(t)return t;try{return this.tabs[0].id}catch(t){}}},{key:"onClick",value:function(t){t.preventDefault();var e=t.target,n=e.attributes.href.value.replace("#","");history.pushState({},document.title,e),this.activateTab(n)}},{key:"activateTab",value:function(t){var e=o(this.links).find((function(e){return e.attributes.href.value==="#"+t})),n=this.getListItemByLink(e),i=o(this.tabs).findIndex((function(e){return e.id===t})),u=this.tabs[i];[].concat(o(this.listItems),o(this.tabs)).forEach((function(t){return r().removeModifier(t,a.Ol)})),[n,u].forEach((function(t){return r().addModifier(t,a.Ol)})),this.node.dataset.tabId=t;try{Object.entries(window._leaflet_events).forEach((function(t){var e,n,i=(n=2,function(t){if(Array.isArray(t))return t}(e=t)||function(t,e){var n=null==t?null:"undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];if(null!=n){var i,r,a=[],o=!0,s=!1;try{for(n=n.call(t);!(o=(i=n.next()).done)&&(a.push(i.value),!e||a.length!==e);o=!0);}catch(t){s=!0,r=t}finally{try{o||null==n.return||n.return()}finally{if(s)throw r}}return a}}(e,n)||s(e,n)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()),r=i[0],a=i[1];r.indexOf("resize")>-1&&a()}))}catch(t){}}},{key:"getListItemByLink",value:function(t){for(var e=r().getBEMClassName(a.x6,a.pL);!t.classList.contains(e);)t=t.parentElement;return t}}])&&c(e.prototype,n),Object.defineProperty(e,"prototype",{writable:!1}),t}();o(a.G7).forEach((function(t){return new l(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["tabs"],{
+
+/***/ "./rijkshuisstijl/js/components/tabs/tabs.js":
+/*!***************************************************!*\
+  !*** ./rijkshuisstijl/js/components/tabs/tabs.js ***!
+  \***************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/tabs/constants.js");
+/**
+ * Contains logic for tabs.
+ * @class
+ */class Tabs{/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */constructor(node){/** @type {HTMLElement} */this.node=node;/** @type {NodeList} */this.listItems=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNodes(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_TABS,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_LIST_ITEM);/** @type {NodeList} */this.links=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNodes(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_TABS,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_LINK);/** @type {NodeList} */this.track=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNode(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_TABS,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_TRACK);/** @type {NodeList} */this.tabs=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNodes(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_TABS,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_TAB);this.bindEvents();if(!this.activateHashLinkTab()){this.activateCurrentTab();}}/**
+     * Binds events to callbacks.
+     */bindEvents(){[...this.links].forEach(link=>this.bindLink(link));window.addEventListener('popstate',this.activateHashLinkTab.bind(this));window.addEventListener('resize',this.activateCurrentTab.bind(this));}/**
+     * Binds link click to callback.
+     * @param {HTMLAnchorElement} link
+     */bindLink(link){link.addEventListener('click',this.onClick.bind(this));}/**
+     * (Re)activates the active tab, or the first tab.
+     */activateCurrentTab(){let id=this.getActiveTabId();if(id){this.activateTab(id);}}/**
+     * (Re)activates the active tab, or the first tab.
+     */activateHashLinkTab(){const id=window.location.hash.replace('#','');const node=document.getElementById(id);if(node&&node.classList.contains(bem_js__WEBPACK_IMPORTED_MODULE_0___default().getBEMClassName(_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_TABS,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_TAB))){const listener=()=>{window.scrollTo(0,0);window.removeEventListener('scroll',listener);};window.addEventListener('scroll',listener);this.activateTab(id);return true;}}/**
+     * Returns the active tab id (this.node.dataset.tabId) or the first tab's id.
+     * @returns {(string|void)}
+     */getActiveTabId(){let tabId=this.node.dataset.tabId;if(tabId){return tabId;}else{try{return this.tabs[0].id;}catch(e){}}}/**
+     * Handles link click event.
+     * @param {MouseEvent} e
+     */onClick(e){e.preventDefault();let link=e.target;let id=link.attributes.href.value.replace('#','');history.pushState({},document.title,link);this.activateTab(id);}/**
+     * Activates tab with id.
+     * @param {string} id The id of the tab.
+     * @return {HTMLElement}
+     */activateTab(id){let link=[...this.links].find(link=>link.attributes.href.value==='#'+id);let listItem=this.getListItemByLink(link);let tabIndex=[...this.tabs].findIndex(tab=>tab.id===id);let tab=this.tabs[tabIndex];[...this.listItems,...this.tabs].forEach(node=>bem_js__WEBPACK_IMPORTED_MODULE_0___default().removeModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_ACTIVE));[listItem,tab].forEach(node=>bem_js__WEBPACK_IMPORTED_MODULE_0___default().addModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_ACTIVE));this.node.dataset.tabId=id;// Support leaflet.
+//
+// Leaflet won't render correctly if not visible. Therefore, we need to invalidate it's size to re-render it.
+// We don't have a direct reference to the leaflet instances so we try to find the callbacks in
+// window._leaflet_events, then call it when activating the tab (if the even name matches resize).
+//
+// FIXME: There is probably a better way to do this.
+try{Object.entries(window._leaflet_events).forEach(_ref=>{let[event_name,callback]=_ref;if(event_name.indexOf('resize')>-1){callback();}});}catch(e){}}/**
+     * Finds the list item containing link up the DOM tree.
+     * @param {HTMLAnchorElement} link
+     */getListItemByLink(link){let listItemClassName=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getBEMClassName(_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_TABS,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_LIST_ITEM);let i=0;while(!link.classList.contains(listItemClassName)){link=link.parentElement;if(i>100){console.error('Failed to find list item');break;}}return link;}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_1__.TABS].forEach(tabs=>new Tabs(tabs));
+
+/***/ })
+
+}]);

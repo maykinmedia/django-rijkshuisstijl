@@ -1,1 +1,35 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[9697],{4140:function(t,n,e){e.r(n),e.d(n,{FakeLink:function(){return c}});var r=e(9879),i=e.n(r),o=e(9385);function a(t,n){(null==n||n>t.length)&&(n=t.length);for(var e=0,r=new Array(n);e<n;e++)r[e]=t[e];return r}function s(t,n){for(var e=0;e<n.length;e++){var r=n[e];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}var u,c=function(){function t(n){!function(t,n){if(!(t instanceof n))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=n,this.href=this.node.dataset.href,this.bindEvents()}var n,e;return n=t,(e=[{key:"bindEvents",value:function(){i().hasModifier(this.node,o.qT)?this.node.addEventListener("dblclick",this.navigate.bind(this)):this.node.addEventListener("click",this.navigate.bind(this))}},{key:"navigate",value:function(){window.location=this.href}}])&&s(n.prototype,e),Object.defineProperty(n,"prototype",{writable:!1}),t}();(u=o.wm,function(t){if(Array.isArray(t))return a(t)}(u)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(u)||function(t,n){if(t){if("string"==typeof t)return a(t,n);var e=Object.prototype.toString.call(t).slice(8,-1);return"Object"===e&&t.constructor&&(e=t.constructor.name),"Map"===e||"Set"===e?Array.from(t):"Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e)?a(t,n):void 0}}(u)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()).forEach((function(t){return new c(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["fake-link"],{
+
+/***/ "./rijkshuisstijl/js/components/fake-link/fake-link.js":
+/*!*************************************************************!*\
+  !*** ./rijkshuisstijl/js/components/fake-link/fake-link.js ***!
+  \*************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FakeLink: function() { return /* binding */ FakeLink; }
+/* harmony export */ });
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/fake-link/constants.js");
+/**
+ * Class for fake (simulated) links.
+ *
+ * Toggle should have BLOCK_FAKE_LINK present in classList for detection.
+ * Toggle should have data-href set to target location.
+ * @class
+ */class FakeLink{/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */constructor(node){/** @type {HTMLElement} */this.node=node;/** @type {string} */this.href=this.node.dataset.href;this.bindEvents();}/**
+     * Binds events to callbacks.
+     */bindEvents(){if(bem_js__WEBPACK_IMPORTED_MODULE_0___default().hasModifier(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_DOUBLE_CLICK)){this.node.addEventListener('dblclick',this.navigate.bind(this));}else{this.node.addEventListener('click',this.navigate.bind(this));}}/**
+     * Navigates to this.href.
+     */navigate(){window.location=this.href;}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_1__.FAKE_LINKS].forEach(node=>new FakeLink(node));
+
+/***/ })
+
+}]);
