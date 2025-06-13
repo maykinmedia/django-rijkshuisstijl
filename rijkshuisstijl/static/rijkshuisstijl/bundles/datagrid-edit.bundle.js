@@ -1,1 +1,26 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[7390],{5787:function(e,t,n){n.r(t);var r=n(9879),o=n.n(r),i=n(3644);function a(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}function u(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}var l,s=function(){function e(t){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),this.node=t,this.bindEvents()}var t,n;return t=e,(n=[{key:"bindEvents",value:function(){this.node.addEventListener("rh-toggle",this.update.bind(this))}},{key:"update",value:function(){var e=o().getChildBEMNodes(this.node,i.bm,i.V$,i.er),t=Boolean(e.length);o().toggleModifier(this.node,i.er,t)}}])&&u(t.prototype,n),Object.defineProperty(t,"prototype",{writable:!1}),e}();(l=i.qd,function(e){if(Array.isArray(e))return a(e)}(l)||function(e){if("undefined"!=typeof Symbol&&null!=e[Symbol.iterator]||null!=e["@@iterator"])return Array.from(e)}(l)||function(e,t){if(e){if("string"==typeof e)return a(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?a(e,t):void 0}}(l)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()).forEach((function(e){return new s(e)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["datagrid-edit"],{
+
+/***/ "./rijkshuisstijl/js/components/datagrid/datagrid-edit.js":
+/*!****************************************************************!*\
+  !*** ./rijkshuisstijl/js/components/datagrid/datagrid-edit.js ***!
+  \****************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/datagrid/constants.js");
+class DataGridEdit{/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */constructor(node){/** @type {HTMLElement} */this.node=node;this.bindEvents();}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.node.addEventListener('rh-toggle',this.update.bind(this));}/**
+     * Toggle MODIFIER_EDIT on this.node based on presense of datagrid__row--edit matches.
+     */update(){const editable_row=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNodes(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_DATAGRID,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_ROW,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_EDIT);const exp=Boolean(editable_row.length);bem_js__WEBPACK_IMPORTED_MODULE_0___default().toggleModifier(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_EDIT,exp);}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_1__.DATAGRIDS].forEach(node=>new DataGridEdit(node));
+
+/***/ })
+
+}]);

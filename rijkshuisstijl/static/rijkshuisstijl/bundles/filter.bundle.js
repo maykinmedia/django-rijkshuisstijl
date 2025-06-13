@@ -1,1 +1,38 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[1165],{3418:function(e,t,r){r.r(t),r.d(t,{Filter:function(){return s}});var n=r(9879),i=r.n(n),o=r(496);function a(e){return function(e){if(Array.isArray(e))return l(e)}(e)||function(e){if("undefined"!=typeof Symbol&&null!=e[Symbol.iterator]||null!=e["@@iterator"])return Array.from(e)}(e)||function(e,t){if(e){if("string"==typeof e)return l(e,t);var r=Object.prototype.toString.call(e).slice(8,-1);return"Object"===r&&e.constructor&&(r=e.constructor.name),"Map"===r||"Set"===r?Array.from(e):"Arguments"===r||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?l(e,t):void 0}}(e)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function l(e,t){(null==t||t>e.length)&&(t=e.length);for(var r=0,n=new Array(t);r<t;r++)n[r]=e[r];return n}function u(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}var s=function(){function e(t){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),this.node=t,this.input=i().getChildBEMNode(this.node,o.g,o.Cv),this.bindEvents(),this.applyFilter()}var t,r;return t=e,(r=[{key:"bindEvents",value:function(){this.node.addEventListener("input",this.filter.bind(this))}},{key:"filter",value:function(){this.input.value?this.applyFilter():this.discardFilter()}},{key:"applyFilter",value:function(){var e=this;setTimeout((function(){var t=document.querySelectorAll(e.node.dataset.filterTarget),r=e.input.value.toUpperCase();a(t).forEach((function(t){i().addModifier(t,o.G3),i().removeModifier(t,o.t2),i().hasModifier(e.node,o.wZ)||t.style.removeProperty("display"),t.textContent.toUpperCase().match(r)||(i().removeModifier(t,o.G3),i().addModifier(t,o.t2),i().hasModifier(e.node,o.wZ)||(t.style.display="none"))}))}))}},{key:"discardFilter",value:function(){var e=this;a(document.querySelectorAll(this.node.dataset.filterTarget)).forEach((function(t){i().hasModifier(e.node,o.wZ)||t.style.removeProperty("display"),i().removeModifier(t,o.t2),i().addModifier(t,o.G3)}))}}])&&u(t.prototype,r),Object.defineProperty(t,"prototype",{writable:!1}),e}();a(o.Oq).forEach((function(e){return new s(e)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["filter"],{
+
+/***/ "./rijkshuisstijl/js/components/filter/filter.js":
+/*!*******************************************************!*\
+  !*** ./rijkshuisstijl/js/components/filter/filter.js ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Filter: function() { return /* binding */ Filter; }
+/* harmony export */ });
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/filter/constants.js");
+/**
+ * Class for generic filters.
+ * Filter should have MODIFIER_FILTER present in classList for detection.
+ * Filter should have data-filter-target set to query selector for targets.
+ * @class
+ */class Filter{/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */constructor(node){/** @type {HTMLElement} */this.node=node;/** @type {HTMLInputElement} */this.input=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNode(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_FILTER,_constants__WEBPACK_IMPORTED_MODULE_1__.ELEMENT_INPUT);this.bindEvents();this.applyFilter();}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.node.addEventListener('input',this.filter.bind(this));}/**
+     * Applies/discard the filter based on this.input.value.
+     */filter(){if(this.input.value){this.applyFilter();}else{this.discardFilter();}}/**
+     * Hides all the nodes matching query selector set in data-filter-target that don't match this.input.value.
+     */applyFilter(){setTimeout(()=>{let selection=document.querySelectorAll(this.node.dataset.filterTarget);let query=this.input.value.toUpperCase();[...selection].forEach(node=>{bem_js__WEBPACK_IMPORTED_MODULE_0___default().addModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_MATCH);bem_js__WEBPACK_IMPORTED_MODULE_0___default().removeModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_NO_MATCH);if(!bem_js__WEBPACK_IMPORTED_MODULE_0___default().hasModifier(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_CLASS_ONLY)){node.style.removeProperty('display');}if(!node.textContent.toUpperCase().match(query)){bem_js__WEBPACK_IMPORTED_MODULE_0___default().removeModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_MATCH);bem_js__WEBPACK_IMPORTED_MODULE_0___default().addModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_NO_MATCH);if(!bem_js__WEBPACK_IMPORTED_MODULE_0___default().hasModifier(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_CLASS_ONLY)){node.style.display='none';}}});});}/**
+     * Removes display property from inline style of every node matching query selector set in data-filter-target.
+     */discardFilter(){let selection=document.querySelectorAll(this.node.dataset.filterTarget);[...selection].forEach(node=>{if(!bem_js__WEBPACK_IMPORTED_MODULE_0___default().hasModifier(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_CLASS_ONLY)){node.style.removeProperty('display');}bem_js__WEBPACK_IMPORTED_MODULE_0___default().removeModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_NO_MATCH);bem_js__WEBPACK_IMPORTED_MODULE_0___default().addModifier(node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_MATCH);});}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_1__.FILTERS].forEach(filter=>new Filter(filter));
+
+/***/ })
+
+}]);

@@ -1,1 +1,67 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[6464],{8719:function(t,n,e){e.r(n),e.d(n,{Search:function(){return c}});var i=e(9879),r=e.n(i),o="button",u=e(2794);function s(t,n){(null==n||n>t.length)&&(n=t.length);for(var e=0,i=new Array(n);e<n;e++)i[e]=t[e];return i}function a(t,n){for(var e=0;e<n.length;e++){var i=n[e];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var l,c=function(){function t(n){!function(t,n){if(!(t instanceof n))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=n,this.input=r().getChildBEMNode(this.node,u.Lx,u.Cv),this.buttonPrimary=r().getChildBEMNode(this.node,o,!1,"primary"),this.buttonSecondary=r().getChildBEMNode(this.node,o,!1,"secondary"),this.bindEvents()}var n,e;return n=t,(e=[{key:"bindEvents",value:function(){this.buttonPrimary.addEventListener("click",this.onClickButtonPrimary.bind(this)),this.buttonSecondary.addEventListener("click",this.onClickButtonSecondary.bind(this)),this.input.addEventListener("blur",this.onBlur.bind(this)),this.input.addEventListener("keypress",this.onPressEnter.bind(this))}},{key:"onPressEnter",value:function(t){13===t.keyCode&&(t.preventDefault(),this.input.value&&this.input.form.submit())}},{key:"onClickButtonPrimary",value:function(){r().hasModifier(this.node,u.Q6)?(this.input.value&&this.input.form.submit(),this.input.focus()):this.input.blur()}},{key:"onClickButtonSecondary",value:function(t){t.preventDefault(),this.input.value="",this.input.focus()}},{key:"onBlur",value:function(t){this.input.value||t.relatedTarget||this.close()}},{key:"close",value:function(){r().removeModifier(this.node,u.Q6)}}])&&a(n.prototype,e),Object.defineProperty(n,"prototype",{writable:!1}),t}();(l=u.Uk,function(t){if(Array.isArray(t))return s(t)}(l)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(l)||function(t,n){if(t){if("string"==typeof t)return s(t,n);var e=Object.prototype.toString.call(t).slice(8,-1);return"Object"===e&&t.constructor&&(e=t.constructor.name),"Map"===e||"Set"===e?Array.from(t):"Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e)?s(t,n):void 0}}(l)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()).forEach((function(t){return new c(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["search"],{
+
+/***/ "./rijkshuisstijl/js/components/button/constants.js":
+/*!**********************************************************!*\
+  !*** ./rijkshuisstijl/js/components/button/constants.js ***!
+  \**********************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BLOCK_BUTTON: function() { return /* binding */ BLOCK_BUTTON; },
+/* harmony export */   MODIFIER_PRIMARY: function() { return /* binding */ MODIFIER_PRIMARY; },
+/* harmony export */   MODIFIER_SECONDARY: function() { return /* binding */ MODIFIER_SECONDARY; }
+/* harmony export */ });
+/** @const {string} */const BLOCK_BUTTON='button';/** @const {string} Modifier indicating a primary button. */const MODIFIER_PRIMARY='primary';/** @const {string} Modifier indicating a secondary button. */const MODIFIER_SECONDARY='secondary';
+
+/***/ }),
+
+/***/ "./rijkshuisstijl/js/components/search/search.js":
+/*!*******************************************************!*\
+  !*** ./rijkshuisstijl/js/components/search/search.js ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Search: function() { return /* binding */ Search; }
+/* harmony export */ });
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _button_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../button/constants */ "./rijkshuisstijl/js/components/button/constants.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/search/constants.js");
+/**
+ * Contains additional logic controlling search widget.
+ * NOTE: Open/close behaviour controlled by button (ToggleButton).
+ * @class
+ */class Search{/**
+     * Constructor method.
+     * @param {HTMLFormElement} node
+     */constructor(node){/** @type {HTMLFormElement} */this.node=node;/** @type {HTMLInputElement} */this.input=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNode(this.node,_constants__WEBPACK_IMPORTED_MODULE_2__.BLOCK_SEARCH,_constants__WEBPACK_IMPORTED_MODULE_2__.ELEMENT_INPUT);/** @type {HTMLButtonElement} */this.buttonPrimary=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNode(this.node,_button_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_BUTTON,false,_button_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_PRIMARY);/** @type {HTMLButtonElement} */this.buttonSecondary=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNode(this.node,_button_constants__WEBPACK_IMPORTED_MODULE_1__.BLOCK_BUTTON,false,_button_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_SECONDARY);this.bindEvents();}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.buttonPrimary.addEventListener('click',this.onClickButtonPrimary.bind(this));this.buttonSecondary.addEventListener('click',this.onClickButtonSecondary.bind(this));this.input.addEventListener('blur',this.onBlur.bind(this));this.input.addEventListener('keypress',this.onPressEnter.bind(this));}/**
+     * Callback for keypress event on focused input.
+     * Submits for if the user pressed enter and there is an input value.
+     */onPressEnter(e){const keyCode=e.keyCode;if(keyCode===13){e.preventDefault();if(this.input.value){this.input.form.submit();}}}/**
+     * Callback for click event on this.buttonPrimary.
+     * Submits form if input has value.
+     * Focuses this.input if MODIFIER_OPEN is set on this.node.
+     * Blurs this.input otherwise.
+     */onClickButtonPrimary(){if(bem_js__WEBPACK_IMPORTED_MODULE_0___default().hasModifier(this.node,_constants__WEBPACK_IMPORTED_MODULE_2__.MODIFIER_OPEN)){if(this.input.value){this.input.form.submit();}this.input.focus();}else{this.input.blur();}}/**
+     * Callback for click event on this.buttonSecondary.
+     * Clears/focuses this.input.
+     * @param {Event} e
+     */onClickButtonSecondary(e){e.preventDefault();this.input.value='';this.input.focus();}/**
+     * Callback for blur event on this.input.
+     * Calls this.close() if input does not have value.
+     * @param {Event} e
+     */onBlur(e){if(!this.input.value&&!e.relatedTarget){this.close();}}/**
+     * Additional control for removing MODIFIER_OPEN for this.node.
+     * NOTE: Open/close behaviour controlled by button (ToggleButton).
+     */close(){bem_js__WEBPACK_IMPORTED_MODULE_0___default().removeModifier(this.node,_constants__WEBPACK_IMPORTED_MODULE_2__.MODIFIER_OPEN);}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_2__.SEARCHES].forEach(search=>new Search(search));
+
+/***/ })
+
+}]);

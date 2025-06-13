@@ -1,1 +1,32 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[4286],{3417:function(t,e,n){n.r(e),n.d(e,{Select:function(){return s}});var r=n(9879),o=n.n(r),i=n(6307);function a(t,e){(null==e||e>t.length)&&(e=t.length);for(var n=0,r=new Array(e);n<e;n++)r[n]=t[n];return r}function u(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}var l,s=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=e,this.bindEvents(),this.update()}var e,n;return e=t,(n=[{key:"bindEvents",value:function(){this.node.addEventListener("change",this.update.bind(this))}},{key:"update",value:function(){var t=Boolean(""+this.node.value);o().toggleModifier(this.node,i.D8,t)}}])&&u(e.prototype,n),Object.defineProperty(e,"prototype",{writable:!1}),t}();(l=i.mo,function(t){if(Array.isArray(t))return a(t)}(l)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(l)||function(t,e){if(t){if("string"==typeof t)return a(t,e);var n=Object.prototype.toString.call(t).slice(8,-1);return"Object"===n&&t.constructor&&(n=t.constructor.name),"Map"===n||"Set"===n?Array.from(t):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?a(t,e):void 0}}(l)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()).forEach((function(t){return new s(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["select"],{
+
+/***/ "./rijkshuisstijl/js/components/form/select.js":
+/*!*****************************************************!*\
+  !*** ./rijkshuisstijl/js/components/form/select.js ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Select: function() { return /* binding */ Select; }
+/* harmony export */ });
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/form/constants.js");
+/**
+ * Detects whether a select has a value.
+ * @class
+ */class Select{/**
+     * Constructor method.
+     * @param {HTMLSelectElement} node
+     */constructor(node){/** @type {HTMLSelectElement} */this.node=node;this.bindEvents();this.update();}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.node.addEventListener('change',this.update.bind(this));}/**
+     * Toggles MODIFIER_HAS_VALUE based on this.node.value.
+     */update(){const exp=Boolean(''+this.node.value);bem_js__WEBPACK_IMPORTED_MODULE_0___default().toggleModifier(this.node,_constants__WEBPACK_IMPORTED_MODULE_1__.MODIFIER_HAS_VALUE,exp);}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_1__.SELECTS].forEach(node=>new Select(node));
+
+/***/ })
+
+}]);

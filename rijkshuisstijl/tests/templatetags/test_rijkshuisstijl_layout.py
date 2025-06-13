@@ -16,9 +16,9 @@ class NavigationBarTestCase(InclusionTagWebTest):
 
         self.assertInHTML(
             '<nav class="navigation-bar"><div class="navigation-bar__body">'
-            '<div class="login-bar"><p class="login-bar__body">'
+            '<div class="login-bar"><div class="login-bar__body">'
             '<a class="login-bar__link login-bar__link--primary" href="/accounts/login/">Inloggen</a>'
-            '</p></div><ul class="menu"></ul></div></nav>',
+            '</div></div><ul class="menu"></ul></div></nav>',
             html,
             count=1
         )
@@ -36,9 +36,9 @@ class NavigationBarTestCase(InclusionTagWebTest):
 
         self.assertInHTML(
             '<nav class="navigation-bar"><div class="navigation-bar__body">'
-            '<div class="login-bar"><p class="login-bar__body">'
+            '<div class="login-bar"><div class="login-bar__body">'
             '<a class="login-bar__link login-bar__link--primary" href="/accounts/login/">Inloggen</a>'
-            '</p></div><ul class="menu"></ul></div></nav><ul class="custom-breadcrumbs"><li>Item 1</li><li>Item 2</li></ul>',
+            '</div></div><ul class="menu"></ul></div></nav><ul class="custom-breadcrumbs"><li>Item 1</li><li>Item 2</li></ul>',
             html,
             count=1
         )

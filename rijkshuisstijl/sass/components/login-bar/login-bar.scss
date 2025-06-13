@@ -15,6 +15,20 @@
     display: none;
   }
 
+  form {
+    display: inline;
+
+    button {
+      padding: 0;
+      border: 0;
+      font: inherit;
+      text-decoration: underline;
+      background: transparent;
+
+      -webkit-appearance: none;
+    }
+  }
+
   &__body {
     @include body;
     @include container;
