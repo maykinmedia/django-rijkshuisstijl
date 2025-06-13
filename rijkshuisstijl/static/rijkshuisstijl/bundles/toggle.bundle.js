@@ -1,1 +1,79 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[3181],{8752:function(t,e,o){o.r(e),o.d(e,{Toggle:function(){return u}});var r=o(9879),n=o.n(r),i=o(5210);function a(t){return function(t){if(Array.isArray(t))return l(t)}(t)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(t)||function(t,e){if(t){if("string"==typeof t)return l(t,e);var o=Object.prototype.toString.call(t).slice(8,-1);return"Object"===o&&t.constructor&&(o=t.constructor.name),"Map"===o||"Set"===o?Array.from(t):"Arguments"===o||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(o)?l(t,e):void 0}}(t)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function l(t,e){(null==e||e>t.length)&&(e=t.length);for(var o=0,r=new Array(e);o<e;o++)r[o]=t[o];return r}function s(t,e){for(var o=0;o<e.length;o++){var r=e[o];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}var u=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=e,this.toggleModifier=this.node.dataset.toggleModifier,this.toggleMobileState=this.node.dataset.toggleMobileState?"TRUE"===this.node.dataset.toggleMobileState.toUpperCase():void 0,this.restoreState(),this.bindEvents()}var e,o;return e=t,o=[{key:"bindEvents",value:function(){this.node.addEventListener("click",this.onClick.bind(this))}},{key:"onClick",value:function(t){var e=this,o=this.node.dataset.toggleLinkMode||"normal";if("normal"===o)t.target.getAttribute("href")&&"#"!==t.target.getAttribute("href")||(t.preventDefault(),t.stopPropagation());else if("positive"===o)t.target.href&&this.getState()||(t.preventDefault(),t.stopPropagation());else if("negative"===o)t.target.href&&!this.getState()||(t.preventDefault(),t.stopPropagation());else if("prevent"===o)t.preventDefault(),t.stopPropagation();else if("noprevent"===o&&(t.target.href||t.target.parentNode.href))return;setTimeout((function(){e.toggle(),e.saveState(),e.focus()}),100)}},{key:"focus",value:function(){var t=this.node.dataset.focusTarget;t&&this.getState()&&document.querySelector(t).focus()}},{key:"toggle",value:function(){var t=this,e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:void 0;"add"===this.node.dataset.toggleOperation?e=!0:"remove"===this.node.dataset.toggleOperation&&(e=!1);var o=this.getTargets();o.forEach((function(o){n().toggleModifier(o,t.toggleModifier,e),t.dispatchEvent(o)})),this.getExclusive().filter((function(t){return-1===o.indexOf(t)})).forEach((function(e){return n().removeModifier(e,t.toggleModifier)}))}},{key:"dispatchEvent",value:function(t){var e=document.createEvent("Event");e.initEvent("rh-toggle",!0,!0),t.dispatchEvent(e)}},{key:"getState",value:function(){var t=this.getTargets()[0];return t?Boolean(n().hasModifier(t,this.toggleModifier)):null}},{key:"getTargets",value:function(){var t=this.node.dataset.toggleTarget;return this.getRelated(t)}},{key:"getExclusive",value:function(){var t=this.node.dataset.toggleExclusive||"";return this.getRelated(t)}},{key:"getRelated",value:function(t){var e=[];return t.split(",").filter((function(t){return t.length})).forEach((function(t){return e=[].concat(a(e),a(document.querySelectorAll(t)))})),e}},{key:"saveState",value:function(){var t=this.node.id,e=this.getState();if("boolean"==typeof e&&t){var o="ToggleButton#".concat(t,".modifierApplied");try{localStorage.setItem(o,e)}catch(t){console.warn(this,"Unable to save state to localstorage")}}}},{key:"restoreState",value:function(){if(void 0!==this.toggleMobileState&&matchMedia("(max-width: 767px)").matches)this.toggle(this.toggleMobileState);else{var t=this.node.id;if(t){var e="ToggleButton#".concat(t,".modifierApplied");try{var o=localStorage.getItem(e)||!1;this.toggle("TRUE"===o.toUpperCase())}catch(t){}}}}}],o&&s(e.prototype,o),Object.defineProperty(e,"prototype",{writable:!1}),t}();a(i.pp).forEach((function(t){return new u(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["toggle"],{
+
+/***/ "./rijkshuisstijl/js/components/toggle/toggle.js":
+/*!*******************************************************!*\
+  !*** ./rijkshuisstijl/js/components/toggle/toggle.js ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Toggle: function() { return /* binding */ Toggle; }
+/* harmony export */ });
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/toggle/constants.js");
+/**
+ * Class for generic toggles.
+ *
+ * Toggle should have BLOCK_TOGGLE present in classList for detection.
+ * Toggle should have data-toggle-target set to query selector for target.
+ * Toggle should have data-toggle-modifier set to modifier to toggle.
+ * Toggle could have data-focus-target set to query selector for node to focus on click.
+ * Toggle could have data-toggle-link-mode set to either "normal", "positive", "negative", "prevent" or "noprevent", see this.onClick().
+ * Toggle could have data-operation set to either "add" or "remove", see this.toggle().
+ * @class
+ */class Toggle{/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */constructor(node){/** @type {HTMLElement} */this.node=node;/** @type {string} */this.toggleModifier=this.node.dataset.toggleModifier;/** @type {(boolean|undefined)} */this.toggleMobileState=this.node.dataset.toggleMobileState?this.node.dataset.toggleMobileState.toUpperCase()==='TRUE':undefined;this.restoreState();this.bindEvents();}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.node.addEventListener('click',this.onClick.bind(this));}/**
+     * Callback for this.node click.
+     *
+     * Prevents default action (e.preventDefault()) based on target and this.node.dataset.toggleLinkMode value:
+     * - "normal" (default): Prevent default on regular elements and links towards "#", pass all other links.
+     * - "positive": Prevent default on regular elements, dont prevent links if this.getState() returns true.
+     * - "negative": Prevent default on regular elements, dont prevent links if this.getState() returns false.
+     * - "prevent": Always prevent default.
+     * - "noprevent": Never prevent default.
+     *
+     * @param {MouseEvent} e
+     */onClick(e){let toggleLinkMode=this.node.dataset.toggleLinkMode||'normal';if(toggleLinkMode==='normal'){if(!e.target.getAttribute('href')||e.target.getAttribute('href')==='#'){e.preventDefault();e.stopPropagation();}}else if(toggleLinkMode==='positive'){if(!e.target.href||!this.getState()){e.preventDefault();e.stopPropagation();}}else if(toggleLinkMode==='negative'){if(!e.target.href||this.getState()){e.preventDefault();e.stopPropagation();}}else if(toggleLinkMode==='prevent'){e.preventDefault();e.stopPropagation();}else if(toggleLinkMode==='noprevent'){if(e.target.href||e.target.parentNode.href){return;}}setTimeout(()=>{this.toggle();this.saveState();this.focus();},100);}/**
+     * Focuses this.node.dataset.focusTarget.
+     */focus(){let querySelector=this.node.dataset.focusTarget;if(querySelector&&this.getState()){let target=document.querySelector(querySelector);target.focus();}}/**
+     * Performs toggle.
+     * Toggle behaviour can optionally controlled by this.node.dataset.toggleOperation value.
+     * - undefined (default): Toggles add/remove based on exp or presence of this.toggleModifier
+     * - "add": Always add this.toggleModifier to targets.
+     * - "remove": Always removes this.toggleModifier from targets.
+     *
+     * @param {boolean} [exp] If passed, add/removes this.toggleModifier based on exp.
+     */toggle(){let exp=arguments.length>0&&arguments[0]!==undefined?arguments[0]:undefined;if(this.node.dataset.toggleOperation==='add'){exp=true;}else if(this.node.dataset.toggleOperation==='remove'){exp=false;}let targets=this.getTargets();targets.forEach(target=>{bem_js__WEBPACK_IMPORTED_MODULE_0___default().toggleModifier(target,this.toggleModifier,exp);this.dispatchEvent(target);});this.getExclusive().filter(exclusive=>targets.indexOf(exclusive)===-1).forEach(exclusive=>bem_js__WEBPACK_IMPORTED_MODULE_0___default().removeModifier(exclusive,this.toggleModifier));}/**
+     * Dispatches "rh-toggle" event on target.
+     * @param {HTMLElement} target
+     */dispatchEvent(target){const event=document.createEvent('Event');event.initEvent('rh-toggle',true,true);target.dispatchEvent(event);}/**
+     * Returns the toggle state (whether this.node.toggleModifier is applied).
+     * State is retrieved from first target.
+     * @returns {(boolean|null)} Boolean is target is found and state is retrieved, null if no target has been found.
+     */getState(){let referenceTarget=this.getTargets()[0];if(!referenceTarget){return null;}return Boolean(bem_js__WEBPACK_IMPORTED_MODULE_0___default().hasModifier(referenceTarget,this.toggleModifier));}/**
+     * Returns all the targets for this.node.
+     * @returns {*}
+     */getTargets(){let selector=this.node.dataset.toggleTarget;return this.getRelated(selector);}/**
+     * Returns all the grouped "exclusive" toggles of this.node.
+     * @returns {*}
+     */getExclusive(){let selector=this.node.dataset.toggleExclusive||'';return this.getRelated(selector);}/**
+     * Splits selector by "," and query selects each part.
+     * @param {string} selector Selector(s) (optionally divided by ",").
+     * @return {Array} An array of all matched nodes.
+     */getRelated(selector){let targets=[];selector.split(',').filter(selector=>selector.length).forEach(selector=>targets=[...targets,...document.querySelectorAll(selector)]);return targets;}/**
+     * Saves state to localstorage.
+     */saveState(){let id=this.node.id;let value=this.getState();if(typeof value!=='boolean'){return;}if(id){let key=`ToggleButton#${id}.modifierApplied`;try{localStorage.setItem(key,value);}catch(e){console.warn(this,'Unable to save state to localstorage');}}}/**
+     * Restores state from localstorage.
+     */restoreState(){if(this.toggleMobileState!==undefined&&matchMedia('(max-width: 767px)').matches){this.toggle(this.toggleMobileState);return;}let id=this.node.id;if(id){let key=`ToggleButton#${id}.modifierApplied`;try{let value=localStorage.getItem(key)||false;this.toggle(value.toUpperCase()==='TRUE');}catch(e){}}}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_1__.TOGGLES].forEach(node=>new Toggle(node));
+
+/***/ })
+
+}]);

@@ -1,1 +1,30 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[5575],{7252:function(t,n,e){e.r(n),e.d(n,{LinkSelect:function(){return u}});var r=e(6307);function o(t,n){(null==n||n>t.length)&&(n=t.length);for(var e=0,r=new Array(n);e<n;e++)r[e]=t[e];return r}function a(t,n){for(var e=0;e<n.length;e++){var r=n[e];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}var i,u=function(){function t(n){!function(t,n){if(!(t instanceof n))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=n,this.bindEvents()}var n,e;return n=t,(e=[{key:"bindEvents",value:function(){this.node.addEventListener("change",this.navigate.bind(this))}},{key:"navigate",value:function(){var t=this.node.dataset.target,n=this.node.value||this.node.dataset.value;"_blank"!==t?location.href=n:window.open(n)}}])&&a(n.prototype,e),Object.defineProperty(n,"prototype",{writable:!1}),t}();(i=r.hx,function(t){if(Array.isArray(t))return o(t)}(i)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(i)||function(t,n){if(t){if("string"==typeof t)return o(t,n);var e=Object.prototype.toString.call(t).slice(8,-1);return"Object"===e&&t.constructor&&(e=t.constructor.name),"Map"===e||"Set"===e?Array.from(t):"Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e)?o(t,n):void 0}}(i)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()).forEach((function(t){return new u(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["link-select"],{
+
+/***/ "./rijkshuisstijl/js/components/form/link-select.js":
+/*!**********************************************************!*\
+  !*** ./rijkshuisstijl/js/components/form/link-select.js ***!
+  \**********************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LinkSelect: function() { return /* binding */ LinkSelect; }
+/* harmony export */ });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/form/constants.js");
+/**
+ * Navigates to selected value of select on change.
+ * @class
+ */class LinkSelect{/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */constructor(node){/** {HTMLElement} */this.node=node;this.bindEvents();}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.node.addEventListener('change',this.navigate.bind(this));}/**
+     * Navigates to the selected link, opens new window if this.node.dataset.target equals "_blank".
+     */navigate(){const target=this.node.dataset.target;const href=this.node.value||this.node.dataset.value;if(target==='_blank'){window.open(href);return;}location.href=href;}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_0__.LINK_SELECTS].forEach(node=>new LinkSelect(node));
+
+/***/ })
+
+}]);

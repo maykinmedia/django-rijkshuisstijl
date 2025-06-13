@@ -1,1 +1,30 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[403],{977:function(t,e,n){n.r(e);var r=n(6307);function i(t,e){(null==e||e>t.length)&&(e=t.length);for(var n=0,r=new Array(e);n<e;n++)r[n]=t[n];return r}function o(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}var a,u=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=e,this.input=this.node.previousElementSibling,this.bindEvents()}var e,n;return e=t,(n=[{key:"getFileName",value:function(){return this.input.files.length?this.input.files[0].name:""}},{key:"bindEvents",value:function(){this.input.addEventListener("change",this.update.bind(this))}},{key:"update",value:function(){this.node.textContent=this.getFileName()}}])&&o(e.prototype,n),Object.defineProperty(e,"prototype",{writable:!1}),t}();(a=r.CY,function(t){if(Array.isArray(t))return i(t)}(a)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(a)||function(t,e){if(t){if("string"==typeof t)return i(t,e);var n=Object.prototype.toString.call(t).slice(8,-1);return"Object"===n&&t.constructor&&(n=t.constructor.name),"Map"===n||"Set"===n?Array.from(t):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?i(t,e):void 0}}(a)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()).forEach((function(t){return new u(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["input-filepicker"],{
+
+/***/ "./rijkshuisstijl/js/components/form/input-filepicker.js":
+/*!***************************************************************!*\
+  !*** ./rijkshuisstijl/js/components/form/input-filepicker.js ***!
+  \***************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/form/constants.js");
+/**
+ * Updates label on input file picker.
+ * @class
+ */class InputFilePicker{/**
+     * Constructor method.
+     * @param {HTMLLabelElement} node
+     */constructor(node){/** @type {HTMLLabelElement} */this.node=node;/** @type {HTMLInputElement} */this.input=this.node.previousElementSibling;this.bindEvents();}/**
+     * Returns the name of the selected file or an empty string.
+     * @return {string}
+     */getFileName(){if(this.input.files.length){return this.input.files[0].name;}return'';}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.input.addEventListener('change',this.update.bind(this));}/**
+     * Updates the textcontent of the input file picker with the input's selected file name.
+     */update(){this.node.textContent=this.getFileName();}}// START!
+[..._constants__WEBPACK_IMPORTED_MODULE_0__.INPUT_FILEPICKERS].forEach(node=>new InputFilePicker(node));
+
+/***/ })
+
+}]);

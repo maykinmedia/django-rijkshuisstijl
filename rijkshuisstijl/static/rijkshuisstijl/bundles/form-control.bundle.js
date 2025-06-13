@@ -1,1 +1,43 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[7707],{9655:function(t,e,n){n.r(e);var r=n(6307);function i(t){return function(t){if(Array.isArray(t))return a(t)}(t)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(t)||function(t,e){if(t){if("string"==typeof t)return a(t,e);var n=Object.prototype.toString.call(t).slice(8,-1);return"Object"===n&&t.constructor&&(n=t.constructor.name),"Map"===n||"Set"===n?Array.from(t):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?a(t,e):void 0}}(t)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function a(t,e){(null==e||e>t.length)&&(e=t.length);for(var n=0,r=new Array(e);n<e;n++)r[n]=t[n];return r}function o(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}var u=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=e,this.bindEvents(),this.update()}var e,n;return e=t,(n=[{key:"getInputs",value:function(){return i(this.node.querySelectorAll("input, select, textarea"))}},{key:"getNamedInputs",value:function(){return this.getInputs().filter((function(t){return t.name}))}},{key:"bindEvents",value:function(){this.node.addEventListener("change",this.update.bind(this)),this.node.addEventListener("input",this.update.bind(this)),this.node.addEventListener("click",this.update.bind(this)),this.node.addEventListener("touchend",this.update.bind(this)),this.node.addEventListener("keyup",this.update.bind(this))}},{key:"update",value:function(){setTimeout(this._update.bind(this))}},{key:"_update",value:function(){var t=this;try{var e=this.getNamedInputs(),n=i(new Set(e.map((function(t){return t.name}))));n.length?this.node.dataset.inputNames=n:delete this.node.dataset.inputNames,e.forEach((function(e){var n="".concat(e.name,"Value"),r=e.value;if(("checkbox"!==e.type||e.checked)&&("radio"!==e.type||e.checked)){if(e.multiple&&e.options){var a=i(e.options).filter((function(t){return t.selected})).map((function(t){return t.value||t.textContent}));r=!!a.length&&a}r?t.node.dataset[n]=r:delete t.node.dataset[n]}})),e.filter((function(t){return t.checked&&t.value})).forEach((function(e){var n="".concat(e.name,"Value");t.node.dataset[n]=e.value}))}catch(t){var r=this.node.dataset.inputNames||this.node.id||this.node;console.warn("Unable to inspect form control (".concat(r,"), got error: ").concat(t,"."))}this.node.classList.add("PAINT"),this.node.classList.remove("PAINT")}}])&&o(e.prototype,n),Object.defineProperty(e,"prototype",{writable:!1}),t}();i(r.yn).forEach((function(t){return new u(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["form-control"],{
+
+/***/ "./rijkshuisstijl/js/components/form/form-control.js":
+/*!***********************************************************!*\
+  !*** ./rijkshuisstijl/js/components/form/form-control.js ***!
+  \***********************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/form/constants.js");
+/**
+ * Keeps track of inputs and their values and copies those to data attributes of node.
+ * @class
+ */class FormControl{/**
+     * Constructor method.
+     * @param {HTMLElement} node
+     */constructor(node){/** @type {HTMLElement} */this.node=node;this.bindEvents();this.update();}/**
+     * Returns all inputs, selects and textareas within this.node.
+     * @return {HTMLElement[]}
+     */getInputs(){return[...this.node.querySelectorAll('input, select, textarea')];}/**
+     * Returns all inputs, selects and textareas within this.node with a name attribute set.
+     * @return {HTMLElement[]}
+     */getNamedInputs(){return this.getInputs().filter(input=>input.name);}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.node.addEventListener('change',this.update.bind(this));this.node.addEventListener('input',this.update.bind(this));this.node.addEventListener('click',this.update.bind(this));this.node.addEventListener('touchend',this.update.bind(this));this.node.addEventListener('keyup',this.update.bind(this));}/**
+     * Copies inputs select and textreas name and values to data attributes of this.node.
+     */update(){setTimeout(this._update.bind(this));}/**
+     * @private
+     */_update(){try{const namedInputs=this.getNamedInputs();// Set names (data-input-names="foo,bar").
+const namedInputNames=[...new Set(namedInputs.map(namedInput=>namedInput.name))];if(namedInputNames.length){this.node.dataset.inputNames=namedInputNames;}else{delete this.node.dataset.inputNames;}// Set values (data-foo-value="bar").
+namedInputs.forEach(namedInput=>{const datasetItem=`${namedInput.name}Value`;let value=namedInput.value;// Checkbox
+if(namedInput.type==='checkbox'&&!namedInput.checked){return;}// Radio
+if(namedInput.type==='radio'&&!namedInput.checked){return;}// Select multiple
+if(namedInput.multiple&&namedInput.options){const values=[...namedInput.options].filter(option=>option.selected).map(selectedOption=>selectedOption.value||selectedOption.textContent);if(values.length){value=values;}else{value=false;}}if(value){this.node.dataset[datasetItem]=value;}else{delete this.node.dataset[datasetItem];}});// Checked
+namedInputs.filter(namedInput=>namedInput.checked&&namedInput.value).forEach(checkedInput=>{const datasetItem=`${checkedInput.name}Value`;this.node.dataset[datasetItem]=checkedInput.value;});}catch(e){const str=this.node.dataset.inputNames||this.node.id||this.node;console.warn(`Unable to inspect form control (${str}), got error: ${e}.`);}// IE11 Does not trigger a paint when using the generated data attributes in CSS in certain conditions.
+// We force a repaint by adding and removing an additional class.
+this.node.classList.add('PAINT');this.node.classList.remove('PAINT');}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_0__.FORM_CONTROLS].forEach(node=>new FormControl(node));
+
+/***/ })
+
+}]);

@@ -1,1 +1,40 @@
-"use strict";(self.webpackChunkdjango_rijkshuisstijl=self.webpackChunkdjango_rijkshuisstijl||[]).push([[8118],{4377:function(t,n,e){e.r(n),e.d(n,{Paginator:function(){return f}});var i=e(9879),r=e.n(i),a=e(4998),o=e.n(a),u=e(2662);function s(t,n){(null==n||n>t.length)&&(n=t.length);for(var e=0,i=new Array(n);e<n;e++)i[e]=t[e];return i}function l(t,n){for(var e=0;e<n.length;e++){var i=n[e];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var c,f=function(){function t(n){!function(t,n){if(!(t instanceof n))throw new TypeError("Cannot call a class as a function")}(this,t),this.node=n,this.input=r().getChildBEMNode(this.node,u.f3),this.bindEvents()}var n,e;return n=t,e=[{key:"bindEvents",value:function(){this.node.addEventListener("submit",this.onChange.bind(this)),this.node.addEventListener("change",this.onChange.bind(this)),this.node.addEventListener("click",this.onClick.bind(this))}},{key:"onChange",value:function(t){t.preventDefault(),this.navigate()}},{key:"onClick",value:function(t){t.preventDefault(),t.target.dataset.page&&this.navigate(t.target.dataset.page)}},{key:"navigate",value:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:this.input.value;window.location=o()(window.location).setSearch(this.input.name,t)}}],e&&l(n.prototype,e),Object.defineProperty(n,"prototype",{writable:!1}),t}();(c=u.xi,function(t){if(Array.isArray(t))return s(t)}(c)||function(t){if("undefined"!=typeof Symbol&&null!=t[Symbol.iterator]||null!=t["@@iterator"])return Array.from(t)}(c)||function(t,n){if(t){if("string"==typeof t)return s(t,n);var e=Object.prototype.toString.call(t).slice(8,-1);return"Object"===e&&t.constructor&&(e=t.constructor.name),"Map"===e||"Set"===e?Array.from(t):"Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e)?s(t,n):void 0}}(c)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()).forEach((function(t){return new f(t)}))}}]);
+"use strict";
+(self["webpackChunkdjango_rijkshuisstijl"] = self["webpackChunkdjango_rijkshuisstijl"] || []).push([["paginator"],{
+
+/***/ "./rijkshuisstijl/js/components/paginator/paginator.js":
+/*!*************************************************************!*\
+  !*** ./rijkshuisstijl/js/components/paginator/paginator.js ***!
+  \*************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Paginator: function() { return /* binding */ Paginator; }
+/* harmony export */ });
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bem.js */ "./node_modules/bem.js/dist/bem.js");
+/* harmony import */ var bem_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bem_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var urijs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! urijs */ "./node_modules/urijs/src/URI.js");
+/* harmony import */ var urijs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(urijs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constants */ "./rijkshuisstijl/js/components/paginator/constants.js");
+/**
+ * Contains logic for making the paginator work with existing GET params.
+ * @class
+ */class Paginator{/**
+     * Constructor method.
+     * @param {HTMLFormElement} node
+     */constructor(node){/** @type {HTMLFormElement} */this.node=node;/** @type {HTMLInputElement} */this.input=bem_js__WEBPACK_IMPORTED_MODULE_0___default().getChildBEMNode(this.node,_constants__WEBPACK_IMPORTED_MODULE_2__.BLOCK_INPUT);this.bindEvents();}/**
+     * Binds events to callbacks.
+     */bindEvents(){this.node.addEventListener('submit',this.onChange.bind(this));this.node.addEventListener('change',this.onChange.bind(this));this.node.addEventListener('click',this.onClick.bind(this));}/**
+     * Callback for change event on this.node.
+     * @param {Event} e
+     */onChange(e){e.preventDefault();this.navigate();}/**
+     * Callback for click event on this.node.
+     * @param {Event} e
+     */onClick(e){e.preventDefault();if(e.target.dataset.page){this.navigate(e.target.dataset.page);}}/**
+     * Navigate to the page specified in this.input.
+     */navigate(){let page=arguments.length>0&&arguments[0]!==undefined?arguments[0]:this.input.value;window.location=urijs__WEBPACK_IMPORTED_MODULE_1___default()(window.location).setSearch(this.input.name,page);}}// Start!
+[..._constants__WEBPACK_IMPORTED_MODULE_2__.PAGINATORS].forEach(node=>new Paginator(node));
+
+/***/ })
+
+}]);
