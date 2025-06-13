@@ -1,6 +1,6 @@
 {
   "name": "django-rijkshuisstijl",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Rijkshuisstijl boilerplate for Django.",
   "main": "js/index.js",
   "module": "js/index.js",
